@@ -6,10 +6,11 @@
     "release:upload": "./scripts/release-upload.sh",
     "build:remoto": "./scripts/build-remoto.sh",
     "clear:modules": "./scripts/clear-node_modules.sh",
+    "build:android:local": "cd android/ && gradlew.bat build && gradlew.bat assembleRelease && cd ..",
     "prebuild": "expo prebuild",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "build:android": "eas build -p android --profile preview",
     "build:local": "eas build --platform android --local",
     "web": "expo start --web --clear"
