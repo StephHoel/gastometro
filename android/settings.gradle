@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'Lista de Compras'
+rootProject.name = 'Gastômetro'
 
 dependencyResolutionManagement {
   versionCatalogs {

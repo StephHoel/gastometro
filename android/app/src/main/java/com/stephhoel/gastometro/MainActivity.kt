@@ -1,4 +1,4 @@
-package com.stephhoel.listacomprasmobile
+package com.stephhoel.gastometro
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
