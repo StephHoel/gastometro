@@ -1,0 +1,78 @@
+name: Build APK and Release to GitHub
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --loglevel=error
+
+      - name: Prebuild Expo
+        run: npx expo prebuild --non-interactive --platform android
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --warning-mode none
+        env:
+          EXPO_NO_COMMAND: 1
+
+      - name: Rename APK
+        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/gastometro-release.apk
+
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: gastometro-release
+          path: android/app/build/outputs/apk/release/gastometro-release.apk
+          if-no-files-found: error
+          overwrite: true
+
+      - name: Create GitHub Release for Develop Branch
+        if: ${{ github.ref_name == 'develop' }}
+        run: |
+          CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
+          gh release create dev \
+          android/app/build/outputs/apk/release/gastometro-release.apk \
+          --title "Builded at $CURRENT_DATETIME" \
+          --target develop \
+          --generate-notes \
+          --draft
+        
+      - name: Create GitHub Release for Main Branch
+        if: ${{ github.ref_name == 'main' }}
+        run: |
+          CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
+          gh release create main \
+          android/app/build/outputs/apk/release/gastometro-release.apk \
+          --title "Builded at $CURRENT_DATETIME" \
+          --target main \
+          --generate-notes \
+          --prerelease
+
+      - name: Skip Release for Other Branches
+        if: ${{ github.ref_name != 'develop' && github.ref_name != 'main' }}
+        run: echo "No release created for branch ${{ github.ref_name }}."

@@ -31,6 +31,6 @@ export const useCartStore = create(
       },
       clear: () => set(() => ({ products: [] })),
     }),
-    { name: 'lista-compras', storage: createJSONStorage(() => AsyncStorage) },
+    { name: 'gastometro', storage: createJSONStorage(() => AsyncStorage) },
   ),
 )
