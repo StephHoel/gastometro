@@ -1,6 +1,6 @@
-# 🛒 Lista de Compras - Aplicativo Mobile
+# 🛒 Gastômetro - Aplicativo Mobile
 
-Bem-vindo ao repositório oficial do **Lista de Compras**, um aplicativo projetado para tornar suas idas ao supermercado mais eficientes, organizadas e práticas.
+Bem-vindo ao repositório oficial do **Gastômetro**, um aplicativo projetado para tornar suas idas ao supermercado mais eficientes, organizadas e práticas.
 
 ![Demonstração do Aplicativo](.github/mobile.gif)
 
@@ -25,11 +25,12 @@ O aplicativo oferece uma série de funcionalidades para facilitar sua experiênc
 
 Estamos constantemente trabalhando para melhorar o aplicativo. Confira as funcionalidades que estão por vir:
 
-- **⭐ Prioridade de Itens:** Marque itens como prioritários, destacando-os na interface.
+- ~~**⭐ Prioridade de Itens:** Marque itens como prioritários, destacando-os na interface.~~
 - **🔔 Notificações:** Receba lembretes sobre itens que precisam ser comprados, utilizando a biblioteca `react-native-push-notification`.
 - **📂 Múltiplas Listas:** Crie várias listas com títulos personalizados.
 - **🧮 Calculadora de Mercado:** Calcule o preço por unidade (preço total dividido pela unidade, como litro ou kg).
 - **💳 Contas a Pagar:** Gerencie uma lista de contas a pagar para controle financeiro.
+- **✅ Total de Itens Marcados:** Cálculo de valor total dos itens marcados como "pegos".
 
 ---
 
@@ -37,7 +38,7 @@ Estamos constantemente trabalhando para melhorar o aplicativo. Confira as funcio
 
 Siga os passos abaixo para começar a usar o aplicativo:
 
-1. **Baixe o APK mais recente:** [Clique aqui para baixar diretamente](https://github.com/StephHoel/lista-compras-mobile/releases/download/v1.3.0/lista-de-compras-v1.3.0.apk).
+1. **Baixe o APK mais recente:** [Clique aqui para baixar diretamente](https://github.com/StephHoel/gastometro/releases/download/v1.3.0/lista-de-compras-v1.3.0.apk).
 2. **Instale o aplicativo:** Após o download, instale o APK no seu dispositivo Android.
 3. **Comece a usar:** Abra o aplicativo e comece a criar suas listas de compras. Não é necessário login.
 
@@ -89,10 +90,10 @@ Este projeto está licenciado sob a [MIT License](LICENSE). Sinta-se à vontade 
 
 ## 📞 Suporte
 
-Se você tiver dúvidas ou problemas, entre em contato abrindo uma [issue](https://github.com/StephHoel/lista-compras-mobile/issues).
+Se você tiver dúvidas ou problemas, entre em contato abrindo uma [issue](https://github.com/StephHoel/gastometro/issues).
 
 ---
 
 ## 🌟 Agradecimentos
 
-Agradecemos a todos os contribuidores e usuários que ajudam a melhorar este projeto continuamente. Sua participação é essencial para o sucesso do **Lista de Compras**!
+Agradecemos a todos os contribuidores e usuários que ajudam a melhorar este projeto continuamente. Sua participação é essencial para o sucesso do **Gastômetro**!
