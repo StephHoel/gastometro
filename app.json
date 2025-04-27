@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Lista de Compras",
-    "slug": "lista-compras-mobile",
+    "name": "Gastômetro",
+    "slug": "gastometro",
     "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "lista-compras-mobile",
+    "scheme": "gastometro",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
@@ -13,29 +13,24 @@
       "resizeMode": "contain",
       "backgroundColor": "#0F172A"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.stephhoel.listacomprasmobile"
+      "bundleIdentifier": "com.stephhoel.gastometro"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
       },
-      "package": "com.stephhoel.listacomprasmobile"
+      "package": "com.stephhoel.gastometro"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "experiments": {
       "typedRoutes": true
     },
