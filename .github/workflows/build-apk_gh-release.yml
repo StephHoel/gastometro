@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build APK and Release to GitHub
     runs-on: ubuntu-latest
 
     steps:
@@ -52,6 +53,8 @@ jobs:
           overwrite: true
 
       - name: Create GitHub Release for Develop Branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ github.ref_name == 'develop' }}
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
@@ -63,6 +66,8 @@ jobs:
           --draft
         
       - name: Create GitHub Release for Main Branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ github.ref_name == 'main' }}
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
