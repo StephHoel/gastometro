@@ -1,4 +1,4 @@
-package com.stephhoel.listacomprasmobile
+package com.stephhoel.gastometro
 
 import android.app.Application
 import android.content.res.Configuration
