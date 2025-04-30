@@ -4,9 +4,8 @@ import { FormatCurrency } from "@/utils/functions/FormatCurrency";
 import { Multiply } from "@/utils/functions/MathFunctions";
 import { FormatTextLine } from "@/utils/functions/StringFunctions";
 import type { ProductProps } from "@/utils/interfaces";
-import { Feather } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
 import { Link } from "expo-router";
-import React from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function Home() {
@@ -36,7 +35,7 @@ export default function Home() {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView className="flex-1 bg-slate-900">
 			<Header />
 
 			<Text className="text-white text-center pt-2 pb-4">
