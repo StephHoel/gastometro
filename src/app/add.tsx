@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 
 export default function Add() {
 	return (
-		<ScrollView>
+		<ScrollView className="flex-1 bg-slate-900">
 			<Header />
 
 			<Form buttonTitle={"Adicionar Item"}>

@@ -19,7 +19,7 @@ export default function Edit() {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView className="flex-1 bg-slate-900">
 			<Header />
 
 			<Form data={prod} buttonTitle={"Editar Item"}>
