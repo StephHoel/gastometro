@@ -3,7 +3,7 @@ import { ScrollView } from "react-native";
 
 import { useCartStore } from "@/stores/CartStore";
 
-import { Feather } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
 
 import { Form } from "@/components/Form";
 import { Header } from "@/components/Header";

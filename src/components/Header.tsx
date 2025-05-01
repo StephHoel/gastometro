@@ -3,7 +3,7 @@ import { titleMessage, titlePages } from "@/utils/constants";
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
 import { ShareOnWhatsapp } from "@/utils/functions/ShareOnWhatsapp";
 import type { ButtonProps, CurrentRoute } from "@/utils/interfaces";
-import { Feather } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
 import { useRoute } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
 import { Link } from "expo-router";
@@ -112,7 +112,7 @@ export function Header() {
 
 	return (
 		<>
-			<View className="pt-8 px-3 flex-row justify-between">
+			<View className="pt-4 px-3 flex-row justify-between">
 				<Text className="text-white text-2xl font-heading">
 					{titlePages[route.name as keyof typeof titlePages]}
 				</Text>
