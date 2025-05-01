@@ -90,3 +90,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+/assets/new_icon.webp
