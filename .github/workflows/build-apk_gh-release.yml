@@ -2,7 +2,7 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "release" ]
   pull_request:
     branches: [ "main" ]
 
@@ -45,29 +45,29 @@ jobs:
           EXPO_NO_COMMAND: 1
 
       - name: Rename APK
-        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/gastometro-release.apk
+        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/gastometro.apk
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: gastometro-release
-          path: android/app/build/outputs/apk/release/gastometro-release.apk
+          name: gastometro
+          path: android/app/build/outputs/apk/release/gastometro.apk
           if-no-files-found: error
           overwrite: true
 
-      - name: Create GitHub Release for Develop Branch
+      - name: Create GitHub Release for Release Branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ github.ref_name == 'develop' }}
+        if: ${{ github.ref_name == 'release' }}
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
           gh release create dev \
-          android/app/build/outputs/apk/release/gastometro-release.apk \
+          android/app/build/outputs/apk/release/gastometro.apk \
           --title "Builded at $CURRENT_DATETIME" \
-          --target develop \
+          --target release \
           --generate-notes \
-          --draft
-        
+          --prerelease
+
       - name: Create GitHub Release for Main Branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,11 +75,10 @@ jobs:
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
           gh release create main \
-          android/app/build/outputs/apk/release/gastometro-release.apk \
+          android/app/build/outputs/apk/release/gastometro.apk \
           --title "Builded at $CURRENT_DATETIME" \
           --target main \
-          --generate-notes \
-          --prerelease
+          --generate-notes
 
       - name: Skip Release for Other Branches
         if: ${{ github.ref_name != 'develop' && github.ref_name != 'main' }}
