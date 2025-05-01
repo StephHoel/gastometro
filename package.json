@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.3.1",
   "scripts": {
-    "new-version": "sh ./scripts/update-version.sh",
+    "new-version": "sh ./scripts/add-new-version.sh",
     "release:upload": "sh ./scripts/release-upload.sh",
     "build:remoto": "sh ./scripts/build-remoto.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
