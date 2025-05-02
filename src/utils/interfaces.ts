@@ -38,3 +38,10 @@ type RootStackParamList = ParamListBase & {
 };
 
 export type CurrentRoute = RouteProp<RootStackParamList, keyof RootStackParamList>;
+
+
+export type IconsProps = {
+  size?: number
+  color?: string
+  checked?: boolean
+}

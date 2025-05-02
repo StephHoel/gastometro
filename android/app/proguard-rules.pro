@@ -12,3 +12,22 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 # Add any project specific keep options here:
+
+
+# Remove logs
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
+
+# Remove recursos não usados
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+# Excluir partes não utilizadas do React Native
+-keep class com.facebook.react.** { *; }
+-keepclassmembers,includedescriptorclasses class * {
+    native <methods>;
+}

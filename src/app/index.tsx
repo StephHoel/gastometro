@@ -1,10 +1,10 @@
 import { Header } from "@/components/Header";
+import { CheckboxIcon, DeleteIcon, EditIcon } from "@/components/Icons";
 import { useCartStore } from "@/stores/CartStore";
 import { FormatCurrency } from "@/utils/functions/FormatCurrency";
 import { Multiply } from "@/utils/functions/MathFunctions";
 import { FormatTextLine } from "@/utils/functions/StringFunctions";
 import type { ProductProps } from "@/utils/interfaces";
-import Feather from "@expo/vector-icons/Feather";
 import { Link } from "expo-router";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -46,12 +46,12 @@ export default function Home() {
 						<View className="px-4 pt-2" key={prod.id}>
 							<View className="flex-row gap-2 items-center">
 								<TouchableOpacity onPress={() => handleRemove(prod)}>
-									<Feather name="trash-2" size={24} color="white" />
+									<DeleteIcon />
 								</TouchableOpacity>
 
 								<Link href={`/edit/${prod.id}`} asChild>
 									<TouchableOpacity>
-										<Feather name="edit-2" size={24} color="white" />
+										<EditIcon />
 									</TouchableOpacity>
 								</Link>
 
@@ -59,11 +59,7 @@ export default function Home() {
 									className="flex-row items-center space-x-2"
 									onPress={() => toggleCollected(prod)}
 								>
-									<Feather
-										name={prod.collected ? "check-square" : "square"}
-										color={prod.collected ? "#22c55e" : "white"}
-										size={24}
-									/>
+									<CheckboxIcon checked={prod.collected} />
 								</TouchableOpacity>
 
 								<Text

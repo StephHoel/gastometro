@@ -1,8 +1,8 @@
-import Feather from "@expo/vector-icons/Feather";
 import { ScrollView } from "react-native";
 
 import { Form } from "@/components/Form";
 import { Header } from "@/components/Header";
+import { AddIcon } from "@/components/Icons";
 
 export default function Add() {
 	return (
@@ -10,7 +10,7 @@ export default function Add() {
 			<Header />
 
 			<Form buttonTitle={"Adicionar Item"}>
-				<Feather name="plus-circle" size={20} />
+				<AddIcon color="black" />
 			</Form>
 		</ScrollView>
 	);

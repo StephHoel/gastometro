@@ -3,13 +3,13 @@ import { titleMessage, titlePages } from "@/utils/constants";
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
 import { ShareOnWhatsapp } from "@/utils/functions/ShareOnWhatsapp";
 import type { ButtonProps, CurrentRoute } from "@/utils/interfaces";
-import Feather from "@expo/vector-icons/Feather";
 import { useRoute } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { CustomAlert } from "./CustomAlert";
+import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "./Icons";
 
 export function Header() {
 	const [alertVisible, setAlertVisible] = useState(false);
@@ -128,24 +128,24 @@ export function Header() {
 					<>
 						{cartStore.products.length > 0 && (
 							<TouchableOpacity activeOpacity={0.7} onPress={handleRemoveAll}>
-								<Feather name="trash-2" size={35} color="white" />
+								<DeleteIcon size={35} />
 							</TouchableOpacity>
 						)}
 
 						<TouchableOpacity activeOpacity={0.7} onPress={handleShare}>
-							<Feather name="share-2" size={35} color="white" />
+							<ShareIcon size={35} />
 						</TouchableOpacity>
 
 						<Link href="/add" asChild>
 							<TouchableOpacity activeOpacity={0.7}>
-								<Feather name="plus-circle" size={35} color="white" />
+								<AddIcon size={35} />
 							</TouchableOpacity>
 						</Link>
 					</>
 				) : (
 					<Link href="/" asChild>
 						<TouchableOpacity activeOpacity={0.7}>
-							<Feather name="arrow-left-circle" size={35} color="white" />
+							<BackIcon size={35} />
 						</TouchableOpacity>
 					</Link>
 				)}
