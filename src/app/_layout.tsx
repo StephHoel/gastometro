@@ -8,8 +8,8 @@ import {
 } from "@expo-google-fonts/inter";
 import { Tabs } from "expo-router";
 
+import { CalculatorIcon, HomeIcon } from "@/components/Icons";
 import "@/styles/global.css";
-import Feather from "@expo/vector-icons/Feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Layout() {
@@ -43,11 +43,22 @@ export default function Layout() {
 				<Tabs.Screen
 					name="index"
 					options={{
-						href: null, // tirar quando tiver outras telas / abas
-						title: "Início",
-						tabBarIcon: ({ color, size }) => (
-							<Feather name="home" size={size} color={color} />
-						),
+						href: null,
+						// title: "Início",
+						// tabBarIcon: ({ color, size }) => (
+						// 	<HomeIcon size={size} color={color} />
+						// ),
+					}}
+				/>
+
+				<Tabs.Screen
+					name="calculator"
+					options={{
+						href: null,
+						// title: "Calculadora",
+						// tabBarIcon: ({ color, size }) => (
+						// 	<CalculatorIcon size={size} color={color} />
+						// ),
 					}}
 				/>
 			</Tabs>

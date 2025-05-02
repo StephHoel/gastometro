@@ -3,10 +3,10 @@ import { ScrollView } from "react-native";
 
 import { useCartStore } from "@/stores/CartStore";
 
-import Feather from "@expo/vector-icons/Feather";
-
 import { Form } from "@/components/Form";
 import { Header } from "@/components/Header";
+
+import { EditIcon } from "@/components/Icons";
 
 export default function Edit() {
 	const { id } = useLocalSearchParams();
@@ -23,7 +23,7 @@ export default function Edit() {
 			<Header />
 
 			<Form data={prod} buttonTitle={"Editar Item"}>
-				<Feather name="edit-2" size={20} />
+				<EditIcon color="black" />
 			</Form>
 		</ScrollView>
 	);
