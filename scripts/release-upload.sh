@@ -1,17 +1,24 @@
 #!/bin/bash
 
-echo "=== Iniciando script de upload de APK na release existente ==="
+TAB="    "
+
+echo "🔍 Iniciando script de upload de APK na release existente"
 echo ""
 
 # Solicita ao usuário a tag
-read -p "Digite a tag da release (exemplo: v1.3): " TAG
-echo ""
+# read -p "$TAB👀 Digite a tag da release (exemplo: v1.3): " TAG
+# echo ""
 
 # Verifica se a tag foi fornecida
-if [ -z "$TAG" ]; then
-  echo "ERROR: Nenhuma tag fornecida. Por favor, insira uma tag válida e tente novamente."
-  exit 1
-fi
+while [ -z "$TAG" ]; do
+  read -p "$TAB👀 Digite a tag da release (exemplo: v1.3) ou pressione Ctrl+C para sair: " TAG
+done
+
+
+# if [ -z "$TAG" ]; then
+#   echo "$TAB$TAB❌ Nenhuma tag fornecida. Tente novamente Por favor, insira uma tag válida e tente novamente."
+#   exit 1
+# fi
 
 # Define o nome e o caminho do arquivo APK
 APK_NAME="gastometro-$TAG.apk"

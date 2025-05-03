@@ -31,7 +31,7 @@ export default function Layout() {
 					headerShown: false,
 					tabBarStyle: {
 						backgroundColor: "#0f172a",
-						borderTopColor: "transparent",
+						borderColor: "transparent",
 					},
 					tabBarActiveTintColor: "#22d3ee",
 					tabBarInactiveTintColor: "#94a3b8",

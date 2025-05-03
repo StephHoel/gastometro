@@ -5,7 +5,7 @@
   "scripts": {
     "new-version": "sh ./scripts/add-new-version.sh",
     "release:upload": "sh ./scripts/release-upload.sh",
-    "build:remoto": "sh ./scripts/build-remoto.sh",
+    "build:local": "sh ./scripts/build-local.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
     "build:android:local": "cd android/ && gradlew.bat build && gradlew.bat assembleRelease && cd ..",
     "prebuild": "expo prebuild",
@@ -13,7 +13,7 @@
     "ios": "expo run:ios",
     "start": "expo start --dev-client",
     "build:android": "eas build -p android --profile preview",
-    "build:local": "eas build --platform android --local",
+    "build:local:eas": "eas build --platform android --local",
     "web": "expo start --web --dev-client --clear"
   },
   "dependencies": {
