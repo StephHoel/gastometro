@@ -37,46 +37,44 @@ export default function Home() {
 	return (
 		<View className="flex-1 bg-slate-900">
 			<Header />
+
 			<Text className="text-white text-center pt-2 pb-4">
 				Total: {FormatCurrency(total)}
 			</Text>
+
 			<ScrollView>
-				<View>
-					{cartStore.products.map((prod: ProductProps, i: number) => (
-						<View className="px-4 pt-2" key={prod.id}>
-							<View className="flex-row gap-2 items-center">
-								<TouchableOpacity onPress={() => handleRemove(prod)}>
-									<DeleteIcon />
+				{cartStore.products.map((prod: ProductProps, i: number) => (
+					<View className="px-4 pt-2 pb-5" key={prod.id}>
+						<View className="flex-row gap-2 items-center">
+							<TouchableOpacity onPress={() => handleRemove(prod)}>
+								<DeleteIcon />
+							</TouchableOpacity>
+
+							<Link href={`/edit/${prod.id}`} asChild>
+								<TouchableOpacity>
+									<EditIcon />
 								</TouchableOpacity>
+							</Link>
 
-								<Link href={`/edit/${prod.id}`} asChild>
-									<TouchableOpacity>
-										<EditIcon />
-									</TouchableOpacity>
-								</Link>
+							<TouchableOpacity
+								className="flex-row items-center space-x-2"
+								onPress={() => toggleCollected(prod)}
+							>
+								<CheckboxIcon checked={prod.collected} />
+							</TouchableOpacity>
 
-								<TouchableOpacity
-									className="flex-row items-center space-x-2"
-									onPress={() => toggleCollected(prod)}
-								>
-									<CheckboxIcon checked={prod.collected} />
-								</TouchableOpacity>
-
-								<Text
-									className={`pl-2 mr-14 text-xl 
+							<Text
+								className={`pl-2 mr-14 text-xl 
                     ${prod.collected ? " line-through text-gray-600 " : " text-white "}`}
-								>
-									{FormatTextLine(prod)}
-								</Text>
-							</View>
-							{i !== cartStore.products.length - 1 && (
-								<View className="border-b border-gray-500 pt-2" />
-							)}
+							>
+								{FormatTextLine(prod)}
+							</Text>
 						</View>
-					))}
-
-					<View className="pb-20" />
-				</View>
+						{i !== cartStore.products.length - 1 && (
+							<View className="border-b border-gray-500 pt-2" />
+						)}
+					</View>
+				))}
 			</ScrollView>
 		</View>
 	);
