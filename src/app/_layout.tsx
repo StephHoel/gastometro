@@ -37,9 +37,6 @@ export default function Layout() {
 					tabBarInactiveTintColor: "#94a3b8",
 				}}
 			>
-				<Tabs.Screen name="add" options={{ href: null }} />
-				<Tabs.Screen name="edit/[id]" options={{ href: null }} />
-
 				<Tabs.Screen
 					name="index"
 					options={{
@@ -61,6 +58,9 @@ export default function Layout() {
 						// ),
 					}}
 				/>
+
+				<Tabs.Screen name="add" options={{ href: null }} />
+				<Tabs.Screen name="edit/[id]" options={{ href: null }} />
 			</Tabs>
 		</SafeAreaView>
 	);

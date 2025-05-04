@@ -1,8 +1,8 @@
-import type { ProductProps } from '../interfaces'
-import { FormatCurrency } from './FormatCurrency'
+import type { ProductProps } from "@/interfaces/ProductProps";
+import { SetCurrency } from '@/utils/functions/MathFunctions';
 
 export function FormatTextLine(prod: ProductProps): string {
   return (
-    `${prod.quantity}x ${prod.item} | ${FormatCurrency(Number.parseFloat(prod.price))}`
+    `${prod.quantity}x ${prod.item} | ${SetCurrency(Number.parseFloat(prod.price))}`
   )
 }

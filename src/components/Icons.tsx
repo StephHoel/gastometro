@@ -1,4 +1,4 @@
-import type { IconsProps } from "@/utils/interfaces";
+import type { IconsProps } from "@/interfaces/IconsProps";
 import IonIcons from "@expo/vector-icons/Ionicons";
 
 export function AddIcon({ size = 24, color = "white" }: IconsProps) {
