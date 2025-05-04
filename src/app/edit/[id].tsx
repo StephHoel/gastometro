@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ScrollView } from "react-native";
 
 import { useCartStore } from "@/stores/CartStore";
@@ -12,11 +12,6 @@ export default function Edit() {
 	const { id } = useLocalSearchParams();
 	const cartStore = useCartStore();
 	const prod = cartStore.get(id.toString());
-	const navigate = useNavigation();
-
-	if (prod === undefined) {
-		return navigate.goBack();
-	}
 
 	return (
 		<ScrollView className="flex-1 bg-slate-900">

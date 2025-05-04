@@ -1,18 +1,18 @@
 import type { PropsWithChildren } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { TextInput } from "react-native";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import uuid from "react-native-uuid";
 
 import { useCartStore } from "@/stores/CartStore";
-import { useNavigation } from "expo-router";
-
-import { messages } from "@/utils/constants";
-import type { ProductProps } from "@/utils/interfaces";
 
 import { CustomButton as Button } from "@/components/Button";
-import { SetProduct } from "@/utils/functions/ItemHelper";
-import { CustomInput } from "./CustomInput";
+import { CustomAlert } from "@/components/CustomAlert";
+import { CustomInput } from "@/components/CustomInput";
+import { messages } from "@/constants/messages";
+import type { ProductProps } from "@/interfaces/ProductProps";
+import { ProductService } from "@/services/ProductService";
+import { useRouter } from "expo-router";
 
 interface FormProps extends PropsWithChildren {
 	data?: ProductProps | null;
@@ -26,26 +26,35 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 	const [collected, setCollected] = useState(false);
 
 	const cartStore = useCartStore();
-	const navigate = useNavigation();
+	const navigation = useRouter();
 
 	const inputRef1 = useRef<TextInput>(null);
 	const inputRef2 = useRef<TextInput>(null);
 	const inputRef3 = useRef<TextInput>(null);
 
+	const { AlertComponent, showAlert } = CustomAlert({});
+
 	function handleSubmit(): void {
-		if (item !== "") {
-			let id = uuid.v4().toString();
-
-			if (data !== null) id = data.id;
-
-			const product = SetProduct({ id, item, qtt, price, collected });
+		if (item === "") {
+			showAlert({title: "Erro", message: messages.campos_nao_preenchidos});
+		} else {
+			const product = ProductService.createOrUpdateProduct({
+				id: data?.id || uuid.v4().toString(),
+				item,
+				qtt,
+				price,
+				collected,
+			});
 
 			if (data !== null) cartStore.edit(product);
 			else cartStore.add(product);
 
-			navigate.goBack();
-		} else {
-			Alert.alert("Erro", messages.camposNaoPreenchidos);
+			navigation.push("/");
+
+			setItem("");
+			setQtt("");
+			setPrice("");
+			setCollected(false);
 		}
 	}
 
@@ -60,6 +69,8 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 
 	return (
 		<View className="mt-4">
+			{AlertComponent}
+
 			<CustomInput
 				placeholder="Item"
 				selfRef={inputRef1}

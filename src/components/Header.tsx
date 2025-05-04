@@ -1,128 +1,102 @@
+import { CustomAlert } from "@/components/CustomAlert";
+import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "@/components/Icons";
+import { titlePages } from "@/constants/pages";
+import { whatsapp } from "@/constants/whatsapp";
+import type { CurrentRoute } from "@/interfaces/CurrentRoute";
+import { ClipboardService } from "@/services/ClipboardService";
+import { ShareService } from "@/services/ShareService";
 import { useCartStore } from "@/stores/CartStore";
-import { titleMessage, titlePages } from "@/utils/constants";
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
-import { ShareOnWhatsapp } from "@/utils/functions/ShareOnWhatsapp";
-import type { ButtonProps, CurrentRoute } from "@/utils/interfaces";
 import { useRoute } from "@react-navigation/native";
-import * as Clipboard from "expo-clipboard";
 import { Link } from "expo-router";
-import { useState } from "react";
-import { Linking, Text, TouchableOpacity, View } from "react-native";
-import { CustomAlert } from "./CustomAlert";
-import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "./Icons";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export function Header() {
-	const [alertVisible, setAlertVisible] = useState(false);
-	const [titleAlert, setTitleAlert] = useState("");
-	const [messageAlert, setMessageAlert] = useState("");
-	const [buttonsList, setButtonsList] = useState<ButtonProps[]>([]);
-
+	const { AlertComponent, showAlert } = CustomAlert({});
 	const route = useRoute<CurrentRoute>();
 	const cartStore = useCartStore();
 
-	function showAlert(
-		title: string,
-		message: string,
-		buttons: ButtonProps[] = [],
-	) {
-		setAlertVisible(true);
-		setTitleAlert(title);
-		setMessageAlert(message);
-
-		buttons.push({ text: "Cancelar", action: () => disableAlert() });
-
-		setButtonsList(buttons);
+	function handleRemoveAll() {
+		showAlert({
+			title: "Remover Tudo",
+			message: "Deseja remover todos os itens?",
+			buttons: [
+				{
+					text: "Remover Tudo!",
+					action: () => {
+						cartStore.clear();
+					},
+				},
+			],
+		});
 	}
 
 	async function pasteOnList() {
-		const clipboard = await Clipboard.getStringAsync();
+		const clipboard = await ClipboardService.getClipboardContent();
 
-		if (clipboard?.startsWith(titleMessage)) {
+		if (clipboard?.startsWith(whatsapp.title)) {
 			const listToPaste = ConvertToProductsList(clipboard);
 
-			return showAlert("Colar Lista", "", [
-				{
-					text: "Colar na Lista Existente",
-					action: () => {
-						listToPaste.map(cartStore.add);
-						return disableAlert();
+			showAlert({
+				title: "Colar Lista",
+				message: "",
+				buttons: [
+					{
+						text: "Colar na Lista Existente",
+						action: () => {
+							listToPaste.map(cartStore.add);
+						},
 					},
-				},
-				{
-					text: "Colar em Nova Lista",
-					action: () => {
-						cartStore.replace(listToPaste);
-						return disableAlert();
+					{
+						text: "Colar em Nova Lista",
+						action: () => {
+							cartStore.replace(listToPaste);
+						},
 					},
-				},
-			]);
+				],
+			});
+		} else {
+			showAlert({
+				title: "Erro!",
+				message:
+					"A lista copiada não está no padrão. Copie a lista do Whatsapp sem editar!",
+			});
 		}
-
-		return showAlert(
-			"Erro!",
-			"A lista copiada não está no padrão. Copie a lista do Whatsapp sem editar!",
-		);
 	}
 
 	function handleShare() {
 		const title = "Compartilhar Lista";
-		let message = "";
+		const message =
+			cartStore.products.length === 0
+				? "Coloque pelo menos 1 item na sua lista para que ela possa ser compartilhada."
+				: "";
 
-		const pasteButton = {
-			text: "Colar Lista",
-			action: pasteOnList,
-		};
+		const buttons =
+			cartStore.products.length === 0
+				? [{ text: "OK", action: () => {} }]
+				: [
+						{
+							text: "Enviar via WhatsApp",
+							action: () => {
+								ShareService.shareOnWhatsapp(cartStore);
+							},
+						},
+						{
+							text: "Colar Lista",
+							action: pasteOnList,
+						},
+					];
 
-		let buttons = [
-			{
-				text: "Enviar via WhatsApp",
-				action: () => {
-					const message = ShareOnWhatsapp(cartStore);
-					Linking.openURL(`http://api.whatsapp.com/send?text=${message}`);
-				},
-			},
-			pasteButton,
-		];
-
-		if (cartStore.products.length === 0) {
-			message =
-				"Coloque pelo menos 1 item na sua lista para que ela possa ser compartilhada.";
-
-			buttons = [pasteButton];
-		}
-
-		return showAlert(title, message, buttons);
-	}
-
-	function disableAlert() {
-		setAlertVisible(false);
-	}
-
-	function handleRemoveAll() {
-		return showAlert("Remover Tudo", "Deseja remover todos os itens?", [
-			{
-				text: "Remover Tudo!",
-				action: () => {
-					cartStore.clear();
-					disableAlert();
-				},
-			},
-		]);
+		showAlert({ title, message, buttons });
 	}
 
 	return (
 		<>
+			{AlertComponent}
 			<View className="pt-4 px-3 flex-row justify-between">
 				<Text className="text-white text-2xl font-heading">
 					{titlePages[route.name as keyof typeof titlePages]}
 				</Text>
-
-				<CustomAlert
-					visible={alertVisible}
-					title={titleAlert}
-					message={messageAlert}
-					buttons={buttonsList}
-				/>
 
 				{route.name === "index" ? (
 					<>
