@@ -7,6 +7,7 @@ import { Form } from "@/components/Form";
 import { Header } from "@/components/Header";
 
 import { EditIcon } from "@/components/Icons";
+import { text } from "@/constants/text";
 
 export default function Edit() {
 	const { id } = useLocalSearchParams();
@@ -17,7 +18,7 @@ export default function Edit() {
 		<ScrollView className="flex-1 bg-slate-900">
 			<Header />
 
-			<Form data={prod} buttonTitle={"Editar Item"}>
+			<Form data={prod} buttonTitle={text.buttons.edit}>
 				<EditIcon color="black" />
 			</Form>
 		</ScrollView>

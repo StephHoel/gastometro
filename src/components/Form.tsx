@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { TextInput } from "react-native";
 import { View } from "react-native";
@@ -9,17 +8,12 @@ import { useCartStore } from "@/stores/CartStore";
 import { CustomButton as Button } from "@/components/Button";
 import { CustomAlert } from "@/components/CustomAlert";
 import { CustomInput } from "@/components/CustomInput";
-import { messages } from "@/constants/messages";
-import type { ProductProps } from "@/interfaces/ProductProps";
+import { text } from "@/constants/text";
+import type { FormProps } from "@/interfaces/FormProps";
 import { ProductService } from "@/services/ProductService";
 import { useRouter } from "expo-router";
 
-interface FormProps extends PropsWithChildren {
-	data?: ProductProps | null;
-	buttonTitle: string;
-}
-
-export function Form({ data = null, buttonTitle, children }: FormProps) {
+export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 	const [item, setItem] = useState("");
 	const [qtt, setQtt] = useState("");
 	const [price, setPrice] = useState("");
@@ -36,7 +30,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 
 	function handleSubmit(): void {
 		if (item === "") {
-			showAlert({title: "Erro", message: messages.campos_nao_preenchidos});
+			showAlert({ title: "Erro", message: text.error.campos_nao_preenchidos });
 		} else {
 			const product = ProductService.createOrUpdateProduct({
 				id: data?.id || uuid.v4().toString(),
@@ -46,7 +40,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 				collected,
 			});
 
-			if (data !== null) cartStore.edit(product);
+			if (data !== undefined) cartStore.edit(product);
 			else cartStore.add(product);
 
 			navigation.push("/");
@@ -59,7 +53,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 	}
 
 	useEffect(() => {
-		if (data !== null) {
+		if (data !== undefined) {
 			setItem(data.item);
 			setQtt(data.quantity);
 			setPrice(data.price);
@@ -72,7 +66,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 			{AlertComponent}
 
 			<CustomInput
-				placeholder="Item"
+				placeholder={text.input.placeholder.item}
 				selfRef={inputRef1}
 				returnKeyType={"next"}
 				setItem={setItem}
@@ -81,7 +75,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 			/>
 
 			<CustomInput
-				placeholder="1"
+				placeholder={text.input.placeholder.quantity}
 				selfRef={inputRef2}
 				returnKeyType={"next"}
 				keyboardType={"number-pad"}
@@ -91,7 +85,7 @@ export function Form({ data = null, buttonTitle, children }: FormProps) {
 			/>
 
 			<CustomInput
-				placeholder="1,30"
+				placeholder={text.input.placeholder.price}
 				selfRef={inputRef3}
 				returnKeyType={"done"}
 				keyboardType={"number-pad"}
