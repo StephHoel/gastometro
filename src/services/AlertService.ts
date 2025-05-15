@@ -1,6 +1,12 @@
 import type { CustomAlertRef } from "@/components/CustomAlert";
 import { alert } from "@/constants/alert";
+import { text } from "@/constants/text";
+import { whatsapp } from "@/constants/whatsapp";
 import type { ProductProps } from "@/interfaces/ProductProps";
+import type { StateProps } from "@/interfaces/StateProps";
+import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
+import { ClipboardService } from "./ClipboardService";
+import { ShareService } from "./ShareService";
 
 let alertRef: CustomAlertRef | null = null;
 
@@ -41,43 +47,53 @@ export const AlertService = {
       buttons: [
         {
           text: alert.share.buttons.ok,
-          action: () => {},
+          action: () => { },
         },
       ],
     });
   },
 
-  share(actionWhatsapp: () => void, actionPaste: () => void) {
+  share(cartStore: StateProps) {
     alertRef?.showAlert({
       title: alert.share.title,
       message: "",
       buttons: [
         {
           text: alert.share.buttons.whatsapp,
-          action: actionWhatsapp,
+          action: () => ShareService.shareOnWhatsapp(cartStore),
         },
         {
           text: alert.share.buttons.paste,
-          action: actionPaste,
+          action: async () => await AlertService.paste(cartStore),
         },
       ],
     });
   },
 
-  paste(actionList: () => void, actionNewList: () => void) {
-    alertRef?.showAlert({
-      title: alert.paste.title,
-      message: alert.paste.message,
-      buttons: [
-        {
-          text: alert.paste.buttons.oldList,
-          action: actionList,
-        },
-        {
-          text: alert.paste.buttons.newList,
-          action: actionNewList,
-        },
-      ],
-    });
+  async paste(cartStore: StateProps) {
+    const clipboard = await ClipboardService.getClipboardContent();
+
+    if (clipboard?.startsWith(whatsapp.title)) {
+      const listToPaste = ConvertToProductsList(clipboard);
+
+      alertRef?.showAlert({
+        title: alert.paste.title,
+        message: alert.paste.message,
+        buttons: [
+          {
+            text: alert.paste.buttons.oldList,
+            action: () => listToPaste.map(cartStore.add),
+          },
+          {
+            text: alert.paste.buttons.newList,
+            action: () => cartStore.replace(listToPaste),
+          },
+        ],
+      });
+    } else {
+      AlertService.alert(text.error.alert_title, text.error.lista_fora_padrao);
+    }
+
+
   },
 };
