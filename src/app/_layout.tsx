@@ -59,8 +59,8 @@ export default function Layout() {
 					}}
 				/>
 
-				<Tabs.Screen name="add" options={{ href: null }} />
-				<Tabs.Screen name="edit/[id]" options={{ href: null }} />
+				<Tabs.Screen name="list/add" options={{ href: null }} />
+				<Tabs.Screen name="list/edit/[id]" options={{ href: null }} />
 			</Tabs>
 		</SafeAreaView>
 	);
