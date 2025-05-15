@@ -19,7 +19,7 @@ export default function Edit() {
 			<Header />
 
 			<Form data={prod} buttonTitle={text.buttons.edit}>
-				<EditIcon color="black" />
+				<EditIcon size={32} color="black" />
 			</Form>
 		</ScrollView>
 	);
