@@ -6,10 +6,11 @@ import uuid from "react-native-uuid";
 import { useCartStore } from "@/stores/CartStore";
 
 import { CustomButton as Button } from "@/components/Button";
-import { CustomAlert } from "@/components/CustomAlert";
+import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert";
 import { CustomInput } from "@/components/CustomInput";
 import { text } from "@/constants/text";
 import type { FormProps } from "@/interfaces/FormProps";
+import { AlertService } from "@/services/AlertService";
 import { ProductService } from "@/services/ProductService";
 import { useRouter } from "expo-router";
 
@@ -25,12 +26,17 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 	const inputRef1 = useRef<TextInput>(null);
 	const inputRef2 = useRef<TextInput>(null);
 	const inputRef3 = useRef<TextInput>(null);
+	const alertRef = useRef<CustomAlertRef>(null);
 
-	const { AlertComponent, showAlert } = CustomAlert({});
+	useEffect(() => {
+		if (alertRef.current) {
+			AlertService.init(alertRef.current);
+		}
+	}, []);
 
 	function handleSubmit(): void {
 		if (item === "") {
-			showAlert({ title: "Erro", message: text.error.campos_nao_preenchidos });
+			AlertService.alert("Erro", text.error.campos_nao_preenchidos);
 		} else {
 			const product = ProductService.createOrUpdateProduct({
 				id: data?.id || uuid.v4().toString(),
@@ -63,7 +69,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 
 	return (
 		<View className="mt-4">
-			{AlertComponent}
+			<CustomAlert ref={alertRef} />
 
 			<CustomInput
 				placeholder={text.input.placeholder.item}

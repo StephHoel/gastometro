@@ -3,5 +3,5 @@ import type { StateProps } from "@/interfaces/StateProps";
 
 export interface ListProps{
   cartStore: StateProps,
-  showAlert: (showAlert: ShowAlertProps) => void
+  showAlert?: (showAlert: ShowAlertProps) => void
 }

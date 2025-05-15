@@ -21,7 +21,7 @@ export function List({ cartStore }: ListProps) {
 					<View className="flex-row gap-2 items-center">
 						<TouchableOpacity
 							onPress={() =>
-								AlertService.remove(prod, () => cartStore.remove(prod.id))
+								AlertService.remove(() => cartStore.remove(prod.id), prod)
 							}
 						>
 							<DeleteIcon />
