@@ -39,8 +39,6 @@ export function Header() {
 								else AlertService.share(cartStore);
 							}}
 						/>
-
-						<Add action={() => navigator.push("/add")} />
 					</>
 				);
 			default:
@@ -51,6 +49,7 @@ export function Header() {
 	return (
 		<>
 			<CustomAlert ref={alertRef} />
+
 			<View className="pt-4 px-3 flex-row justify-between">
 				<Text className="text-white text-2xl font-heading">
 					{titlePages[route.name as keyof typeof titlePages]}
@@ -59,6 +58,8 @@ export function Header() {
 				<View className="flex-row gap-4">{buttonsByRouteName()}</View>
 			</View>
 			<View className="border-b border-white pt-3 mx-2" />
+
+			{route.name === "index" && <Add action={() => navigator.push("/add")} />}
 		</>
 	);
 }
