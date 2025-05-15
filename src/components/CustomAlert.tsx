@@ -9,6 +9,7 @@ import {
 	View,
 } from "react-native";
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps";
+import { WhatsappIcon } from "./Icons";
 
 export interface CustomAlertRef {
 	showAlert: (params: ShowAlertProps) => void;
@@ -52,9 +53,9 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
 			onRequestClose={internalHideAlert}
 		>
 			<TouchableWithoutFeedback onPress={internalHideAlert}>
-				<View className="flex-1 justify-center items-center bg-black/50">
+				<View className="flex-1 justify-center items-center bg-black/30">
 					<TouchableWithoutFeedback>
-						<View className="w-3/4 p-5 bg-slate-700 rounded-xl items-center">
+						<View className="w-3/4 p-5 bg-slate-700 rounded-lg  items-center">
 							<Text className="text-xl text-white font-bold mb-3">{title}</Text>
 
 							{message && (
@@ -63,7 +64,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
 								</Text>
 							)}
 
-							<View className="w-full flex-col">
+							<View className="w-full flex-col px-4">
 								{buttons.map((button, index) => (
 									<TouchableOpacity
 										key={index}
@@ -82,7 +83,13 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
 													: "text-black/90"
 											}`}
 										>
-											{button.text}
+											{button.text === alert.share.buttons.whatsapp ? (
+												<View className="flex-row justify-center items-center gap-1">
+													<WhatsappIcon /> {button.text}
+												</View>
+											) : (
+												button.text
+											)}
 										</Text>
 									</TouchableOpacity>
 								))}

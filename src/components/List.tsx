@@ -1,4 +1,4 @@
-import { CheckboxIcon, DeleteIcon, EditIcon } from "@/components/Icons";
+import { CheckboxIcon, DeleteIcon } from "@/components/Icons";
 import type { ListProps } from "@/interfaces/ListProps";
 import type { ProductProps } from "@/interfaces/ProductProps";
 import { AlertService } from "@/services/AlertService";
@@ -27,10 +27,6 @@ export function List({ cartStore }: ListProps) {
 							<DeleteIcon />
 						</TouchableOpacity>
 
-						<TouchableOpacity onPress={() => nav.push(`/edit/${prod.id}`)}>
-							<EditIcon />
-						</TouchableOpacity>
-
 						<TouchableOpacity
 							className="flex-row items-center space-x-2"
 							onPress={() => toggleCollected(prod)}
@@ -38,13 +34,17 @@ export function List({ cartStore }: ListProps) {
 							<CheckboxIcon checked={prod.collected} />
 						</TouchableOpacity>
 
-						<Text
-							className={`pl-2 mr-14 text-xl ${
-								prod.collected ? " line-through text-gray-600 " : " text-white "
-							}`}
-						>
-							{FormatTextLine(prod)}
-						</Text>
+						<TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)}>
+							<Text
+								className={`pl-2 mr-14 text-xl ${
+									prod.collected
+										? " line-through text-gray-600 "
+										: " text-white "
+								}`}
+							>
+								{FormatTextLine(prod)}
+							</Text>
+						</TouchableOpacity>
 					</View>
 
 					{i !== cartStore.products.length - 1 && (

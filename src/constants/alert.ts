@@ -20,7 +20,7 @@ export const alert = {
     message: "Coloque pelo menos 1 item na sua lista para que ela possa ser compartilhada.",
     buttons: {
       ok: "OK",
-      whatsapp: "Enviar via WhatsApp",
+      whatsapp: "WhatsApp",
       paste: "Colar Lista",
     },
   },

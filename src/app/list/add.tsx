@@ -11,7 +11,7 @@ export default function Add() {
 			<Header />
 
 			<Form buttonTitle={text.buttons.add}>
-				<AddIcon color="black" />
+				<AddIcon size={32} color="black" />
 			</Form>
 		</ScrollView>
 	);

@@ -68,10 +68,11 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 	}, [data]);
 
 	return (
-		<View className="mt-4">
+		<View className="my-5 gap-5">
 			<CustomAlert ref={alertRef} />
 
 			<CustomInput
+				nameField="Item"
 				placeholder={text.input.placeholder.item}
 				selfRef={inputRef1}
 				returnKeyType={"next"}
@@ -81,6 +82,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 			/>
 
 			<CustomInput
+				nameField="Quantidade"
 				placeholder={text.input.placeholder.quantity}
 				selfRef={inputRef2}
 				returnKeyType={"next"}
@@ -91,6 +93,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 			/>
 
 			<CustomInput
+				nameField="Preço"
 				placeholder={text.input.placeholder.price}
 				selfRef={inputRef3}
 				returnKeyType={"done"}

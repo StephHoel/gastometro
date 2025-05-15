@@ -17,7 +17,7 @@ export function CheckboxIcon({ checked, size = 24 }: IconsProps) {
 	return (
 		<IonIcons
 			name={checked ? "checkbox" : "square"}
-			color={checked ? "#22c55e" : "white"}
+			color={checked ? "#a3e635" : "white"}
 			size={size}
 		/>
 	);
@@ -37,4 +37,8 @@ export function HomeIcon({ size = 24, color = "white" }: IconsProps) {
 
 export function ShareIcon({ size = 24, color = "white" }: IconsProps) {
 	return <IonIcons name="share-social-outline" size={size} color={color} />;
+}
+
+export function WhatsappIcon(){
+	return <IonIcons name="logo-whatsapp" size={18} color={"black"} />
 }
