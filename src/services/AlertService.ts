@@ -1,49 +1,60 @@
-import { alertMethods } from "@/components/CustomAlert";
+import type { CustomAlertRef } from "@/components/CustomAlert";
 import { alert } from "@/constants/alert";
 import type { ProductProps } from "@/interfaces/ProductProps";
 
+let alertRef: CustomAlertRef | null = null;
+
 export const AlertService = {
+  init(ref: CustomAlertRef) {
+    alertRef = ref;
+  },
+
   alert(title: string, message: string) {
-    alertMethods.showAlert({
-      title: title,
-      message: message,
+    alertRef?.showAlert({
+      title,
+      message,
     });
   },
 
-  remove(prod: ProductProps | undefined, action: () => void) {
-    alertMethods.showAlert({
+  remove(action: () => void, prod?: ProductProps) {
+    alertRef?.showAlert({
       title: prod === undefined ? alert.removeAll.title : alert.remove.title,
-      message: prod === undefined ? alert.removeAll.message : alert.remove.message(prod.item),
+      message: prod === undefined
+        ? alert.removeAll.message
+        : alert.remove.message(prod.item),
       buttons: [
         {
-          text: prod === undefined ? alert.removeAll.button.title : alert.remove.button.title,
-          action: action,
+          text:
+            prod === undefined
+              ? alert.removeAll.button.title
+              : alert.remove.button.title,
+          action,
         },
       ],
     });
   },
 
   shareEmpty() {
-    alertMethods.showAlert({
+    alertRef?.showAlert({
       title: alert.share.title,
       message: alert.share.message,
       buttons: [
         {
           text: alert.share.buttons.ok,
-          action: () => { }
+          action: () => console.log("ok button"),
         },
       ],
     });
   },
 
   share(actionWhatsapp: () => void, actionPaste: () => void) {
-    alertMethods.showAlert({
+    alertRef?.showAlert({
       title: alert.share.title,
       message: "",
       buttons: [
         {
           text: alert.share.buttons.whatsapp,
-          action: actionWhatsapp
+          action: actionWhatsapp,
         },
         {
           text: alert.share.buttons.paste,
@@ -54,13 +65,13 @@ export const AlertService = {
   },
 
   paste(actionList: () => void, actionNewList: () => void) {
-    alertMethods.showAlert({
+    alertRef?.showAlert({
       title: alert.paste.title,
       message: alert.paste.message,
       buttons: [
         {
           text: alert.paste.buttons.oldList,
-          action: actionList
+          action: actionList,
         },
         {
           text: alert.paste.buttons.newList,
@@ -69,6 +80,4 @@ export const AlertService = {
       ],
     });
   },
-
-
-}
+};

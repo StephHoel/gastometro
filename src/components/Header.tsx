@@ -1,5 +1,5 @@
-import { CustomAlert } from "@/components/CustomAlert";
-import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "@/components/Icons";
+import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert";
+import { Add, Back, Delete, Share } from "@/components/TouchableIcons";
 import { titlePages } from "@/constants/pages";
 import { text } from "@/constants/text";
 import { whatsapp } from "@/constants/whatsapp";
@@ -10,13 +10,21 @@ import { ShareService } from "@/services/ShareService";
 import { useCartStore } from "@/stores/CartStore";
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
 import { useRoute } from "@react-navigation/native";
-import { Link } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useEffect, useRef } from "react";
+import { Text, View } from "react-native";
 
 export function Header() {
-	const { AlertComponent } = CustomAlert({});
 	const route = useRoute<CurrentRoute>();
 	const cartStore = useCartStore();
+	const navigator = useRouter();
+	const alertRef = useRef<CustomAlertRef>(null);
+
+	useEffect(() => {
+		if (alertRef.current) {
+			AlertService.init(alertRef.current);
+		}
+	}, []);
 
 	async function pasteOnList() {
 		const clipboard = await ClipboardService.getClipboardContent();
@@ -33,7 +41,7 @@ export function Header() {
 		}
 	}
 
-	function handleShare() {
+	function handleShare(): void {
 		if (cartStore.products.length === 0) AlertService.shareEmpty();
 		else
 			AlertService.share(
@@ -44,7 +52,8 @@ export function Header() {
 
 	return (
 		<>
-			{AlertComponent}
+			<CustomAlert ref={alertRef} />
+			
 			<View className="pt-4 px-3 flex-row justify-between">
 				<Text className="text-white text-2xl font-heading">
 					{titlePages[route.name as keyof typeof titlePages]}
@@ -53,32 +62,21 @@ export function Header() {
 				{route.name === "index" ? (
 					<>
 						{cartStore.products.length > 0 && (
-							<TouchableOpacity
-								activeOpacity={0.7}
-								onPress={() =>
-									AlertService.remove(undefined, cartStore.clear())
-								}
-							>
-								<DeleteIcon size={35} />
-							</TouchableOpacity>
+							<Delete action={() => AlertService.remove(cartStore.clear())} />
 						)}
 
-						<TouchableOpacity activeOpacity={0.7} onPress={() => handleShare}>
-							<ShareIcon size={35} />
-						</TouchableOpacity>
+						<Share action={handleShare} />
 
-						<Link href="/add" asChild>
+						<Add action={() => navigator.push("/add")} />
+
+						{/* <Link href="/add" asChild>
 							<TouchableOpacity activeOpacity={0.7}>
 								<AddIcon size={35} />
 							</TouchableOpacity>
-						</Link>
+						</Link> */}
 					</>
 				) : (
-					<Link href="/" asChild>
-						<TouchableOpacity activeOpacity={0.7}>
-							<BackIcon size={35} />
-						</TouchableOpacity>
-					</Link>
+					<Back action={() => navigator.push("/")} />
 				)}
 			</View>
 			<View className="border-b border-white pt-3 mx-2" />

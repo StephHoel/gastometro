@@ -1,19 +1,27 @@
-import { CustomAlert } from "@/components/CustomAlert";
+import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert";
 import { Header } from "@/components/Header";
 import { List } from "@/components/List";
+import { AlertService } from "@/services/AlertService";
 import { useCartStore } from "@/stores/CartStore";
 import { ReduceProducts, SetCurrency } from "@/utils/functions/MathFunctions";
+import { useEffect, useRef } from "react";
 import { Text, View } from "react-native";
 
 export default function Home() {
 	const cartStore = useCartStore();
-	const { AlertComponent, showAlert } = CustomAlert({});
+	const alertRef = useRef<CustomAlertRef>(null);
+
+	useEffect(() => {
+		if (alertRef.current) {
+			AlertService.init(alertRef.current);
+		}
+	}, []);
 
 	const total = ReduceProducts(cartStore);
 
 	return (
 		<>
-			{AlertComponent}
+			<CustomAlert ref={alertRef} />
 
 			<View className="flex-1 bg-slate-900">
 				<Header />
@@ -21,7 +29,7 @@ export default function Home() {
 					Total: {SetCurrency(total)}
 				</Text>
 
-				<List cartStore={cartStore} showAlert={showAlert} />
+				<List cartStore={cartStore} />
 			</View>
 		</>
 	);
