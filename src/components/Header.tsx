@@ -50,34 +50,34 @@ export function Header() {
 			);
 	}
 
+	function buttonsByRouteName() {
+		switch (route.name) {
+			case "index":
+				return (
+					<>
+						{cartStore.products.length > 0 && (
+							<Delete
+								action={() => AlertService.remove(() => cartStore.clear())}
+							/>
+						)}
+						<Share action={handleShare} />
+						<Add action={() => navigator.push("/add")} />
+					</>
+				);
+			default:
+				return <Back action={() => navigator.push("/")} />;
+		}
+	}
+
 	return (
 		<>
 			<CustomAlert ref={alertRef} />
-			
 			<View className="pt-4 px-3 flex-row justify-between">
 				<Text className="text-white text-2xl font-heading">
 					{titlePages[route.name as keyof typeof titlePages]}
 				</Text>
 
-				{route.name === "index" ? (
-					<>
-						{cartStore.products.length > 0 && (
-							<Delete action={() => AlertService.remove(cartStore.clear())} />
-						)}
-
-						<Share action={handleShare} />
-
-						<Add action={() => navigator.push("/add")} />
-
-						{/* <Link href="/add" asChild>
-							<TouchableOpacity activeOpacity={0.7}>
-								<AddIcon size={35} />
-							</TouchableOpacity>
-						</Link> */}
-					</>
-				) : (
-					<Back action={() => navigator.push("/")} />
-				)}
+				<View className="flex-row gap-4">{buttonsByRouteName()}</View>
 			</View>
 			<View className="border-b border-white pt-3 mx-2" />
 		</>
