@@ -59,7 +59,7 @@ export function Header() {
 			</View>
 			<View className="border-b border-white pt-3 mx-2" />
 
-			{route.name === "index" && <Add action={() => navigator.push("/add")} />}
+			{route.name === "index" && <Add action={() => navigator.push("/list/add")} />}
 		</>
 	);
 }
