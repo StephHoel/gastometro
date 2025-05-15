@@ -28,7 +28,7 @@ export const AlertService = {
             prod === undefined
               ? alert.removeAll.button.title
               : alert.remove.button.title,
-          action,
+          action: action,
         },
       ],
     });
@@ -41,7 +41,7 @@ export const AlertService = {
       buttons: [
         {
           text: alert.share.buttons.ok,
-          action: () => console.log("ok button"),
+          action: () => {},
         },
       ],
     });

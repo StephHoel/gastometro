@@ -1,6 +1,13 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+import { alert } from "@/constants/alert";
 import type { ButtonProps } from "@/interfaces/ButtonProps";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import {
+	Modal,
+	Text,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
+} from "react-native";
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps";
 
 export interface CustomAlertRef {
@@ -20,13 +27,18 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
 
 	useImperativeHandle(ref, () => ({
 		showAlert({ title, message, buttons = [] }: ShowAlertProps) {
+			const hasSingleOk =
+				buttons.length === 1 && buttons[0].text === alert.share.buttons.ok;
+
 			setTitle(title);
 			setMessage(message);
-			const hasCancel = buttons.some((b) => b.text === "Cancelar");
-			const finalButtons = hasCancel
-				? buttons
-				: [...buttons, { text: "Cancelar", action: internalHideAlert }];
-			setButtons(finalButtons);
+
+			setButtons(
+				hasSingleOk
+					? buttons
+					: [...buttons, { text: "Cancelar", action: internalHideAlert }],
+			);
+
 			setIsVisible(true);
 		},
 		hideAlert: internalHideAlert,
@@ -39,42 +51,46 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
 			visible={isVisible}
 			onRequestClose={internalHideAlert}
 		>
-			<View className="flex-1 justify-center items-center bg-black/50">
-				<View className="w-3/4 p-5 bg-slate-700 rounded-xl items-center">
-					<Text className="text-xl text-white font-bold mb-3">{title}</Text>
-					{message ? (
-						<Text className="text-base text-white mb-5 text-center">
-							{message}
-						</Text>
-					) : null}
-					<View className="w-full flex-col">
-						{buttons.map((button, index) => (
-							<TouchableOpacity
-								key={index}
-								className={`p-2 mb-2 rounded items-center ${
-									button.text === "Cancelar"
-										? "bg-red-500"
-										: "bg-slate-400"
-								}`}
-								onPress={() => {
-									button.action?.();
-									internalHideAlert();
-								}}
-							>
-								<Text
-									className={`font-bold ${
-										button.text === "Cancelar"
-											? "text-white"
-											: "text-black/90"
-									}`}
-								>
-									{button.text}
+			<TouchableWithoutFeedback onPress={internalHideAlert}>
+				<View className="flex-1 justify-center items-center bg-black/50">
+					<TouchableWithoutFeedback>
+						<View className="w-3/4 p-5 bg-slate-700 rounded-xl items-center">
+							<Text className="text-xl text-white font-bold mb-3">{title}</Text>
+
+							{message && (
+								<Text className="text-base text-white mb-5 text-center">
+									{message}
 								</Text>
-							</TouchableOpacity>
-						))}
-					</View>
+							)}
+
+							<View className="w-full flex-col">
+								{buttons.map((button, index) => (
+									<TouchableOpacity
+										key={index}
+										className={`p-2 mb-2 rounded items-center ${
+											button.text === "Cancelar" ? "bg-red-500" : "bg-slate-400"
+										}`}
+										onPress={() => {
+											button.action();
+											internalHideAlert();
+										}}
+									>
+										<Text
+											className={`font-bold ${
+												button.text === "Cancelar"
+													? "text-white"
+													: "text-black/90"
+											}`}
+										>
+											{button.text}
+										</Text>
+									</TouchableOpacity>
+								))}
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
 				</View>
-			</View>
+			</TouchableWithoutFeedback>
 		</Modal>
 	);
 });
