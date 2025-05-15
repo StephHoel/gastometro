@@ -1,11 +1,17 @@
 import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "@/components/Icons";
 import type { IconProps } from "@/interfaces/IconProps";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 export function Add({ action }: IconProps) {
 	return (
-		<TouchableOpacity activeOpacity={0.7} onPress={action}>
-			<AddIcon size={35} />
+		<TouchableOpacity
+			activeOpacity={0.7}
+			onPress={action}
+			className="absolute bottom-6 right-6 z-50"
+		>
+			<View className="bg-lime-400 rounded-full w-14 h-14 items-center justify-center">
+				<AddIcon size={35} color="black" />
+			</View>
 		</TouchableOpacity>
 	);
 }
