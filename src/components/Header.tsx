@@ -41,6 +41,9 @@ export function Header() {
 						/>
 					</>
 				);
+
+				case "calculator":
+					return null
 			default:
 				return <Back action={() => navigator.push("/")} />;
 		}
