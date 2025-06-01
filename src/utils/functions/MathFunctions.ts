@@ -2,11 +2,15 @@ import type { ProductProps } from "@/interfaces/ProductProps";
 import type { StateProps } from "@/interfaces/StateProps";
 
 function ParseToFloat(value: string): number {
-  return Number.parseFloat(value)
+  return Number.parseFloat(value.replace(",","."))
 }
 
 export function Multiply(value1: string, value2: string): number {
   return ParseToFloat(value1) * ParseToFloat(value2)
+}
+
+export function Divide(value1: string, value2: string): number {
+  return ParseToFloat(value1) / ParseToFloat(value2)
 }
 
 export function SetCurrency(value: number) {

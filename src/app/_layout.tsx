@@ -40,22 +40,22 @@ export default function Layout() {
 				<Tabs.Screen
 					name="index"
 					options={{
-						href: null,
-						// title: "Início",
-						// tabBarIcon: ({ color, size }) => (
-						// 	<HomeIcon size={size} color={color} />
-						// ),
+						// href: null,
+						title: "Início",
+						tabBarIcon: ({ color, size }) => (
+							<HomeIcon size={size} color={color} />
+						),
 					}}
 				/>
 
 				<Tabs.Screen
 					name="calculator"
 					options={{
-						href: null,
-						// title: "Calculadora",
-						// tabBarIcon: ({ color, size }) => (
-						// 	<CalculatorIcon size={size} color={color} />
-						// ),
+						// href: null,
+						title: "Calculadora",
+						tabBarIcon: ({ color, size }) => (
+							<CalculatorIcon size={size} color={color} />
+						),
 					}}
 				/>
 

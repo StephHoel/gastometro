@@ -22,6 +22,17 @@ export const AlertService = {
     });
   },
 
+  ok(title: string, message: string) {
+    alertRef?.showAlert({
+      title,
+      message,
+      buttons: [{
+        text: alert.share.buttons.ok,
+        action: () => { },
+      }]
+    });
+  },
+
   remove(action: () => void, prod?: ProductProps) {
     alertRef?.showAlert({
       title: prod === undefined ? alert.removeAll.title : alert.remove.title,

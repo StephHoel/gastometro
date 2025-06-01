@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { TextInput } from "react-native";
-import { View } from "react-native";
+import { Keyboard, View } from "react-native";
 import uuid from "react-native-uuid";
 
 import { useCartStore } from "@/stores/CartStore";
@@ -35,8 +35,10 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 	}, []);
 
 	function handleSubmit(): void {
+		Keyboard.dismiss()
+
 		if (item === "") {
-			AlertService.alert("Erro", text.error.campos_nao_preenchidos);
+			AlertService.ok("Erro", text.error.campos_nao_preenchidos);
 		} else {
 			const product = ProductService.createOrUpdateProduct({
 				id: data?.id || uuid.v4().toString(),
@@ -48,13 +50,13 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 
 			if (data !== undefined) cartStore.edit(product);
 			else cartStore.add(product);
-
-			navigation.push("/");
-
+			
 			setItem("");
 			setQtt("");
 			setPrice("");
 			setCollected(false);
+
+			navigation.push("/");
 		}
 	}
 
