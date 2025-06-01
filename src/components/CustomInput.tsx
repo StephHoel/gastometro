@@ -15,18 +15,20 @@ export function CustomInput({
 	function handleChangeText(text: string) {
 		if (nameField === "Quantidade" || nameField === "Preço") {
 			let filtered = text.replace(/[^0-9.,]/g, "");
+
 			const sep = filtered.includes(",")
 				? ","
 				: filtered.includes(".")
 					? "."
 					: "";
+			
 			const [intPart, ...rest] = filtered.split(/[.,]/);
 			let decimalPart = rest.join("");
 
 			if (sep) {
 				const maxDecimals = nameField === "Preço" ? 2 : 3;
 				decimalPart = decimalPart.slice(0, maxDecimals);
-				filtered = intPart + sep + decimalPart;
+				filtered = intPart + "." + decimalPart;
 			} else {
 				filtered = intPart;
 			}

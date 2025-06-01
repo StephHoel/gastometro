@@ -1,17 +1,25 @@
+import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps";
 import type { PropsWithChildren } from "react";
-import type { TouchableOpacityProps } from "react-native";
 import { Text, TouchableOpacity } from "react-native";
 
-type ButtonProps = TouchableOpacityProps & PropsWithChildren;
+function Button({ children, type = "Success", ...rest }: ButtonTouchableProps) {
+	let typeColor: string;
 
-type ButtonTextProps = PropsWithChildren;
+	switch (type) {
+		case "Success":
+			typeColor = "bg-lime-400";
+			break;
+		case "Fail":
+			typeColor = "bg-red-600";
+			break;
+		default:
+			typeColor = "bg-zinc-400";
+			break;
+	}
 
-type ButtonIconProps = PropsWithChildren;
-
-function Button({ children, ...rest }: ButtonProps) {
 	return (
 		<TouchableOpacity
-			className="h-12 bg-lime-400 items-center justify-center flex-row mx-5 rounded-2xl"
+			className={`h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
 			activeOpacity={0.7}
 			{...rest}
 		>
@@ -20,13 +28,13 @@ function Button({ children, ...rest }: ButtonProps) {
 	);
 }
 
-function ButtonText({ children }: ButtonTextProps) {
+function ButtonText({ children }: PropsWithChildren) {
 	return (
 		<Text className="text-black font-heading text-3xl mx-2">{children}</Text>
 	);
 }
 
-function ButtonIcon({ children }: ButtonIconProps) {
+function ButtonIcon({ children }: PropsWithChildren) {
 	return children;
 }
 
