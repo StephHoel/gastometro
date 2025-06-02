@@ -2,7 +2,7 @@ import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps";
 import type { PropsWithChildren } from "react";
 import { Text, TouchableOpacity } from "react-native";
 
-function Button({ children, type = "Success", ...rest }: ButtonTouchableProps) {
+function Button({ children, type = "Success", className, ...rest }: ButtonTouchableProps) {
 	let typeColor: string;
 
 	switch (type) {
@@ -19,7 +19,7 @@ function Button({ children, type = "Success", ...rest }: ButtonTouchableProps) {
 
 	return (
 		<TouchableOpacity
-			className={`h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
+			className={`${className} h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
 			activeOpacity={0.7}
 			{...rest}
 		>
