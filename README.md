@@ -18,6 +18,7 @@ O aplicativo oferece uma série de funcionalidades para facilitar sua experiênc
 - **💱 Suporte a Preços com Vírgulas:** Insira preços utilizando vírgulas ou pontos como separadores decimais.
 - **✅ Marcar Itens Coletados:** Marque itens já coletados, facilitando o acompanhamento durante as compras.
 - **💾 Salvar Itens com Preço Zerado:** Permita salvar itens mesmo que o preço esteja zerado.
+- **🧮 Calculadora de Mercado:** Calcule o preço por unidade (preço total dividido pela unidade, como litro ou kg).
 
 ---
 
@@ -28,7 +29,6 @@ Estamos constantemente trabalhando para melhorar o aplicativo. Confira as funcio
 - ~~**⭐ Prioridade de Itens:** Marque itens como prioritários, destacando-os na interface.~~
 - **🔔 Notificações:** Receba lembretes sobre itens que precisam ser comprados, utilizando a biblioteca `react-native-push-notification`.
 - **📂 Múltiplas Listas:** Crie várias listas com títulos personalizados.
-- **🧮 Calculadora de Mercado:** Calcule o preço por unidade (preço total dividido pela unidade, como litro ou kg).
 - **💳 Contas a Pagar:** Gerencie uma lista de contas a pagar para controle financeiro.
 - **✅ Total de Itens Marcados:** Cálculo de valor total dos itens marcados como "pegos".
 
