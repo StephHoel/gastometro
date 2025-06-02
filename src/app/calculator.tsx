@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { text } from "@/constants/text";
 import { AlertService } from "@/services/AlertService";
 import { Divide, SetCurrency } from "@/utils/functions/MathFunctions";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Keyboard, Text, TextInput, View } from "react-native";
 
 export default function Calculator() {
@@ -17,6 +17,10 @@ export default function Calculator() {
 	const inputRef1 = useRef<TextInput>(null);
 	const inputRef2 = useRef<TextInput>(null);
 	const inputRef3 = useRef<TextInput>(null);
+
+	useEffect(() => {
+		inputRef1.current?.focus()
+	},[])
 	
 	function clear() {
 		setPrice("")
@@ -27,9 +31,8 @@ export default function Calculator() {
 	function handleToCalc() {
 		Keyboard.dismiss();
 
-		if (price === "" || quantity === "") {
+		if (price === "" || quantity === "")
 			return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
-		}
 
 		setAnswer(Divide(price, quantity));
 	}
@@ -51,6 +54,7 @@ export default function Calculator() {
 					placeholder={"Preço da Embalagem"}
 					setItem={setPrice}
 					item={price}
+					keyboardType="number-pad"
 					onSubmit={() => inputRef2.current?.focus()}
 					returnKeyType={"next"}
 				/>
@@ -61,6 +65,7 @@ export default function Calculator() {
 					placeholder={"Quantidade na Embalagem"}
 					setItem={setQuantity}
 					item={quantity}
+					keyboardType="number-pad"
 					// onSubmit={() => inputRef3.current?.focus()}
 					// returnKeyType={"next"}
 					onSubmit={handleToCalc}
@@ -77,13 +82,15 @@ export default function Calculator() {
 					returnKeyType={"done"}
 				/> */}
 
-				<Button onPress={handleToCalc}>
-					<Button.Text>Calcular</Button.Text>
-				</Button>
+				<View className="flex-1 flex-row justify-between">
+					<Button type="Normal" onPress={handleToClear} className="flex-1 border mr-2">
+						<Button.Text>Limpar</Button.Text>
+					</Button>
 
-				<Button type="Normal" onPress={handleToClear}>
-					<Button.Text>Limpar</Button.Text>
-				</Button>
+					<Button onPress={handleToCalc} className="flex-1 border ml-2">
+						<Button.Text>Calcular</Button.Text>
+					</Button>
+				</View>
 
 				<View className="border border-white rounded-2xl mx-5 p-4 gap-2 text-white">
 					<Text className="text-white">Preço por Unidade:</Text>

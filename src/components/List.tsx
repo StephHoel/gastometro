@@ -34,7 +34,7 @@ export function List({ cartStore }: ListProps) {
 							<CheckboxIcon checked={prod.collected} />
 						</TouchableOpacity>
 
-						<TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)}>
+						<TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)} className="flex-1">
 							<Text
 								className={`pl-2 mr-14 text-xl ${
 									prod.collected
