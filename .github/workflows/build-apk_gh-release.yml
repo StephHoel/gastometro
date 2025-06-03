@@ -61,7 +61,7 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-      - name: Create GitHub Release for Main Branch
+      - name: Create or Update GitHub Release for Main Branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ github.ref_name == 'main' }}
