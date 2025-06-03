@@ -2,7 +2,7 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "release" ]
+    branches: [ "main", "release"]
   pull_request:
     branches: [ "main" ]
 
@@ -36,6 +36,12 @@ jobs:
       - name: Prebuild Expo
         run: npx expo prebuild --non-interactive --platform android
 
+      - name: Remove .webp files
+        run: |
+          echo "Removing .webp files..."
+          find . -name "*.webp" -type f -delete
+          echo "Files removing!"
+
       - name: Build APK
         run: |
           cd android
@@ -45,7 +51,7 @@ jobs:
           EXPO_NO_COMMAND: 1
 
       - name: Rename APK
-        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/gastometro.apk
+        run: mv android/app/build/outputs/apk/release/*.apk android/app/build/outputs/apk/release/gastometro.apk
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4.6.2
@@ -55,31 +61,44 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-      - name: Create GitHub Release for Release Branch
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ github.ref_name == 'release' }}
-        run: |
-          CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
-          gh release create dev \
-          android/app/build/outputs/apk/release/gastometro.apk \
-          --title "Builded at $CURRENT_DATETIME" \
-          --target release \
-          --generate-notes \
-          --prerelease
-
       - name: Create GitHub Release for Main Branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ github.ref_name == 'main' }}
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
-          gh release create main \
-          android/app/build/outputs/apk/release/gastometro.apk \
-          --title "Builded at $CURRENT_DATETIME" \
-          --target main \
-          --generate-notes
+          TAG="main"
+          APK_PATH="android/app/build/outputs/apk/release/gastometro.apk"
 
-      - name: Skip Release for Other Branches
-        if: ${{ github.ref_name != 'develop' && github.ref_name != 'main' }}
-        run: echo "No release created for branch ${{ github.ref_name }}."
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release with tag '$TAG' exists. Uploading new APK..."
+            gh release upload "$TAG" "$APK_PATH" --clobber
+          else
+            echo "Creating new release with tag '$TAG'..."
+            gh release create "$TAG" "$APK_PATH" \
+              --title "Builded at $CURRENT_DATETIME" \
+              --target main \
+              --generate-notes
+          fi
+
+      - name: Create or Update GitHub Release for Other Branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ github.ref_name != 'main' }}
+        run: |
+          CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
+          TAG="dev"
+          APK_PATH="android/app/build/outputs/apk/release/gastometro.apk"
+
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release with tag '$TAG' exists. Uploading new APK..."
+            gh release upload "$TAG" "$APK_PATH" --clobber
+          else
+            echo "Creating new prerelease with tag '$TAG'..."
+            gh release create "$TAG" "$APK_PATH" \
+              --title "Builded at $CURRENT_DATETIME" \
+              --target release \
+              --generate-notes \
+              --prerelease
+          fi
+
