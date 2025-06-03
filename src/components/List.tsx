@@ -2,6 +2,7 @@ import { CheckboxIcon, DeleteIcon } from "@/components/Icons";
 import type { ListProps } from "@/interfaces/ListProps";
 import type { ProductProps } from "@/interfaces/ProductProps";
 import { AlertService } from "@/services/AlertService";
+import { SortProductsAlphabetically } from '@/utils/functions/SortList';
 import { FormatTextLine } from "@/utils/functions/StringFunctions";
 import { useRouter } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -16,7 +17,8 @@ export function List({ cartStore }: ListProps) {
 
 	return (
 		<ScrollView>
-			{cartStore.products.map((prod: ProductProps, i: number) => (
+			{SortProductsAlphabetically.call(cartStore.products)
+				.map((prod: ProductProps, i: number) => (
 				<View className="px-4 " key={prod.id}>
 					<View className="flex-row gap-2 items-center">
 						<TouchableOpacity
