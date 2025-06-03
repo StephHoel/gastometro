@@ -1,9 +1,7 @@
-import type { ProductProps } from '../interfaces'
+import { ProductProps } from "@/interfaces/ProductProps"
 
-export function SortList(newProducts: ProductProps[]) {
-  const sortedProducts = newProducts.sort((a, b) => {
-    return a.item.toLowerCase().localeCompare(b.item.toLowerCase())
-  })
-
-  return sortedProducts
+export function SortProductsAlphabetically(this: ProductProps[]) {
+  return [...this].sort((a, b) =>
+    a.item.toLowerCase().localeCompare(b.item.toLowerCase())
+  )
 }

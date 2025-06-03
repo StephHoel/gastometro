@@ -97,3 +97,5 @@ Se você tiver dúvidas ou problemas, entre em contato abrindo uma [issue](https
 ## 🌟 Agradecimentos
 
 Agradecemos a todos os contribuidores e usuários que ajudam a melhorar este projeto continuamente. Sua participação é essencial para o sucesso do **Gastômetro**!
+
+Agradecemos principalmente ao nosso designer [Ivaneudo](https://github.com/Ivaneudo/)!

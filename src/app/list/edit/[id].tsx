@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 import { useCartStore } from "@/stores/CartStore";
 
@@ -15,12 +15,18 @@ export default function Edit() {
 	const prod = cartStore.get(id.toString());
 
 	return (
-		<ScrollView className="flex-1 bg-slate-900">
-			<Header />
+		<KeyboardAvoidingView
+			className="flex-1 bg-slate-900"
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
+		>
+			<ScrollView keyboardShouldPersistTaps="handled">
+				<Header />
 
-			<Form data={prod} buttonTitle={text.buttons.edit}>
-				<EditIcon size={32} color="black" />
-			</Form>
-		</ScrollView>
+				<Form data={prod} buttonTitle={text.buttons.edit}>
+					<EditIcon size={32} color="black" />
+				</Form>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 }

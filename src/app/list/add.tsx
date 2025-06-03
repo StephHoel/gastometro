@@ -7,14 +7,11 @@ import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 export default function Add() {
 	return (
 		<KeyboardAvoidingView
-			style={{ flex: 1 }}
+			className="flex-1 bg-slate-900"
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={80} // Ajuste conforme o header/nav bar
+			keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
 		>
-			<ScrollView
-				className="flex-1 bg-slate-900"
-				keyboardShouldPersistTaps="handled"
-			>
+			<ScrollView keyboardShouldPersistTaps="handled">
 				<Header />
 
 				<Form buttonTitle={text.buttons.add}>
