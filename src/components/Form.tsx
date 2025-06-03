@@ -29,8 +29,6 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 	const alertRef = useRef<CustomAlertRef>(null);
 
 	useEffect(() => {
-		inputRef1.current?.focus()
-
 		if (alertRef.current) {
 			AlertService.init(alertRef.current);
 		}

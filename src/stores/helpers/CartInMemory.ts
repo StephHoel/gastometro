@@ -1,14 +1,12 @@
-import { SortList } from '@/utils/functions/SortList'
-import type { ProductProps } from '@/utils/interfaces'
+import { ProductProps } from '@/interfaces/ProductProps'
+import { SortProductsAlphabetically } from '@/utils/functions/SortList'
 
 export function add(products: ProductProps[], newProduct: ProductProps) {
-  const newProducts = [...products, { ...newProduct }]
-
-  return SortList(newProducts)
+  return SortProductsAlphabetically.call([...products, { ...newProduct }])
 }
 
 export function replace(products: ProductProps[]) {
-  return SortList(products)
+  return SortProductsAlphabetically.call(products)
 }
 
 export function remove(products: ProductProps[], productRemovedId: string) {
