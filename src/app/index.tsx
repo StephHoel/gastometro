@@ -25,6 +25,7 @@ export default function Home() {
 
 			<View className="flex-1 bg-slate-900">
 				<Header />
+				
 				<Text className="text-white text-center pt-2 pb-4">
 					Total: {SetCurrency(total)}
 				</Text>
