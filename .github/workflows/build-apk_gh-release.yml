@@ -2,16 +2,24 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "release"]
+    branches: [ "main", "release", "releases/v1.4.0"]
   pull_request:
     branches: [ "main" ]
 
 permissions:
   contents: write
+  actions: read
+  security-events: write
+  packages: read
 
 jobs:
+  detect-languages:
+    name: Detect Languages
+    uses: ./.github/workflows/detect-and-analyze-languages.yml
+
   build:
     name: Build and Release
+    needs: [detect-languages]
     runs-on: ubuntu-latest
 
     steps:
@@ -101,4 +109,3 @@ jobs:
               --generate-notes \
               --prerelease
           fi
-

@@ -1,0 +1,39 @@
+### 1. Reusable Workflow - codeql-reusable.yml
+# .github/workflows/codeql-reusable.yml
+name: CodeQL reusable
+# description: "Reusable CodeQL workflow for any language"
+
+on:
+  workflow_call:
+    inputs:
+      language:
+        required: true
+        type: string
+      build_mode:
+        required: false
+        type: string
+
+jobs:
+  codeql:
+    name: Analyze Code
+    runs-on: ${{ inputs.language == 'swift' && 'macos-latest' || 'ubuntu-latest' }}
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ inputs.language }}
+          build-mode: ${{ inputs.build_mode || 'autobuild' }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ inputs.language }}"
