@@ -101,10 +101,8 @@ export const AlertService = {
           },
         ],
       });
-    } else {
-      AlertService.alert(text.error.alert_title, text.error.lista_fora_padrao);
     }
-
-
+    else
+      AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao);
   },
 };
