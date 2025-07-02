@@ -1,6 +1,7 @@
 import { CustomButton as Button } from "@/components/Button";
 import { CustomInput } from "@/components/CustomInput";
 import { Header } from "@/components/Header";
+import { BroomIcon, CalculatorIcon } from "@/components/Icons";
 import { text } from "@/constants/text";
 import { AlertService } from "@/services/AlertService";
 import { Divide, SetCurrency } from "@/utils/functions/MathFunctions";
@@ -84,19 +85,19 @@ export default function Calculator() {
 					/> */}
 
 					<View className="flex-1 flex-row justify-between">
-						<Button type="Normal" onPress={handleToClear} className="flex-1 border mr-2">
-							<Button.Text>Limpar</Button.Text>
+						<Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
+							<Button.Icon><BroomIcon size={28} color="black"/></Button.Icon>
+							<Button.Text className="text-2xl">Limpar</Button.Text>
 						</Button>
 
-						<Button onPress={handleToCalc} className="flex-1 border ml-2">
-							<Button.Text>Calcular</Button.Text>
+						<Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
+							<Button.Icon><CalculatorIcon size={28} color="black"/></Button.Icon>
+							<Button.Text className="text-2xl">Calcular</Button.Text>
 						</Button>
 					</View>
 
-					<View className="border border-white rounded-2xl mx-5 p-4 gap-2 text-white">
-						<Text className="text-white">Preço por Unidade:</Text>
-						<Text className="text-white">
-							{answer == null ? "Resposta" : `${SetCurrency(answer)}`}
+					<View className="border border-white rounded-2xl mx-5 p-4 text-white">
+						<Text className="text-white">Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}
 						</Text>
 					</View>
 				</View>

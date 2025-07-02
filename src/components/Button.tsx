@@ -1,3 +1,4 @@
+import { ButtonTextProps } from "@/interfaces/ButtonProps";
 import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps";
 import type { PropsWithChildren } from "react";
 import { Text, TouchableOpacity } from "react-native";
@@ -28,9 +29,11 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
 	);
 }
 
-function ButtonText({ children }: PropsWithChildren) {
+
+
+function ButtonText({ children, className = "text-3xl" }: ButtonTextProps) {
 	return (
-		<Text className="text-black font-heading text-3xl mx-2">{children}</Text>
+		<Text className={ `${className} text-black font-heading mx-2`}>{children}</Text>
 	);
 }
 

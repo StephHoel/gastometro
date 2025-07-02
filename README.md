@@ -26,7 +26,6 @@ O aplicativo oferece uma série de funcionalidades para facilitar sua experiênc
 
 Estamos constantemente trabalhando para melhorar o aplicativo. Confira as funcionalidades que estão por vir:
 
-- ~~**⭐ Prioridade de Itens:** Marque itens como prioritários, destacando-os na interface.~~
 - **🔔 Notificações:** Receba lembretes sobre itens que precisam ser comprados, utilizando a biblioteca `react-native-push-notification`.
 - **📂 Múltiplas Listas:** Crie várias listas com títulos personalizados.
 - **💳 Contas a Pagar:** Gerencie uma lista de contas a pagar para controle financeiro.
