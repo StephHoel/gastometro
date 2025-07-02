@@ -1,5 +1,6 @@
 import type { IconsProps } from "@/interfaces/IconsProps";
 import IonIcons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export function AddIcon({ size = 24, color = "white" }: IconsProps) {
 	return <IonIcons name="add-circle-outline" size={size} color={color} />;
@@ -11,6 +12,10 @@ export function BackIcon({ size = 24, color = "white" }: IconsProps) {
 
 export function CalculatorIcon({ size = 24, color = "white" }: IconsProps) {
 	return <IonIcons name="calculator" size={size} color={color} />;
+}
+
+export function BroomIcon({ size = 24, color = "white" }: IconsProps) {
+	return <MaterialCommunityIcons name="broom" size={size} color={color} />;
 }
 
 export function CheckboxIcon({ checked, size = 24 }: IconsProps) {
