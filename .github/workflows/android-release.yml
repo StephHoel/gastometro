@@ -5,6 +5,8 @@ on:
     tags:
       - 'v0*' # Executa quando um tag começando com "v" é feita (ex: v1.3.0)
 
+permissions:
+  contents: write
 
 jobs:
   build:
