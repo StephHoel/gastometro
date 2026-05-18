@@ -1,7 +1,7 @@
 # Garante que branch release existe e faz checkout
-echo "$TAB1🔍 Verificando branch 'release'..."
-if git show-ref --quiet refs/heads/release; then
-  echo "$TAB2✔ Branch 'release' encontrada."
+echo "$TAB1🔍 Verificando branch 'main'..."
+if git show-ref --quiet refs/heads/main; then
+  echo "$TAB2✔ Branch 'main' encontrada."
   echo ""
   
   echo "$TAB1🔍 Verificando mudanças pendentes..."
@@ -17,11 +17,11 @@ if git show-ref --quiet refs/heads/release; then
     echo ""
   fi
     
-  echo "$TAB2🔍 Mudando para branch 'release'..."
-  git checkout release && git pull origin release
-  echo "$TAB3✔ Mudança para branch 'release' concluída."
+  echo "$TAB2🔍 Mudando para branch 'main'..."
+  git checkout main && git pull origin main
+  echo "$TAB3✔ Mudança para branch 'main' concluída."
 else
-  echo "$TAB2❌ A branch 'release' não existe."
+  echo "$TAB2❌ A branch 'main' não existe."
   exit 1
 fi
 
