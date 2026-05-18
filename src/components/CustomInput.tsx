@@ -50,14 +50,7 @@ export function CustomInput({
                 value={item}
                 ref={selfRef}
                 keyboardType={keyboardType}
-                onFocus={() => {
-                    if (
-                        (nameField === "Quantidade" || nameField === "Preço") &&
-                        (item == "0.00" || item == "0")
-                    ) {
-                        setItem("")
-                    }
-                }}
+                onFocus={() => { if (item == "0.00" || item == "0") setItem("") }}
                 onSubmitEditing={onSubmit}
                 returnKeyType={returnKeyType}
             />
