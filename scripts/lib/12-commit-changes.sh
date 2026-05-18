@@ -4,3 +4,6 @@ git add package.json app.json android/app/build.gradle CHANGELOG.md
 git commit -m "chore: versão $new_version – $changes"
 echo "${TAB2}✔ Mudanças comitadas."
 echo ""
+
+git stash pop
+echo ""

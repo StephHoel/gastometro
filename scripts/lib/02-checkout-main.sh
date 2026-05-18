@@ -7,10 +7,10 @@ if git show-ref --quiet refs/heads/main; then
   echo "$TAB1🔍 Verificando mudanças pendentes..."
   if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
     echo "$TAB2✔ Mudanças pendentes detectadas."
-    echo "$TAB1🔍 Comitando como WIP..."
+    echo "$TAB1🔍 Criando Stash WIP..."
     git add .
-    git commit -m "WIP"
-    echo "$TAB2✔ Mudanças pendentes comitadas como WIP."
+    git stash save "WIP"
+    echo "$TAB2✔ Mudanças pendentes stashed como WIP."
     echo ""
   else
     echo "$TAB2✔ Nenhuma mudança pendente."

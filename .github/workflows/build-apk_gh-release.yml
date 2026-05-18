@@ -2,7 +2,7 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "release", "releases/v1.4.0"]
+    branches: [ "main", "release", "release/v1.4.3"]
   pull_request:
     branches: [ "main" ]
 
