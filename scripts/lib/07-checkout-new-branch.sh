@@ -1,4 +1,4 @@
-branch_name="releases/v$new_version"
+branch_name="release/v$new_version"
 
 # Verifica se a nova branch já existe
 echo "$TAB1🔍 Verificando se a branch '$branch_name' não existe..."
