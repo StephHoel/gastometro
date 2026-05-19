@@ -17,6 +17,6 @@ source ./scripts/lib/11-clear-files.sh
 source ./scripts/lib/12-commit-changes.sh
 
 echo "✔ Versão atualizada para $new_version na branch $branch_name"
-echo "$TAB1➡ Execute 'git push origin $branch_name' para publicar a nova branch."
+echo "$TAB1➡ Publicando a nova branch automaticamente..."
 
 git push origin $branch_name
