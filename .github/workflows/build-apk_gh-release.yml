@@ -44,11 +44,11 @@ jobs:
       - name: Prebuild Expo
         run: npx expo prebuild --non-interactive --platform android
 
-      # - name: Remove .webp files
-      #   run: |
-      #     echo "Removing .webp files..."
-      #     find . -name "*.webp" -type f -delete
-      #     echo "Files removing!"
+      - name: Remove .webp files
+        run: |
+          echo "Removing .webp files..."
+          find . -name "*.webp" -type f -delete
+          echo "Files removing!"
 
       - name: Build APK
         run: |
