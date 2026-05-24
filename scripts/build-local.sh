@@ -19,28 +19,18 @@ npm install --legacy-peer-deps --prefer-offline --no-audit --no-fund
 echo "✅ Dependências instaladas"
 echo ""
 
-if [ ! -d "android" ]; then
-  echo "📦 Executando 'expo prebuild'..."
-  npx expo prebuild --platform android
-  echo "✅ 'expo prebuild' concluído"
-else
-  echo "ℹ️ Pasta android/ já existe — pulando 'expo prebuild'."
-fi
-  echo ""
+# if [ ! -d "android" ]; then
+#   echo "📦 Executando 'expo prebuild'..."
+#   npx expo prebuild --platform android
+#   echo "✅ 'expo prebuild' concluído"
+# else
+#   echo "ℹ️ Pasta android/ já existe — pulando 'expo prebuild'."
+# fi
+#   echo ""
 
-# echo "📦 Executando 'npx expo prebuild'..."
-# npx expo prebuild --platform android
-# echo "✅ 'expo prebuild' concluído"
-# echo ""
-
-echo "🔧 Ajustando expo build.gradle..."
-# Note: patch_expo.js should be in the root
-if [ -f patch_expo.js ]; then
-  node patch_expo.js
-  echo "✅ build.gradle ajustado"
-else
-  echo "⚠️ patch_expo.js não encontrado, pulando..."
-fi
+echo "📦 Executando 'npx expo prebuild'..."
+npx expo prebuild --platform android
+echo "✅ 'expo prebuild' concluído"
 echo ""
 
 echo "🧹 Removendo arquivos .webp..."
@@ -50,16 +40,6 @@ echo ""
 
 echo "📁 Entrando em android/"
 cd android/
-echo ""
-
-echo "🔧 Ajustando settings.gradle..."
-# Note: patch_settings.js should be in the root
-if [ -f ../patch_settings.js ]; then
-  node ../patch_settings.js
-  echo "✅ settings.gradle ajustado"
-else
-  echo "⚠️ patch_settings.js não encontrado, pulando..."
-fi
 echo ""
 
 echo "⚙️  Iniciando build Gradle..."
