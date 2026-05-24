@@ -57,5 +57,5 @@
         "node": ">=20 <21",
         "npm": ">=10 <11"
     },
-    "packageManager": "npm@10"
+    "packageManager": "npm@10.0.0"
 }
