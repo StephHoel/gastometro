@@ -98,3 +98,21 @@ Se você tiver dúvidas ou problemas, entre em contato abrindo uma [issue](https
 Agradecemos a todos os contribuidores e usuários que ajudam a melhorar este projeto continuamente. Sua participação é essencial para o sucesso do **Gastômetro**!
 
 Agradecemos principalmente ao nosso designer [Ivaneudo](https://github.com/Ivaneudo/)!
+
+---
+
+## 🔄 Política de Atualização de Dependências
+
+Para reduzir risco de quebra em atualizações grandes, seguimos uma política incremental:
+
+- Use **Node 20** (`.nvmrc`) e npm 10 para manter builds reproduzíveis.
+- Atualize o **stack Expo** em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`).
+- Atualize outras bibliotecas em PRs pequenos e semanais.
+- Rode verificações locais antes de publicar:
+
+```bash
+npm run deps:check
+npm run deps:audit
+```
+
+O repositório também usa Dependabot para abrir PRs automáticos semanais com agrupamento de dependências críticas (Expo/React Native) separado das demais.
