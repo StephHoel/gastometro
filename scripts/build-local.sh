@@ -19,10 +19,19 @@ npm install --legacy-peer-deps --prefer-offline --no-audit --no-fund
 echo "✅ Dependências instaladas"
 echo ""
 
-echo "📦 Executando 'npx expo prebuild'..."
-npx expo prebuild --platform android
-echo "✅ 'expo prebuild' concluído"
-echo ""
+if [ ! -d "android" ]; then
+  echo "📦 Executando 'expo prebuild'..."
+  npx expo prebuild --platform android
+  echo "✅ 'expo prebuild' concluído"
+else
+  echo "ℹ️ Pasta android/ já existe — pulando 'expo prebuild'."
+fi
+  echo ""
+
+# echo "📦 Executando 'npx expo prebuild'..."
+# npx expo prebuild --platform android
+# echo "✅ 'expo prebuild' concluído"
+# echo ""
 
 echo "🔧 Ajustando expo build.gradle..."
 # Note: patch_expo.js should be in the root
@@ -51,6 +60,7 @@ if [ -f ../patch_settings.js ]; then
 else
   echo "⚠️ patch_settings.js não encontrado, pulando..."
 fi
+echo ""
 
 echo "⚙️  Iniciando build Gradle..."
 chmod +x gradlew
