@@ -1,11 +1,15 @@
 #!/bin/bash
 
+# Abort on error, undefined var, or pipe failure
 set -euo pipefail
+
+# Mostrar mensagem amigável quando qualquer comando falhar
 trap 'rc=$?; echo ""; echo "❌ Erro ao executar: \"$BASH_COMMAND\" (código $rc). Abortando o build."; exit $rc' ERR
 
 echo "🔍 Iniciando build local do Gastômetro..."
 echo ""
 
+# Salva o diretório inicial (raiz do repositório quando o script foi chamado)
 START_PWD="$(pwd)"
 
 if [ ! -d "android" ]; then
@@ -44,16 +48,30 @@ else
 fi
 
 echo "⚙️  Iniciando build Gradle (padrão)..."
-if ! $GRADLE_CMD build; then
-  echo ""
-  echo "⚠️ Não foi possível concluir o build Gradle completo neste ambiente (proxy/rede)."
-  echo "⚠️ Encerrando sem erro para permitir validações locais de script."
-  exit 0
-fi
+$GRADLE_CMD build
 echo ""
 
 echo "📦 Gerando APK release com Gradle..."
 $GRADLE_CMD assembleRelease
 echo ""
 
-echo "🎉 Build finalizado com sucesso!"
+echo "📂 Acessando pasta de saída do APK..."
+cd app/build/outputs/apk/release/
+echo ""
+
+echo "📤 Movendo e renomeando APK para _apks/ (timestamp incluído)"
+APKS_DIR="$START_PWD/_apks"
+if [ ! -d "$APKS_DIR" ]; then
+  echo "📁 Diretório _apks não existe — criando: $APKS_DIR"
+  mkdir -p "$APKS_DIR"
+else
+  echo "📁 Diretório _apks existe: $APKS_DIR"
+fi
+echo ""
+
+mv "app-arm64-v8a-release.apk" "$APKS_DIR/gastometro-$(date +"%Y%m%d%H%M%S").apk"
+
+cd "$START_PWD"
+
+echo ""
+echo "🎉 Build finalizado com sucesso! APK disponível em _apks/"
