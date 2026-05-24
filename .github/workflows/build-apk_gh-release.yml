@@ -2,9 +2,9 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "release", "release/**" ]
+    branches: ["main", "release", "release/**"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -29,8 +29,8 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
           cache: gradle
 
       - name: Setup Node.js
@@ -49,6 +49,37 @@ jobs:
           echo "Removing .webp files..."
           find . -name "*.webp" -type f -delete
           echo "Files removing!"
+
+      - name: Ensure Gradle plugin resolution for Expo (CI fix)
+        run: |
+          echo "Verifying android/settings.gradle for expo-module-gradle-plugin mapping..."
+          SETTINGS_FILE=android/settings.gradle
+          if ! grep -q "expo-module-gradle-plugin" "$SETTINGS_FILE"; then
+            echo "Injecting resolutionStrategy for expo-module-gradle-plugin into $SETTINGS_FILE"
+            awk '/pluginManagement \{/{print; inblock=1; next} inblock && /\}/ {inblock=0} {print}' "$SETTINGS_FILE" > /tmp/settings.pre
+            # Insert resolutionStrategy after repositories block
+            python3 - <<'PY'
+            import sys
+            f='android/settings.gradle'
+            txt=open(f).read()
+            ins='''  resolutionStrategy {
+                eachPlugin {
+                  if (requested.id.id == 'expo-module-gradle-plugin') {
+                    useModule("dev.expo.modules:expo-module-gradle-plugin:+")
+                  }
+                }
+              }
+            '''
+            if 'resolutionStrategy' not in txt:
+                txt=txt.replace('  }\n  includeBuild', '  }\n'+ins+'  includeBuild')
+                open(f,'w').write(txt)
+                print('Injected')
+            else:
+                print('Already present')
+            PY
+          else
+            echo "Settings already contain expo-module-gradle-plugin mapping"
+          fi
 
       - name: Build APK
         run: |
