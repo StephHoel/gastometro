@@ -3,11 +3,53 @@ pluginManagement {
     gradlePluginPortal()
     google()
     mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/releases/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url 'https://jitpack.io' }
     maven { url 'https://plugins.gradle.org/m2/' }
   }
+  resolutionStrategy {
+    eachPlugin {
+      if (requested.id.id == 'expo-module-gradle-plugin') {
+        // prefer local plugin coordinates (expo.modules) used by the bundled plugin
+        useModule("expo.modules:expo-module-gradle-plugin:+")
+      }
+    }
+  }
   includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile().toString())
+  // If expo-module-gradle-plugin source is available inside node_modules (expo-modules-core),
+  // include it as a build so plugin id 'expo-module-gradle-plugin' resolves locally.
+  def localExpoPlugin = new File(rootDir.parentFile, 'node_modules/expo-modules-core/expo-module-gradle-plugin')
+  if (localExpoPlugin.exists()) {
+    includeBuild(localExpoPlugin.toString())
+  } else {
+    println('[expo] local expo-module-gradle-plugin not found in node_modules; will rely on resolutionStrategy')
+  }
 }
+
 plugins { id("com.facebook.react.settings") }
+
+dependencyResolutionManagement {
+  repositories {
+    google()
+    mavenCentral()
+  }
+  versionCatalogs {
+    reactAndroidLibs {
+      from(files(new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../gradle/libs.versions.toml")))
+    }
+  }
+}
+
+ext {
+  buildToolsVersion = settings.hasProperty('android.buildToolsVersion') ? settings.getProperty('android.buildToolsVersion') : null ?: '35.0.0'
+  minSdkVersion = Integer.parseInt(settings.hasProperty('android.minSdkVersion') ? settings.getProperty('android.minSdkVersion') : null ?: '24')
+  compileSdkVersion = Integer.parseInt(settings.hasProperty('android.compileSdkVersion') ? settings.getProperty('android.compileSdkVersion') : null ?: '35')
+  targetSdkVersion = Integer.parseInt(settings.hasProperty('android.targetSdkVersion') ? settings.getProperty('android.targetSdkVersion') : null ?: '34')
+  kotlinVersion = settings.hasProperty('android.kotlinVersion') ? settings.getProperty('android.kotlinVersion') : null ?: '1.9.25'
+  androidGradlePlugin = settings.hasProperty('android.androidGradlePlugin') ? settings.getProperty('android.androidGradlePlugin') : null ?: 'com.android.tools.build:gradle:8.1.1'
+  ndkVersion = settings.hasProperty('android.ndkVersion') ? settings.getProperty('android.ndkVersion') : null ?: '26.1.10909125'
+}
 
 extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   if (System.getenv('EXPO_USE_COMMUNITY_AUTOLINKING') == '1') {
@@ -29,16 +71,29 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 
 rootProject.name = 'Gastômetro'
 
-dependencyResolutionManagement {
-  versionCatalogs {
-    reactAndroidLibs {
-      from(files(new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../gradle/libs.versions.toml")))
-    }
-  }
+def expoAutolinkingGradle = new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle")
+if (expoAutolinkingGradle.exists()) {
+  apply from: expoAutolinkingGradle
+} else {
+  println("[expo] autolinking.gradle not found in expo package; skipping apply and using JS autolinking")
 }
 
-apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
-useExpoModules()
+def expoBuildDir = new File(rootDir.parentFile, 'node_modules/expo')
+if (System.getenv('INCLUDE_EXPO_AS_BUILD') == '1') {
+  if (expoBuildDir.exists()) {
+    includeBuild(expoBuildDir)
+  } else {
+    println("[expo] node_modules/expo not found; not including Expo as build")
+  }
+} else {
+  println('[expo] Skipping includeBuild(node_modules/expo) — unset INCLUDE_EXPO_AS_BUILD')
+}
+
+try {
+  useExpoModules()
+} catch (Exception e) {
+  println("[expo] useExpoModules() not available: " + e.getMessage())
+}
 
 include ':app'
 includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile())
