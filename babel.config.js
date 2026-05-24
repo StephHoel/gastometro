@@ -7,6 +7,7 @@ export default (api) => {
         ],
         plugins: [
             'react-native-worklets/plugin',
+            "react-native-reanimated/plugin",
         ],
     }
 }

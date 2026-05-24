@@ -11,26 +11,18 @@ echo ""
 START_PWD="$(pwd)"
 
 echo "🧽 Limpando caches locais..."
-rm -rf node_modules .gradle android/.gradle android/app/build android/build .expo .expo-shared
+rm -rf node_modules android .gradle .expo .expo-shared
 echo ""
 
 echo "📦 Reinstalando dependências..."
-npm install --legacy-peer-deps --prefer-offline --no-audit --no-fund
+# npm install --legacy-peer-deps
+npm install --loglevel=error
 echo "✅ Dependências instaladas"
 echo ""
 
-# if [ ! -d "android" ]; then
-#   echo "📦 Executando 'expo prebuild'..."
-#   npx expo prebuild --platform android
-#   echo "✅ 'expo prebuild' concluído"
-# else
-#   echo "ℹ️ Pasta android/ já existe — pulando 'expo prebuild'."
-# fi
-#   echo ""
-
-echo "📦 Executando 'npx expo prebuild'..."
-npx expo prebuild --platform android
-echo "✅ 'expo prebuild' concluído"
+echo "📦 Executando expo prebuild limpo (recria android/)..."
+npx expo prebuild --platform android --clean
+echo "✅ expo prebuild concluído"
 echo ""
 
 echo "🧹 Removendo arquivos .webp..."
@@ -44,12 +36,12 @@ echo ""
 
 echo "⚙️  Iniciando build Gradle..."
 chmod +x gradlew
-./gradlew assembleRelease
+./gradlew assembleRelease --warning-mode all
 echo ""
 
 echo "📂 Coletando APK..."
 cd ..
-mkdir -p _apks
-mv android/app/build/outputs/apk/release/app-arm64-v8a-release.apk "_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk" || mv android/app/build/outputs/apk/release/app-release.apk "_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk" || echo "⚠️ APK não encontrado em locais esperados"
+mkdir -p 
+mv android/app/build/outputs/apk/release/*.apk "_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk" || echo "⚠️ APK não encontrado em locais esperados"
 
 echo "🎉 Build concluído! APK disponível em _apks/"
