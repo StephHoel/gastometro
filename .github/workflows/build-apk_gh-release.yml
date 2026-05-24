@@ -42,7 +42,7 @@ jobs:
         run: npm install --loglevel=error
 
       - name: Prebuild Expo
-        run: npx expo prebuild --non-interactive --platform android
+        run: npx expo prebuild --non-interactive --platform android --clean
 
       - name: Remove .webp files
         run: |
@@ -50,42 +50,11 @@ jobs:
           find . -name "*.webp" -type f -delete
           echo "Files removing!"
 
-      - name: Ensure Gradle plugin resolution for Expo (CI fix)
-        run: |
-          echo "Verifying android/settings.gradle for expo-module-gradle-plugin mapping..."
-          SETTINGS_FILE=android/settings.gradle
-          if ! grep -q "expo-module-gradle-plugin" "$SETTINGS_FILE"; then
-            echo "Injecting resolutionStrategy for expo-module-gradle-plugin into $SETTINGS_FILE"
-            awk '/pluginManagement \{/{print; inblock=1; next} inblock && /\}/ {inblock=0} {print}' "$SETTINGS_FILE" > /tmp/settings.pre
-            # Insert resolutionStrategy after repositories block
-            python3 - <<'PY'
-            import sys
-            f='android/settings.gradle'
-            txt=open(f).read()
-            ins='''  resolutionStrategy {
-                eachPlugin {
-                  if (requested.id.id == 'expo-module-gradle-plugin') {
-                    useModule("dev.expo.modules:expo-module-gradle-plugin:+")
-                  }
-                }
-              }
-            '''
-            if 'resolutionStrategy' not in txt:
-                txt=txt.replace('  }\n  includeBuild', '  }\n'+ins+'  includeBuild')
-                open(f,'w').write(txt)
-                print('Injected')
-            else:
-                print('Already present')
-            PY
-          else
-            echo "Settings already contain expo-module-gradle-plugin mapping"
-          fi
-
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease --warning-mode none
+          ./gradlew assembleRelease
         env:
           EXPO_NO_COMMAND: 1
 
