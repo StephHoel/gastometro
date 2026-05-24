@@ -14,7 +14,9 @@
         "start": "expo start --dev-client",
         "build:android": "eas build -p android --profile preview",
         "build:local:eas": "eas build --platform android --local",
-        "web": "expo start --web --dev-client --clear"
+        "web": "expo start --web --dev-client --clear",
+        "deps:check": "npx expo-doctor",
+        "deps:audit": "npm audit --omit=dev"
     },
     "dependencies": {
         "@expo-google-fonts/inter": "^0.3.0",
@@ -50,5 +52,10 @@
         "expo-atlas": "^0.4.0",
         "typescript": "~6.0.3"
     },
-    "private": true
+    "private": true,
+    "engines": {
+        "node": ">=20 <21",
+        "npm": ">=10 <11"
+    },
+    "packageManager": "npm@10"
 }
