@@ -7,6 +7,7 @@
         "release:upload": "sh ./scripts/release-upload.sh",
         "build:local": "sh ./scripts/build-local.sh",
         "clear:modules": "sh ./scripts/clear-node_modules.sh",
+        "clear": "sh ./scripts/clear.sh",
         "build:android:local": "cd android/ && gradlew.bat build && gradlew.bat assembleRelease && cd ..",
         "prebuild": "expo prebuild",
         "android": "expo run:android",
@@ -19,20 +20,20 @@
         "deps:audit": "npm audit --omit=dev"
     },
     "dependencies": {
-        "@expo-google-fonts/inter": "^0.3.0",
-        "@expo/ui": "~56.0.13",
-        "@expo/vector-icons": "^15.0.2",
+        "@expo-google-fonts/inter": "^0.4.2",
+        "@expo/ui": "~56.0.14",
+        "@expo/vector-icons": "^15.1.1",
         "@react-native-async-storage/async-storage": "2.2.0",
-        "@react-navigation/native": "^7.0.14",
-        "expo": "~56.0.4",
-        "expo-clipboard": "~56.0.3",
+        "@react-navigation/native": "^7.2.4",
+        "expo": "~56.0.5",
+        "expo-clipboard": "^56.0.3",
         "expo-constants": "~56.0.15",
         "expo-device": "~56.0.4",
         "expo-font": "~56.0.5",
         "expo-glass-effect": "~56.0.4",
         "expo-image": "~56.0.9",
-        "expo-linking": "~56.0.11",
-        "expo-router": "~56.2.6",
+        "expo-linking": "~56.0.12",
+        "expo-router": "~56.2.7",
         "expo-splash-screen": "~56.0.10",
         "expo-status-bar": "~56.0.4",
         "expo-symbols": "~56.0.5",
@@ -46,23 +47,18 @@
         "react-native-reanimated": "^4.3.1",
         "react-native-safe-area-context": "~5.7.0",
         "react-native-screens": "4.25.2",
-        "react-native-uuid": "^2.0.3",
+        "react-native-uuid": "^2.0.4",
         "react-native-web": "~0.21.0",
-        "react-native-worklets": "0.8.3",
-        "zustand": "^5.0.3"
+        "react-native-worklets": "^0.9.1",
+        "zustand": "^5.0.13"
     },
     "devDependencies": {
-        "@babel/core": "^7.25.2",
+        "@babel/core": "^7.29.0",
         "@types/react": "~19.2.2",
         "babel-preset-expo": "^56.0.12",
-        "prettier-plugin-tailwindcss": "^0.5.11",
+        "prettier-plugin-tailwindcss": "^0.5.14",
         "tailwindcss": "^3.4.19",
         "typescript": "~6.0.3"
     },
-    "private": true,
-    "engines": {
-        "node": ">=20 <25",
-        "npm": ">=10 <12"
-    },
-    "packageManager": "npm@10.0.0"
+    "private": true
 }
