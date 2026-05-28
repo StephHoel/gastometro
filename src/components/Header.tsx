@@ -4,7 +4,7 @@ import { titlePages } from "@/constants/pages";
 import type { CurrentRoute } from "@/interfaces/CurrentRoute";
 import { AlertService } from "@/services/AlertService";
 import { useCartStore } from "@/stores/CartStore";
-import { useRoute } from "@react-navigation/native";
+import { useRoute } from "expo-router/react-navigation";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { Text, View } from "react-native";

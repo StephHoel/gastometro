@@ -11,7 +11,7 @@ echo ""
 START_PWD="$(pwd)"
 
 echo "🧽 Limpando caches locais..."
-rm -rf node_modules android .gradle .expo .expo-shared
+rm -rf node_modules .gradle .expo .expo-shared
 echo ""
 
 echo "📦 Reinstalando dependências..."
