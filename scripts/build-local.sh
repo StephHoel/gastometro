@@ -11,7 +11,7 @@ echo ""
 START_PWD="$(pwd)"
 
 echo "🧽 Limpando caches locais..."
-rm -rf node_modules .gradle .expo .expo-shared
+rm -rf node_modules android .gradle .expo .expo-shared
 echo ""
 
 echo "📦 Reinstalando dependências..."
@@ -25,10 +25,10 @@ npx expo prebuild --platform android --clean
 echo "✅ expo prebuild concluído"
 echo ""
 
-echo "🧹 Removendo arquivos .webp..."
-find . -type f -name "*.webp" -delete
-echo "✔ Arquivos .webp removidos"
-echo ""
+# # echo "🧹 Removendo arquivos .webp..."
+# # find . -type f -name "*.webp" -delete
+# # echo "✔ Arquivos .webp removidos"
+# # echo ""
 
 echo "📁 Entrando em android/"
 cd android/
@@ -40,8 +40,19 @@ chmod +x gradlew
 echo ""
 
 echo "📂 Coletando APK..."
-cd ..
-mkdir -p 
-mv android/app/build/outputs/apk/release/*.apk "_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk" || echo "⚠️ APK não encontrado em locais esperados"
+cd "$START_PWD" || true
+mkdir -p _apks
 
-echo "🎉 Build concluído! APK disponível em _apks/"
+# Find the most recently modified APK under android/app/build
+latest_apk=$(find android/app/build -type f -name "*.apk" -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2- || true)
+
+if [ -z "$latest_apk" ]; then
+	echo "⚠️ APK não encontrado em locais esperados"
+else
+	target="_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk"
+	mv -- "$latest_apk" "$target"
+	echo "✅ APK movido: $target"
+fi
+echo ""
+
+echo "🎉 Build concluído!"
