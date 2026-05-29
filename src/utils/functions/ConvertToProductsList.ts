@@ -1,33 +1,54 @@
+import type { ProductProps } from '@/interfaces/ProductProps'
 import uuid from 'react-native-uuid'
-import type { ProductProps } from '../interfaces'
 
 export function ConvertToProductsList(clipboard: string) {
-  const listShop = clipboard.split('--')[1].trim()
+    if (!clipboard || typeof clipboard !== 'string') return []
 
-  const lineListShop = listShop.split('|| ')
+    const lineListShop = GetListShop(clipboard)
 
-  const listProducts: ProductProps[] = []
+    const listProducts: ProductProps[] = []
 
-  // eslint-disable-next-line prettier/prettier
-  for (let i = 1;i < lineListShop.length;i++) {
-    const lineArray = lineListShop[i].split(' | ')
+    lineListShop.forEach((line) => {
+        const add = ExtractProductDetails(line)
+
+        if (add != undefined)
+            listProducts.push(add)
+    })
+
+    return listProducts
+}
+
+function GetListShop(clipboard: string): string[] {
+    const listShops = clipboard.split('--')
+
+    if (listShops.length <= 1)
+        return []
+
+    const listShop = listShops[1].trim()
+
+    return listShop.split('|| ')
+}
+
+function ExtractProductDetails(line: string): ProductProps | undefined {
+    const cols = line.split(' | ')
+
+    if (cols.length <= 1) return undefined
 
     // 0 quantity item
-    const x = lineArray[0].split('x ')
-    const quantity = x[0]
-    const item = x[1]
+    const quantityItem = cols[0].split('x ')
+    const quantity = quantityItem[0].trim()
+    const item = quantityItem[1].trim()
 
     // 1 price
-    const price = lineArray[1].trim().slice(3)
+    const price = cols[1].trim().slice(3)
 
     const add: ProductProps = {
-      id: uuid.v4().toString(),
-      item,
-      quantity: quantity.replace(',', '.'),
-      price: price.replace(',', '.'),
+        id: uuid.v4().toString(),
+        item,
+        quantity: quantity.replace(',', '.'),
+        price: price.replace(',', '.'),
+        collected: false
     }
 
-    listProducts.push(add)
-  }
-  return listProducts
+    return add
 }
