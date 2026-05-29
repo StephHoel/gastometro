@@ -1,107 +1,95 @@
-import { CustomButton as Button } from "@/components/Button";
-import { CustomInput } from "@/components/CustomInput";
-import { Header } from "@/components/Header";
-import { BroomIcon, CalculatorIcon } from "@/components/Icons";
-import { text } from "@/constants/text";
-import { AlertService } from "@/services/AlertService";
-import { Divide, SetCurrency } from "@/utils/functions/MathFunctions";
-import { useRef, useState } from "react";
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from "react-native";
+import { CustomButton as Button } from "@/components/Button"
+import { CustomInput } from "@/components/CustomInput"
+import { Header } from "@/components/Header"
+import { BroomIcon, CalculatorIcon } from "@/components/Icons"
+import { text } from "@/constants/text"
+import { AlertService } from "@/services/AlertService"
+import { Divide, SetCurrency } from "@/utils/functions/MathFunctions"
+import { useRef, useState } from "react"
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from "react-native"
 
 export default function Calculator() {
-	const [answer, setAnswer] = useState<number | null>(null);
+    const [answer, setAnswer] = useState<number | null>(null)
 
-	const [price, setPrice] = useState("");
-	const [quantity, setQuantity] = useState("");
-	const [unit, setUnit] = useState("");
-		
-	const inputRef1 = useRef<TextInput>(null);
-	const inputRef2 = useRef<TextInput>(null);
-	const inputRef3 = useRef<TextInput>(null);
+    const [price, setPrice] = useState("")
+    const [quantity, setQuantity] = useState("")
+    const [unit, setUnit] = useState("")
 
-	function clear() {
-		setPrice("")
-		setQuantity("")
-		setUnit("")
-	}
+    const inputRef1 = useRef<TextInput>(null)
+    const inputRef2 = useRef<TextInput>(null)
+    const inputRef3 = useRef<TextInput>(null)
 
-	function handleToCalc() {
-		Keyboard.dismiss();
+    function clear() {
+        setPrice("")
+        setQuantity("")
+        setUnit("")
+    }
 
-		if (price === "" || quantity === "")
-			return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
+    function handleToCalc() {
+        Keyboard.dismiss()
 
-		setAnswer(Divide(price, quantity));
-	}
+        if (price === "" || quantity === "")
+            return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
 
-	function handleToClear() {
-		Keyboard.dismiss();
-		clear()
-		setAnswer(null);
-	}
+        setAnswer(Divide(price, quantity))
+    }
 
-	return (
-		<KeyboardAvoidingView
-			className="flex-1 bg-slate-900"
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
-		>
-			<ScrollView keyboardShouldPersistTaps="handled">
-				<Header />
+    function handleToClear() {
+        Keyboard.dismiss()
+        clear()
+        setAnswer(null)
+    }
 
-				<View className="mt-5 gap-5">
-					<CustomInput
-						nameField={"Preço"}
-						selfRef={inputRef1}
-						placeholder={"Preço da Embalagem"}
-						setItem={setPrice}
-						item={price}
-						keyboardType="number-pad"
-						onSubmit={() => inputRef2.current?.focus()}
-						returnKeyType={"next"}
-					/>
+    return (
+        <KeyboardAvoidingView
+            className="flex-1 bg-slate-900"
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
+        >
+            <ScrollView keyboardShouldPersistTaps="handled">
+                <Header />
 
-					<CustomInput
-						nameField={"Quantidade"}
-						selfRef={inputRef2}
-						placeholder={"Quantidade na Embalagem"}
-						setItem={setQuantity}
-						item={quantity}
-						keyboardType="number-pad"
-						// onSubmit={() => inputRef3.current?.focus()}
-						// returnKeyType={"next"}
-						onSubmit={handleToCalc}
-						returnKeyType={"done"}
-					/>
+                <View className="mt-5 gap-5">
+                    <CustomInput
+                        nameField={"Preço"}
+                        selfRef={inputRef1}
+                        placeholder={"Preço da Embalagem"}
+                        setItem={setPrice}
+                        item={price}
+                        keyboardType="number-pad"
+                        onSubmit={() => inputRef2.current?.focus()}
+                        returnKeyType={"next"}
+                    />
 
-					{/* <CustomInput
-						nameField={"Unidade"}
-						selfRef={inputRef3}
-						placeholder={"Unidade de Medida (seletor)"}
-						setItem={setUnit}
-						item={unit}
-						onSubmit={handleToCalc}
-						returnKeyType={"done"}
-					/> */}
+                    <CustomInput
+                        nameField={"Quantidade"}
+                        selfRef={inputRef2}
+                        placeholder={"Quantidade na Embalagem"}
+                        setItem={setQuantity}
+                        item={quantity}
+                        keyboardType="number-pad"
+                        onSubmit={handleToCalc}
+                        returnKeyType={"done"}
+                    />
 
-					<View className="flex-1 flex-row justify-between">
-						<Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-							<Button.Icon><BroomIcon size={28} color="black"/></Button.Icon>
-							<Button.Text className="text-2xl">Limpar</Button.Text>
-						</Button>
+                    <View className="flex-1 flex-row justify-between">
+                        <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
+                            <Button.Icon><BroomIcon size={28} color="black" /></Button.Icon>
+                            <Button.Text className="text-2xl">Limpar</Button.Text>
+                        </Button>
 
-						<Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
-							<Button.Icon><CalculatorIcon size={28} color="black"/></Button.Icon>
-							<Button.Text className="text-2xl">Calcular</Button.Text>
-						</Button>
-					</View>
+                        <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
+                            <Button.Icon><CalculatorIcon size={28} color="black" /></Button.Icon>
+                            <Button.Text className="text-2xl">Calcular</Button.Text>
+                        </Button>
+                    </View>
 
-					<View className="border border-white rounded-2xl mx-5 p-4 text-white">
-						<Text className="text-white">Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}
-						</Text>
-					</View>
-				</View>
-			</ScrollView>
-		</KeyboardAvoidingView>
-	);
+                    <View className="border border-white rounded-2xl mx-5 p-4 text-white">
+                        <Text className="text-white">Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}
+                        </Text>
+                    </View>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    )
 }

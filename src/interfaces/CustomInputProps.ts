@@ -1,12 +1,12 @@
-import type { TextInput } from "react-native";
+import type { TextInput } from "react-native"
 
 export interface CustomInputProps {
-  nameField: "Item" | "Quantidade" | "Preço" | "Unidade"
-  selfRef: React.RefObject<TextInput>;
-  placeholder: string;
-  setItem: (value: string) => void;
-  item: string;
-  onSubmit: () => void;
-  returnKeyType: "next" | "done";
-  keyboardType?: "default" | "number-pad";
+    nameField: "Item" | "Quantidade" | "Preço" | "Unidade"
+    selfRef: React.RefObject<TextInput | null>
+    placeholder: string
+    setItem: (value: string) => void
+    item: string
+    onSubmit: () => void
+    returnKeyType: "next" | "done"
+    keyboardType?: "default" | "number-pad"
 }

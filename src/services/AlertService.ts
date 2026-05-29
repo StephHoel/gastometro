@@ -1,108 +1,108 @@
-import type { CustomAlertRef } from "@/components/CustomAlert";
-import { alert } from "@/constants/alert";
-import { text } from "@/constants/text";
-import { whatsapp } from "@/constants/whatsapp";
-import type { ProductProps } from "@/interfaces/ProductProps";
-import type { StateProps } from "@/interfaces/StateProps";
-import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList";
-import { ClipboardService } from "./ClipboardService";
-import { ShareService } from "./ShareService";
+import type { CustomAlertRef } from "@/components/CustomAlert"
+import { alert } from "@/constants/alert"
+import { text } from "@/constants/text"
+import { whatsapp } from "@/constants/whatsapp"
+import type { ProductProps } from "@/interfaces/ProductProps"
+import type { StateProps } from "@/interfaces/StateProps"
+import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList"
+import { ClipboardService } from "./ClipboardService"
+import { ShareService } from "./ShareService"
 
-let alertRef: CustomAlertRef | null = null;
+let alertRef: CustomAlertRef | null = null
 
 export const AlertService = {
-  init(ref: CustomAlertRef) {
-    alertRef = ref;
-  },
+    init(ref: CustomAlertRef) {
+        alertRef = ref
+    },
 
-  alert(title: string, message: string) {
-    alertRef?.showAlert({
-      title,
-      message,
-    });
-  },
+    alert(title: string, message: string) {
+        alertRef?.showAlert({
+            title,
+            message,
+        })
+    },
 
-  ok(title: string, message: string) {
-    alertRef?.showAlert({
-      title,
-      message,
-      buttons: [{
-        text: alert.share.buttons.ok,
-        action: () => { },
-      }]
-    });
-  },
+    ok(title: string, message: string) {
+        alertRef?.showAlert({
+            title,
+            message,
+            buttons: [{
+                text: alert.share.buttons.ok,
+                action: () => { },
+            }]
+        })
+    },
 
-  remove(action: () => void, prod?: ProductProps) {
-    alertRef?.showAlert({
-      title: prod === undefined ? alert.removeAll.title : alert.remove.title,
-      message: prod === undefined
-        ? alert.removeAll.message
-        : alert.remove.message(prod.item),
-      buttons: [
-        {
-          text:
-            prod === undefined
-              ? alert.removeAll.button.title
-              : alert.remove.button.title,
-          action: action,
-        },
-      ],
-    });
-  },
+    remove(action: () => void, prod?: ProductProps) {
+        alertRef?.showAlert({
+            title: prod === undefined ? alert.removeAll.title : alert.remove.title,
+            message: prod === undefined
+                ? alert.removeAll.message
+                : alert.remove.message(prod.item),
+            buttons: [
+                {
+                    text:
+                        prod === undefined
+                            ? alert.removeAll.button.title
+                            : alert.remove.button.title,
+                    action: action,
+                },
+            ],
+        })
+    },
 
-  shareEmpty() {
-    alertRef?.showAlert({
-      title: alert.share.title,
-      message: alert.share.message,
-      buttons: [
-        {
-          text: alert.share.buttons.ok,
-          action: () => { },
-        },
-      ],
-    });
-  },
+    shareEmpty() {
+        alertRef?.showAlert({
+            title: alert.share.title,
+            message: alert.share.message,
+            buttons: [
+                {
+                    text: alert.share.buttons.ok,
+                    action: () => { },
+                },
+            ],
+        })
+    },
 
-  share(cartStore: StateProps) {
-    alertRef?.showAlert({
-      title: alert.share.title,
-      message: "",
-      buttons: [
-        {
-          text: alert.share.buttons.whatsapp,
-          action: () => ShareService.shareOnWhatsapp(cartStore),
-        },
-        {
-          text: alert.share.buttons.paste,
-          action: async () => await AlertService.paste(cartStore),
-        },
-      ],
-    });
-  },
+    share(cartStore: StateProps) {
+        alertRef?.showAlert({
+            title: alert.share.title,
+            message: "",
+            buttons: [
+                {
+                    text: alert.share.buttons.whatsapp,
+                    action: () => ShareService.shareOnWhatsapp(cartStore),
+                },
+                {
+                    text: alert.share.buttons.paste,
+                    action: async () => await AlertService.paste(cartStore),
+                },
+            ],
+        })
+    },
 
-  async paste(cartStore: StateProps) {
-    const clipboard = await ClipboardService.getClipboardContent();
+    async paste(cartStore: StateProps) {
+        const clipboard = await ClipboardService.getClipboardContent()
 
-    if (clipboard?.startsWith(whatsapp.title)) {
-      const listToPaste = ConvertToProductsList(clipboard);
+        if (clipboard?.startsWith(whatsapp.title)) {
+            const listToPaste = ConvertToProductsList(clipboard)
 
-      alertRef?.showAlert({
-        title: alert.paste.title,
-        message: alert.paste.message,
-        buttons: [
-          {
-            text: alert.paste.buttons.oldList,
-            action: () => listToPaste.map(cartStore.add),
-          },
-          {
-            text: alert.paste.buttons.newList,
-            action: () => cartStore.replace(listToPaste),
-          },
-        ],
-      });
-    }
-    else
-      AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao);
-  },
-};
+            alertRef?.showAlert({
+                title: alert.paste.title,
+                message: alert.paste.message,
+                buttons: [
+                    {
+                        text: alert.paste.buttons.oldList,
+                        action: () => listToPaste.map(cartStore.add),
+                    },
+                    {
+                        text: alert.paste.buttons.newList,
+                        action: () => cartStore.replace(listToPaste),
+                    },
+                ],
+            })
+        }
+        else
+            AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+    },
+}
