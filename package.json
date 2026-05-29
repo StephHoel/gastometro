@@ -60,5 +60,8 @@
         "tailwindcss": "^3.4.19",
         "typescript": "~6.0.3"
     },
-    "private": true
+    "private": true,
+    "allowScripts": {
+        "msgpackr-extract@3.0.4": true
+    }
 }
