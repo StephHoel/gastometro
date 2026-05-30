@@ -1,6 +1,6 @@
 import { whatsapp } from "@/constants/whatsapp"
 import type { StateProps } from "@/interfaces/StateProps"
-import { SetCurrency, Multiply, ReduceProducts } from "@/utils/functions/MathFunctions"
+import { SetCurrency, Multiply, ReduceProducts, ParseToFloat } from "@/utils/functions/MathFunctions"
 import { Linking, Alert } from "react-native"
 
 export const ShareService = {
@@ -28,9 +28,8 @@ function GetWhatsappMessage(products: string, total: string) {
 
 function GetProductsFormated(cartStore: StateProps) {
     return cartStore.products
-        .map(
-                (product) =>
-                `\n|| ${product.quantity}x ${product.item} | ${SetCurrency(Multiply(product.price, 1))} | ${SetCurrency(Multiply(product.quantity, product.price))}`,
+        .map((product) =>
+            `\n|| ${product.quantity}x ${product.item} | ${SetCurrency(ParseToFloat(product.price))} | ${SetCurrency(Multiply(product.quantity, product.price))}`,
         )
         .join('')
 }
