@@ -4,6 +4,7 @@ import { List } from "@/components/List"
 import { AlertService } from "@/services/AlertService"
 import { useCartStore } from "@/stores/CartStore"
 import { ReduceProducts, SetCurrency } from "@/utils/functions/MathFunctions"
+import React from 'react'
 import { useEffect, useRef } from "react"
 import { Text, View } from "react-native"
 

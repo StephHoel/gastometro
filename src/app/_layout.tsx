@@ -9,8 +9,10 @@ import {
 import { Tabs } from "expo-router"
 
 import { CalculatorIcon, HomeIcon } from "@/components/Icons"
-import "@/styles/global.css"
 import { SafeAreaView } from "react-native-safe-area-context"
+import React from 'react'
+import "@/styles/global.css"
+import { Platform } from 'react-native'
 
 export default function Layout() {
     const [fontsLoaded] = useFonts({
@@ -25,7 +27,7 @@ export default function Layout() {
     }
 
     return (
-        <SafeAreaView className="bg-slate-900 flex-1">
+        <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
             <Tabs
                 screenOptions={{
                     headerShown: false,
