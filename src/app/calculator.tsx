@@ -6,7 +6,11 @@ import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
 import { Divide, SetCurrency } from "@/utils/functions/MathFunctions"
 import { useRef, useState } from "react"
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from "react-native"
+import { Keyboard, ScrollView, TextInput, View } from "react-native"
+import { Card } from '@/components/Card'
+import { KeyboardScreen } from '@/components/Screen'
+import React from 'react'
+import { TextWhite } from '@/components/TextWhite'
 
 export default function Calculator() {
     const [answer, setAnswer] = useState<number | null>(null)
@@ -41,11 +45,7 @@ export default function Calculator() {
     }
 
     return (
-        <KeyboardAvoidingView
-            className="flex-1 bg-slate-900"
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
-        >
+        <KeyboardScreen>
             <ScrollView keyboardShouldPersistTaps="handled">
                 <Header />
 
@@ -84,12 +84,11 @@ export default function Calculator() {
                         </Button>
                     </View>
 
-                    <View className="border border-white rounded-2xl mx-5 p-4 text-white">
-                        <Text className="text-white">Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}
-                        </Text>
-                    </View>
+                    <Card className="mx-5 p-4">
+                        <TextWhite>Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}</TextWhite>
+                    </Card>
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardScreen>
     )
 }

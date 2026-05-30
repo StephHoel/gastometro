@@ -1,6 +1,9 @@
 import type { CustomInputProps } from "@/interfaces/CustomInputProps"
-import { Text, TextInput, View } from "react-native"
+import { TextInput } from "react-native"
+import { Card } from '@/components/Card'
 import colors from "tailwindcss/colors"
+import React from 'react'
+import { TextWhite } from './TextWhite'
 
 export function CustomInput({
     nameField,
@@ -39,8 +42,8 @@ export function CustomInput({
     }
 
     return (
-        <View className="border border-white rounded-2xl mx-5 py-1 text-white flex-row">
-            <Text className="text-white p-2">{nameField}:</Text>
+        <Card className="mx-5 py-1 flex-row">
+            <TextWhite className="p-2">{nameField}:</TextWhite>
 
             <TextInput
                 className={"text-white flex-1 py-2 mr-3 outline-none"}
@@ -54,6 +57,6 @@ export function CustomInput({
                 onSubmitEditing={onSubmit}
                 returnKeyType={returnKeyType}
             />
-        </View>
+        </Card>
     )
 }

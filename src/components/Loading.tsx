@@ -1,11 +1,12 @@
 import React from 'react'
-import { ActivityIndicator, View } from "react-native"
+import { ActivityIndicator } from "react-native"
+import { Screen } from '@/components/Screen'
 import colors from "tailwindcss/colors"
 
 export function Loading() {
     return (
-        <View className="flex-1 items-center justify-center bg-slate-900">
+        <Screen className="items-center justify-center">
             <ActivityIndicator color={colors.white} />
-        </View>
+        </Screen>
     )
 }

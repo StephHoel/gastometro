@@ -6,7 +6,8 @@ import { ReduceProducts, SetCurrency } from "@/utils/functions/MathFunctions"
 import React from 'react'
 import { useRef } from "react"
 import { useInitAlert } from '@/hooks/useInitAlert'
-import { Text, View } from "react-native"
+import { Screen } from '@/components/Screen'
+import { TextWhite } from '@/components/TextWhite'
 
 export default function Home() {
     const cartStore = useCartStore()
@@ -20,15 +21,13 @@ export default function Home() {
         <>
             <CustomAlert ref={alertRef} />
 
-            <View className="flex-1 bg-slate-900">
+            <Screen>
                 <Header />
 
-                <Text className="text-white text-center pt-2 pb-4">
-                    Total: {SetCurrency(total)}
-                </Text>
+                <TextWhite className="text-center pt-2 pb-4">Total: {SetCurrency(total)}</TextWhite>
 
                 <List cartStore={cartStore} />
-            </View>
+            </Screen>
         </>
     )
 }

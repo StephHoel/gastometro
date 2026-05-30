@@ -4,11 +4,14 @@ import { titlePages } from "@/constants/pages"
 import type { CurrentRoute } from "@/interfaces/CurrentRoute"
 import { AlertService } from "@/services/AlertService"
 import { useInitAlert } from '@/hooks/useInitAlert'
+import { Row } from '@/components/Row'
 import { useCartStore } from "@/stores/CartStore"
 import { useRoute } from "expo-router/react-navigation"
 import { useRouter } from "expo-router"
 import { useRef } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
+import { TextWhite } from '@/components/TextWhite'
+import { Divider } from '@/components/Divider'
 import React from 'react'
 
 export function Header() {
@@ -52,13 +55,13 @@ export function Header() {
             <CustomAlert ref={alertRef} />
 
             <View className="pt-4 px-3 flex-row justify-between">
-                <Text className="text-white text-2xl font-heading">
+                <TextWhite className="text-2xl font-heading">
                     {titlePages[route.name as keyof typeof titlePages]}
-                </Text>
+                </TextWhite>
 
-                <View className="flex-row gap-4">{buttonsByRouteName()}</View>
+                <Row className="gap-4">{buttonsByRouteName()}</Row>
             </View>
-            <View className="border-b border-white pt-3 mx-2" />
+            <Divider className="border-white pt-3 mx-2" />
 
             {route.name === "index" && <Add action={() => navigator.push("/list/add")} />}
         </>
