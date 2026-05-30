@@ -1,25 +1,18 @@
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { SetProductProps } from "@/interfaces/SetProductProps"
 import { ParseToFloat } from '@/utils/functions/MathFunctions'
+import { ToTitleCase } from '@/utils/functions/StringFunctions'
 
 export const ProductService = {
     createOrUpdateProduct(data: SetProductProps): ProductProps {
         return {
             id: data.id,
-            item: GetItemNormalize(data.item),
+            item: ToTitleCase(data.item),
             quantity: GetQuantityNormalize(data.qtt),
             price: GetPriceNormalize(data.price),
             collected: data.collected || false,
         }
     }
-}
-
-function GetItemNormalize(item: string) {
-    return item
-        .trim()
-        .split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ')
 }
 
 function GetPriceNormalize(price: string) {
