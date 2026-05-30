@@ -8,6 +8,8 @@ import { FormatTextLine } from "@/utils/functions/StringFunctions"
 import { useRouter } from "expo-router"
 import React from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Divider } from '@/components/Divider'
+import { TextWhite } from './TextWhite'
 
 export function List({ cartStore }: ListProps) {
     const nav = useRouter()
@@ -36,19 +38,16 @@ export function List({ cartStore }: ListProps) {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)} className="flex-1">
-                                <Text
-                                    className={`pl-2 mr-14 text-xl ${prod.collected
-                                        ? " line-through text-gray-600 "
-                                        : " text-white "
-                                        }`}
-                                >
-                                    {FormatTextLine(prod)}
-                                </Text>
+                                {prod.collected ? (
+                                    <Text className={`pl-2 mr-14 text-xl line-through text-gray-600`}>{FormatTextLine(prod)}</Text>
+                                ) : (
+                                    <TextWhite className="pl-2 mr-14 text-xl">{FormatTextLine(prod)}</TextWhite>
+                                )}
                             </TouchableOpacity>
                         </View>
 
                         {i !== cartStore.products.length - 1 && (
-                            <View className="border-b border-gray-500 my-2" />
+                            <Divider />
                         )}
                     </View>
                 ))}

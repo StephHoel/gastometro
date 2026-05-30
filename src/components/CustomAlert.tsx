@@ -10,7 +10,9 @@ import {
 } from "react-native"
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps"
 import { WhatsappIcon } from './Icons'
+import { Row } from './Row'
 import React from 'react'
+import { TextWhite } from './TextWhite'
 
 export interface CustomAlertRef {
     showAlert: (params: ShowAlertProps) => void
@@ -57,12 +59,10 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
                 <View className="flex-1 justify-center items-center bg-black/30">
                     <TouchableWithoutFeedback>
                         <View className="w-3/4 p-5 bg-slate-700 rounded-lg  items-center">
-                            <Text className="text-xl text-white font-bold mb-3">{title}</Text>
+                            <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
 
                             {message && (
-                                <Text className="text-base text-white mb-5 text-center">
-                                    {message}
-                                </Text>
+                                <TextWhite className="text-base mb-5 text-center">{message}</TextWhite>
                             )}
 
                             <View className="w-full flex-col px-4">
@@ -78,14 +78,14 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
                                     >
                                         <Text
                                             className={`font-bold ${button.text === "Cancelar"
-                                                    ? "text-white"
-                                                    : "text-black/90"
+                                                ? "text-white"
+                                                : "text-black/90"
                                                 }`}
                                         >
                                             {button.text === alert.share.buttons.whatsapp ? (
-                                                <View className="flex-row justify-center items-center gap-1">
+                                                <Row className="justify-center items-center gap-1">
                                                     <WhatsappIcon /> {button.text}
-                                                </View>
+                                                </Row>
                                             ) : (
                                                 button.text
                                             )}

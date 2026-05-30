@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from "expo-router"
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native"
+import { ScrollView } from "react-native"
+import { KeyboardScreen } from '@/components/Screen'
 
 import { useCartStore } from "@/stores/CartStore"
 
@@ -8,6 +9,7 @@ import { Header } from "@/components/Header"
 
 import { EditIcon } from "@/components/Icons"
 import { text } from "@/constants/text"
+import React from 'react'
 
 export default function Edit() {
     const { id } = useLocalSearchParams()
@@ -15,11 +17,7 @@ export default function Edit() {
     const prod = cartStore.get(id.toString())
 
     return (
-        <KeyboardAvoidingView
-            className="flex-1 bg-slate-900"
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
-        >
+        <KeyboardScreen>
             <ScrollView keyboardShouldPersistTaps="handled">
                 <Header />
 
@@ -27,6 +25,6 @@ export default function Edit() {
                     <EditIcon size={32} color="black" />
                 </Form>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardScreen>
     )
 }
