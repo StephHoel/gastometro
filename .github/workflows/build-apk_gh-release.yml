@@ -2,9 +2,9 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: [ "main", "release", "releases/v1.4.0"]
+    branches: ["main", "release", "release/**"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -26,46 +26,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+          java-version: "21"
+          distribution: "temurin"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 20
 
-      - name: Install dependencies
-        run: npm install --loglevel=error
-
-      - name: Prebuild Expo
-        run: npx expo prebuild --non-interactive --platform android
-
-      - name: Remove .webp files
+      - name: Run local build script
         run: |
-          echo "Removing .webp files..."
-          find . -name "*.webp" -type f -delete
-          echo "Files removing!"
-
-      - name: Build APK
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleRelease --warning-mode none
-        env:
-          EXPO_NO_COMMAND: 1
-
-      - name: Rename APK
-        run: mv android/app/build/outputs/apk/release/*.apk android/app/build/outputs/apk/release/gastometro.apk
+          chmod +x scripts/build-local.sh
+          ./scripts/build-local.sh
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
           name: gastometro
-          path: android/app/build/outputs/apk/release/gastometro.apk
+          path: _apks/*.apk
           if-no-files-found: error
           overwrite: true
 
@@ -76,7 +57,12 @@ jobs:
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
           TAG="main"
-          APK_PATH="android/app/build/outputs/apk/release/gastometro.apk"
+          APK_PATH=$(ls -1 _apks/*.apk 2>/dev/null | head -n1 || true)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "No APK found in _apks/ to upload"
+            exit 1
+          fi
 
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release with tag '$TAG' exists. Uploading new APK..."
@@ -96,7 +82,12 @@ jobs:
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
           TAG="dev"
-          APK_PATH="android/app/build/outputs/apk/release/gastometro.apk"
+          APK_PATH=$(ls -1 _apks/*.apk 2>/dev/null | head -n1 || true)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "No APK found in _apks/ to upload"
+            exit 1
+          fi
 
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release with tag '$TAG' exists. Uploading new APK..."

@@ -1,32 +1,30 @@
-import { useLocalSearchParams } from "expo-router";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useLocalSearchParams } from "expo-router"
+import { ScrollView } from "react-native"
+import { KeyboardScreen } from '@/components/Screen'
 
-import { useCartStore } from "@/stores/CartStore";
+import { useCartStore } from "@/stores/CartStore"
 
-import { Form } from "@/components/Form";
-import { Header } from "@/components/Header";
+import { Form } from "@/components/Form"
+import { Header } from "@/components/Header"
 
-import { EditIcon } from "@/components/Icons";
-import { text } from "@/constants/text";
+import { EditIcon } from "@/components/Icons"
+import { text } from "@/constants/text"
+import React from 'react'
 
 export default function Edit() {
-	const { id } = useLocalSearchParams();
-	const cartStore = useCartStore();
-	const prod = cartStore.get(id.toString());
+    const { id } = useLocalSearchParams()
+    const cartStore = useCartStore()
+    const prod = cartStore.get(id.toString())
 
-	return (
-		<KeyboardAvoidingView
-			className="flex-1 bg-slate-900"
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
-		>
-			<ScrollView keyboardShouldPersistTaps="handled">
-				<Header />
+    return (
+        <KeyboardScreen>
+            <ScrollView keyboardShouldPersistTaps="handled">
+                <Header />
 
-				<Form data={prod} buttonTitle={text.buttons.edit}>
-					<EditIcon size={32} color="black" />
-				</Form>
-			</ScrollView>
-		</KeyboardAvoidingView>
-	);
+                <Form data={prod} buttonTitle={text.buttons.edit}>
+                    <EditIcon size={32} color="black" />
+                </Form>
+            </ScrollView>
+        </KeyboardScreen>
+    )
 }

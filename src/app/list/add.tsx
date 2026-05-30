@@ -1,23 +1,21 @@
-import { Form } from "@/components/Form";
-import { Header } from "@/components/Header";
-import { AddIcon } from "@/components/Icons";
-import { text } from "@/constants/text";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Form } from "@/components/Form"
+import { Header } from "@/components/Header"
+import { AddIcon } from "@/components/Icons"
+import { text } from "@/constants/text"
+import { ScrollView } from "react-native"
+import { KeyboardScreen } from '@/components/Screen'
+import React from 'react'
 
 export default function Add() {
-	return (
-		<KeyboardAvoidingView
-			className="flex-1 bg-slate-900"
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={100} // Ajuste conforme o header/nav bar
-		>
-			<ScrollView keyboardShouldPersistTaps="handled">
-				<Header />
+    return (
+        <KeyboardScreen>
+            <ScrollView keyboardShouldPersistTaps="handled">
+                <Header />
 
-				<Form buttonTitle={text.buttons.add}>
-					<AddIcon size={32} color="black" />
-				</Form>
-			</ScrollView>
-		</KeyboardAvoidingView>
-	);
+                <Form buttonTitle={text.buttons.add}>
+                    <AddIcon size={32} color="black" />
+                </Form>
+            </ScrollView>
+        </KeyboardScreen>
+    )
 }

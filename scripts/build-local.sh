@@ -1,21 +1,58 @@
 #!/bin/bash
 
-echo "🔍  Iniciando script de build local..."
+# Abort on error, undefined var, or pipe failure
+set -euo pipefail
+trap 'rc=$?; echo ""; echo "❌ Erro ao executar: \"$BASH_COMMAND\" (código $rc). Abortando o build."; exit $rc' ERR
+
+echo "🔍 Iniciando build local do Gastômetro..."
 echo ""
 
-expo prebuild
+# Salva o diretório inicial (raiz do repositório quando o script foi chamado)
+START_PWD="$(pwd)"
 
+echo "🧽 Limpando caches locais..."
+rm -rf node_modules android .gradle .expo .expo-shared
+echo ""
+
+echo "📦 Reinstalando dependências..."
+# npm install --legacy-peer-deps
+npm install --loglevel=error
+echo "✅ Dependências instaladas"
+echo ""
+
+echo "📦 Executando expo prebuild limpo (recria android/)..."
+npx expo prebuild --platform android --clean
+echo "✅ expo prebuild concluído"
+echo ""
+
+# # echo "🧹 Removendo arquivos .webp..."
+# # find . -type f -name "*.webp" -delete
+# # echo "✔ Arquivos .webp removidos"
+# # echo ""
+
+echo "📁 Entrando em android/"
 cd android/
-
-./gradlew build
-
-./gradlew assembleRelease
-
-cd app/build/outputs/apk/release/
-
-mv "app-arm64-v8a-release.apk" "../../../../../../_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk"
-
-cd ../../../../../../
-
 echo ""
-echo "✔ Build finalizado!"
+
+echo "⚙️  Iniciando build Gradle..."
+chmod +x gradlew
+./gradlew assembleRelease --warning-mode all
+echo ""
+
+echo "📂 Coletando APK..."
+cd "$START_PWD" || true
+mkdir -p _apks
+
+# Find the most recently modified APK under android/app/build
+latest_apk=$(find android/app/build -type f -name "*.apk" -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2- || true)
+
+if [ -z "$latest_apk" ]; then
+	echo "⚠️ APK não encontrado em locais esperados"
+else
+	target="_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk"
+	mv -- "$latest_apk" "$target"
+	echo "✅ APK movido: $target"
+fi
+echo ""
+
+echo "🎉 Build concluído!"
