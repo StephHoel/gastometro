@@ -8,6 +8,7 @@ import { useRoute } from "expo-router/react-navigation"
 import { useRouter } from "expo-router"
 import { useEffect, useRef } from "react"
 import { Text, View } from "react-native"
+import React from 'react'
 
 export function Header() {
     const route = useRoute<CurrentRoute>()

@@ -9,7 +9,8 @@ import {
     View,
 } from "react-native"
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps"
-import { WhatsappIcon } from "./Icons"
+import { WhatsappIcon } from './Icons'
+import React from 'react'
 
 export interface CustomAlertRef {
     showAlert: (params: ShowAlertProps) => void
