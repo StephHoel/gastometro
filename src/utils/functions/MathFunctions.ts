@@ -1,7 +1,7 @@
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { StateProps } from "@/interfaces/StateProps"
 
-function ParseToFloat(value: string | number): number {
+export function ParseToFloat(value: string | number): number {
     if (typeof value === 'number')
         return Number.isFinite(value) ? value : 0
 
