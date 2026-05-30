@@ -7,12 +7,14 @@ import { useCartStore } from "@/stores/CartStore"
 
 import { CustomButton as Button } from "@/components/Button"
 import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert"
+import { useInitAlert } from '@/hooks/useInitAlert'
 import { CustomInput } from "@/components/CustomInput"
 import { text } from "@/constants/text"
 import type { FormProps } from "@/interfaces/FormProps"
 import { AlertService } from "@/services/AlertService"
 import { ProductService } from "@/services/ProductService"
 import { useRouter } from "expo-router"
+import React from 'react'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     const [item, setItem] = useState("")
@@ -28,11 +30,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     const inputRef3 = useRef<TextInput | null>(null)
     const alertRef = useRef<CustomAlertRef>(null)
 
-    useEffect(() => {
-        if (alertRef.current) {
-            AlertService.init(alertRef.current)
-        }
-    }, [])
+    useInitAlert(alertRef)
 
     function handleSubmit(): void {
         Keyboard.dismiss()

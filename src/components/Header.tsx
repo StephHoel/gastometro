@@ -3,10 +3,11 @@ import { Add, Back, Delete, Share } from "@/components/TouchableIcons"
 import { titlePages } from "@/constants/pages"
 import type { CurrentRoute } from "@/interfaces/CurrentRoute"
 import { AlertService } from "@/services/AlertService"
+import { useInitAlert } from '@/hooks/useInitAlert'
 import { useCartStore } from "@/stores/CartStore"
 import { useRoute } from "expo-router/react-navigation"
 import { useRouter } from "expo-router"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { Text, View } from "react-native"
 import React from 'react'
 
@@ -16,11 +17,7 @@ export function Header() {
     const navigator = useRouter()
     const alertRef = useRef<CustomAlertRef>(null)
 
-    useEffect(() => {
-        if (alertRef.current) {
-            AlertService.init(alertRef.current)
-        }
-    }, [])
+    useInitAlert(alertRef)
 
     function buttonsByRouteName() {
         switch (route.name) {
