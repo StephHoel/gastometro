@@ -1,3 +1,5 @@
 {
-    "editor.autoIndent": "none"
+  "editor.autoIndent": "none",
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2
 }
