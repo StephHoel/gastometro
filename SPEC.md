@@ -37,12 +37,13 @@ Publico esperado:
 
 ## 3. Funcionalidades Planejadas
 
-Estas ideias aparecem no README e ainda devem ser detalhadas antes de implementacao:
+Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execucao:
 
 - notificacoes/lembretes;
 - multiplas listas com titulos personalizados;
 - contas a pagar;
-- total apenas dos itens marcados como coletados.
+- total dos itens marcados como coletados, exibido ao lado do total geral;
+- identificacao de itens duplicados com uma acao para unir os itens ou alterar um deles.
 
 Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificacao contendo comportamento esperado, telas afetadas, persistencia e criterios de aceite.
 
@@ -62,6 +63,8 @@ Use esta secao como verdade atual do repositorio.
 - Expo/React Native APIs para clipboard, linking, imagens, fontes, splash e UI.
 - Biome configurado parcialmente em `biome.json`.
 - Dependabot semanal para dependencias npm.
+- Foco de plataforma: Android.
+- Plataforma futura: web compativel com GitHub Pages.
 
 Nao assumir Prisma, PostgreSQL, Jest ou Zod sem antes adicionar essas dependencias e justificar a mudanca. O arquivo antigo do Copilot citava essas tecnologias, mas elas nao aparecem na stack atual.
 
@@ -104,6 +107,8 @@ Regras atuais:
 - tocar no checkbox alterna `collected`.
 - tocar no texto do item abre a edicao.
 - exclusao usa alerta de confirmacao.
+- o app permanece offline-first por tempo indeterminado.
+- todos os comportamentos existentes devem ser preservados, exceto quando uma feature aprovada alterar explicitamente esse comportamento.
 
 ## 7. Arquitetura e Fluxo de Dados
 
@@ -164,24 +169,27 @@ Ao criar UI nova:
 - manter controles simples e orientados a tarefa;
 - respeitar acessibilidade basica de toque e contraste;
 - evitar quebrar o fluxo rapido de compra.
+- manter o tema escuro como identidade fixa do app.
+- limitar a largura visual do nome do item a aproximadamente tres quartos da largura horizontal da tela do dispositivo.
 
 ## 10. Validacoes e Regras de Entrada
 
-Regras atuais:
+Regras decididas:
 
 - item vazio bloqueia salvamento.
-- calculadora bloqueia calculo quando preco ou quantidade estao vazios.
-- quantidade e preco vazios ou invalidos sao normalizados para `0` ou `0.00` conforme regras em `ProductService`.
+- quantidade vazia deve ser aceita e tratada como `0`.
+- preco vazio deve ser aceito e tratado como `0.00`.
+- valores negativos nao devem ser aceitos em quantidade nem preco.
+- itens duplicados devem ser bloqueados no modo de criacao de item.
+- itens duplicados devem ser permitidos no modo de colar/importar lista.
 - `ParseToFloat` remove caracteres nao numericos relevantes e interpreta virgula como decimal.
 - divisao por zero retorna `0`.
 
-Pendencias para detalhar:
+Pendencias de implementacao:
 
-- decidir se quantidade vazia deve ser permitida em novos itens;
-- decidir se preco vazio deve ser permitido em novos itens;
-- definir comportamento para valores negativos;
-- definir limite maximo de caracteres para nome do item;
-- definir se duplicidade de item deve ser permitida.
+- alinhar o codigo atual para bloquear negativos.
+- alinhar o codigo atual para bloquear duplicados apenas na criacao manual.
+- planejar feature para listar duplicados e permitir uniao ou alteracao pelo usuario.
 
 ## 11. Compartilhamento e Importacao
 
@@ -198,8 +206,9 @@ Importacao:
 - itens importados recebem novo `id`;
 - itens importados entram com `collected: false`;
 - a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
+- itens duplicados sao permitidos na importacao.
 
-Qualquer mudanca nesse formato deve considerar retrocompatibilidade com listas ja compartilhadas.
+Qualquer mudanca nesse formato deve manter retrocompatibilidade com listas ja compartilhadas.
 
 ## 12. Build, Qualidade e Verificacao
 
@@ -218,12 +227,24 @@ npm run deps:audit
 
 Antes de finalizar mudancas, a IA deve tentar uma verificacao proporcional ao escopo:
 
-- para regras puras: validar manualmente os cenarios relevantes e, se houver suite de testes futura, adicionar testes;
+- para regras puras: adicionar ou atualizar testes unitarios quando a suite existir;
+- para store/estado: testar operacoes do Zustand e helpers de lista;
+- para componentes: testar renderizacao e interacoes principais;
+- para integracao: testar fluxos completos entre tela, store e servicos;
+- para contrato/formato: testar compartilhamento e importacao do WhatsApp, preservando retrocompatibilidade;
 - para UI: rodar o app quando possivel e verificar tela afetada;
 - para dependencias: rodar `npm run deps:check` e `npm run deps:audit`;
 - para TypeScript: usar verificacao de tipos quando houver script ou comando apropriado no projeto.
 
-Observacao: o projeto ainda nao tem script de teste automatizado configurado.
+Estrategia de testes escolhida:
+
+- testes unitarios;
+- testes de store/estado;
+- testes de componentes;
+- testes de integracao;
+- testes de contrato/formato.
+
+Observacao: o projeto ainda nao tem script de teste automatizado configurado. Ao introduzir testes, priorizar funcoes puras, store e contrato do WhatsApp antes de ampliar cobertura de UI.
 
 ## 13. Politica de Dependencias
 
@@ -235,7 +256,17 @@ Diretrizes do README:
 - usar Dependabot semanal;
 - rodar `npm run deps:check` e `npm run deps:audit` antes de publicar alteracoes de dependencia.
 
-## 14. Como a IA Deve Trabalhar Neste Projeto
+## 14. Versionamento e Release
+
+Regras de versionamento:
+
+- fix ou atualizacao de stack: incrementar `patch`;
+- nova feature: incrementar `minor`;
+- mudanca que possa quebrar comportamento, dados persistidos, importacao/exportacao ou compatibilidade: incrementar `major`.
+
+Os scripts atuais de release/build devem ser preservados ate que uma nova estrategia seja especificada.
+
+## 15. Como a IA Deve Trabalhar Neste Projeto
 
 Antes de codar:
 
@@ -250,6 +281,8 @@ Durante a implementacao:
 - manter alteracoes pequenas e rastreaveis;
 - nao refatorar codigo nao relacionado;
 - proteger dados persistidos;
+- preservar comportamento existente por padrao;
+- pedir confirmacao quando uma mudanca alterar comportamento de usuario, formato de dados, formato de compartilhamento ou compatibilidade;
 - atualizar este spec quando uma decisao nova for tomada;
 - atualizar README somente quando a informacao for util para usuarios ou contribuidores.
 
@@ -260,7 +293,7 @@ Ao finalizar:
 - declarar riscos ou pendencias;
 - apontar decisoes que ainda precisam de confirmacao humana.
 
-## 15. Template de Mini-Spec para Novas Features
+## 16. Template de Mini-Spec para Novas Features
 
 Copie e preencha antes de implementar funcionalidades maiores:
 
@@ -289,12 +322,21 @@ Fora de escopo:
 - <o que nao sera feito agora>
 ```
 
-## 16. Perguntas Abertas
+## 17. Decisoes Registradas
 
-- O app deve continuar com apenas uma lista ou multiplas listas viraram prioridade?
-- Produtos com quantidade/preco vazios devem ser aceitos ou bloqueados?
-- Itens duplicados devem ser agrupados, bloqueados ou permitidos?
-- O total de itens coletados deve aparecer junto ao total geral?
-- A importacao de listas antigas deve continuar aceitando exatamente o formato atual?
-- Havera backend no futuro ou o produto deve permanecer offline-first?
-- Qual estrategia de testes automatizados sera adotada?
+- Multiplas listas e uma feature futura.
+- Quantidade vazia deve ser aceita e tratada como `0`.
+- Preco vazio deve ser aceito e tratado como `0.00`.
+- Valores negativos nao devem ser aceitos.
+- Nome de item deve ocupar no maximo aproximadamente tres quartos da largura horizontal da tela.
+- Duplicados devem ser bloqueados na criacao manual e permitidos na importacao/colagem.
+- Deve existir uma feature futura para mostrar itens duplicados e permitir uniao ou alteracao.
+- Total de itens coletados deve aparecer ao lado do total geral.
+- Formato atual de compartilhamento/importacao via WhatsApp deve continuar retrocompativel.
+- O app permanece offline-first por tempo indeterminado.
+- Estrategia de testes: unitarios, store/estado, componentes, integracao e contrato/formato.
+- Todas as funcionalidades planejadas devem ser implementadas futuramente.
+- Tema escuro deve ser mantido como identidade fixa.
+- Versionamento segue patch para fix/stack, minor para feature e major para mudanca potencialmente quebravel.
+- Foco continua Android, com versao web futura compativel com GitHub Pages.
+- Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmacao do usuario.
