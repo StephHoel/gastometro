@@ -1,20 +1,17 @@
-# Copilot Instructions
+# Instrucoes para GitHub Copilot
 
-## Stack
-- Node.js + TypeScript
-- Prisma ORM
-- PostgreSQL
+Leia `SPEC.md` antes de sugerir alteracoes. Ele e o guia canonico do projeto para IA.
 
-## Code Style
-- Use clean architecture
-- Prefer small functions
-- Always type everything strictly
+Resumo rapido:
 
-## Rules
-- Never use `any`
-- Always validate input with Zod
-- Prefer async/await over promises
-
-## Testing
-- Use Jest
-- Always include happy path + edge cases
+- Projeto mobile Expo/React Native com TypeScript estrito.
+- Rotas em `src/app` via Expo Router.
+- UI com NativeWind/Tailwind e componentes em `src/components`.
+- Estado global em Zustand com persistencia local via AsyncStorage.
+- Dominio principal: lista de compras, total em BRL, compartilhamento/importacao via WhatsApp e calculadora de preco por unidade.
+- Use imports internos com alias `@/`.
+- Evite `any`.
+- Nao assuma Prisma, PostgreSQL, Jest ou Zod: eles nao fazem parte da stack atual.
+- Preserve regras pt-BR de moeda, numeros com virgula/ponto e textos do usuario.
+- Evite mudar formato de dados persistidos sem planejar migracao.
+- Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `SPEC.md`.
