@@ -5,6 +5,7 @@ Leia `SPEC.md` antes de sugerir alteracoes. Ele e o guia canonico do projeto par
 Resumo rapido:
 
 - Projeto mobile Expo/React Native com TypeScript estrito.
+- Foco atual em Android; web futura deve ser compativel com GitHub Pages.
 - Rotas em `src/app` via Expo Router.
 - UI com NativeWind/Tailwind e componentes em `src/components`.
 - Estado global em Zustand com persistencia local via AsyncStorage.
@@ -13,5 +14,6 @@ Resumo rapido:
 - Evite `any`.
 - Nao assuma Prisma, PostgreSQL, Jest ou Zod: eles nao fazem parte da stack atual.
 - Preserve regras pt-BR de moeda, numeros com virgula/ponto e textos do usuario.
-- Evite mudar formato de dados persistidos sem planejar migracao.
+- Preserve comportamento existente, formato de dados persistidos e formato de WhatsApp, salvo confirmacao explicita do usuario.
+- Tema escuro e identidade fixa do app.
 - Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `SPEC.md`.
