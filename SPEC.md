@@ -45,6 +45,8 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 - total dos itens marcados como coletados, exibido ao lado do total geral;
 - identificacao de itens duplicados com uma acao para unir os itens ou alterar um deles.
 
+As mini-specs ficam em `specs/` e devem ser consultadas antes da implementacao.
+
 Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificacao contendo comportamento esperado, telas afetadas, persistencia e criterios de aceite.
 
 ## 4. Stack Real do Projeto
@@ -295,7 +297,7 @@ Ao finalizar:
 
 ## 16. Template de Mini-Spec para Novas Features
 
-Copie e preencha antes de implementar funcionalidades maiores:
+As mini-specs do projeto ficam em `specs/`. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
 
 ```md
 ## Feature: <nome>
