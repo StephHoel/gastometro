@@ -1,118 +1,159 @@
-# 🛒 Gastômetro - Aplicativo Mobile
+# Gastômetro
 
-Bem-vindo ao repositório oficial do **Gastômetro**, um aplicativo projetado para tornar suas idas ao supermercado mais eficientes, organizadas e práticas.
+Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
-![Demonstração do Aplicativo](.github/mobile.gif)
+![Demonstração do aplicativo](.github/mobile.gif)
 
----
+## O que o app faz hoje
 
-## 📋 Funcionalidades Principais
+- Cria, edita e remove itens da lista de compras.
+- Marca itens como coletados durante a compra.
+- Calcula o total geral da lista com base em quantidade e preço.
+- Aceita valores com vírgula ou ponto como separador decimal.
+- Mantém os dados localmente no dispositivo, sem login e sem backend.
+- Ordena os itens alfabeticamente.
+- Compartilha a lista via WhatsApp.
+- Importa uma lista copiada do WhatsApp quando ela segue o formato gerado pelo app.
+- Permite salvar itens com preço ou quantidade zerada.
+- Inclui uma calculadora de mercado para calcular preço por unidade.
 
-O aplicativo oferece uma série de funcionalidades para facilitar sua experiência:
+## Stack
 
-- **📑 Gerenciamento de Lista de Compras:** Crie, edite e remova itens da sua lista de forma simples e rápida.
-- **🎨 Design Intuitivo:** Interface amigável e fácil de usar, proporcionando uma experiência agradável.
-- **📤 Compartilhamento de Listas:** Compartilhe suas listas com familiares e amigos via WhatsApp.
-- **💾 Persistência Local:** Suas listas são salvas localmente no dispositivo, sem necessidade de login.
-- **🧮 Cálculo Automático de Totais:** O aplicativo calcula automaticamente o valor total da lista com base nos preços e quantidades dos itens.
-- **💱 Suporte a Preços com Vírgulas:** Insira preços utilizando vírgulas ou pontos como separadores decimais.
-- **✅ Marcar Itens Coletados:** Marque itens já coletados, facilitando o acompanhamento durante as compras.
-- **💾 Salvar Itens com Preço Zerado:** Permita salvar itens mesmo que o preço esteja zerado.
-- **🧮 Calculadora de Mercado:** Calcule o preço por unidade (preço total dividido pela unidade, como litro ou kg).
+- Expo 56.
+- React Native 0.85.
+- React 19.
+- TypeScript com modo estrito.
+- Expo Router para rotas.
+- NativeWind/Tailwind para estilos.
+- Zustand para estado global.
+- AsyncStorage para persistência local.
+- Node 20 conforme `.nvmrc`.
 
----
+O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pages está planejada.
 
-## 🌟 Funcionalidades Planejadas
+## Funcionalidades planejadas
 
-Estamos constantemente trabalhando para melhorar o aplicativo. Confira as funcionalidades que estão por vir:
+As próximas funcionalidades são documentadas em mini-specs dentro de [`specs/`](specs/README.md):
 
-- **🔔 Notificações:** Receba lembretes sobre itens que precisam ser comprados, utilizando a biblioteca `react-native-push-notification`.
-- **📂 Múltiplas Listas:** Crie várias listas com títulos personalizados.
-- **💳 Contas a Pagar:** Gerencie uma lista de contas a pagar para controle financeiro.
-- **✅ Total de Itens Marcados:** Cálculo de valor total dos itens marcados como "pegos".
+- Notificações e lembretes.
+- Múltiplas listas.
+- Contas a pagar.
+- Total de itens coletados ao lado do total geral.
+- Gestão de itens duplicados.
+- Validação de valores negativos.
+- Bloqueio de duplicados na criação manual.
+- Suite de testes automatizados.
+- Versão web compatível com GitHub Pages.
 
----
+Antes de implementar uma feature maior, consulte o [`SPEC.md`](SPEC.md) e a mini-spec correspondente.
 
-## 🚀 Como Usar
+## Como usar
 
-Siga os passos abaixo para começar a usar o aplicativo:
+Baixe o APK mais recente pela página de releases:
 
-1. **Baixe o APK mais recente:** [Clique aqui para baixar diretamente](https://github.com/StephHoel/gastometro/releases/download/v1.3.0/lista-de-compras-v1.3.0.apk).
-2. **Instale o aplicativo:** Após o download, instale o APK no seu dispositivo Android.
-3. **Comece a usar:** Abra o aplicativo e comece a criar suas listas de compras. Não é necessário login.
+[Releases do Gastômetro](https://github.com/StephHoel/gastometro/releases/latest)
 
----
+Depois instale o APK no Android e abra o app. Não é necessário criar conta.
 
-## 🛠️ Como Fazer Build
+## Desenvolvimento
 
-Se você deseja compilar o aplicativo após realizar modificações, siga estas instruções:
+Instale as dependências:
 
-1. **Configure os caminhos necessários no terminal Linux:**
+```bash
+npm install
+```
 
-   ```bash
-   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-   export ANDROID_HOME=$HOME/android
-   export ANDROID_SDK_ROOT=${ANDROID_HOME}
-   export PATH=${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${PATH}
-   ```
+Inicie o app com dev client:
 
-2. **Execute o comando de build:**
+```bash
+npm run start
+```
 
-   ```bash
-   eas build --platform android --local
-   ```
+Outros comandos disponíveis:
 
----
+```bash
+npm run android
+npm run web
+npm run prebuild
+npm run build:android
+npm run build:local:eas
+npm run deps:check
+npm run deps:audit
+```
 
-## 🤝 Como Contribuir
+Observações:
 
-Contribuições são sempre bem-vindas! Você pode ajudar de várias formas:
+- `npm run web` inicia o app no modo web de desenvolvimento.
+- `npm run build:android` usa EAS com o perfil `preview`.
+- `npm run build:local:eas` executa build local via EAS.
+- O diretório nativo `android/` pode ser gerado por `npm run prebuild` quando necessário.
 
-- **📂 Abrir Issues:** Relate bugs ou sugira novas funcionalidades.
-- **🔧 Enviar Pull Requests:** Contribua com correções de bugs, novas funcionalidades ou melhorias no código.
+## Qualidade e testes
 
-### Passos para Contribuir
+O projeto ainda não possui uma suite de testes automatizados configurada.
 
-1. Faça um fork do repositório.
-2. Crie uma branch para sua funcionalidade ou correção: `git checkout -b minha-feature`.
-3. Faça commit das suas alterações: `git commit -m 'Adiciona minha nova feature'`.
-4. Envie para o repositório remoto: `git push origin minha-feature`.
-5. Abra um Pull Request.
+A estratégia definida no spec inclui:
 
----
+- testes unitários;
+- testes de store/estado;
+- testes de componentes;
+- testes de integração;
+- testes de contrato/formato, especialmente para compartilhamento e importação via WhatsApp.
 
-## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE). Sinta-se à vontade para usá-lo e modificá-lo conforme necessário.
-
----
-
-## 📞 Suporte
-
-Se você tiver dúvidas ou problemas, entre em contato abrindo uma [issue](https://github.com/StephHoel/gastometro/issues).
-
----
-
-## 🌟 Agradecimentos
-
-Agradecemos a todos os contribuidores e usuários que ajudam a melhorar este projeto continuamente. Sua participação é essencial para o sucesso do **Gastômetro**!
-
-Agradecemos principalmente ao nosso designer [Ivaneudo](https://github.com/Ivaneudo/)!
-
----
-
-## 🔄 Política de Atualização de Dependências
-
-Para reduzir risco de quebra em atualizações grandes, seguimos uma política incremental:
-
-- Use **Node 20** (`.nvmrc`) e npm 10 para manter builds reproduzíveis.
-- Atualize o **stack Expo** em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`).
-- Atualize outras bibliotecas em PRs pequenos e semanais.
-- Rode verificações locais antes de publicar:
+Enquanto a suite não existir, valide manualmente o fluxo afetado e rode as verificações disponíveis quando fizer sentido:
 
 ```bash
 npm run deps:check
 npm run deps:audit
 ```
 
-O repositório também usa Dependabot para abrir PRs automáticos semanais com agrupamento de dependências críticas (Expo/React Native) separado das demais.
+## Diretrizes do projeto
+
+Este repositório segue um fluxo spec-driven para orientar mudanças humanas e assistidas por IA.
+
+- [`SPEC.md`](SPEC.md) é a referência principal de produto, arquitetura, UX, validações e processo.
+- [`specs/`](specs/README.md) contém mini-specs das funcionalidades pendentes.
+- [`.github/copilot-instructions.md`](.github/copilot-instructions.md) orienta sugestões do GitHub Copilot.
+
+Ao alterar comportamento de usuário, persistência, formato de WhatsApp ou compatibilidade, atualize a documentação relevante.
+
+## Versionamento
+
+Regras atuais:
+
+- `patch`: correções e atualizações de stack.
+- `minor`: novas funcionalidades.
+- `major`: mudanças que possam quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade.
+
+## Política de dependências
+
+Para reduzir risco em atualizações:
+
+- use Node 20 e npm 10;
+- atualize o stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
+- atualize outras bibliotecas em PRs pequenos;
+- rode `npm run deps:check` e `npm run deps:audit` antes de publicar alterações de dependências.
+
+O Dependabot abre PRs semanais para dependências npm.
+
+## Contribuição
+
+Contribuições são bem-vindas.
+
+1. Consulte o [`SPEC.md`](SPEC.md).
+2. Para features maiores, consulte ou crie uma mini-spec em [`specs/`](specs/README.md).
+3. Crie uma branch para a alteração.
+4. Faça commits pequenos e objetivos.
+5. Abra um pull request descrevendo mudança, impacto e validação feita.
+
+## Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+## Suporte
+
+Abra uma [issue](https://github.com/StephHoel/gastometro/issues) para relatar problemas ou sugerir melhorias.
+
+## Agradecimentos
+
+Agradecimento especial ao designer [Ivaneudo](https://github.com/Ivaneudo/).
