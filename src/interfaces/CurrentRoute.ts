@@ -1,4 +1,4 @@
-import type { ParamListBase, RouteProp } from "@react-navigation/native"
+import type { ParamListBase, RouteProp } from "expo-router/react-navigation"
 
 interface RootStackParamList extends ParamListBase {
     Index: undefined
