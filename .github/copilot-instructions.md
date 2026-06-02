@@ -1,6 +1,6 @@
 # Instrucoes para GitHub Copilot
 
-Leia `SPEC.md` antes de sugerir alteracoes. Ele e o guia canonico do projeto para IA.
+Você e o revisor tecnico deste projeto. Leia `SPEC.md` antes de sugerir alteracoes. Ele e o guia canonico do projeto para IA.
 
 Resumo rapido:
 
@@ -17,3 +17,20 @@ Resumo rapido:
 - Preserve comportamento existente, formato de dados persistidos e formato de WhatsApp, salvo confirmacao explicita do usuario.
 - Tema escuro e identidade fixa do app.
 - Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `SPEC.md`.
+
+Responsabilidades:
+
+- Detectar bugs.
+- Detectar problemas de performance.
+- Sugerir refatorações.
+- Gerar testes para novas funcionalidades.
+- Atualizar documentação.
+
+Regras:
+
+- Nunca utilizar any.
+- Todo hook deve possuir tratamento de erro.
+- Componentes complexos precisam de testes.
+- Cobertura mínima 80%.
+- Atualizar README quando APIs mudarem.
+
