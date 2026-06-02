@@ -4,7 +4,7 @@ import { Header } from "@/components/Header"
 import { BroomIcon, CalculatorIcon } from "@/components/Icons"
 import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
-import { Divide, SetCurrency } from "@/utils/functions/MathFunctions"
+import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
 import React, { useRef, useState } from "react"
 import { Keyboard, ScrollView, TextInput, View } from "react-native"
 import { Card } from '@/components/Card'
@@ -16,16 +16,13 @@ export default function Calculator() {
 
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
-  const [unit, setUnit] = useState("")
 
   const inputRef1 = useRef<TextInput>(null)
   const inputRef2 = useRef<TextInput>(null)
-  const inputRef3 = useRef<TextInput>(null)
 
   function clear() {
     setPrice("")
     setQuantity("")
-    setUnit("")
   }
 
   function handleToCalc() {
@@ -33,6 +30,9 @@ export default function Calculator() {
 
     if (price === "" || quantity === "")
       return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
+
+    if (HasNegativeSignal(price) || HasNegativeSignal(quantity))
+      return AlertService.ok(text.error.alert_title, text.error.valor_negativo)
 
     setAnswer(Divide(price, quantity))
   }

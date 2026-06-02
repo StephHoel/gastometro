@@ -13,6 +13,7 @@ import type { FormProps } from "@/interfaces/FormProps"
 import { AlertService } from "@/services/AlertService"
 import { ProductService } from "@/services/ProductService"
 import { useRouter } from "expo-router"
+import { HasNegativeSignal } from '@/utils/functions/MathFunctions'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const [item, setItem] = useState("")
@@ -33,27 +34,35 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   function handleSubmit(): void {
     Keyboard.dismiss()
 
-    if (item === "") {
-      AlertService.ok("Erro", text.error.campos_nao_preenchidos)
-    } else {
-      const product = ProductService.createOrUpdateProduct({
-        id: data?.id || uuid.v4().toString(),
-        item,
-        qtt,
-        price,
-        collected,
-      })
+    const normalizedItem = item.trim()
 
-      if (data !== undefined) cartStore.edit(product)
-      else cartStore.add(product)
-
-      setItem("")
-      setQtt("")
-      setPrice("")
-      setCollected(false)
-
-      navigation.push("/")
+    if (normalizedItem === "") {
+      AlertService.ok(text.error.alert_title, text.error.campos_nao_preenchidos)
+      return
     }
+
+    if (HasNegativeSignal(qtt) || HasNegativeSignal(price)) {
+      AlertService.ok(text.error.alert_title, text.error.valor_negativo)
+      return
+    }
+
+    const product = ProductService.createOrUpdateProduct({
+      id: data?.id || uuid.v4().toString(),
+      item: normalizedItem,
+      qtt,
+      price,
+      collected,
+    })
+
+    if (data !== undefined) cartStore.edit(product)
+    else cartStore.add(product)
+
+    setItem("")
+    setQtt("")
+    setPrice("")
+    setCollected(false)
+
+    navigation.push("/")
   }
 
   useEffect(() => {
