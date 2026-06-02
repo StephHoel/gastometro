@@ -1,7 +1,6 @@
 import { ButtonTextProps } from "@/interfaces/ButtonProps"
 import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps"
-import type { PropsWithChildren } from "react"
-import React from 'react'
+import React, { type PropsWithChildren } from "react"
 import { Text, TouchableOpacity } from "react-native"
 
 function Button({ children, type = "Success", className, ...rest }: ButtonTouchableProps) {
