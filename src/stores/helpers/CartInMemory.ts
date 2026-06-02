@@ -2,11 +2,11 @@ import { ProductProps } from '@/interfaces/ProductProps'
 import { SortProductsAlphabetically } from '@/utils/functions/SortList'
 
 export function add(products: ProductProps[], newProduct: ProductProps) {
-  return SortProductsAlphabetically.call([...products, { ...newProduct }])
+  return SortProductsAlphabetically([...products, { ...newProduct }])
 }
 
 export function replace(products: ProductProps[]) {
-  return SortProductsAlphabetically.call(products)
+  return SortProductsAlphabetically(products)
 }
 
 export function remove(products: ProductProps[], productRemovedId: string) {
@@ -20,7 +20,7 @@ export function edit(products: ProductProps[], editProduct: ProductProps) {
     return product
   })
 
-  return productsList
+  return SortProductsAlphabetically(productsList)
 }
 
 export function get(

@@ -82,27 +82,32 @@ export const AlertService = {
   },
 
   async paste(cartStore: StateProps) {
-    const clipboard = await ClipboardService.getClipboardContent()
+    try {
+      const clipboard = await ClipboardService.getClipboardContent()
 
-    if (clipboard?.startsWith(whatsapp.title)) {
-      const listToPaste = ConvertToProductsList(clipboard)
+      if (clipboard?.startsWith(whatsapp.title)) {
+        const listToPaste = ConvertToProductsList(clipboard)
 
-      alertRef?.showAlert({
-        title: alert.paste.title,
-        message: alert.paste.message,
-        buttons: [
-          {
-            text: alert.paste.buttons.oldList,
-            action: () => listToPaste.map(cartStore.add),
-          },
-          {
-            text: alert.paste.buttons.newList,
-            action: () => cartStore.replace(listToPaste),
-          },
-        ],
-      })
-    }
-    else
+        alertRef?.showAlert({
+          title: alert.paste.title,
+          message: alert.paste.message,
+          buttons: [
+            {
+              text: alert.paste.buttons.oldList,
+              action: () => listToPaste.map(cartStore.add),
+            },
+            {
+              text: alert.paste.buttons.newList,
+              action: () => cartStore.replace(listToPaste),
+            },
+          ],
+        })
+      }
+      else
+        AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+    } catch (error) {
+      console.error('Falha ao colar lista do clipboard:', error)
       AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+    }
   },
 }
