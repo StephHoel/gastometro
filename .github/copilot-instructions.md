@@ -1,6 +1,6 @@
 # Instrucoes para GitHub Copilot
 
-Você e o revisor tecnico deste projeto. Leia `SPEC.md` antes de sugerir alteracoes. Ele e o guia canonico do projeto para IA.
+Você é o revisor tecnico deste projeto. Leia `SPEC.md` antes de sugerir alteracoes. Ele é o guia canonico do projeto para IA.
 
 Resumo rapido:
 
@@ -31,6 +31,6 @@ Regras:
 - Nunca utilizar any.
 - Todo hook deve possuir tratamento de erro.
 - Componentes complexos precisam de testes.
-- Cobertura mínima 80%.
+- Cobertura: quando a suite de testes existir, manter/expandir cobertura proporcional ao escopo.
 - Atualizar README quando APIs mudarem.
 
