@@ -46,6 +46,11 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       return
     }
 
+    if (ProductService.isDuplicateItem(normalizedItem, cartStore.products, data?.id)) {
+      AlertService.ok(text.error.alert_title, text.error.item_duplicado)
+      return
+    }
+
     const product = ProductService.createOrUpdateProduct({
       id: data?.id || uuid.v4().toString(),
       item: normalizedItem,

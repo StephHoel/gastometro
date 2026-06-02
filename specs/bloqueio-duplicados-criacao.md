@@ -1,6 +1,6 @@
 # Mini-spec: Bloqueio de duplicados na criação manual
 
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -54,4 +54,11 @@ Impedir que o usuário crie manualmente um item duplicado na lista atual.
 ## Observações para IA
 
 - Esta regra deve ser implementada sem quebrar o fluxo de colar lista.
-- Cobrir com teste de helper/store quando a suíte existir.
+- Cobrir com teste de helper/store quando a suite existir.
+
+## Registro de implementacao
+
+- Criacao manual valida duplicidade por nome normalizado (`trim` + case-insensitive).
+- Edicao valida duplicidade ignorando o proprio item e bloqueia renomeacao para um item ja existente.
+- Mensagem de erro dedicada adicionada em `src/constants/text.ts` (`item_duplicado`).
+- Fluxo de importacao/colar permanece permitindo itens duplicados.

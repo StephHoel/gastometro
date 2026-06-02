@@ -12,3 +12,7 @@ export function ToTitleCase(text: string): string {
     .map((word) => (word.length === 0 ? '' : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()))
     .join(' ')
 }
+
+export function NormalizeItemName(text: string): string {
+  return text.trim().replace(/\s+/g, ' ').toLocaleLowerCase('pt-BR')
+}

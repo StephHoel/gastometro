@@ -16,6 +16,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Importa uma lista copiada do WhatsApp quando ela segue o formato gerado pelo app.
 - Permite salvar itens com preço ou quantidade zerada.
 - Bloqueia valores negativos em quantidade e preço nos fluxos manuais.
+- Bloqueia itens duplicados na criação manual de item.
 - Inclui uma calculadora de mercado para calcular preço por unidade.
 
 ## Stack
@@ -117,6 +118,7 @@ npm run deps:audit
 Mitigações já aplicadas no código:
 
 - Validação de negativos em criação/edição manual e calculadora.
+- Bloqueio de duplicados na criação manual de itens.
 
 ## Diretrizes do projeto
 
