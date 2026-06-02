@@ -53,7 +53,7 @@ Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequ
 
 Use esta secao como verdade atual do repositorio.
 
-- Node 20 conforme `.nvmrc`.
+- Node 24 conforme `.nvmrc`.
 - Expo `~56`.
 - React Native `0.85`.
 - React `19`.
@@ -252,7 +252,7 @@ Observacao: o projeto ainda nao tem script de teste automatizado configurado. Ao
 
 Diretrizes do README:
 
-- usar Node 20 e npm 10;
+- usar Node 24 e npm 11;
 - atualizar stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
 - atualizar demais bibliotecas em PRs pequenos;
 - usar Dependabot semanal;
