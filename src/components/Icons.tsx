@@ -1,6 +1,7 @@
 import type { IconsProps } from "@/interfaces/IconsProps"
 import IonIcons from "@expo/vector-icons/Ionicons"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import React from 'react'
 
 export function AddIcon({ size = 24, color = "white" }: IconsProps) {
     return <IonIcons name="add-circle-outline" size={size} color={color} />
