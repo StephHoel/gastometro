@@ -35,6 +35,7 @@ Publico esperado:
 - Suporte a numeros com virgula ou ponto como separador decimal.
 - Salvamento de itens com preco ou quantidade zerada quando normalizados pelas regras atuais.
 - Bloqueio de valores negativos nos fluxos manuais (formulario e calculadora).
+- Bloqueio de itens duplicados na criacao manual de item.
 
 ## 3. Funcionalidades Planejadas
 
