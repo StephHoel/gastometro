@@ -4,6 +4,7 @@ import { Card } from '@/components/Card'
 import colors from "tailwindcss/colors"
 import React from 'react'
 import { TextWhite } from './TextWhite'
+import { NormalizeDecimalInput } from '@/utils/functions/MathFunctions'
 
 export function CustomInput({
   nameField,
@@ -17,24 +18,9 @@ export function CustomInput({
 }: CustomInputProps) {
   function handleChangeText(text: string) {
     if (nameField === "Quantidade" || nameField === "Preço") {
-      let filtered = text.replace(/[^0-9.,]/g, "")
+      const maxDecimals = nameField === "Preço" ? 2 : 3
+      const filtered = NormalizeDecimalInput(text, maxDecimals)
 
-      const sep = filtered.includes(",")
-        ? ","
-        : filtered.includes(".")
-          ? "."
-          : ""
-
-      const [intPart, ...rest] = filtered.split(/[.,]/)
-      let decimalPart = rest.join("")
-
-      if (sep) {
-        const maxDecimals = nameField === "Preço" ? 2 : 3
-        decimalPart = decimalPart.slice(0, maxDecimals)
-        filtered = intPart + "." + decimalPart
-      } else {
-        filtered = intPart
-      }
       setItem(filtered)
     } else {
       setItem(text)

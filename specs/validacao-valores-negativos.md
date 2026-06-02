@@ -1,6 +1,6 @@
 # Mini-spec: Validacao de valores negativos
 
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -54,3 +54,10 @@ Bloquear valores negativos em quantidade, preco e calculadora, preservando o sup
 
 - Preferir funcoes puras de validacao reaproveitaveis.
 - Cobrir parser e validacao com testes unitarios quando a suite existir.
+
+## Registro de implementacao
+
+- Formulario de adicionar/editar bloqueia quantidade e preco com sinal negativo.
+- Calculadora bloqueia preco e quantidade com sinal negativo.
+- Mensagem de erro dedicada adicionada em `src/constants/text.ts` (`valor_negativo`).
+- Conversao pt-BR e regra de campos vazios foram preservadas.

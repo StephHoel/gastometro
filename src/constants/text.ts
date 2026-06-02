@@ -3,6 +3,7 @@ export const text = {
     alert_title: "Erro!",
     lista_fora_padrao: "A lista copiada não está no padrão. Copie a lista do Whatsapp sem editar!",
     campos_nao_preenchidos: 'Por favor, preencha todos os campos corretamente.',
+    valor_negativo: 'Valores negativos não são permitidos.',
   },
 
   buttons: {

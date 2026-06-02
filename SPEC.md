@@ -34,6 +34,7 @@ Publico esperado:
 - Calculadora de preco por unidade.
 - Suporte a numeros com virgula ou ponto como separador decimal.
 - Salvamento de itens com preco ou quantidade zerada quando normalizados pelas regras atuais.
+- Bloqueio de valores negativos nos fluxos manuais (formulario e calculadora).
 
 ## 3. Funcionalidades Planejadas
 
@@ -189,9 +190,8 @@ Regras decididas:
 
 Pendencias de implementacao:
 
-- alinhar o codigo atual para bloquear negativos.
-- alinhar o codigo atual para bloquear duplicados apenas na criacao manual.
 - planejar feature para listar duplicados e permitir uniao ou alteracao pelo usuario.
+- definir estrategia para tratar valores negativos vindos de importacao de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importacao
 
@@ -209,6 +209,7 @@ Importacao:
 - itens importados entram com `collected: false`;
 - a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
 - itens duplicados sao permitidos na importacao.
+- linhas malformadas ou com valores negativos devem ser ignoradas na importacao.
 
 Qualquer mudanca nesse formato deve manter retrocompatibilidade com listas ja compartilhadas.
 

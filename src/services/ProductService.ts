@@ -1,6 +1,6 @@
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { SetProductProps } from "@/interfaces/SetProductProps"
-import { ParseToFloat } from '@/utils/functions/MathFunctions'
+import { NormalizeNumericString } from '@/utils/functions/MathFunctions'
 import { ToTitleCase } from '@/utils/functions/StringFunctions'
 
 export const ProductService = {
@@ -16,25 +16,10 @@ export const ProductService = {
 }
 
 function GetPriceNormalize(price: string) {
-  const floatPrice = ParseToFloat(price)
-  const trimmed = price.replace(/\s/g, '')
-
-  if (floatPrice === 0
-    && trimmed !== '0'
-    && trimmed !== '0.0'
-    && trimmed !== '0.00')
-    return '0.00'
-
-  return floatPrice.toString()
+  return NormalizeNumericString(price, '0.00', ['0', '0.0', '0.00', '0,0', '0,00'])
 }
 
 function GetQuantityNormalize(qtt: string) {
-  const floatQtt = ParseToFloat(qtt)
-
-  if (floatQtt === 0
-    && qtt.replace(/\s/g, '') !== '0')
-    return '0'
-
-  return floatQtt.toString()
+  return NormalizeNumericString(qtt, '0', ['0', '0.0', '0.00', '0,0', '0,00'])
 }
 
