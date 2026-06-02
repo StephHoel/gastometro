@@ -6,32 +6,32 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 export const useCartStore = create(
-    persist<StateProps>(
-        (set, get) => ({
-            products: [],
+  persist<StateProps>(
+    (set, get) => ({
+      products: [],
 
-            add: (product: ProductProps) =>
-                set((state: StateProps) => ({
-                    products: CartInMemory.add(state.products, product),
-                })),
-            replace: (products: ProductProps[]) =>
-                set(() => ({
-                    products: CartInMemory.replace(products),
-                })),
-            remove: (productId: string) =>
-                set((state: StateProps) => ({
-                    products: CartInMemory.remove(state.products, productId),
-                })),
-            edit: (product: ProductProps) =>
-                set((state: StateProps) => ({
-                    products: CartInMemory.edit(state.products, product),
-                })),
-            get: (productId: string) => {
-                const products = get().products
-                return products.find((product) => product.id === productId)
-            },
-            clear: () => set(() => ({ products: [] })),
-        }),
-        { name: 'gastometro', storage: createJSONStorage(() => AsyncStorage) },
-    ),
+      add: (product: ProductProps) =>
+        set((state: StateProps) => ({
+          products: CartInMemory.add(state.products, product),
+        })),
+      replace: (products: ProductProps[]) =>
+        set(() => ({
+          products: CartInMemory.replace(products),
+        })),
+      remove: (productId: string) =>
+        set((state: StateProps) => ({
+          products: CartInMemory.remove(state.products, productId),
+        })),
+      edit: (product: ProductProps) =>
+        set((state: StateProps) => ({
+          products: CartInMemory.edit(state.products, product),
+        })),
+      get: (productId: string) => {
+        const products = get().products
+        return products.find((product) => product.id === productId)
+      },
+      clear: () => set(() => ({ products: [] })),
+    }),
+    { name: 'gastometro', storage: createJSONStorage(() => AsyncStorage) },
+  ),
 )

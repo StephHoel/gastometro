@@ -5,90 +5,89 @@ import { BroomIcon, CalculatorIcon } from "@/components/Icons"
 import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
 import { Divide, SetCurrency } from "@/utils/functions/MathFunctions"
-import { useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Keyboard, ScrollView, TextInput, View } from "react-native"
 import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
-import React from 'react'
 import { TextWhite } from '@/components/TextWhite'
 
 export default function Calculator() {
-    const [answer, setAnswer] = useState<number | null>(null)
+  const [answer, setAnswer] = useState<number | null>(null)
 
-    const [price, setPrice] = useState("")
-    const [quantity, setQuantity] = useState("")
-    const [unit, setUnit] = useState("")
+  const [price, setPrice] = useState("")
+  const [quantity, setQuantity] = useState("")
+  const [unit, setUnit] = useState("")
 
-    const inputRef1 = useRef<TextInput>(null)
-    const inputRef2 = useRef<TextInput>(null)
-    const inputRef3 = useRef<TextInput>(null)
+  const inputRef1 = useRef<TextInput>(null)
+  const inputRef2 = useRef<TextInput>(null)
+  const inputRef3 = useRef<TextInput>(null)
 
-    function clear() {
-        setPrice("")
-        setQuantity("")
-        setUnit("")
-    }
+  function clear() {
+    setPrice("")
+    setQuantity("")
+    setUnit("")
+  }
 
-    function handleToCalc() {
-        Keyboard.dismiss()
+  function handleToCalc() {
+    Keyboard.dismiss()
 
-        if (price === "" || quantity === "")
-            return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
+    if (price === "" || quantity === "")
+      return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
 
-        setAnswer(Divide(price, quantity))
-    }
+    setAnswer(Divide(price, quantity))
+  }
 
-    function handleToClear() {
-        Keyboard.dismiss()
-        clear()
-        setAnswer(null)
-    }
+  function handleToClear() {
+    Keyboard.dismiss()
+    clear()
+    setAnswer(null)
+  }
 
-    return (
-        <KeyboardScreen>
-            <ScrollView keyboardShouldPersistTaps="handled">
-                <Header />
+  return (
+    <KeyboardScreen>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Header />
 
-                <View className="mt-5 gap-5">
-                    <CustomInput
-                        nameField={"Preço"}
-                        selfRef={inputRef1}
-                        placeholder={"Preço da Embalagem"}
-                        setItem={setPrice}
-                        item={price}
-                        keyboardType="number-pad"
-                        onSubmit={() => inputRef2.current?.focus()}
-                        returnKeyType={"next"}
-                    />
+        <View className="mt-5 gap-5">
+          <CustomInput
+            nameField={"Preço"}
+            selfRef={inputRef1}
+            placeholder={"Preço da Embalagem"}
+            setItem={setPrice}
+            item={price}
+            keyboardType="number-pad"
+            onSubmit={() => inputRef2.current?.focus()}
+            returnKeyType={"next"}
+          />
 
-                    <CustomInput
-                        nameField={"Quantidade"}
-                        selfRef={inputRef2}
-                        placeholder={"Quantidade na Embalagem"}
-                        setItem={setQuantity}
-                        item={quantity}
-                        keyboardType="number-pad"
-                        onSubmit={handleToCalc}
-                        returnKeyType={"done"}
-                    />
+          <CustomInput
+            nameField={"Quantidade"}
+            selfRef={inputRef2}
+            placeholder={"Quantidade na Embalagem"}
+            setItem={setQuantity}
+            item={quantity}
+            keyboardType="number-pad"
+            onSubmit={handleToCalc}
+            returnKeyType={"done"}
+          />
 
-                    <View className="flex-1 flex-row justify-between">
-                        <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-                            <Button.Icon><BroomIcon size={28} color="black" /></Button.Icon>
-                            <Button.Text className="text-2xl">Limpar</Button.Text>
-                        </Button>
+          <View className="flex-1 flex-row justify-between">
+            <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
+              <Button.Icon><BroomIcon size={28} color="black" /></Button.Icon>
+              <Button.Text className="text-2xl">Limpar</Button.Text>
+            </Button>
 
-                        <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
-                            <Button.Icon><CalculatorIcon size={28} color="black" /></Button.Icon>
-                            <Button.Text className="text-2xl">Calcular</Button.Text>
-                        </Button>
-                    </View>
+            <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
+              <Button.Icon><CalculatorIcon size={28} color="black" /></Button.Icon>
+              <Button.Text className="text-2xl">Calcular</Button.Text>
+            </Button>
+          </View>
 
-                    <Card className="mx-5 p-4">
-                        <TextWhite>Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}</TextWhite>
-                    </Card>
-                </View>
-            </ScrollView>
-        </KeyboardScreen>
-    )
+          <Card className="mx-5 p-4">
+            <TextWhite>Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}</TextWhite>
+          </Card>
+        </View>
+      </ScrollView>
+    </KeyboardScreen>
+  )
 }

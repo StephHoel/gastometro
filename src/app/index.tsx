@@ -3,31 +3,30 @@ import { Header } from "@/components/Header"
 import { List } from "@/components/List"
 import { useCartStore } from "@/stores/CartStore"
 import { ReduceProducts, SetCurrency } from "@/utils/functions/MathFunctions"
-import React from 'react'
-import { useRef } from "react"
+import React, { useRef } from "react"
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 
 export default function Home() {
-    const cartStore = useCartStore()
-    const alertRef = useRef<CustomAlertRef>(null)
+  const cartStore = useCartStore()
+  const alertRef = useRef<CustomAlertRef>(null)
 
-    useInitAlert(alertRef)
+  useInitAlert(alertRef)
 
-    const total = ReduceProducts(cartStore)
+  const total = ReduceProducts(cartStore)
 
-    return (
-        <>
-            <CustomAlert ref={alertRef} />
+  return (
+    <>
+      <CustomAlert ref={alertRef} />
 
-            <Screen>
-                <Header />
+      <Screen>
+        <Header />
 
-                <TextWhite className="text-center pt-2 pb-4">Total: {SetCurrency(total)}</TextWhite>
+        <TextWhite className="text-center pt-2 pb-4">Total: {SetCurrency(total)}</TextWhite>
 
-                <List cartStore={cartStore} />
-            </Screen>
-        </>
-    )
+        <List cartStore={cartStore} />
+      </Screen>
+    </>
+  )
 }
