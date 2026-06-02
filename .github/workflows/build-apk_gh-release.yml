@@ -3,9 +3,8 @@ name: Build APK and Release to GitHub
 on:
   push:
     branches: ["main"]
-  pull_request:
-    types: [closed]
-    # types: [opened, synchronize, reopened]
+  # pull_request:
+  #   types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
