@@ -4,9 +4,13 @@ import { AlertService } from '@/services/AlertService'
 
 export function useInitAlert(ref: React.RefObject<CustomAlertRef | null> | null) {
   useEffect(() => {
-    if (!ref) return
-    if (ref.current) {
-      AlertService.init(ref.current)
+    try {
+      if (!ref) return
+      if (ref.current) {
+        AlertService.init(ref.current)
+      }
+    } catch (error) {
+      console.error('Falha ao inicializar alerta customizado:', error)
     }
-  }, [])
+  }, [ref])
 }

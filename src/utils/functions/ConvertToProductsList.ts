@@ -36,11 +36,16 @@ function ExtractProductDetails(line: string): ProductProps | undefined {
 
   // 0 quantity item
   const quantityItem = cols[0].split('x ')
+  if (quantityItem.length < 2) return undefined
+
   const quantity = quantityItem[0].trim()
-  const item = quantityItem[1].trim()
+  const item = quantityItem.slice(1).join('x ').trim()
+  if (!item) return undefined
 
   // 1 price
-  const price = cols[1].trim().slice(3)
+  const price = cols[1].trim().replace(/^R\$\s?/, '')
+
+  if (quantity.includes('-') || price.includes('-')) return undefined
 
   const add: ProductProps = {
     id: uuid.v4().toString(),
