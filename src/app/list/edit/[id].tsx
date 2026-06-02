@@ -12,19 +12,19 @@ import { text } from "@/constants/text"
 import React from 'react'
 
 export default function Edit() {
-    const { id } = useLocalSearchParams()
-    const cartStore = useCartStore()
-    const prod = cartStore.get(id.toString())
+  const { id } = useLocalSearchParams()
+  const cartStore = useCartStore()
+  const prod = cartStore.get(id.toString())
 
-    return (
-        <KeyboardScreen>
-            <ScrollView keyboardShouldPersistTaps="handled">
-                <Header />
+  return (
+    <KeyboardScreen>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Header />
 
-                <Form data={prod} buttonTitle={text.buttons.edit}>
-                    <EditIcon size={32} color="black" />
-                </Form>
-            </ScrollView>
-        </KeyboardScreen>
-    )
+        <Form data={prod} buttonTitle={text.buttons.edit}>
+          <EditIcon size={32} color="black" />
+        </Form>
+      </ScrollView>
+    </KeyboardScreen>
+  )
 }

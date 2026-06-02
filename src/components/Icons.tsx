@@ -4,47 +4,47 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
 
 export function AddIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="add-circle-outline" size={size} color={color} />
+  return <IonIcons name="add-circle-outline" size={size} color={color} />
 }
 
 export function BackIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="arrow-back" size={size} color={color} />
+  return <IonIcons name="arrow-back" size={size} color={color} />
 }
 
 export function CalculatorIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="calculator" size={size} color={color} />
+  return <IonIcons name="calculator" size={size} color={color} />
 }
 
 export function BroomIcon({ size = 24, color = "white" }: IconsProps) {
-    return <MaterialCommunityIcons name="broom" size={size} color={color} />
+  return <MaterialCommunityIcons name="broom" size={size} color={color} />
 }
 
 export function CheckboxIcon({ checked, size = 24 }: IconsProps) {
-    return (
-        <IonIcons
-            name={checked ? "checkbox" : "square"}
-            color={checked ? "#a3e635" : "white"}
-            size={size}
-        />
-    )
+  return (
+    <IonIcons
+      name={checked ? "checkbox" : "square"}
+      color={checked ? "#a3e635" : "white"}
+      size={size}
+    />
+  )
 }
 
 export function DeleteIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="trash-outline" size={size} color={color} />
+  return <IonIcons name="trash-outline" size={size} color={color} />
 }
 
 export function EditIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="pencil" size={size} color={color} />
+  return <IonIcons name="pencil" size={size} color={color} />
 }
 
 export function HomeIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="home" size={size} color={color} />
+  return <IonIcons name="home" size={size} color={color} />
 }
 
 export function ShareIcon({ size = 24, color = "white" }: IconsProps) {
-    return <IonIcons name="share-social-outline" size={size} color={color} />
+  return <IonIcons name="share-social-outline" size={size} color={color} />
 }
 
 export function WhatsappIcon() {
-    return <IonIcons name="logo-whatsapp" size={18} color={"black"} />
+  return <IonIcons name="logo-whatsapp" size={18} color={"black"} />
 }

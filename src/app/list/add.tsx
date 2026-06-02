@@ -7,15 +7,15 @@ import { KeyboardScreen } from '@/components/Screen'
 import React from 'react'
 
 export default function Add() {
-    return (
-        <KeyboardScreen>
-            <ScrollView keyboardShouldPersistTaps="handled">
-                <Header />
+  return (
+    <KeyboardScreen>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Header />
 
-                <Form buttonTitle={text.buttons.add}>
-                    <AddIcon size={32} color="black" />
-                </Form>
-            </ScrollView>
-        </KeyboardScreen>
-    )
+        <Form buttonTitle={text.buttons.add}>
+          <AddIcon size={32} color="black" />
+        </Form>
+      </ScrollView>
+    </KeyboardScreen>
+  )
 }

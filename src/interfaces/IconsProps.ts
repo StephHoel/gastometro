@@ -1,5 +1,5 @@
 export interface IconsProps {
-    size?: number
-    color?: string
-    checked?: boolean
+  size?: number
+  color?: string
+  checked?: boolean
 }

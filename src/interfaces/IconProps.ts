@@ -1,3 +1,3 @@
 export interface IconProps {
-    action: () => void
+  action: () => void
 }
