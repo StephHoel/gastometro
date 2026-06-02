@@ -27,7 +27,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
 - AsyncStorage para persistência local.
-- Node 20 conforme `.nvmrc`.
+- Node 24 conforme `.nvmrc`.
 
 O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pages está planejada.
 
@@ -129,7 +129,7 @@ Regras atuais:
 
 Para reduzir risco em atualizações:
 
-- use Node 20 e npm 10;
+- use Node 24 e npm 11;
 - atualize o stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
 - atualize outras bibliotecas em PRs pequenos;
 - rode `npm run deps:check` e `npm run deps:audit` antes de publicar alterações de dependências.

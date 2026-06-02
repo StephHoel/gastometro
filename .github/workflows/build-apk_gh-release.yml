@@ -4,7 +4,8 @@ on:
   push:
     branches: ["main"]
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [closed]
+    # types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
@@ -33,9 +34,9 @@ jobs:
           distribution: "temurin"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Run local build script
         run: |
