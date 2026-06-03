@@ -14,5 +14,5 @@ export function ToTitleCase(text: string): string {
 }
 
 export function NormalizeItemName(text: string): string {
-  return text.trim().replace(/\s+/g, ' ').toLocaleLowerCase('pt-BR')
+  return text.trim().replace(/\s+/g, ' ').toLowerCase()
 }

@@ -33,7 +33,7 @@ Impedir que o usuário crie manualmente um item duplicado na lista atual.
 
 ## Regras de validação
 
-- Comparar nomes normalizados com trim e case-insensitive.
+- Comparar nomes normalizados com trim, colapso dos espaços internos e case-insensitive.
 - Decidir se acentos devem ser considerados equivalentes antes de implementar.
 - Duplicados vindos de importação continuam permitidos.
 
@@ -54,11 +54,11 @@ Impedir que o usuário crie manualmente um item duplicado na lista atual.
 ## Observações para IA
 
 - Esta regra deve ser implementada sem quebrar o fluxo de colar lista.
-- Cobrir com teste de helper/store quando a suite existir.
+- Cobrir com teste de helper/store quando a suíte existir.
 
-## Registro de implementacao
+## Registro de implementação
 
-- Criacao manual valida duplicidade por nome normalizado (`trim` + case-insensitive).
-- Edicao valida duplicidade ignorando o proprio item e bloqueia renomeacao para um item ja existente.
+- Criação manual valida duplicidade por nome normalizado (`trim` + colapso de espaços internos + case-insensitive).
+- Edição valida duplicidade ignorando o próprio item e bloqueia renomeação para um item já existente.
 - Mensagem de erro dedicada adicionada em `src/constants/text.ts` (`item_duplicado`).
-- Fluxo de importacao/colar permanece permitindo itens duplicados.
+- Fluxo de importação/colar permanece permitindo itens duplicados.
