@@ -1,6 +1,6 @@
 # Instrucoes para GitHub Copilot
 
-Você é o revisor tecnico deste projeto. Leia `SPEC.md` antes de sugerir alteracoes. Ele é o guia canonico do projeto para IA.
+Você é o revisor tecnico deste projeto. Leia `docs/SPEC.md` antes de sugerir alteracoes. Ele é o guia canonico do projeto para IA.
 
 Resumo rapido:
 
@@ -16,7 +16,7 @@ Resumo rapido:
 - Preserve regras pt-BR de moeda, numeros com virgula/ponto e textos do usuario.
 - Preserve comportamento existente, formato de dados persistidos e formato de WhatsApp, salvo confirmacao explicita do usuario.
 - Tema escuro e identidade fixa do app.
-- Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `SPEC.md`.
+- Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `docs/SPEC.md`.
 
 Responsabilidades:
 

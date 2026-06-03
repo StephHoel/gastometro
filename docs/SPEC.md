@@ -47,7 +47,7 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 - total dos itens marcados como coletados, exibido ao lado do total geral;
 - identificacao de itens duplicados com uma acao para unir os itens ou alterar um deles.
 
-As mini-specs ficam em `specs/` e devem ser consultadas antes da implementacao.
+As mini-specs ficam em `docs/specs/` e devem ser consultadas antes da implementacao.
 
 Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificacao contendo comportamento esperado, telas afetadas, persistencia e criterios de aceite.
 
@@ -144,7 +144,7 @@ Ao trabalhar neste projeto, a IA deve:
 - usar alias `@/` para imports internos;
 - manter funcoes pequenas e com responsabilidade clara;
 - preservar as regras pt-BR de moeda, texto e numeros;
-- escrever entradas do `CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
+- escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
 - escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
 - preferir funcoes puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
 - centralizar textos reutilizaveis em `src/constants`;
@@ -276,7 +276,7 @@ Os scripts atuais de release/build devem ser preservados ate que uma nova estrat
 
 Antes de codar:
 
-1. ler este `SPEC.md`;
+1. ler este `docs/SPEC.md`;
 2. verificar os arquivos diretamente envolvidos;
 3. confirmar se a solicitacao muda produto, persistencia, UI ou dependencias;
 4. propor uma mini-spec quando o pedido estiver ambiguo ou afetar comportamento de usuario.
@@ -301,7 +301,7 @@ Ao finalizar:
 
 ## 16. Template de Mini-Spec para Novas Features
 
-As mini-specs do projeto ficam em `specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
+As mini-specs do projeto ficam em `docs/specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
 
 ```md
 ## Feature: <nome>

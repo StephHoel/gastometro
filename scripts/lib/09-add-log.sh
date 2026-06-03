@@ -1,5 +1,5 @@
 # Adição ao CHANGELOG
-echo "$TAB1🔍 Atualizando CHANGELOG.md..."
+echo "$TAB1🔍 Atualizando docs/CHANGELOG.md..."
 
 echo -e "${TAB2}Descreva as mudanças na nova versão (pressione Enter em uma linha vazia para finalizar):"
 changes=""
@@ -17,7 +17,7 @@ tmpfile=$(mktemp)
   echo ""
   echo "$changes"
   echo ""
-  cat CHANGELOG.md
-} > "$tmpfile" && mv "$tmpfile" CHANGELOG.md
-echo "$TAB3✔ CHANGELOG.md atualizado com sucesso!"
+  cat docs/CHANGELOG.md
+} > "$tmpfile" && mv "$tmpfile" docs/CHANGELOG.md
+echo "$TAB3✔ docs/CHANGELOG.md atualizado com sucesso!"
 echo ""

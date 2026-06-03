@@ -35,7 +35,7 @@ O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pa
 
 ## Funcionalidades planejadas
 
-As próximas funcionalidades são documentadas em mini-specs dentro de [`specs/`](specs/README.md):
+As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/`](docs/specs/README.md):
 
 - Notificações e lembretes.
 - Múltiplas listas.
@@ -47,7 +47,7 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`specs/`
 - Suite de testes automatizados.
 - Versão web compatível com GitHub Pages.
 
-Antes de implementar uma feature maior, consulte o [`SPEC.md`](SPEC.md) e a mini-spec correspondente.
+Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
 ## Como usar
 
@@ -124,8 +124,9 @@ Mitigações já aplicadas no código:
 
 Este repositório segue um fluxo spec-driven para orientar mudanças humanas e assistidas por IA.
 
-- [`SPEC.md`](SPEC.md) é a referência principal de produto, arquitetura, UX, validações e processo.
-- [`specs/`](specs/README.md) contém mini-specs das funcionalidades pendentes.
+- [`docs/SPEC.md`](docs/SPEC.md) é a referência principal de produto, arquitetura, UX, validações e processo.
+- [`docs/specs/`](docs/specs/README.md) contém mini-specs das funcionalidades pendentes.
+- [`docs/CHANGELOG.md`](docs/CHANGELOG.md) registra o histórico das versões.
 - [`.github/copilot-instructions.md`](.github/copilot-instructions.md) orienta sugestões do GitHub Copilot.
 
 Ao alterar comportamento de usuário, persistência, formato de WhatsApp ou compatibilidade, atualize a documentação relevante.
@@ -153,8 +154,8 @@ O Dependabot abre PRs semanais para dependências npm.
 
 Contribuições são bem-vindas.
 
-1. Consulte o [`SPEC.md`](SPEC.md).
-2. Para features maiores, consulte ou crie uma mini-spec em [`specs/`](specs/README.md).
+1. Consulte o [`docs/SPEC.md`](docs/SPEC.md).
+2. Para features maiores, consulte ou crie uma mini-spec em [`docs/specs/`](docs/specs/README.md).
 3. Crie uma branch para a alteração.
 4. Faça commits pequenos e objetivos.
 5. Abra um pull request descrevendo mudança, impacto e validação feita.
