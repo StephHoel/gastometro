@@ -94,7 +94,7 @@ export const AlertService = {
           buttons: [
             {
               text: alert.paste.buttons.oldList,
-              action: () => listToPaste.map(cartStore.add),
+              action: () => listToPaste.forEach(cartStore.add),
             },
             {
               text: alert.paste.buttons.newList,
