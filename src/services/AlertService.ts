@@ -88,6 +88,11 @@ export const AlertService = {
       if (clipboard?.startsWith(whatsapp.title)) {
         const listToPaste = ConvertToProductsList(clipboard)
 
+        if (listToPaste.length === 0) {
+          AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+          return
+        }
+
         alertRef?.showAlert({
           title: alert.paste.title,
           message: alert.paste.message,

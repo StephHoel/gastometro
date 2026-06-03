@@ -61,3 +61,5 @@ Bloquear valores negativos em quantidade, preço e calculadora, preservando o su
 - Calculadora bloqueia preço e quantidade com sinal negativo.
 - Mensagem de erro dedicada adicionada em `src/constants/text.ts` (`valor_negativo`).
 - Conversão pt-BR e regra de campos vazios foram preservadas.
+- Importação da lista ignora linhas malformadas ou com valores negativos.
+- Fluxo de colagem não permite substituir a lista por um resultado vazio após o filtro de importação.
