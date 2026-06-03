@@ -29,7 +29,7 @@ export default function Calculator() {
     Keyboard.dismiss()
 
     if (price === "" || quantity === "")
-      return AlertService.ok("Erro", text.error.campos_nao_preenchidos)
+      return AlertService.ok(text.error.alert_title, text.error.campos_nao_preenchidos)
 
     if (HasNegativeSignal(price) || HasNegativeSignal(quantity))
       return AlertService.ok(text.error.alert_title, text.error.valor_negativo)

@@ -31,7 +31,7 @@ export function HasNegativeSignal(value: string): boolean {
 }
 
 export function NormalizeDecimalInput(text: string, maxDecimals: number): string {
-  let filtered = text.replace(/[^0-9.,]/g, "")
+  let filtered = text.replace(/[^0-9.,-]/g, "")
 
   const sep = filtered.includes(",")
     ? ","
