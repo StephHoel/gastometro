@@ -87,7 +87,8 @@ jobs:
         if: ${{ github.ref_name != 'main' }}
         run: |
           CURRENT_DATETIME=$(date +"%d-%m-%Y %H:%M:%S")
-          TAG="dev"
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}-alpha"
           APK_PATH=$(ls -1 _apks/*.apk 2>/dev/null | head -n1 || true)
 
           if [ -z "$APK_PATH" ]; then
@@ -95,13 +96,18 @@ jobs:
             exit 1
           fi
 
+          if [ -z "$VERSION" ]; then
+            echo "Could not read version from package.json"
+            exit 1
+          fi
+
           if gh release view "$TAG" > /dev/null 2>&1; then
-            echo "Release with tag '$TAG' exists. Uploading new APK..."
+            echo "Release with tag '$TAG' already exists. Uploading new APK for this alpha version..."
             gh release upload "$TAG" "$APK_PATH" --clobber
           else
-            echo "Creating new prerelease with tag '$TAG'..."
+            echo "Creating new prerelease for version '$VERSION' (tag '$TAG')..."
             gh release create "$TAG" "$APK_PATH" \
-              --title "Builded at $CURRENT_DATETIME" \
+              --title "v${VERSION}-alpha" \
               --target release \
               --generate-notes \
               --prerelease
