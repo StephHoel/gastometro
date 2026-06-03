@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.6 - 2026-06-03
+
+Correção
+
+- Bloqueia a criação manual de itens duplicados na lista atual.
+- Bloqueia a edição para um nome que já exista em outro item.
+- Preserva a importação/colagem com duplicados permitidos.
+- Adiciona registro da mini-spec de bloqueio de duplicados na criação manual.
+
 ## 1.4.5 - 2026-06-02
 
 Correção
