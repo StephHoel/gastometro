@@ -1,5 +1,6 @@
 import type { ProductProps } from '@/interfaces/ProductProps'
 import uuid from 'react-native-uuid'
+import { IsValidImportedNumber } from './NumberFunctions'
 
 export function ConvertToProductsList(clipboard: string) {
   if (!clipboard || typeof clipboard !== 'string') return []
@@ -32,7 +33,7 @@ function GetListShop(clipboard: string): string[] {
 function ExtractProductDetails(line: string): ProductProps | undefined {
   const cols = line.split(' | ')
 
-  if (cols.length <= 1) return undefined
+  if (cols.length < 3) return undefined
 
   // 0 quantity item
   const quantityItem = cols[0].split('x ')
@@ -40,12 +41,12 @@ function ExtractProductDetails(line: string): ProductProps | undefined {
 
   const quantity = quantityItem[0].trim()
   const item = quantityItem.slice(1).join('x ').trim()
-  if (!item) return undefined
+  if (!item || !IsValidImportedNumber(quantity)) return undefined
 
   // 1 price
   const price = cols[1].trim().replace(/^R\$\s?/, '')
 
-  if (quantity.includes('-') || price.includes('-')) return undefined
+  if (!IsValidImportedNumber(price)) return undefined
 
   const add: ProductProps = {
     id: uuid.v4().toString(),
