@@ -1,23 +1,23 @@
-# Mini-spec: Multiplas listas
+# Mini-spec: Múltiplas listas
 
 Status: planejado
 
 ## Problema
 
-O app atualmente trabalha com uma unica lista. Usuarios podem precisar separar compras por mercado, data, evento ou categoria.
+O app atualmente trabalha com uma única lista. Usuários podem precisar separar compras por mercado, data, evento ou categoria.
 
 ## Objetivo
 
-Permitir que o usuario crie e gerencie multiplas listas com titulos personalizados, mantendo o funcionamento offline-first.
+Permitir que o usuário crie e gerencie múltiplas listas com títulos personalizados, mantendo o funcionamento offline-first.
 
 ## Comportamento esperado
 
-- O usuario deve poder criar uma nova lista com titulo.
-- O usuario deve poder alternar entre listas.
-- O usuario deve poder editar o titulo de uma lista.
-- O usuario deve poder remover uma lista com confirmacao.
-- Cada lista deve ter seus proprios itens, total geral e total de coletados.
-- Compartilhamento e importacao devem operar sobre a lista ativa.
+- O usuário deve poder criar uma nova lista com título.
+- O usuário deve poder alternar entre listas.
+- O usuário deve poder editar o título de uma lista.
+- O usuário deve poder remover uma lista com confirmação.
+- Cada lista deve ter seus próprios itens, total geral e total de coletados.
+- Compartilhamento e importação devem operar sobre a lista ativa.
 
 ## Telas afetadas
 
@@ -25,37 +25,37 @@ Permitir que o usuario crie e gerencie multiplas listas com titulos personalizad
 - Header.
 - Fluxo de adicionar/editar item.
 - Compartilhamento/importacao.
-- Possivel tela de selecao ou gerenciamento de listas.
+- Possível tela de seleção ou gerenciamento de listas.
 
-## Dados e persistencia
+## Dados e persistência
 
 - O modelo atual de `products` precisa evoluir para um modelo com listas.
-- A mudanca exige plano de migracao dos dados atuais do AsyncStorage.
-- A chave `gastometro` nao deve mudar sem justificativa e migracao.
-- Dados existentes devem virar uma lista padrao na primeira migracao.
+- A mudança exige plano de migração dos dados atuais do AsyncStorage.
+- A chave `gastometro` não deve mudar sem justificativa e migração.
+- Dados existentes devem virar uma lista padrão na primeira migração.
 
-## Regras de validacao
+## Regras de validação
 
-- Titulo de lista vazio nao deve ser aceito.
-- Remover a ultima lista deve criar ou manter uma lista padrao, conforme decisao de UX.
-- Nomes duplicados de listas precisam de regra definida antes da implementacao.
+- Título de lista vazio não deve ser aceito.
+- Remover a última lista deve criar ou manter uma lista padrão, conforme decisão de UX.
+- Nomes duplicados de listas precisam de regra definida antes da implementação.
 
-## Criterios de aceite
+## Critérios de aceite
 
-- Migrar lista atual para uma lista padrao sem perda de dados.
+- Migrar lista atual para uma lista padrão sem perda de dados.
 - Criar, renomear, alternar e remover listas.
 - Adicionar item somente na lista ativa.
 - Calcular total por lista.
 - Compartilhar apenas a lista ativa.
-- Importar lista para a lista ativa ou para nova lista, conforme fluxo definido na implementacao.
+- Importar lista para a lista ativa ou para nova lista, conforme fluxo definido na implementação.
 
 ## Fora de escopo
 
-- Sincronizacao entre dispositivos.
+- Sincronização entre dispositivos.
 - Compartilhamento colaborativo em tempo real.
 - Backend/login.
 
-## Observacoes para IA
+## Observações para IA
 
-- Esta e uma mudanca com risco de quebra de dados persistidos; tratar como alteracao potencialmente major se o formato nao for retrocompativel.
-- Pedir confirmacao antes de alterar formato de storage.
+- Esta é uma mudança com risco de quebra de dados persistidos; tratar como alteração potencialmente major se o formato não for retrocompatível.
+- Pedir confirmação antes de alterar formato de storage.

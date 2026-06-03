@@ -1,63 +1,63 @@
-# Mini-spec: Validacao de valores negativos
+# Mini-spec: Validação de valores negativos
 
 Status: implementado
 
 ## Problema
 
-O spec define que valores negativos nao devem ser aceitos, mas o parser numerico atual permite sinal negativo.
+O spec define que valores negativos não devem ser aceitos, mas o parser numérico atual permite sinal negativo.
 
 ## Objetivo
 
-Bloquear valores negativos em quantidade, preco e calculadora, preservando o suporte a virgula e ponto.
+Bloquear valores negativos em quantidade, preço e calculadora, preservando o suporte a vírgula e ponto.
 
 ## Comportamento esperado
 
-- Quantidade negativa nao deve ser salva.
-- Preco negativo nao deve ser salvo.
-- Calculadora nao deve calcular com preco ou quantidade negativos.
-- O usuario deve receber mensagem clara de erro.
+- Quantidade negativa não deve ser salva.
+- Preço negativo não deve ser salvo.
+- Calculadora não deve calcular com preço ou quantidade negativos.
+- O usuário deve receber mensagem clara de erro.
 - Valores vazios continuam aceitos em produtos e tratados como `0` ou `0.00`.
 
 ## Telas afetadas
 
-- Formulario de adicionar item.
-- Formulario de editar item.
+- Formulário de adicionar item.
+- Formulário de editar item.
 - Calculadora.
 - Possivelmente textos de erro em `src/constants/text.ts`.
 
-## Dados e persistencia
+## Dados e persistência
 
-- Nao requer migracao.
-- Dados antigos negativos, se existirem, precisam de decisao antes de saneamento automatico.
+- Não requer migração.
+- Dados antigos negativos, se existirem, precisam de decisão antes de saneamento automático.
 
-## Regras de validacao
+## Regras de validação
 
-- `-1`, `-1,50`, `-1.50` e formatos equivalentes devem ser invalidos.
-- `0`, `0.00`, `0,00` devem ser validos.
-- Campo vazio deve seguir regra existente: quantidade `0`, preco `0.00`.
+- `-1`, `-1,50`, `-1.50` e formatos equivalentes devem ser inválidos.
+- `0`, `0.00`, `0,00` devem ser válidos.
+- Campo vazio deve seguir regra existente: quantidade `0`, preço `0.00`.
 
-## Criterios de aceite
+## Critérios de aceite
 
-- Bloquear criacao de produto com quantidade negativa.
-- Bloquear criacao de produto com preco negativo.
-- Bloquear edicao que transforme valor em negativo.
+- Bloquear criação de produto com quantidade negativa.
+- Bloquear criação de produto com preço negativo.
+- Bloquear edição que transforme valor em negativo.
 - Bloquear calculadora com valores negativos.
-- Manter conversao pt-BR funcionando.
+- Manter conversão pt-BR funcionando.
 
 ## Fora de escopo
 
-- Migracao de dados antigos.
-- Mascaras monetarias.
-- Validacao de limite maximo de valor.
+- Migração de dados antigos.
+- Máscaras monetárias.
+- Validação de limite máximo de valor.
 
-## Observacoes para IA
+## Observações para IA
 
-- Preferir funcoes puras de validacao reaproveitaveis.
-- Cobrir parser e validacao com testes unitarios quando a suite existir.
+- Preferir funções puras de validação reaproveitáveis.
+- Cobrir parser e validação com testes unitários quando a suíte existir.
 
-## Registro de implementacao
+## Registro de implementação
 
-- Formulario de adicionar/editar bloqueia quantidade e preco com sinal negativo.
-- Calculadora bloqueia preco e quantidade com sinal negativo.
+- Formulário de adicionar/editar bloqueia quantidade e preço com sinal negativo.
+- Calculadora bloqueia preço e quantidade com sinal negativo.
 - Mensagem de erro dedicada adicionada em `src/constants/text.ts` (`valor_negativo`).
-- Conversao pt-BR e regra de campos vazios foram preservadas.
+- Conversão pt-BR e regra de campos vazios foram preservadas.

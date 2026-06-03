@@ -1,57 +1,57 @@
-# Mini-spec: Notificacoes e lembretes
+# Mini-spec: Notificações e lembretes
 
 Status: planejado
 
 ## Problema
 
-Usuarios podem esquecer de comprar itens recorrentes ou de revisar a lista antes de ir ao mercado.
+Usuários podem esquecer de comprar itens recorrentes ou de revisar a lista antes de ir ao mercado.
 
 ## Objetivo
 
-Permitir criar lembretes locais para revisar listas ou itens sem depender de login, backend ou conexao com internet.
+Permitir criar lembretes locais para revisar listas ou itens sem depender de login, backend ou conexão com internet.
 
 ## Comportamento esperado
 
-- O usuario deve poder criar, editar e remover lembretes locais.
-- O lembrete deve disparar uma notificacao no dispositivo no horario configurado.
-- A notificacao deve abrir o app na lista relacionada quando isso for tecnicamente possivel.
-- O app deve continuar funcionando quando permissoes de notificacao forem negadas.
-- Permissoes devem ser solicitadas apenas no momento em que o usuario tentar ativar notificacoes.
+- O usuário deve poder criar, editar e remover lembretes locais.
+- O lembrete deve disparar uma notificação no dispositivo no horário configurado.
+- A notificação deve abrir o app na lista relacionada quando isso for tecnicamente possível.
+- O app deve continuar funcionando quando permissões de notificação forem negadas.
+- Permissões devem ser solicitadas apenas no momento em que o usuário tentar ativar notificações.
 
 ## Telas afetadas
 
 - Tela principal da lista.
-- Tela futura de configuracao de lista ou item.
-- Possivel tela/modal de configuracao de lembrete.
+- Tela futura de configuração de lista ou item.
+- Possível tela/modal de configuração de lembrete.
 
-## Dados e persistencia
+## Dados e persistência
 
 - Persistir lembretes localmente com AsyncStorage ou storage equivalente offline-first.
-- Relacionar o lembrete a uma lista quando multiplas listas existirem.
-- Antes de multiplas listas, permitir lembrete global da lista atual.
+- Relacionar o lembrete a uma lista quando múltiplas listas existirem.
+- Antes de múltiplas listas, permitir lembrete global da lista atual.
 
-## Regras de validacao
+## Regras de validação
 
-- Horario/data do lembrete devem ser validos.
-- Lembretes no passado nao devem ser aceitos sem confirmacao ou ajuste.
-- O usuario deve conseguir remover lembretes mesmo sem permissao ativa de notificacao.
+- Horário/data do lembrete devem ser válidos.
+- Lembretes no passado não devem ser aceitos sem confirmação ou ajuste.
+- O usuário deve conseguir remover lembretes mesmo sem permissão ativa de notificação.
 
-## Criterios de aceite
+## Critérios de aceite
 
 - Criar um lembrete local.
-- Editar horario/data de um lembrete.
+- Editar horário/data de um lembrete.
 - Remover um lembrete.
-- Negar permissao sem quebrar o app.
-- Persistir lembretes apos reiniciar o app.
+- Negar permissão sem quebrar o app.
+- Persistir lembretes após reiniciar o app.
 
 ## Fora de escopo
 
-- Sincronizacao em nuvem.
-- Lembretes compartilhados entre usuarios.
-- Backend de notificacoes push.
+- Sincronização em nuvem.
+- Lembretes compartilhados entre usuários.
+- Backend de notificações push.
 
-## Observacoes para IA
+## Observações para IA
 
 - Manter o app offline-first.
 - Verificar compatibilidade Expo antes de adicionar biblioteca.
-- Preservar foco Android; avaliar impacto futuro na versao web.
+- Preservar foco Android; avaliar impacto futuro na versão web.
