@@ -143,6 +143,7 @@ Ao trabalhar neste projeto, a IA deve:
 - usar alias `@/` para imports internos;
 - manter funcoes pequenas e com responsabilidade clara;
 - preservar as regras pt-BR de moeda, texto e numeros;
+- escrever entradas do `CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
 - preferir funcoes puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
 - centralizar textos reutilizaveis em `src/constants`;
 - evitar alterar formato de dados persistidos sem plano de migracao;
