@@ -144,6 +144,7 @@ Ao trabalhar neste projeto, a IA deve:
 - manter funcoes pequenas e com responsabilidade clara;
 - preservar as regras pt-BR de moeda, texto e numeros;
 - escrever entradas do `CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
+- escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
 - preferir funcoes puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
 - centralizar textos reutilizaveis em `src/constants`;
 - evitar alterar formato de dados persistidos sem plano de migracao;
@@ -299,7 +300,7 @@ Ao finalizar:
 
 ## 16. Template de Mini-Spec para Novas Features
 
-As mini-specs do projeto ficam em `specs/`. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
+As mini-specs do projeto ficam em `specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
 
 ```md
 ## Feature: <nome>

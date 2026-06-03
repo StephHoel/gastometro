@@ -1,17 +1,21 @@
-# Mini-specs do Gastometro
+# Mini-specs do Gastômetro
 
-Esta pasta organiza mini-specs para funcionalidades e pendencias que ainda precisam ser implementadas.
+Esta pasta organiza mini-specs para funcionalidades e pendências que ainda precisam ser implementadas.
 
-Use estes documentos antes de iniciar qualquer alteracao de produto. Quando uma mini-spec for implementada, atualize o status, registre decisoes tomadas durante a execucao e mantenha o `SPEC.md` sincronizado quando houver mudanca de diretriz.
+Use estes documentos antes de iniciar qualquer alteração de produto. Quando uma mini-spec for implementada, atualize o status, registre decisões tomadas durante a execução e mantenha o `SPEC.md` sincronizado quando houver mudança de diretriz.
+
+## Regra de idioma
+
+Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais.
 
 ## Mini-specs
 
-- [Notificacoes e lembretes](./notificacoes-lembretes.md)
-- [Multiplas listas](./multiplas-listas.md)
+- [Notificações e lembretes](./notificacoes-lembretes.md)
+- [Múltiplas listas](./multiplas-listas.md)
 - [Contas a pagar](./contas-a-pagar.md)
 - [Total de itens coletados](./total-itens-coletados.md)
-- [Gestao de itens duplicados](./gestao-itens-duplicados.md)
-- [Validacao de valores negativos](./validacao-valores-negativos.md)
-- [Bloqueio de duplicados na criacao](./bloqueio-duplicados-criacao.md)
-- [Suite de testes automatizados](./testes-automatizados.md)
-- [Web compativel com GitHub Pages](./web-github-pages.md)
+- [Gestão de itens duplicados](./gestao-itens-duplicados.md)
+- [Validação de valores negativos](./validacao-valores-negativos.md)
+- [Bloqueio de duplicados na criação](./bloqueio-duplicados-criacao.md)
+- [Suíte de testes automatizados](./testes-automatizados.md)
+- [Web compatível com GitHub Pages](./web-github-pages.md)
