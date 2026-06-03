@@ -77,7 +77,7 @@ jobs:
             echo "Creating new release for version '$VERSION' (tag '$TAG')..."
             gh release create "$TAG" "$APK_PATH" \
               --title "v$VERSION" \
-              --target main \
+              --target $GITHUB_SHA \
               --generate-notes
           fi
 
