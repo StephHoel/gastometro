@@ -6,7 +6,7 @@ Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub 
 
 ## 1. Contexto do Produto
 
-O Gastômetro e um aplicativo mobile para organizar listas de compras de supermercado.
+O Gastômetro é um aplicativo mobile para organizar listas de compras de supermercado.
 
 Objetivo principal:
 
@@ -103,7 +103,7 @@ interface ProductProps {
 
 Regras atuais:
 
-- `item` e normalizado para title case por `ProductService`.
+- `item` é normalizado para title case por `ProductService`.
 - `quantity` e `price` são armazenados como string, mas convertidos para número nas operações matemáticas.
 - `ParseToFloat` deve aceitar formatos com vírgula e ponto.
 - `SetCurrency` deve formatar valores em `pt-BR` e `BRL`.
@@ -118,9 +118,9 @@ Regras atuais:
 
 Estado:
 
-- `useCartStore` e o store global.
+- `useCartStore` é o store global.
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
-- A chave de storage atual e `gastometro`.
+- A chave de storage atual é `gastometro`.
 
 Manipulação da lista:
 
@@ -134,7 +134,7 @@ UI:
 - `Header` decide botões conforme a rota atual;
 - `CustomButton`, `CustomInput`, `Card`, `TextWhite`, `Divider`, `Row` e `TouchableIcons` devem ser preferidos antes de criar novos componentes.
 
-## 8. Diretrizes de Codigo
+## 8. Diretrizes de Código
 
 Ao trabalhar neste projeto, a IA deve:
 
@@ -144,9 +144,9 @@ Ao trabalhar neste projeto, a IA deve:
 - usar alias `@/` para imports internos;
 - manter funções pequenas e com responsabilidade clara;
 - preservar as regras pt-BR de moeda, texto e números;
-- escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
+- escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuação e caracteres especiais;
 - escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
-- preferir funções puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
+- preferir funções puras em `src/utils` ou `src/stores/helpers` para regras testáveis;
 - centralizar textos reutilizáveis em `src/constants`;
 - evitar alterar formato de dados persistidos sem plano de migração;
 - evitar mudar a chave do AsyncStorage sem necessidade explícita;
@@ -200,7 +200,7 @@ Pendências de implementação:
 
 Formato de compartilhamento:
 
-- título e subtítulo vem de `src/constants/whatsapp.ts`;
+- título e subtítulo vêm de `src/constants/whatsapp.ts`;
 - produtos são serializados no formato `|| {quantidade}x {item} | {preço} | {subtotal}`;
 - total final e incluído no fim da mensagem.
 
