@@ -9,6 +9,7 @@ import React from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Divider } from '@/components/Divider'
 import { TextWhite } from './TextWhite'
+import { SortProductsAlphabetically } from '@/utils/functions/SortList'
 
 export function List({ cartStore }: ListProps) {
   const nav = useRouter()
@@ -19,7 +20,7 @@ export function List({ cartStore }: ListProps) {
 
   return (
     <ScrollView>
-      {cartStore.products
+      {SortProductsAlphabetically(cartStore.products)
         .map((prod: ProductProps, i: number) => (
           <View className="px-4 " key={prod.id}>
             <View className="flex-row gap-2 items-center">
