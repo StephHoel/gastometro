@@ -43,7 +43,7 @@ jobs:
           ./scripts/build-local.sh
 
       - name: Upload APK as Artifact
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: gastometro
           path: _apks/*.apk
