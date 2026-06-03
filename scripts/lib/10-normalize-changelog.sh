@@ -1,5 +1,5 @@
 # Arquivo alvo
-FILE="CHANGELOG.md"
+FILE="docs/CHANGELOG.md"
 
 echo "$TAB1❗ Iniciando a normalização do arquivo $FILE."
 echo "$TAB2🔍 Movendo o título para o topo..."
