@@ -108,7 +108,7 @@ jobs:
             echo "Creating new prerelease for version '$VERSION' (tag '$TAG')..."
             gh release create "$TAG" "$APK_PATH" \
               --title "v${VERSION}-alpha" \
-              --target release \
+              --target $GITHUB_SHA \
               --generate-notes \
               --prerelease
           fi
