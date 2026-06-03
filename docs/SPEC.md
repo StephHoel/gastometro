@@ -1,59 +1,59 @@
-# Gastometro - Spec Driven Guide para IA
+# Gastômetro - Spec Driven Guide para IA
 
-> Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisao de produto, arquitetura, design ou processo mudar.
+> Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 
-Este spec orienta futuras interacoes com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primaria antes de propor codigo, refatoracoes, testes, automacoes ou mudancas de produto.
+Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
 ## 1. Contexto do Produto
 
-O Gastometro e um aplicativo mobile para organizar listas de compras de supermercado.
+O Gastômetro e um aplicativo mobile para organizar listas de compras de supermercado.
 
 Objetivo principal:
 
 - permitir criar, editar, remover, marcar e compartilhar itens de uma lista de compras;
 - calcular automaticamente o total da lista;
-- funcionar sem login e com persistencia local no dispositivo;
-- facilitar comparacoes de preco por unidade usando a calculadora de mercado.
+- funcionar sem login e com persistência local no dispositivo;
+- facilitar comparações de preço por unidade usando a calculadora de mercado.
 
-Publico esperado:
+Público esperado:
 
-- pessoas que fazem compras no supermercado e precisam de uma lista simples, rapida e offline;
-- usuarios brasileiros, com moeda BRL e formatos pt-BR.
+- pessoas que fazem compras no supermercado e precisam de uma lista simples, rápida e offline;
+- usuários brasileiros, com moeda BRL e formatos pt-BR.
 
 ## 2. Funcionalidades Existentes
 
 - Gerenciamento de uma lista de compras.
-- Adicao, edicao e remocao de produtos.
-- Remocao total da lista.
-- Marcacao de produtos como coletados.
-- Total geral calculado por `quantidade * preco`.
-- Ordenacao alfabetica dos produtos.
+- Adição, edição e remoção de produtos.
+- Remoção total da lista.
+- Marcação de produtos como coletados.
+- Total geral calculado por `quantidade * preço`.
+- Ordenação alfabética dos produtos.
 - Compartilhamento da lista via WhatsApp.
-- Importacao de lista copiada do WhatsApp quando o texto segue o formato do app.
-- Persistencia local com AsyncStorage.
-- Calculadora de preco por unidade.
-- Suporte a numeros com virgula ou ponto como separador decimal.
-- Salvamento de itens com preco ou quantidade zerada quando normalizados pelas regras atuais.
-- Bloqueio de valores negativos nos fluxos manuais (formulario e calculadora).
-- Bloqueio de itens duplicados na criacao manual de item.
+- Importação de lista copiada do WhatsApp quando o texto segue o formato do app.
+- Persistência local com AsyncStorage.
+- Calculadora de preço por unidade.
+- Suporte a números com vírgula ou ponto como separador decimal.
+- Salvamento de itens com preço ou quantidade zerada quando normalizados pelas regras atuais.
+- Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
+- Bloqueio de itens duplicados na criação manual de item.
 
 ## 3. Funcionalidades Planejadas
 
-Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execucao:
+Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- notificacoes/lembretes;
-- multiplas listas com titulos personalizados;
+- notificações/lembretes;
+- múltiplas listas com títulos personalizados;
 - contas a pagar;
 - total dos itens marcados como coletados, exibido ao lado do total geral;
-- identificacao de itens duplicados com uma acao para unir os itens ou alterar um deles.
+- identificação de itens duplicados com uma ação para unir os itens ou alterar um deles.
 
-As mini-specs ficam em `docs/specs/` e devem ser consultadas antes da implementacao.
+As mini-specs ficam em `docs/specs/` e devem ser consultadas antes da implementação.
 
-Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificacao contendo comportamento esperado, telas afetadas, persistencia e criterios de aceite.
+Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificação contendo comportamento esperado, telas afetadas, persistência e critérios de aceite.
 
 ## 4. Stack Real do Projeto
 
-Use esta secao como verdade atual do repositorio.
+Use esta seção como verdade atual do repositório.
 
 - Node 24 conforme `.nvmrc`.
 - Expo `~56`.
@@ -63,31 +63,31 @@ Use esta secao como verdade atual do repositorio.
 - Expo Router com rotas em `src/app`.
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
-- AsyncStorage para persistencia local.
+- AsyncStorage para persistência local.
 - Expo/React Native APIs para clipboard, linking, imagens, fontes, splash e UI.
 - Biome configurado parcialmente em `biome.json`.
-- Dependabot semanal para dependencias npm.
+- Dependabot semanal para dependências npm.
 - Foco de plataforma: Android.
-- Plataforma futura: web compativel com GitHub Pages.
+- Plataforma futura: web compatível com GitHub Pages.
 
-Nao assumir Prisma, PostgreSQL, Jest ou Zod sem antes adicionar essas dependencias e justificar a mudanca. O arquivo antigo do Copilot citava essas tecnologias, mas elas nao aparecem na stack atual.
+Não assumir Prisma, PostgreSQL, Jest ou Zod sem antes adicionar essas dependências e justificar a mudança. O arquivo antigo do Copilot citava essas tecnologias, mas elas não aparecem na stack atual.
 
 ## 5. Estrutura de Pastas
 
 - `src/app`: telas e rotas do Expo Router.
-- `src/components`: componentes reutilizaveis de UI.
+- `src/components`: componentes reutilizáveis de UI.
 - `src/constants`: textos, rotas, mensagens e valores constantes.
 - `src/hooks`: hooks compartilhados.
 - `src/interfaces`: tipos e contratos TypeScript.
-- `src/services`: orquestracao de casos de uso e integracoes com APIs nativas.
-- `src/stores`: estado global Zustand e helpers de manipulacao da lista.
+- `src/services`: orquestração de casos de uso e integrações com APIs nativas.
+- `src/stores`: estado global Zustand e helpers de manipulação da lista.
 - `src/styles`: CSS global do NativeWind.
-- `src/utils`: funcoes puras de dominio, formatacao, conversao, ordenacao e matematica.
-- `assets`: imagens e icones do app.
-- `scripts`: scripts de build, release, limpeza e automacoes.
-- `.github`: workflows, Dependabot, assets e instrucoes para Copilot.
+- `src/utils`: funções puras de domínio, formatação, conversão, ordenação e matemática.
+- `assets`: imagens e ícones do app.
+- `scripts`: scripts de build, release, limpeza e automações.
+- `.github`: workflows, Dependabot, assets e instruções para Copilot.
 
-## 6. Dominio Principal
+## 6. Domínio Principal
 
 Produto da lista:
 
@@ -104,13 +104,13 @@ interface ProductProps {
 Regras atuais:
 
 - `item` e normalizado para title case por `ProductService`.
-- `quantity` e `price` sao armazenados como string, mas convertidos para numero nas operacoes matematicas.
-- `ParseToFloat` deve aceitar formatos com virgula e ponto.
+- `quantity` e `price` são armazenados como string, mas convertidos para número nas operações matemáticas.
+- `ParseToFloat` deve aceitar formatos com vírgula e ponto.
 - `SetCurrency` deve formatar valores em `pt-BR` e `BRL`.
 - produto coletado aparece riscado e em cinza.
 - tocar no checkbox alterna `collected`.
-- tocar no texto do item abre a edicao.
-- exclusao usa alerta de confirmacao.
+- tocar no texto do item abre a edição.
+- exclusão usa alerta de confirmação.
 - o app permanece offline-first por tempo indeterminado.
 - todos os comportamentos existentes devem ser preservados, exceto quando uma feature aprovada alterar explicitamente esse comportamento.
 
@@ -119,19 +119,19 @@ Regras atuais:
 Estado:
 
 - `useCartStore` e o store global.
-- Persistencia usa `persist` do Zustand com `AsyncStorage`.
+- Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual e `gastometro`.
 
-Manipulacao da lista:
+Manipulação da lista:
 
 - telas e componentes chamam a API do store (`add`, `edit`, `remove`, `replace`, `get`, `clear`);
-- o store delega operacoes puras para `src/stores/helpers/CartInMemory.ts`;
-- servicos como `ProductService`, `AlertService`, `ShareService` e `ClipboardService` concentram regras de criacao, alertas, compartilhamento e integracoes.
+- o store delega operações puras para `src/stores/helpers/CartInMemory.ts`;
+- serviços como `ProductService`, `AlertService`, `ShareService` e `ClipboardService` concentram regras de criação, alertas, compartilhamento e integrações.
 
 UI:
 
 - telas devem usar `Screen` ou `KeyboardScreen` para manter fundo e comportamento de teclado consistentes;
-- `Header` decide botoes conforme a rota atual;
+- `Header` decide botões conforme a rota atual;
 - `CustomButton`, `CustomInput`, `Card`, `TextWhite`, `Divider`, `Row` e `TouchableIcons` devem ser preferidos antes de criar novos componentes.
 
 ## 8. Diretrizes de Codigo
@@ -142,81 +142,81 @@ Ao trabalhar neste projeto, a IA deve:
 - evitar `any`;
 - preferir tipos em `src/interfaces` sempre;
 - usar alias `@/` para imports internos;
-- manter funcoes pequenas e com responsabilidade clara;
-- preservar as regras pt-BR de moeda, texto e numeros;
+- manter funções pequenas e com responsabilidade clara;
+- preservar as regras pt-BR de moeda, texto e números;
 - escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuacao e caracteres especiais;
 - escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
-- preferir funcoes puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
-- centralizar textos reutilizaveis em `src/constants`;
-- evitar alterar formato de dados persistidos sem plano de migracao;
-- evitar mudar a chave do AsyncStorage sem necessidade explicita;
-- nao introduzir biblioteca nova sem justificar o ganho e verificar compatibilidade com Expo;
-- manter escopo pequeno por alteracao.
+- preferir funções puras em `src/utils` ou `src/stores/helpers` para regras testaveis;
+- centralizar textos reutilizáveis em `src/constants`;
+- evitar alterar formato de dados persistidos sem plano de migração;
+- evitar mudar a chave do AsyncStorage sem necessidade explícita;
+- não introduzir biblioteca nova sem justificar o ganho e verificar compatibilidade com Expo;
+- manter escopo pequeno por alteração.
 
 ## 9. Diretrizes de Design e UX
 
 Diretrizes encontradas no app:
 
-- app mobile em orientacao portrait.
+- app mobile em orientação portrait.
 - tema escuro com base em `bg-slate-900`.
 - fonte Inter configurada no Tailwind (`heading`, `subtitle`, `body`, `bold`).
-- botoes principais usam estados visuais:
+- botões principais usam estados visuais:
   - sucesso: `bg-lime-400`;
   - falha: `bg-red-600`;
   - neutro: `bg-zinc-400`.
-- textos primarios usam `TextWhite`.
+- textos primários usam `TextWhite`.
 - telas com entrada de dados devem lidar com teclado via `KeyboardScreen`, `KeyboardAvoidingView` e foco entre inputs.
-- confirmacoes e erros devem usar `CustomAlert` via `AlertService`, quando possivel.
+- confirmações e erros devem usar `CustomAlert` via `AlertService`, quando possível.
 
 Ao criar UI nova:
 
 - priorizar legibilidade em telas pequenas;
-- nao usar landing page ou explicacoes longas dentro do app;
+- não usar landing page ou explicações longas dentro do app;
 - manter controles simples e orientados a tarefa;
-- respeitar acessibilidade basica de toque e contraste;
-- evitar quebrar o fluxo rapido de compra.
+- respeitar acessibilidade básica de toque e contraste;
+- evitar quebrar o fluxo rápido de compra.
 - manter o tema escuro como identidade fixa do app.
-- limitar a largura visual do nome do item a aproximadamente tres quartos da largura horizontal da tela do dispositivo.
+- limitar a largura visual do nome do item a aproximadamente três quartos da largura horizontal da tela do dispositivo.
 
-## 10. Validacoes e Regras de Entrada
+## 10. Validações e Regras de Entrada
 
 Regras decididas:
 
 - item vazio bloqueia salvamento.
 - quantidade vazia deve ser aceita e tratada como `0`.
-- preco vazio deve ser aceito e tratado como `0.00`.
-- valores negativos nao devem ser aceitos em quantidade nem preco.
-- itens duplicados devem ser bloqueados no modo de criacao de item.
+- preço vazio deve ser aceito e tratado como `0.00`.
+- valores negativos não devem ser aceitos em quantidade nem preço.
+- itens duplicados devem ser bloqueados no modo de criação de item.
 - itens duplicados devem ser permitidos no modo de colar/importar lista.
-- `ParseToFloat` remove caracteres nao numericos relevantes e interpreta virgula como decimal.
-- divisao por zero retorna `0`.
+- `ParseToFloat` remove caracteres não numéricos relevantes e interpreta vírgula como decimal.
+- divisão por zero retorna `0`.
 
-Pendencias de implementacao:
+Pendências de implementação:
 
-- planejar feature para listar duplicados e permitir uniao ou alteracao pelo usuario.
-- definir estrategia para tratar valores negativos vindos de importacao de lista antiga, sem quebrar retrocompatibilidade.
+- planejar feature para listar duplicados e permitir união ou alteração pelo usuário.
+- definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
-## 11. Compartilhamento e Importacao
+## 11. Compartilhamento e Importação
 
 Formato de compartilhamento:
 
-- titulo e subtitulo vem de `src/constants/whatsapp.ts`;
-- produtos sao serializados no formato `|| {quantidade}x {item} | {preco} | {subtotal}`;
-- total final e incluido no fim da mensagem.
+- título e subtítulo vem de `src/constants/whatsapp.ts`;
+- produtos são serializados no formato `|| {quantidade}x {item} | {preço} | {subtotal}`;
+- total final e incluído no fim da mensagem.
 
-Importacao:
+Importação:
 
-- so deve tentar importar se o clipboard comecar com o titulo esperado do WhatsApp;
+- só deve tentar importar se o clipboard começar com o título esperado do WhatsApp;
 - `ConvertToProductsList` extrai os produtos entre separadores `--`;
 - itens importados recebem novo `id`;
 - itens importados entram com `collected: false`;
 - a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
-- itens duplicados sao permitidos na importacao.
-- linhas malformadas ou com valores negativos devem ser ignoradas na importacao.
+- itens duplicados são permitidos na importação.
+- linhas malformadas ou com valores negativos devem ser ignoradas na importação.
 
-Qualquer mudanca nesse formato deve manter retrocompatibilidade com listas ja compartilhadas.
+Qualquer mudança nesse formato deve manter retrocompatibilidade com listas já compartilhadas.
 
-## 12. Build, Qualidade e Verificacao
+## 12. Build, Qualidade e Verificação
 
 Comandos existentes:
 
@@ -231,28 +231,28 @@ npm run deps:check
 npm run deps:audit
 ```
 
-Antes de finalizar mudancas, a IA deve tentar uma verificacao proporcional ao escopo:
+Antes de finalizar mudanças, a IA deve tentar uma verificação proporcional ao escopo:
 
-- para regras puras: adicionar ou atualizar testes unitarios quando a suite existir;
-- para store/estado: testar operacoes do Zustand e helpers de lista;
-- para componentes: testar renderizacao e interacoes principais;
-- para integracao: testar fluxos completos entre tela, store e servicos;
-- para contrato/formato: testar compartilhamento e importacao do WhatsApp, preservando retrocompatibilidade;
-- para UI: rodar o app quando possivel e verificar tela afetada;
-- para dependencias: rodar `npm run deps:check` e `npm run deps:audit`;
-- para TypeScript: usar verificacao de tipos quando houver script ou comando apropriado no projeto.
+- para regras puras: adicionar ou atualizar testes unitários quando a suíte existir;
+- para store/estado: testar operações do Zustand e helpers de lista;
+- para componentes: testar renderização e interações principais;
+- para integração: testar fluxos completos entre tela, store e serviços;
+- para contrato/formato: testar compartilhamento e importação do WhatsApp, preservando retrocompatibilidade;
+- para UI: rodar o app quando possível e verificar tela afetada;
+- para dependências: rodar `npm run deps:check` e `npm run deps:audit`;
+- para TypeScript: usar verificação de tipos quando houver script ou comando apropriado no projeto.
 
-Estrategia de testes escolhida:
+Estratégia de testes escolhida:
 
-- testes unitarios;
+- testes unitários;
 - testes de store/estado;
 - testes de componentes;
-- testes de integracao;
+- testes de integração;
 - testes de contrato/formato.
 
-Observacao: o projeto ainda nao tem script de teste automatizado configurado. Ao introduzir testes, priorizar funcoes puras, store e contrato do WhatsApp antes de ampliar cobertura de UI.
+Observação: o projeto ainda não tem script de teste automatizado configurado. Ao introduzir testes, priorizar funções puras, store e contrato do WhatsApp antes de ampliar cobertura de UI.
 
-## 13. Politica de Dependencias
+## 13. Política de Dependências
 
 Diretrizes do README:
 
@@ -260,17 +260,17 @@ Diretrizes do README:
 - atualizar stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
 - atualizar demais bibliotecas em PRs pequenos;
 - usar Dependabot semanal;
-- rodar `npm run deps:check` e `npm run deps:audit` antes de publicar alteracoes de dependencia.
+- rodar `npm run deps:check` e `npm run deps:audit` antes de publicar alterações de dependência.
 
 ## 14. Versionamento e Release
 
 Regras de versionamento:
 
-- fix ou atualizacao de stack: incrementar `patch`;
+- fix ou atualização de stack: incrementar `patch`;
 - nova feature: incrementar `minor`;
-- mudanca que possa quebrar comportamento, dados persistidos, importacao/exportacao ou compatibilidade: incrementar `major`.
+- mudança que possa quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade: incrementar `major`.
 
-Os scripts atuais de release/build devem ser preservados ate que uma nova estrategia seja especificada.
+Os scripts atuais de release/build devem ser preservados até que uma nova estratégia seja especificada.
 
 ## 15. Como a IA Deve Trabalhar Neste Projeto
 
@@ -278,36 +278,36 @@ Antes de codar:
 
 1. ler este `docs/SPEC.md`;
 2. verificar os arquivos diretamente envolvidos;
-3. confirmar se a solicitacao muda produto, persistencia, UI ou dependencias;
-4. propor uma mini-spec quando o pedido estiver ambiguo ou afetar comportamento de usuario.
+3. confirmar se a solicitação muda produto, persistência, UI ou dependências;
+4. propor uma mini-spec quando o pedido estiver ambíguo ou afetar comportamento de usuário.
 
-Durante a implementacao:
+Durante a implementação:
 
-- seguir os padroes existentes de pasta, nomes e componentes;
-- manter alteracoes pequenas e rastreaveis;
-- nao refatorar codigo nao relacionado;
+- seguir os padrões existentes de pasta, nomes e componentes;
+- manter alterações pequenas e rastreáveis;
+- não refatorar código não relacionado;
 - proteger dados persistidos;
-- preservar comportamento existente por padrao;
-- pedir confirmacao quando uma mudanca alterar comportamento de usuario, formato de dados, formato de compartilhamento ou compatibilidade;
-- atualizar este spec quando uma decisao nova for tomada;
-- atualizar README somente quando a informacao for util para usuarios ou contribuidores.
+- preservar comportamento existente por padrão;
+- pedir confirmação quando uma mudança alterar comportamento de usuário, formato de dados, formato de compartilhamento ou compatibilidade;
+- atualizar este spec quando uma decisão nova for tomada;
+- atualizar README somente quando a informação for útil para usuários ou contribuidores.
 
 Ao finalizar:
 
 - descrever arquivos alterados;
-- informar verificacoes executadas;
-- declarar riscos ou pendencias;
-- apontar decisoes que ainda precisam de confirmacao humana.
+- informar verificações executadas;
+- declarar riscos ou pendências;
+- apontar decisões que ainda precisam de confirmação humana.
 
 ## 16. Template de Mini-Spec para Novas Features
 
-As mini-specs do projeto ficam em `docs/specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda nao tenham documento proprio:
+As mini-specs do projeto ficam em `docs/specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda não tenham documento próprio:
 
 ```md
 ## Feature: <nome>
 
 Problema:
-- <qual problema do usuario resolve?>
+- <qual problema do usuário resolve?>
 
 Comportamento esperado:
 - <o que deve acontecer?>
@@ -315,34 +315,34 @@ Comportamento esperado:
 Telas afetadas:
 - <rotas/componentes>
 
-Dados e persistencia:
-- <campos novos, migracao, compatibilidade>
+Dados e persistência:
+- <campos novos, migração, compatibilidade>
 
-Regras de validacao:
-- <entradas validas/invalidas>
+Regras de validação:
+- <entradas válidas/inválidas>
 
-Criterios de aceite:
+Critérios de aceite:
 - <lista objetiva para validar>
 
 Fora de escopo:
-- <o que nao sera feito agora>
+- <o que não será feito agora>
 ```
 
-## 17. Decisoes Registradas
+## 17. Decisões Registradas
 
-- Multiplas listas e uma feature futura.
+- Múltiplas listas e uma feature futura.
 - Quantidade vazia deve ser aceita e tratada como `0`.
-- Preco vazio deve ser aceito e tratado como `0.00`.
-- Valores negativos nao devem ser aceitos.
-- Nome de item deve ocupar no maximo aproximadamente tres quartos da largura horizontal da tela.
-- Duplicados devem ser bloqueados na criacao manual e permitidos na importacao/colagem.
-- Deve existir uma feature futura para mostrar itens duplicados e permitir uniao ou alteracao.
+- Preço vazio deve ser aceito e tratado como `0.00`.
+- Valores negativos não devem ser aceitos.
+- Nome de item deve ocupar no máximo aproximadamente três quartos da largura horizontal da tela.
+- Duplicados devem ser bloqueados na criação manual e permitidos na importação/colagem.
+- Deve existir uma feature futura para mostrar itens duplicados e permitir união ou alteração.
 - Total de itens coletados deve aparecer ao lado do total geral.
-- Formato atual de compartilhamento/importacao via WhatsApp deve continuar retrocompativel.
+- Formato atual de compartilhamento/importação via WhatsApp deve continuar retrocompatível.
 - O app permanece offline-first por tempo indeterminado.
-- Estrategia de testes: unitarios, store/estado, componentes, integracao e contrato/formato.
+- Estratégia de testes: unitários, store/estado, componentes, integração e contrato/formato.
 - Todas as funcionalidades planejadas devem ser implementadas futuramente.
 - Tema escuro deve ser mantido como identidade fixa.
-- Versionamento segue patch para fix/stack, minor para feature e major para mudanca potencialmente quebravel.
-- Foco continua Android, com versao web futura compativel com GitHub Pages.
-- Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmacao do usuario.
+- Versionamento segue patch para fix/stack, minor para feature e major para mudança potencialmente quebrável.
+- Foco continua Android, com versão web futura compatível com GitHub Pages.
+- Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmação do usuário.

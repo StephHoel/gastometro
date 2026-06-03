@@ -44,7 +44,7 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/sp
 - Gestão de itens duplicados.
 - Validação de valores negativos.
 - Bloqueio de duplicados na criação manual.
-- Suite de testes automatizados.
+- Suíte de testes automatizados.
 - Versão web compatível com GitHub Pages.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
@@ -92,7 +92,7 @@ Observações:
 
 ## Qualidade e testes
 
-O projeto ainda não possui uma suite de testes automatizados configurada.
+O projeto ainda não possui uma suíte de testes automatizados configurada.
 
 A estratégia definida no spec inclui:
 
@@ -102,7 +102,7 @@ A estratégia definida no spec inclui:
 - testes de integração;
 - testes de contrato/formato, especialmente para compartilhamento e importação via WhatsApp.
 
-Enquanto a suite não existir, valide manualmente o fluxo afetado e rode as verificações disponíveis quando fizer sentido:
+Enquanto a suíte não existir, valide manualmente o fluxo afetado e rode as verificações disponíveis quando fizer sentido:
 
 ```bash
 npm run deps:check
@@ -111,7 +111,7 @@ npm run deps:audit
 
 ## Riscos técnicos atuais
 
-- Ainda não existe suite automatizada para validar regressões de regras de negócio.
+- Ainda não existe suíte automatizada para validar regressões de regras de negócio.
 - A importação de lista depende de um formato de texto rígido do WhatsApp.
 - Fluxos de alerta dependem de referência global inicializada em runtime.
 

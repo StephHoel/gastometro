@@ -24,7 +24,7 @@ Permitir que o usuário crie e gerencie múltiplas listas com títulos personali
 - Tela principal.
 - Header.
 - Fluxo de adicionar/editar item.
-- Compartilhamento/importacao.
+- Compartilhamento/importação.
 - Possível tela de seleção ou gerenciamento de listas.
 
 ## Dados e persistência
