@@ -1,6 +1,6 @@
 # Mini-spec: Suíte de testes automatizados
 
-Status: em andamento
+Status: ativa (evolução contínua)
 
 ## Problema Inicial
 
@@ -8,23 +8,25 @@ O projeto ainda não possui script de teste automatizado configurado, mas o spec
 
 ## Problema Atual
 
-O projeto já possui script de teste automatizado configurado, e o foco agora é ampliar e operacionalizar a cobertura (incluindo exportação de relatório em CSV) seguindo a estratégia de testes unitários, store/estado, componentes, integração e contrato/formato.
+O projeto já possui suíte automatizada configurada e funcionando com gate de cobertura global. O foco agora é ampliar cobertura de componentes e fluxos de tela, mantendo estabilidade dos testes de domínio, store, serviços e contrato/formato.
 
 ## Objetivo
 
-Configurar uma base de testes automatizados compatível com Expo/React Native e cobrir primeiro as regras mais sensíveis do domínio.
+Manter e evoluir a suíte de testes automatizados compatível com Expo/React Native, preservando o gate de cobertura global e reduzindo riscos de regressão nos fluxos críticos.
 
 ## Comportamento esperado
 
 - Deve existir comando npm para rodar testes.
 - Testes devem rodar localmente sem emulador no primeiro momento.
-- Cobertura inicial deve priorizar funções puras, store e contrato do WhatsApp.
-- Componentes e integração devem ser adicionados de forma incremental.
+- Deve existir comando de cobertura com gate global de 80% para código runtime.
+- Deve existir comando para exportar cobertura em CSV para `docs/coverages/`.
+- Cobertura deve priorizar funções puras, store, serviços e contrato do WhatsApp.
+- Componentes e integração devem seguir evolução incremental.
 
 ## Telas afetadas
 
-- Nenhuma tela diretamente.
-- Componentes serão cobertos em fases posteriores.
+- Nenhuma regra de negócio de tela foi alterada por esta mini-spec.
+- Fluxos de `src/app` e componentes de lista/formulário fazem parte da evolução contínua de cobertura.
 
 ## Dados e persistência
 
@@ -37,15 +39,17 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 - Testar normalização de produto.
 - Testar helpers de lista.
 - Testar formato de compartilhamento/importação do WhatsApp.
-- Testar comportamento de duplicados e negativos quando essas features forem implementadas.
+- Testar bloqueio de duplicados na criação manual.
+- Testar bloqueio de valores negativos nos fluxos manuais.
+- Testar descarte de linhas malformadas/negativas na importação.
 
 ## Critérios de aceite
 
-- Adicionar script de teste no `package.json`.
-- Rodar testes unitários no ambiente local.
-- Ter mocks básicos para APIs nativas usadas nos testes.
-- Documentar como executar os testes.
-- Garantir que a suíte inicial passe.
+- Manter os scripts de teste e cobertura no `package.json`.
+- Garantir execução local da suíte sem emulador.
+- Manter mocks para APIs nativas usadas em testes.
+- Manter documentação de execução e cobertura no `README.md` e `docs/coverages/README.md`.
+- Garantir suíte verde e gate de cobertura global em 80%.
 
 ## Cobertura atual
 
@@ -53,13 +57,15 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 - Cobertura ampla de utilitários de domínio (matemática, strings, números, ordenação e parser de importação).
 - Cobertura de serviços críticos (`ProductService`, `ShareService`, `AlertService`, `ClipboardService`, `CartStoreService`).
 - Cobertura de store Zustand e helper in-memory (`useCartStore`, `CartInMemory`).
-- Cobertura inicial de componente e hook (`CustomInput`, `useInitAlert`).
+- Cobertura de componentes, telas de rota e hook (`CustomInput`, `Form`, `Header`, `List`, `src/app/index`, `src/app/list/add`, `src/app/list/edit/[id]`, `useInitAlert`).
 - Execução local validada sem emulador.
 - Exportação da tabela de cobertura para CSV em `docs/coverages/`, com nome no formato `YYYY-MM-DD_HH-MM.csv`.
 - O Jest trava abaixo de 80% de cobertura global do código runtime.
 
 ### Resumo de cobertura mais recente (Jest)
 
+- Execução de referência em 2026-06-04 com `npm run test:coverage -- --runInBand`.
+- 19 suítes passadas, 62 testes passados.
 - All files: 84.86% statements, 82.24% branches, 86.5% functions, 85.14% lines.
 - Services: 96.07% statements.
 - Stores e helpers: 100% statements.
@@ -69,10 +75,11 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 
 - E2E com emulador.
 - Regressão visual.
-- Cobertura mínima obrigatória no primeiro PR.
+- Alterar regra global de cobertura (80%) sem aprovação explícita.
 
 ## Observações para IA
 
 - Avaliar `jest-expo` e `@testing-library/react-native` antes de adicionar dependências.
 - Verificar compatibilidade com Expo 56.
 - Se adicionar dependências de teste, seguir política de versionamento e rodar verificações aplicáveis.
+- Priorizar novos testes em componentes com menor cobertura atual (`Button`, `Form`, `Header`, `List`) e fluxos de integração de tela.
