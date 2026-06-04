@@ -20,6 +20,11 @@ npm install --loglevel=error
 echo "✅ Dependências instaladas"
 echo ""
 
+echo "🧪 Executando testes automatizados..."
+npm run test
+echo "✅ Testes aprovados"
+echo ""
+
 echo "📦 Executando expo prebuild limpo (recria android/)..."
 npx expo prebuild --platform android --clean
 echo "✅ expo prebuild concluído"
