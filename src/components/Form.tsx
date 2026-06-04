@@ -37,17 +37,17 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     const trimmedItem = item.trim()
 
     if (trimmedItem === "") {
-      AlertService.ok(text.error.alert_title, text.error.campos_nao_preenchidos)
+      AlertService.ok(text.error.alert_title, text.error.required_fields)
       return
     }
 
     if (HasNegativeSignal(qtt) || HasNegativeSignal(price)) {
-      AlertService.ok(text.error.alert_title, text.error.valor_negativo)
+      AlertService.ok(text.error.alert_title, text.error.negative_value)
       return
     }
 
     if (ProductService.isDuplicateItem(trimmedItem, cartStore.products, data?.id)) {
-      AlertService.ok(text.error.alert_title, text.error.item_duplicado)
+      AlertService.ok(text.error.alert_title, text.error.duplicate_item)
       return
     }
 

@@ -3,9 +3,9 @@ import type { ButtonProps } from "@/interfaces/ButtonProps"
 import React, { forwardRef, useImperativeHandle, useState } from "react"
 import {
   Modal,
+  Pressable,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native"
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps"
@@ -54,9 +54,9 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
       visible={isVisible}
       onRequestClose={internalHideAlert}
     >
-      <TouchableWithoutFeedback onPress={internalHideAlert}>
+      <Pressable onPress={internalHideAlert}>
         <View className="flex-1 justify-center items-center bg-black/30">
-          <TouchableWithoutFeedback>
+          <Pressable>
             <View className="w-3/4 p-5 bg-slate-700 rounded-lg  items-center">
               <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
 
@@ -93,9 +93,9 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
                 ))}
               </View>
             </View>
-          </TouchableWithoutFeedback>
+          </Pressable>
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
     </Modal>
   )
 })

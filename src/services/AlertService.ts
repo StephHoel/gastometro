@@ -89,7 +89,7 @@ export const AlertService = {
         const listToPaste = ConvertToProductsList(clipboard)
 
         if (listToPaste.length === 0) {
-          AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+          AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
           return
         }
 
@@ -109,10 +109,10 @@ export const AlertService = {
         })
       }
       else
-        AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+        AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
     } catch (error) {
       console.error('Falha ao colar lista do clipboard:', error)
-      AlertService.ok(text.error.alert_title, text.error.lista_fora_padrao)
+      AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
     }
   },
 }

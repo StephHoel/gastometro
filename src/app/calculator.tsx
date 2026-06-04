@@ -29,10 +29,10 @@ export default function Calculator() {
     Keyboard.dismiss()
 
     if (price === "" || quantity === "")
-      return AlertService.ok(text.error.alert_title, text.error.campos_nao_preenchidos)
+      return AlertService.ok(text.error.alert_title, text.error.required_fields)
 
     if (HasNegativeSignal(price) || HasNegativeSignal(quantity))
-      return AlertService.ok(text.error.alert_title, text.error.valor_negativo)
+      return AlertService.ok(text.error.alert_title, text.error.negative_value)
 
     setAnswer(Divide(price, quantity))
   }
