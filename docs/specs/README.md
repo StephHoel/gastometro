@@ -15,12 +15,12 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Bloqueio de duplicados na criação](./bloqueio-duplicados-criacao.md)
 - [Validação de valores negativos](./validacao-valores-negativos.md)
 
-### Planejadas
+### Planejadas (ordem de prioridade)
 
-- [Notificações e lembretes](./notificacoes-lembretes.md)
-- [Múltiplas listas](./multiplas-listas.md)
-- [Contas a pagar](./contas-a-pagar.md)
-- [Total de itens coletados](./total-itens-coletados.md)
-- [Gestão de itens duplicados](./gestao-itens-duplicados.md)
-- [Suíte de testes automatizados](./testes-automatizados.md)
-- [Web compatível com GitHub Pages](./web-github-pages.md)
+1. [Suíte de testes automatizados](./testes-automatizados.md)
+2. [Gestão de itens duplicados](./gestao-itens-duplicados.md)
+3. [Total de itens coletados](./total-itens-coletados.md)
+4. [Web compatível com GitHub Pages](./web-github-pages.md)
+5. [Múltiplas listas](./multiplas-listas.md)
+6. [Notificações e lembretes](./notificacoes-lembretes.md)
+7. [Contas a pagar](./contas-a-pagar.md)
