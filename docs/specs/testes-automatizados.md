@@ -2,9 +2,13 @@
 
 Status: em andamento
 
-## Problema
+## Problema Inicial
 
 O projeto ainda não possui script de teste automatizado configurado, mas o spec define que a estratégia deve incluir testes unitários, store/estado, componentes, integração e contrato/formato.
+
+## Problema Atual
+
+O projeto já possui script de teste automatizado configurado, e o foco agora é ampliar e operacionalizar a cobertura (incluindo exportação de relatório em CSV) seguindo a estratégia de testes unitários, store/estado, componentes, integração e contrato/formato.
 
 ## Objetivo
 
@@ -45,12 +49,13 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 
 ## Cobertura atual
 
-- Suíte configurada com `jest-expo` e comandos `npm run test`, `npm run test:watch` e `npm run test:coverage`.
+- Suíte configurada com `jest-expo` e comandos `npm run test`, `npm run test:watch`, `npm run test:coverage` e `npm run test:coverage:csv`.
 - Cobertura ampla de utilitários de domínio (matemática, strings, números, ordenação e parser de importação).
 - Cobertura de serviços críticos (`ProductService`, `ShareService`, `AlertService`, `ClipboardService`, `CartStoreService`).
 - Cobertura de store Zustand e helper in-memory (`useCartStore`, `CartInMemory`).
 - Cobertura inicial de componente e hook (`CustomInput`, `useInitAlert`).
 - Execução local validada sem emulador.
+- Exportação da tabela de cobertura para CSV em `docs/coverages/`, com nome no formato `YYYY-MM-DD_HH-MM.csv`.
 
 ### Resumo de cobertura mais recente (Jest)
 
