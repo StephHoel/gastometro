@@ -56,10 +56,11 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 - Cobertura inicial de componente e hook (`CustomInput`, `useInitAlert`).
 - Execução local validada sem emulador.
 - Exportação da tabela de cobertura para CSV em `docs/coverages/`, com nome no formato `YYYY-MM-DD_HH-MM.csv`.
+- O Jest trava abaixo de 80% de cobertura global do código runtime.
 
 ### Resumo de cobertura mais recente (Jest)
 
-- All files: 52.88% statements, 44.75% branches, 54.47% functions, 50.49% lines.
+- All files: 84.86% statements, 82.24% branches, 86.5% functions, 85.14% lines.
 - Services: 96.07% statements.
 - Stores e helpers: 100% statements.
 - Utils/functions: 97.46% statements.

@@ -21,7 +21,7 @@ echo "✅ Dependências instaladas"
 echo ""
 
 echo "🧪 Executando testes automatizados..."
-npm run test
+npm run test:coverage
 echo "✅ Testes aprovados"
 echo ""
 

@@ -118,6 +118,8 @@ Cobertura:
 npm run test:coverage
 ```
 
+O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%.
+
 Cobertura com exportacao CSV:
 
 ```bash
