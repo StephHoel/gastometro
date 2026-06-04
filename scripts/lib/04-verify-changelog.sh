@@ -5,5 +5,6 @@ if [ ! -f docs/CHANGELOG.md ]; then
   echo "# Changelog" > docs/CHANGELOG.md
   echo "" >> docs/CHANGELOG.md
 fi
+
 echo "$TAB2✔ docs/CHANGELOG.md encontrado."
 echo ""
