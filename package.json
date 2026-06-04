@@ -9,6 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:coverage:csv": "sh ./scripts/test-coverage-csv.sh",
     "clear:branches": "sh ./scripts/clear-branches.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
     "clear": "sh ./scripts/clear.sh",

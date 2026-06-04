@@ -118,6 +118,15 @@ Cobertura:
 npm run test:coverage
 ```
 
+Cobertura com exportacao CSV:
+
+```bash
+npm run test:coverage:csv
+```
+
+O CSV e salvo em `docs/coverages/` com nome no formato `YYYY-MM-DD_HH-MM.csv`.
+Header do arquivo: `File;% Stmts;% Branch;% Funcs;% Lines;Uncovered Line #s`.
+
 Além dos testes, rode as verificações disponíveis quando fizer sentido:
 
 ```bash
