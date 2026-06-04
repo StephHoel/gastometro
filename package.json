@@ -6,6 +6,7 @@
     "new-version": "sh ./scripts/add-new-version.sh",
     "release:upload": "sh ./scripts/release-upload.sh",
     "build:local": "sh ./scripts/build-local.sh",
+    "clear:branches": "sh ./scripts/clear-branches.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
     "clear": "sh ./scripts/clear.sh",
     "build:android:local": "cd android/ && gradlew.bat build && gradlew.bat assembleRelease && cd ..",
