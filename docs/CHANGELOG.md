@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.7 - 2026-06-04
+
+Ajustes internos e melhorias na documentação e suíte de testes automatizados.
+
 ## 1.4.6 - 2026-06-03
 
 Correção
