@@ -92,17 +92,25 @@ Observações:
 
 ## Qualidade e testes
 
-O projeto ainda não possui uma suíte de testes automatizados configurada.
-
-A estratégia definida no spec inclui:
+O projeto possui uma suíte inicial de testes automatizados alinhada ao spec, cobrindo principalmente regras de domínio e contrato:
 
 - testes unitários;
 - testes de store/estado;
-- testes de componentes;
-- testes de integração;
 - testes de contrato/formato, especialmente para compartilhamento e importação via WhatsApp.
 
-Enquanto a suíte não existir, valide manualmente o fluxo afetado e rode as verificações disponíveis quando fizer sentido:
+Execute os testes localmente com:
+
+```bash
+npm run test
+```
+
+Modo watch:
+
+```bash
+npm run test:watch
+```
+
+Além dos testes, rode as verificações disponíveis quando fizer sentido:
 
 ```bash
 npm run deps:check
@@ -138,6 +146,12 @@ Regras atuais:
 - `patch`: correções e atualizações de stack.
 - `minor`: novas funcionalidades.
 - `major`: mudanças que possam quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade.
+
+Regra de Pull Request:
+
+- Se o PR alterar arquivos em `src/` e/ou `tests/`, é obrigatório atualizar a versão do projeto.
+- O check automático valida o campo `version` em `package.json` e `app.json`.
+- Se a versão não for atualizada (ou ficar inconsistente entre os dois arquivos), o check falha e o merge fica bloqueado.
 
 ## Política de dependências
 

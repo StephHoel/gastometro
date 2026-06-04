@@ -1,0 +1,87 @@
+name: Require Version Bump On PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  verify-version-bump:
+    name: Verify Version Bump
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify changed paths and versions
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          echo "Base SHA: $BASE_SHA"
+          echo "Head SHA: $HEAD_SHA"
+
+          CHANGED_FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "Sem arquivos alterados no PR. Check aprovado."
+            exit 0
+          fi
+
+          echo "Arquivos alterados:" 
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -Eq '^(src/|tests/)'; then
+            echo "Foram detectadas alterações em src/ ou tests/. A versão do projeto deve ser atualizada."
+          else
+            echo "Nenhuma alteração em src/ ou tests/. Check aprovado sem exigir bump de versão."
+            exit 0
+          fi
+
+          get_version_from_ref() {
+            local ref="$1"
+            local file="$2"
+
+            git show "$ref:$file" 2>/dev/null | node -e "
+              const fs = require('fs');
+              const raw = fs.readFileSync(0, 'utf8').trim();
+              if (!raw) {
+                process.exit(2);
+              }
+              const json = JSON.parse(raw);
+              process.stdout.write(json.version || '');
+            "
+          }
+
+          BASE_PACKAGE_VERSION=$(get_version_from_ref "$BASE_SHA" "package.json")
+          HEAD_PACKAGE_VERSION=$(get_version_from_ref "$HEAD_SHA" "package.json")
+          BASE_APP_VERSION=$(get_version_from_ref "$BASE_SHA" "app.json")
+          HEAD_APP_VERSION=$(get_version_from_ref "$HEAD_SHA" "app.json")
+
+          echo "Versão base package.json: $BASE_PACKAGE_VERSION"
+          echo "Versão head package.json: $HEAD_PACKAGE_VERSION"
+          echo "Versão base app.json: $BASE_APP_VERSION"
+          echo "Versão head app.json: $HEAD_APP_VERSION"
+
+          if [ -z "$HEAD_PACKAGE_VERSION" ] || [ -z "$HEAD_APP_VERSION" ]; then
+            echo "Erro: não foi possível ler version em package.json e/ou app.json do HEAD."
+            exit 1
+          fi
+
+          if [ "$HEAD_PACKAGE_VERSION" != "$HEAD_APP_VERSION" ]; then
+            echo "Erro: versões divergentes entre package.json ($HEAD_PACKAGE_VERSION) e app.json ($HEAD_APP_VERSION)."
+            exit 1
+          fi
+
+          if [ "$BASE_PACKAGE_VERSION" = "$HEAD_PACKAGE_VERSION" ] && [ "$BASE_APP_VERSION" = "$HEAD_APP_VERSION" ]; then
+            echo "Erro: PR alterou src/ ou tests/, mas não atualizou a versão do projeto."
+            echo "Atualize package.json e app.json (campo version) antes do merge."
+            exit 1
+          fi
+
+          echo "Bump de versão detectado e consistente. Check aprovado."

@@ -5,3 +5,4 @@
 - [ ] Sem uso de any
 - [ ] Cobertura mantida (quando houver suíte de testes)
 - [ ] Tratamento de erros revisado
+- [ ] Versão atualizada em package.json e app.json quando o PR altera src/ e/ou tests/
