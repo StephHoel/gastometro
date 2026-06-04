@@ -1,6 +1,6 @@
 # Mini-spec: Suíte de testes automatizados
 
-Status: planejado
+Status: em andamento
 
 ## Problema
 
@@ -42,6 +42,22 @@ Configurar uma base de testes automatizados compatível com Expo/React Native e 
 - Ter mocks básicos para APIs nativas usadas nos testes.
 - Documentar como executar os testes.
 - Garantir que a suíte inicial passe.
+
+## Cobertura atual
+
+- Suíte configurada com `jest-expo` e comandos `npm run test`, `npm run test:watch` e `npm run test:coverage`.
+- Cobertura ampla de utilitários de domínio (matemática, strings, números, ordenação e parser de importação).
+- Cobertura de serviços críticos (`ProductService`, `ShareService`, `AlertService`, `ClipboardService`, `CartStoreService`).
+- Cobertura de store Zustand e helper in-memory (`useCartStore`, `CartInMemory`).
+- Cobertura inicial de componente e hook (`CustomInput`, `useInitAlert`).
+- Execução local validada sem emulador.
+
+### Resumo de cobertura mais recente (Jest)
+
+- All files: 52.88% statements, 44.75% branches, 54.47% functions, 50.49% lines.
+- Services: 96.07% statements.
+- Stores e helpers: 100% statements.
+- Utils/functions: 97.46% statements.
 
 ## Fora de escopo
 

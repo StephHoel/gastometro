@@ -92,10 +92,12 @@ Observações:
 
 ## Qualidade e testes
 
-O projeto possui uma suíte inicial de testes automatizados alinhada ao spec, cobrindo principalmente regras de domínio e contrato:
+O projeto possui uma suíte automatizada alinhada ao spec, com foco em regras de domínio, store, serviços e contrato:
 
 - testes unitários;
 - testes de store/estado;
+- testes de componentes;
+- testes de integração em serviços;
 - testes de contrato/formato, especialmente para compartilhamento e importação via WhatsApp.
 
 Execute os testes localmente com:
@@ -110,6 +112,12 @@ Modo watch:
 npm run test:watch
 ```
 
+Cobertura:
+
+```bash
+npm run test:coverage
+```
+
 Além dos testes, rode as verificações disponíveis quando fizer sentido:
 
 ```bash
@@ -119,7 +127,7 @@ npm run deps:audit
 
 ## Riscos técnicos atuais
 
-- Ainda não existe suíte automatizada para validar regressões de regras de negócio.
+- Cobertura de telas e fluxos de navegação ainda pode evoluir, apesar da boa cobertura de domínio e serviços.
 - A importação de lista depende de um formato de texto rígido do WhatsApp.
 - Fluxos de alerta dependem de referência global inicializada em runtime.
 

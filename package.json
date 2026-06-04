@@ -8,6 +8,7 @@
     "build:local": "sh ./scripts/build-local.sh",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "clear:branches": "sh ./scripts/clear-branches.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
     "clear": "sh ./scripts/clear.sh",

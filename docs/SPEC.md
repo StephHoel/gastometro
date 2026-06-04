@@ -250,7 +250,7 @@ Estratégia de testes escolhida:
 - testes de integração;
 - testes de contrato/formato.
 
-Observação: o projeto ainda não tem script de teste automatizado configurado. Ao introduzir testes, priorizar funções puras, store e contrato do WhatsApp antes de ampliar cobertura de UI.
+Observação: o projeto já possui script de teste automatizado configurado (`npm run test`), com cobertura inicial priorizando funções puras, store e contrato do WhatsApp. A evolução deve seguir para ampliar cobertura de componentes, integração e fluxos de tela.
 
 ## 13. Política de Dependências
 
