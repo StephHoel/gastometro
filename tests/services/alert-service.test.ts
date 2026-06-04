@@ -161,7 +161,7 @@ describe('AlertService', () => {
 
     expect(clipboardSpy).toHaveBeenCalledTimes(1)
     expect(convertSpy).toHaveBeenCalledTimes(1)
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.lista_fora_padrao)
+    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
   })
 
   it('paste deve mostrar erro quando conteúdo não estiver no padrão', async () => {
@@ -170,7 +170,7 @@ describe('AlertService', () => {
 
     await AlertService.paste(makeStore())
 
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.lista_fora_padrao)
+    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
   })
 
   it('paste deve tratar erro de clipboard e mostrar alerta', async () => {
@@ -181,6 +181,6 @@ describe('AlertService', () => {
     await AlertService.paste(makeStore())
 
     expect(consoleSpy).toHaveBeenCalledTimes(1)
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.lista_fora_padrao)
+    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
   })
 })
