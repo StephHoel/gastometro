@@ -21,14 +21,14 @@ Write-Host "Head ref: $headRef"
 
 $null = git rev-parse --verify $baseRef 2>$null
 if ($LASTEXITCODE -ne 0) {
-  Write-Host "Erro: base ref invalida ou ausente: $baseRef"
+  Write-Host "Erro: base ref inválida ou ausente: $baseRef"
   Write-Host "Dica: rode 'git fetch origin main' e tente novamente."
   exit 1
 }
 
 $null = git rev-parse --verify $headRef 2>$null
 if ($LASTEXITCODE -ne 0) {
-  Write-Host "Erro: head ref invalida ou ausente: $headRef"
+  Write-Host "Erro: head ref inválida ou ausente: $headRef"
   exit 1
 }
 
@@ -52,13 +52,13 @@ foreach ($line in ($changedFiles -split "`r?`n")) {
 }
 
 if (-not $requiresBump) {
-  Write-Host 'Sem alteracoes em src/ ou tests/'
+  Write-Host 'Sem alterações em src/ ou tests/'
   Write-Host 'Check aprovado sem exigir bump'
   exit 0
 }
 
-Write-Host 'Alteracoes detectadas em src/ ou tests/'
-Write-Host 'Bump de versao exigido'
+Write-Host 'Alterações detectadas em src/ ou tests/'
+Write-Host 'Bump de versão exigido'
 Write-Host ''
 
 function Get-VersionFromRef {
@@ -100,25 +100,25 @@ $headPackageVersion = Get-VersionFromRef -Ref $headRef -File 'package.json'
 $baseAppVersion = Get-VersionFromRef -Ref $baseRef -File 'app.json'
 $headAppVersion = Get-VersionFromRef -Ref $headRef -File 'app.json'
 
-Write-Host "Versao base package.json: $basePackageVersion"
-Write-Host "Versao head package.json: $headPackageVersion"
-Write-Host "Versao base app.json: $baseAppVersion"
-Write-Host "Versao head app.json: $headAppVersion"
+Write-Host "Versão base package.json: $basePackageVersion"
+Write-Host "Versão head package.json: $headPackageVersion"
+Write-Host "Versão base app.json: $baseAppVersion"
+Write-Host "Versão head app.json: $headAppVersion"
 
 if ([string]::IsNullOrWhiteSpace($headPackageVersion) -or [string]::IsNullOrWhiteSpace($headAppVersion)) {
-  Write-Host 'Erro: nao foi possivel ler versao em package.json e/ou app.json do head.'
+  Write-Host 'Erro: não foi possível ler versão em package.json e/ou app.json do head.'
   exit 1
 }
 
 if ($headPackageVersion -ne $headAppVersion) {
-  Write-Host "Erro: versoes divergentes entre package.json ($headPackageVersion) e app.json ($headAppVersion)."
+  Write-Host "Erro: versões divergentes entre package.json ($headPackageVersion) e app.json ($headAppVersion)."
   exit 1
 }
 
 if ($basePackageVersion -eq $headPackageVersion -and $baseAppVersion -eq $headAppVersion) {
-  Write-Host 'Erro: houve alteracao em src/ ou tests/, mas sem bump de versao.'
+  Write-Host 'Erro: houve alteração em src/ ou tests/, mas sem bump de versão.'
   Write-Host 'Atualize package.json e app.json (campo version) antes do merge.'
   exit 1
 }
 
-Write-Host 'Bump de versao detectado e consistente. Check aprovado.'
+Write-Host 'Bump de versão detectado e consistente. Check aprovado.'

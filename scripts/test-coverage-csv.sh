@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUTPUT_DIR="$ROOT_DIR/docs/coverages"
@@ -14,7 +14,7 @@ cd "$ROOT_DIR"
 
 echo "Executando testes com cobertura..."
 if ! npm run test:coverage 2>&1 | tee "$TMP_OUTPUT"; then
-  echo "Falha ao executar cobertura. O CSV nao foi gerado."
+  echo "Falha ao executar cobertura. O CSV não foi gerado."
   rm -f "$TMP_OUTPUT"
   exit 1
 fi
@@ -42,7 +42,7 @@ awk -F'|' '
     }
   }
 ' "$TMP_OUTPUT" >> "$OUTPUT_FILE" || {
-  echo "Nao foi possivel processar a tabela de cobertura da saida do Jest."
+  echo "Não foi possível processar a tabela de cobertura da saída do Jest."
   rm -f "$TMP_OUTPUT" "$OUTPUT_FILE"
   exit 1
 }
@@ -51,4 +51,5 @@ rm -f "$TMP_OUTPUT"
 
 rm -rf coverage
 
+echo ""
 echo "CSV de cobertura gerado em: $OUTPUT_FILE"
