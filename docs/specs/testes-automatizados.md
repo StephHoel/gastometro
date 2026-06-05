@@ -66,10 +66,7 @@ Manter e evoluir a suíte de testes automatizados compatível com Expo/React Nat
 
 - Execução de referência em 2026-06-04 com `npm run test:coverage -- --runInBand`.
 - 19 suítes passadas, 62 testes passados.
-- All files: 84.86% statements, 82.24% branches, 86.5% functions, 85.14% lines.
-- Services: 96.07% statements.
-- Stores e helpers: 100% statements.
-- Utils/functions: 97.46% statements.
+- Consulte o relatório CSV versionado mais recente em `docs/coverages/` para validar os percentuais vigentes, não nesta mini-spec.
 
 ## Fora de escopo
 
