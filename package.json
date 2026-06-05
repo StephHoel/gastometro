@@ -4,6 +4,7 @@
   "version": "1.4.7",
   "scripts": {
     "new-version": "sh ./scripts/add-new-version.sh",
+    "verify:version-bump": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/verify-version-bump.ps1",
     "release:upload": "sh ./scripts/release-upload.sh",
     "build:local": "sh ./scripts/build-local.sh",
     "test": "jest",
