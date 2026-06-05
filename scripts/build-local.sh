@@ -39,6 +39,7 @@ echo ""
 
 echo "⚙️  Iniciando build Gradle..."
 chmod +x gradlew
+export ORG_GRADLE_PROJECT_reactNativeArchitectures="arm64-v8a"
 ./gradlew assembleRelease --warning-mode all
 echo ""
 

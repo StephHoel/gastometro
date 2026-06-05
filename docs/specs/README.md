@@ -18,13 +18,13 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./testes-automatizados.md)
+- [APK menor com foco em Android moderno e web](./apk-menor-android-moderno-web.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [APK menor com foco em Android moderno e web](./apk-menor-android-moderno-web.md)
+1. [Total de itens coletados](./total-itens-coletados.md)
 2. [Gestão de itens duplicados](./gestao-itens-duplicados.md)
-3. [Total de itens coletados](./total-itens-coletados.md)
-4. [Web compatível com GitHub Pages](./web-github-pages.md)
-5. [Múltiplas listas](./multiplas-listas.md)
-6. [Notificações e lembretes](./notificacoes-lembretes.md)
-7. [Contas a pagar](./contas-a-pagar.md)
+3. [Web compatível com GitHub Pages](./web-github-pages.md)
+4. [Múltiplas listas](./multiplas-listas.md)
+5. [Notificações e lembretes](./notificacoes-lembretes.md)
+6. [Contas a pagar](./contas-a-pagar.md)

@@ -69,6 +69,7 @@ Use esta seção como verdade atual do repositório.
 - Dependabot semanal para dependências npm.
 - Foco de plataforma: Android.
 - Plataforma futura: web compatível com GitHub Pages.
+- Baseline atual de compatibilidade Android: API 29+ (Android 10).
 
 Não assumir Prisma, PostgreSQL, Jest ou Zod sem antes adicionar essas dependências e justificar a mudança. O arquivo antigo do Copilot citava essas tecnologias, mas elas não aparecem na stack atual.
 
@@ -231,6 +232,12 @@ npm run deps:check
 npm run deps:audit
 ```
 
+Diretrizes atuais de build Android para reduzir artefato:
+
+- build local e preview devem priorizar arquitetura `arm64-v8a`;
+- build de produção Android deve gerar AAB (`app-bundle`);
+- manter compatibilidade web dos fluxos principais após ajustes de build.
+
 Antes de finalizar mudanças, a IA deve tentar uma verificação proporcional ao escopo:
 
 - para regras puras: adicionar ou atualizar testes unitários quando a suíte existir;
@@ -270,7 +277,7 @@ Regras de versionamento:
 - nova feature: incrementar `minor`;
 - mudança que possa quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade: incrementar `major`.
 
-Os scripts atuais de release/build devem ser preservados até que uma nova estratégia seja especificada.
+Estratégia atual de release/build Android: artefatos locais em APK arm64 e produção em AAB.
 
 ## 15. Como a IA Deve Trabalhar Neste Projeto
 
@@ -345,4 +352,5 @@ Fora de escopo:
 - Tema escuro deve ser mantido como identidade fixa.
 - Versionamento segue patch para fix/stack, minor para feature e major para mudança potencialmente quebrável.
 - Foco continua Android, com versão web futura compatível com GitHub Pages.
+- Baseline de Android suportado definida em API 29+, com foco em artefatos menores para Android moderno.
 - Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmação do usuário.
