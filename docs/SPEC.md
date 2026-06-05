@@ -160,7 +160,7 @@ Diretrizes encontradas no app:
 
 - app mobile em orientação portrait.
 - tema escuro com base em `bg-slate-900`.
-- fonte Inter configurada no Tailwind (`heading`, `subtitle`, `body`, `bold`).
+- famílias tipográficas do sistema configuradas no Tailwind (`heading`, `subtitle`, `body`, `bold`) para reduzir peso de build.
 - botões principais usam estados visuais:
   - sucesso: `bg-lime-400`;
   - falha: `bg-red-600`;

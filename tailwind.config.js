@@ -9,10 +9,10 @@ export const presets = [require("nativewind/preset")];
 export const theme = {
   extend: {
     fontFamily: {
-      heading: 'Inter_600SemiBold',
-      subtitle: 'Inter_500Medium',
-      body: 'Inter_400Regular',
-      bold: 'Inter_700Bold',
+      heading: 'System',
+      subtitle: 'System',
+      body: 'System',
+      bold: 'System',
     },
   },
 };
