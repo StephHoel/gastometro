@@ -39,7 +39,23 @@ echo "$TAB3✔ Título no topo."
 
 # Garante exatamente uma linha em branco no final
 echo "$TAB2🔍 Garantindo que o arquivo tenha exatamente uma linha em branco no final..."
-sed -Ez 's/(\n[[:space:]]*)*\n?$/\n/' "$FILE.tmp" > "$FILE"
+awk '
+{
+  lines[NR] = $0
+}
+END {
+  last = NR
+  while (last > 0 && lines[last] ~ /^[[:space:]]*$/) {
+    last--
+  }
+
+  for (i = 1; i <= last; i++) {
+    print lines[i]
+  }
+
+  print ""
+}
+' "$FILE.tmp" > "$FILE"
 echo "$TAB3✔ Linha em branco final garantida."
 
 # Limpa temporário

@@ -11,13 +11,11 @@ if [ ! -f "package-lock.json" ]; then
   exit 1
 fi
 
-files_to_add=(package.json package-lock.json app.json docs/CHANGELOG.md)
+git add package.json package-lock.json app.json docs/CHANGELOG.md
 
 if [ -f "android/app/build.gradle" ]; then
-  files_to_add+=(android/app/build.gradle)
+  git add android/app/build.gradle
 fi
-
-git add "${files_to_add[@]}"
 git commit -m "chore: versão $new_version – $changes"
 echo "${TAB2}✔ Mudanças comitadas."
 echo ""
