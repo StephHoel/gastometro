@@ -1,7 +1,7 @@
 export const text = {
   error: {
     alert_title: "Erro!",
-    invalid_list_format: "A lista copiada não está no padrão. Copie a lista do Whatsapp sem editar!",
+    invalid_list_format: "A lista copiada não está no padrão. Copie a lista do WhatsApp sem editar!",
     required_fields: 'Por favor, preencha todos os campos corretamente.',
     negative_value: 'Valores negativos não são permitidos.',
     duplicate_item: 'Já existe um item com este nome na lista.',

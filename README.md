@@ -120,13 +120,13 @@ npm run test:coverage
 
 O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%.
 
-Cobertura com exportacao CSV:
+Cobertura com exportação CSV:
 
 ```bash
 npm run test:coverage:csv
 ```
 
-O CSV e salvo em `docs/coverages/` com nome no formato `YYYY-MM-DD_HH-MM.csv`.
+O CSV é salvo em `docs/coverages/` com nome no formato `YYYY-MM-DD_HH-MM.csv`.
 Header do arquivo: `File;% Stmts;% Branch;% Funcs;% Lines;Uncovered Line #s`.
 
 Além dos testes, rode as verificações disponíveis quando fizer sentido:
