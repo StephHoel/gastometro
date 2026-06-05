@@ -9,13 +9,13 @@ import { useCartStore } from '@/stores/CartStore'
 import { useRouter, useLocalSearchParams } from 'expo-router'
 import { useRoute } from 'expo-router/react-navigation'
 
-jest.mock('@expo-google-fonts/inter', () => ({
-  Inter_700Bold: {},
-  Inter_500Medium: {},
-  Inter_400Regular: {},
-  Inter_600SemiBold: {},
-  useFonts: jest.fn(() => [true]),
-}))
+// jest.mock('@expo-google-fonts/inter', () => ({
+//   Inter_700Bold: {},
+//   Inter_500Medium: {},
+//   Inter_400Regular: {},
+//   Inter_600SemiBold: {},
+//   useFonts: jest.fn(() => [true]),
+// }))
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: jest.fn(),

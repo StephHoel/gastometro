@@ -1,6 +1,5 @@
 import type { IconsProps } from "@/interfaces/IconsProps"
 import IonIcons from "@expo/vector-icons/Ionicons"
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
 
 export function AddIcon({ size = 24, color = "white" }: IconsProps) {
@@ -16,7 +15,7 @@ export function CalculatorIcon({ size = 24, color = "white" }: IconsProps) {
 }
 
 export function BroomIcon({ size = 24, color = "white" }: IconsProps) {
-  return <MaterialCommunityIcons name="broom" size={size} color={color} />
+  return <IonIcons name="trash-outline" size={size} color={color} />
 }
 
 export function CheckboxIcon({ checked, size = 24 }: IconsProps) {

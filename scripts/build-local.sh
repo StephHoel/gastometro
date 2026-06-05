@@ -28,6 +28,32 @@ npx expo prebuild --platform android --clean
 echo "✅ expo prebuild concluído"
 echo ""
 
+echo "🛠️ Aplicando otimizações de tamanho no android/gradle.properties..."
+set_prop() {
+	key="$1"
+	value="$2"
+	file="$3"
+	if grep -q "^${key}=" "$file"; then
+		sed -i "s|^${key}=.*|${key}=${value}|" "$file"
+	else
+		echo "${key}=${value}" >> "$file"
+	fi
+}
+
+set_prop "newArchEnabled" "false" "android/gradle.properties"
+set_prop "expo.gif.enabled" "false" "android/gradle.properties"
+set_prop "expo.webp.enabled" "false" "android/gradle.properties"
+set_prop "EX_DEV_CLIENT_NETWORK_INSPECTOR" "false" "android/gradle.properties"
+set_prop "reactNativeArchitectures" "arm64-v8a" "android/gradle.properties"
+set_prop "expo.useLegacyPackaging" "true" "android/gradle.properties"
+set_prop "android.enableBundleCompression" "true" "android/gradle.properties"
+
+if ! grep -q 'resConfigs "en", "pt-rBR"' android/app/build.gradle; then
+	sed -i '/targetSdkVersion rootProject.ext.targetSdkVersion/a\        resConfigs "en", "pt-rBR"' android/app/build.gradle
+fi
+echo "✅ Otimizações aplicadas"
+echo ""
+
 # # echo "🧹 Removendo arquivos .webp..."
 # # find . -type f -name "*.webp" -delete
 # # echo "✔ Arquivos .webp removidos"
@@ -48,7 +74,14 @@ cd "$START_PWD" || true
 mkdir -p _apks
 
 # Find the most recently modified APK under android/app/build
-latest_apk=$(find android/app/build -type f -name "*.apk" -exec ls -t {} + 2>/dev/null | head -n 1 || true)
+# Prefer arm64 release output and select the smallest APK available.
+latest_apk=$(find android/app/build -type f -name "*.apk" \
+	! -name "*unaligned*" \
+	! -name "*debug*" \
+	-print 2>/dev/null | while IFS= read -r f; do
+		size=$(wc -c < "$f" 2>/dev/null || echo 0)
+		echo "$size|$f"
+	done | sort -n | head -n 1 | cut -d'|' -f2- || true)
 
 if [ -z "$latest_apk" ]; then
 	echo "⚠️ APK não encontrado em locais esperados"

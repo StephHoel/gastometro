@@ -7,10 +7,8 @@
     "icon": "./assets/images/icon.png",
     "scheme": "gastometro",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": false,
     "android": {
       "package": "com.stephhoel.gastometro",
-      "minSdkVersion": 29,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon-foreground.png",
         "backgroundColor": "#0F172A"
@@ -28,8 +26,11 @@
         "expo-build-properties",
         {
           "android": {
+            "minSdkVersion": 29,
             "enableProguardInReleaseBuilds": true,
-            "enableShrinkResourcesInReleaseBuilds": true
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "enableSeparateBuildPerCPUArchitecture": true,
+            "extraProguardRules": "-assumenosideeffects class android.util.Log { *; }"
           }
         }
       ],
@@ -41,7 +42,8 @@
             "image": "./assets/images/splash-icon.png"
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
