@@ -33,6 +33,12 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 
 O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pages está planejada.
 
+Compatibilidade atual de plataforma:
+
+- Android mínimo: API 29 (Android 10).
+- Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
+- Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
+
 ## Funcionalidades planejadas
 
 As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/`](docs/specs/README.md):
@@ -56,6 +62,10 @@ Baixe o APK mais recente pela página de releases:
 [Releases do Gastômetro](https://github.com/StephHoel/gastometro/releases/latest)
 
 Depois instale o APK no Android e abra o app. Não é necessário criar conta.
+
+Observação de compatibilidade Android:
+
+- O APK gerado para distribuição local prioriza dispositivos Android modernos com arquitetura arm64.
 
 ## Desenvolvimento
 
@@ -86,7 +96,7 @@ npm run deps:audit
 Observações:
 
 - `npm run web` inicia o app no modo web de desenvolvimento.
-- `npm run build:android` usa EAS com o perfil `preview`.
+- `npm run build:android` usa EAS com o perfil `production` e gera AAB.
 - `npm run build:local:eas` executa build local via EAS.
 - O diretório nativo `android/` pode ser gerado por `npm run prebuild` quando necessário.
 

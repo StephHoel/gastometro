@@ -9,6 +9,7 @@
     "userInterfaceStyle": "dark",
     "android": {
       "package": "com.stephhoel.gastometro",
+      "minSdkVersion": 29,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon-foreground.png",
         "backgroundColor": "#0F172A"

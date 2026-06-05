@@ -1,6 +1,6 @@
 # Mini-spec: APK menor com foco em Android moderno e web
 
-Status: planejado
+Status: em andamento
 
 ## Problema
 
@@ -63,3 +63,27 @@ Diminuir o tamanho final de instalação/distribuição no Android por meio de a
 - Medir baseline de tamanho antes de alterar configurações para evitar comparação imprecisa.
 - Priorizar ganhos de build/configuração antes de considerar troca de bibliotecas.
 - Preservar foco em Android e compatibilidade web do projeto.
+
+## Implementação realizada
+
+- Baseline mínima de Android definida com o usuário em API 29+ (Android 10).
+- Configuração de app atualizada para `minSdkVersion: 29`.
+- Perfis Android do EAS ajustados para priorizar `arm64-v8a` em builds locais/preview.
+- Build Android de produção ajustado para `app-bundle` (AAB).
+- Script local (`scripts/build-local.sh`) ajustado para exportar `ORG_GRADLE_PROJECT_reactNativeArchitectures=arm64-v8a` antes do Gradle.
+- Documentação principal (README e SPEC) atualizada com nova baseline e estratégia de build.
+
+## Baseline de tamanho medido antes da mudança
+
+- Artefatos em `_apks/` medidos em 2026-06-05: aproximadamente 102 MB por APK.
+- Arquivos usados como baseline:
+  - `gastometro-20260528215752.apk`
+  - `gastometro-20260528215955.apk`
+  - `gastometro-20260529130635.apk`
+  - `gastometro-20260529131239.apk`
+
+## Validação pendente pós-mudança
+
+- Gerar novo build Android e comparar tamanho com baseline de 102 MB.
+- Validar abertura do app em Android API 29+.
+- Validar fluxo web sem regressões aparentes.

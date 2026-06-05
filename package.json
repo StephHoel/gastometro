@@ -20,7 +20,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "start": "expo start --dev-client",
-    "build:android": "eas build -p android --profile preview",
+    "build:android": "eas build -p android --profile production",
     "build:local:eas": "eas build --platform android --local",
     "web": "expo start --web --dev-client --clear",
     "deps:check": "npx expo-doctor",
