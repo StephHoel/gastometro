@@ -1,8 +1,10 @@
 # Função para incrementar versão
 increment_version() {
-  local version=$1
-  local part=$2
-  IFS='.' read -r major minor patch <<< "$version"
+  version=$1
+  part=$2
+  major=$(printf '%s' "$version" | cut -d. -f1)
+  minor=$(printf '%s' "$version" | cut -d. -f2)
+  patch=$(printf '%s' "$version" | cut -d. -f3)
 
   case $part in
     major) major=$((major + 1)); minor=0; patch=0 ;;
