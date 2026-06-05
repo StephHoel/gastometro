@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "gastometro",
     "userInterfaceStyle": "dark",
+    "newArchEnabled": false,
     "android": {
       "package": "com.stephhoel.gastometro",
       "minSdkVersion": 29,
@@ -23,6 +24,15 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ],
       [
         "expo-splash-screen",
         {
