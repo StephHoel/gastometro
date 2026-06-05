@@ -1,17 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
 TAB="    "
 
 echo "🔍 Iniciando script de upload de APK na release existente"
 echo ""
 
-# Solicita ao usuário a tag
-# read -p "$TAB👀 Digite a tag da release (exemplo: v1.3): " TAG
-# echo ""
-
 # Verifica se a tag foi fornecida
 while [ -z "$TAG" ]; do
-  read -p "$TAB👀 Digite a tag da release (exemplo: v1.3) ou pressione Ctrl+C para sair: " TAG
+  printf "%s" "$TAB👀 Digite a tag da release (exemplo: v1.3) ou pressione Ctrl+C para sair: "
+  IFS= read -r TAG
 done
 
 
@@ -36,11 +33,13 @@ echo "Executando comandos com a tag: $TAG"
 
 # Tenta deletar o asset e verifica se o release existe
 DELETE_OUTPUT=$(gh release delete-asset "$TAG" "$APK_NAME" -y 2>&1)
-if [[ "$DELETE_OUTPUT" == *"release not found"* ]]; then
+case "$DELETE_OUTPUT" in
+  *"release not found"*)
   echo "ERROR: Release não encontrado para a tag $TAG."
   echo "Certifique-se de que a tag está correta ou crie a release antes de continuar."
   exit 1
-fi
+  ;;
+esac
 
 # Faz o upload do arquivo APK para a release
 UPLOAD_OUTPUT=$(gh release upload "$TAG" "$APK_PATH" --clobber 2>&1)

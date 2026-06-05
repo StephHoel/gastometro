@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_dir="$(cd "$(dirname "$0")" && pwd)"
 LOG_FILE="$script_dir/clear.csv"
 
 # Inicializa o arquivo de log com header CSV se não existir
@@ -10,13 +10,11 @@ fi
 
 # Escreve uma entrada no log em formato CSV: datetime;message
 log() {
-	local ts
 	ts="$(date +"%Y-%m-%d %H:%M:%S")"
-	local msg
 	msg="$*"
 
 	# Remover possíveis pontos-e-vírgulas e converter quebras de linha em espaço para manter uma única linha CSV
-	msg="$(echo "$msg" | tr '\n' ' ' | sed 's/;/,/g' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')"
+	msg="$(echo "$msg" | tr '\n' ' ' | sed 's/;/,/g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
 
 	# Não registrar entradas vazias
 	if [ -n "$msg" ]; then
@@ -26,19 +24,18 @@ log() {
 
 # Executa comando, captura saída (stdout+stderr) e registra resultado no log sem imprimir no terminal
 run_and_log() {
-	local description="$1"
+	description="$1"
 	shift
-	local tmp
+	tmp=""
 	tmp=$(mktemp)
 
 	# Executa o comando redirecionando stdout+stderr para arquivo temporário
 	"$@" >"$tmp" 2>&1
-	local exit_code=$?
-	local output
+	exit_code=$?
 
-	output=$(tr '\n' ' ' < "$tmp" | sed 's/;/,/g' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
+	output=$(tr '\n' ' ' < "$tmp" | sed 's/;/,/g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 	rm -f "$tmp"
-    echo $output
+    echo "$output"
 
 	if [ $exit_code -eq 0 ]; then
 		if [ -n "$output" ]; then

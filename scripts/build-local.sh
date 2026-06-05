@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-# Abort on error, undefined var, or pipe failure
-set -euo pipefail
-trap 'rc=$?; echo ""; echo "❌ Erro ao executar: \"$BASH_COMMAND\" (código $rc). Abortando o build."; exit $rc' ERR
+# Abort on error and undefined variables
+set -eu
 
 echo "🔍 Iniciando build local do Gastômetro..."
 echo ""
@@ -15,7 +14,6 @@ rm -rf node_modules android .gradle .expo .expo-shared
 echo ""
 
 echo "📦 Reinstalando dependências..."
-# npm install --legacy-peer-deps
 npm install --loglevel=error
 echo "✅ Dependências instaladas"
 echo ""
@@ -49,13 +47,13 @@ cd "$START_PWD" || true
 mkdir -p _apks
 
 # Find the most recently modified APK under android/app/build
-latest_apk=$(find android/app/build -type f -name "*.apk" -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2- || true)
+latest_apk=$(find android/app/build -type f -name "*.apk" -exec ls -t {} + 2>/dev/null | head -n 1 || true)
 
 if [ -z "$latest_apk" ]; then
 	echo "⚠️ APK não encontrado em locais esperados"
 else
 	target="_apks/gastometro-$(date +"%Y%m%d%H%M%S").apk"
-	mv -- "$latest_apk" "$target"
+	mv "$latest_apk" "$target"
 	echo "✅ APK movido: $target"
 fi
 echo ""
