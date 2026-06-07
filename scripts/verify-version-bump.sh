@@ -98,6 +98,7 @@ echo "${TAB2}Versão base package.json: $base_package_version"
 echo "${TAB2}Versão head package.json: $head_package_version"
 echo "${TAB2}Versão base app.json: $base_app_version"
 echo "${TAB2}Versão head app.json: $head_app_version"
+echo ""
 
 [ -n "$head_package_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.json do head."
 [ -n "$head_app_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.json do head."
