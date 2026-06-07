@@ -34,7 +34,8 @@ set_prop() {
 	value="$2"
 	file="$3"
 	if grep -q "^${key}=" "$file"; then
-		sed -i "s|^${key}=.*|${key}=${value}|" "$file"
+		sed -i.bak "s|^${key}=.*|${key}=${value}|" "$file"
+    rm -f "${file}.bak"
 	else
 		if [ -s "$file" ] && [ "$(tail -c 1 "$file" 2>/dev/null || true)" != "" ]; then
 			echo "" >> "$file"
@@ -52,7 +53,8 @@ set_prop "expo.useLegacyPackaging" "true" "android/gradle.properties"
 set_prop "android.enableBundleCompression" "true" "android/gradle.properties"
 
 if ! grep -q 'resConfigs "en", "pt-rBR"' android/app/build.gradle; then
-	sed -i '/targetSdkVersion rootProject.ext.targetSdkVersion/a\        resConfigs "en", "pt-rBR"' android/app/build.gradle
+	sed -i.bak '/targetSdkVersion rootProject.ext.targetSdkVersion/a\        resConfigs "en", "pt-rBR"' android/app/build.gradle
+  rm -f android/app/build.gradle.bak
 fi
 echo "✅ Otimizações aplicadas"
 echo ""
