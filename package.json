@@ -15,7 +15,6 @@
     "clear:branches": "sh ./scripts/clear-branches.sh",
     "clear:modules": "sh ./scripts/clear-node_modules.sh",
     "clear": "sh ./scripts/clear.sh",
-    "build:android:local": "cd android/ && gradlew.bat build && gradlew.bat assembleRelease && cd ..",
     "prebuild": "expo prebuild",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -39,7 +38,6 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
-    "react-native-css-interop": "^0.2.5",
     "react-native-gesture-handler": "~2.31.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
@@ -73,7 +71,8 @@
       "android": {
         "exclude": [
           "react-native-reanimated",
-          "react-native-worklets"
+          "react-native-worklets",
+          "react-native-css-interop"
         ]
       }
     }
