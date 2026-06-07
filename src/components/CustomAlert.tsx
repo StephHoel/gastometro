@@ -6,6 +6,7 @@ import {
   Pressable,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native"
 import type { ShowAlertProps } from "../interfaces/ShowAlertProps"
@@ -19,10 +20,13 @@ export interface CustomAlertRef {
 }
 
 export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
+  const { width } = useWindowDimensions()
   const [isVisible, setIsVisible] = useState(false)
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
   const [buttons, setButtons] = useState<ButtonProps[]>([])
+
+  const alertWidth = width >= 1024 ? "50%" : "75%"
 
   function internalHideAlert() {
     setIsVisible(false)
@@ -54,47 +58,51 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
       visible={isVisible}
       onRequestClose={internalHideAlert}
     >
-      <Pressable onPress={internalHideAlert}>
-        <View className="flex-1 justify-center items-center bg-black/30">
-          <Pressable>
-            <View className="w-3/4 p-5 bg-slate-700 rounded-lg  items-center">
-              <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
+      <Pressable
+        className="flex-1 justify-center items-center bg-black/30"
+        onPress={internalHideAlert}
+      >
+        <Pressable className="p-5 bg-slate-700 rounded-lg items-center" style={{ width: alertWidth }}>
+          <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
 
-              {message && (
-                <TextWhite className="text-base mb-5 text-center">{message}</TextWhite>
-              )}
+          {!!message && (
+            <TextWhite className="text-base mb-5 text-center">{message}</TextWhite>
+          )}
 
-              <View className="w-full flex-col px-4">
-                {buttons.map((button, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    className={`p-2 mb-2 rounded items-center ${button.text === "Cancelar" ? "bg-red-500" : "bg-slate-400"
-                      }`}
-                    onPress={() => {
-                      button.action()
-                      internalHideAlert()
-                    }}
-                  >
-                    <Text
-                      className={`font-bold ${button.text === "Cancelar"
+          <View className="w-full flex-col px-4">
+            {buttons.map((button, index) => (
+              <TouchableOpacity
+                key={index}
+                className={`p-2 mb-2 rounded items-center 
+                  ${button.text === "Cancelar"
+                    ? "bg-red-500"
+                    : "bg-slate-400"}
+                  `}
+                onPress={() => {
+                  button.action()
+                  internalHideAlert()
+                }}
+              >
+                {button.text === alert.share.buttons.whatsapp ? (
+                  <Row className="justify-center items-center gap-1">
+                    <WhatsappIcon />
+                    <Text className="font-bold text-black/90">{button.text}</Text>
+                  </Row>
+                ) : (
+                  <Text
+                    className={`font-bold 
+                    ${button.text === "Cancelar"
                         ? "text-white"
                         : "text-black/90"
-                        }`}
-                    >
-                      {button.text === alert.share.buttons.whatsapp ? (
-                        <Row className="justify-center items-center gap-1">
-                          <WhatsappIcon /> {button.text}
-                        </Row>
-                      ) : (
-                        button.text
-                      )}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          </Pressable>
-        </View>
+                      }`}
+                  >
+                    {button.text}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Pressable>
       </Pressable>
     </Modal>
   )
