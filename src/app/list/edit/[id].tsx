@@ -10,6 +10,7 @@ import { Header } from "@/components/Header"
 import { EditIcon } from "@/components/Icons"
 import { text } from "@/constants/text"
 import React from 'react'
+import { colors } from '@/constants/color'
 
 export default function Edit() {
   const { id } = useLocalSearchParams()
@@ -22,7 +23,7 @@ export default function Edit() {
         <Header />
 
         <Form data={prod} buttonTitle={text.buttons.edit}>
-          <EditIcon size={32} color="black" />
+          <EditIcon size={32} color={colors.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>

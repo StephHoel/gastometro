@@ -5,6 +5,7 @@ import { text } from "@/constants/text"
 import { ScrollView } from "react-native"
 import { KeyboardScreen } from '@/components/Screen'
 import React from 'react'
+import { colors } from '@/constants/color'
 
 export default function Add() {
   return (
@@ -13,7 +14,7 @@ export default function Add() {
         <Header />
 
         <Form buttonTitle={text.buttons.add}>
-          <AddIcon size={32} color="black" />
+          <AddIcon size={32} color={colors.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>
