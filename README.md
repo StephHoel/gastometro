@@ -48,9 +48,6 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/sp
 - Múltiplas listas.
 - Contas a pagar.
 - Gestão de itens duplicados.
-- Validação de valores negativos.
-- Bloqueio de duplicados na criação manual.
-- Suíte de testes automatizados.
 - Versão web compatível com GitHub Pages.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
