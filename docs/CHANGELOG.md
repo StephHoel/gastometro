@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.4.9 - 2026-06-07
+
 ## 1.4.8 - 2026-06-07
 
 Melhorias de infraestrutura, UX e qualidade com foco em Android moderno e estabilidade do app.
@@ -72,3 +74,4 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
+
