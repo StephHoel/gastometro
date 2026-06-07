@@ -2,7 +2,7 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feat/apk-menor"]
   # pull_request:
   #   types: [opened, synchronize, reopened]
 
@@ -24,16 +24,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "21"
           distribution: "temurin"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
 
@@ -43,7 +43,7 @@ jobs:
           ./scripts/build-local.sh
 
       - name: Upload APK as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gastometro
           path: _apks/*.apk
