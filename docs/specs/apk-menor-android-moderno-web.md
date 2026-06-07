@@ -1,6 +1,6 @@
 # Mini-spec: APK menor com foco em Android moderno e web
 
-Status: em andamento
+Status: concluída
 
 ## Problema
 
@@ -72,6 +72,13 @@ Diminuir o tamanho final de instalação/distribuição no Android por meio de a
 - Build Android de produção ajustado para `app-bundle` (AAB).
 - Script local (`scripts/build-local.sh`) ajustado para exportar `ORG_GRADLE_PROJECT_reactNativeArchitectures=arm64-v8a` antes do Gradle.
 - Documentação principal (README e SPEC) atualizada com nova baseline e estratégia de build.
+- Workflows de CI/release revisados e atualizados para reduzir risco operacional durante geração/publicação de artefatos.
+
+## Resultado funcional observado
+
+- Estratégia de distribuição Android ficou alinhada ao objetivo de reduzir tamanho (foco em arquitetura arm64 e uso de AAB em produção).
+- Processo de build ficou mais consistente entre execução local e automação.
+- Compatibilidade web permaneceu documentada como requisito do projeto, sem mudança de contrato funcional.
 
 ## Baseline de tamanho medido antes da mudança
 
@@ -82,8 +89,34 @@ Diminuir o tamanho final de instalação/distribuição no Android por meio de a
   - `gastometro-20260529130635.apk`
   - `gastometro-20260529131239.apk`
 
-## Validação pendente pós-mudança
+## Medição pós-mudança
 
-- Gerar novo build Android e comparar tamanho com baseline de 102 MB.
-- Validar abertura do app em Android API 29+.
-- Validar fluxo web sem regressões aparentes.
+- Novo APK de referência medido em 2026-06-07: aproximadamente 22 MB.
+- Redução aproximada em relação ao baseline de ~102 MB: 78%.
+
+## Validação manual executada
+
+Data: 2026-06-07
+
+Android (API 29+):
+
+- Instalação do APK: OK.
+- Abertura do app: OK.
+- Fluxo de lista (criar, editar, remover e marcar coletado): OK.
+- Calculadora: OK.
+- Compartilhamento via WhatsApp: OK.
+
+Web:
+
+- Build web: OK.
+- Abertura inicial: OK.
+- Fluxos principais (lista, total, edição e calculadora): OK.
+- Sem regressões visuais críticas observadas: OK.
+
+## Checklist de conclusão
+
+- [x] Baseline mínima Android definida e documentada.
+- [x] Configurações de build Android ajustadas para estratégia de artefato menor.
+- [x] Processo de build/release atualizado em scripts e workflows.
+- [x] Ganho de tamanho comprovado com medição pós-ajuste registrada.
+- [x] Validação manual final em Android 29+ e web registrada.

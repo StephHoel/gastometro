@@ -14,11 +14,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 - [Bloqueio de duplicados na criação](./bloqueio-duplicados-criacao.md)
 - [Validação de valores negativos](./validacao-valores-negativos.md)
+- [APK menor com foco em Android moderno e web](./apk-menor-android-moderno-web.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./testes-automatizados.md)
-- [APK menor com foco em Android moderno e web](./apk-menor-android-moderno-web.md)
 
 ### Planejadas (ordem de prioridade)
 
