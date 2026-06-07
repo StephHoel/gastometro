@@ -1,17 +1,18 @@
 import React from 'react'
 import { render } from '@testing-library/react-native'
 
-jest.mock('@expo/vector-icons/Ionicons', () => {
-  return {
-    __esModule: true,
-    default: () => null,
-  }
-})
+jest.mock('react-native-svg', () => {
+  const React = require('react')
+  const { View } = require('react-native')
+  const Mock = ({ children }: { children?: React.ReactNode }) => <View>{children}</View>
 
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   return {
     __esModule: true,
-    default: () => null,
+    default: Mock,
+    Circle: Mock,
+    Line: Mock,
+    Path: Mock,
+    Rect: Mock,
   }
 })
 
