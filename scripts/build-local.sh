@@ -36,6 +36,9 @@ set_prop() {
 	if grep -q "^${key}=" "$file"; then
 		sed -i "s|^${key}=.*|${key}=${value}|" "$file"
 	else
+		if [ -s "$file" ] && [ "$(tail -c 1 "$file" 2>/dev/null || true)" != "" ]; then
+			echo "" >> "$file"
+		fi
 		echo "${key}=${value}" >> "$file"
 	fi
 }
