@@ -19,13 +19,12 @@ jest.mock('react-native-svg', () => {
 import {
   AddIcon,
   BackIcon,
-  BroomIcon,
   CalculatorIcon,
   CheckboxIcon,
-  DeleteIcon,
   EditIcon,
   HomeIcon,
   ShareIcon,
+  TrashIcon,
   WhatsappIcon,
 } from '@/components/Icons'
 import { Add, Back, Delete, Share } from '@/components/TouchableIcons'
@@ -37,13 +36,12 @@ describe('Icons and TouchableIcons', () => {
         <AddIcon />
         <BackIcon />
         <CalculatorIcon />
-        <BroomIcon />
         <CheckboxIcon checked />
         <CheckboxIcon checked={false} />
-        <DeleteIcon />
         <EditIcon />
         <HomeIcon />
         <ShareIcon />
+        <TrashIcon />
         <WhatsappIcon />
       </>
     )).not.toThrow()

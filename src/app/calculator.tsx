@@ -1,7 +1,7 @@
 import { CustomButton as Button } from "@/components/Button"
 import { CustomInput } from "@/components/CustomInput"
 import { Header } from "@/components/Header"
-import { BroomIcon, CalculatorIcon } from "@/components/Icons"
+import { TrashIcon, CalculatorIcon } from "@/components/Icons"
 import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
 import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
@@ -73,7 +73,7 @@ export default function Calculator() {
 
           <View className="flex-1 flex-row justify-between">
             <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-              <Button.Icon><BroomIcon size={28} color="black" /></Button.Icon>
+              <Button.Icon><TrashIcon size={28} color="black" /></Button.Icon>
               <Button.Text className="text-2xl">Limpar</Button.Text>
             </Button>
 

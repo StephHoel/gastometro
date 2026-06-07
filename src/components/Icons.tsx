@@ -25,17 +25,13 @@ export function CalculatorIcon({ size = 24, color = colors.white }: IconsProps) 
   return <Calculator width={size} height={size} color={color} />
 }
 
-export function BroomIcon({ size = 24, color = colors.white }: IconsProps) {
-  return <Trash width={size} height={size} color={color} />
-}
-
 export function CheckboxIcon({ checked, size = 30 }: IconsProps) {
   return checked
     ? <CheckboxChecked width={size} height={size} color={colors.active} />
     : <CheckboxUnchecked width={size} height={size} color={colors.white} />
 }
 
-export function DeleteIcon({ size = 24, color = colors.white }: IconsProps) {
+export function TrashIcon({ size = 24, color = colors.white }: IconsProps) {
   return <Trash width={size} height={size} color={color} />
 }
 

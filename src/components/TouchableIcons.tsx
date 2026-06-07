@@ -1,4 +1,4 @@
-import { AddIcon, BackIcon, DeleteIcon, ShareIcon } from "@/components/Icons"
+import { AddIcon, BackIcon, TrashIcon, ShareIcon } from "@/components/Icons"
 import type { IconProps } from "@/interfaces/IconProps"
 import { TouchableOpacity, View } from "react-native"
 import React from 'react'
@@ -39,7 +39,7 @@ export function Add({ action }: IconProps) {
 export function Delete({ action }: IconProps) {
   return (
     <IconButton action={action}>
-      <DeleteIcon size={35} />
+      <TrashIcon size={35} />
     </IconButton>
   )
 }
