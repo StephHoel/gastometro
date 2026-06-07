@@ -5,6 +5,11 @@ export const text = {
     required_fields: 'Por favor, preencha todos os campos corretamente.',
     negative_value: 'Valores negativos não são permitidos.',
     duplicate_item: 'Já existe um item com este nome na lista.',
+    
+    whatsapp_unavailable: 'WhatsApp não disponível',
+    whatsapp_open_error: 'Não foi possível abrir o WhatsApp no dispositivo.',
+    whatsapp_deep_link_error: 'Falha ao abrir deep link do WhatsApp, tentando fallback web.',
+    whatsapp_open_failure_message: 'Erro ao abrir WhatsApp:'
   },
 
   buttons: {

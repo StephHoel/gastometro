@@ -1,6 +1,8 @@
-import { Alert, Linking } from 'react-native'
+import { Alert, Linking, Platform } from 'react-native'
 import { ShareService, GetTotalValueFormated } from '@/services/ShareService'
 import type { StateProps } from '@/interfaces/StateProps'
+
+const originalPlatform = Platform.OS
 
 function makeState(): StateProps {
   return {
@@ -19,7 +21,12 @@ function makeState(): StateProps {
 
 describe('ShareService', () => {
   beforeEach(() => {
+    Object.defineProperty(Platform, 'OS', { value: 'ios' })
     jest.spyOn(Alert, 'alert').mockImplementation(() => undefined)
+  })
+
+  afterAll(() => {
+    Object.defineProperty(Platform, 'OS', { value: originalPlatform })
   })
 
   it('GetTotalValueFormated deve retornar total em BRL', () => {
@@ -32,16 +39,14 @@ describe('ShareService', () => {
   })
 
   it('shareOnWhatsapp deve abrir URL com mensagem no formato esperado', async () => {
-    const canOpenURLSpy = jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true)
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined)
 
     await ShareService.shareOnWhatsapp(makeState())
 
-    expect(canOpenURLSpy).toHaveBeenCalledTimes(1)
     expect(openURLSpy).toHaveBeenCalledTimes(1)
 
-    const url = canOpenURLSpy.mock.calls[0][0]
-    expect(url).toContain('https://api.whatsapp.com/send?text=')
+    const url = openURLSpy.mock.calls[0][0]
+    expect(url).toContain('whatsapp://send?text=')
 
     const encodedMessage = url.split('text=')[1] ?? ''
     const decodedMessage = decodeURIComponent(encodedMessage)
@@ -55,15 +60,35 @@ describe('ShareService', () => {
     expect(decodedMessage).toContain('Valor Total: ' + currency(28.5))
   })
 
-  it('shareOnWhatsapp deve alertar quando WhatsApp não estiver disponível', async () => {
-    const canOpenURLSpy = jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(false)
+  it('shareOnWhatsapp deve abrir fallback web quando deep link falhar', async () => {
+    const openURLSpy = jest.spyOn(Linking, 'openURL')
+      .mockRejectedValueOnce(new Error('deep link indisponível'))
+      .mockResolvedValueOnce(undefined)
+
+    await ShareService.shareOnWhatsapp(makeState())
+
+    expect(openURLSpy).toHaveBeenCalledTimes(2)
+    expect(openURLSpy.mock.calls[0][0]).toContain('whatsapp://send?text=')
+    expect(openURLSpy.mock.calls[1][0]).toContain('https://wa.me/?text=')
+  })
+
+  it('shareOnWhatsapp no web deve abrir somente fallback web', async () => {
+    Object.defineProperty(Platform, 'OS', { value: 'web' })
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined)
+
+    await ShareService.shareOnWhatsapp(makeState())
+
+    expect(openURLSpy).toHaveBeenCalledTimes(1)
+    expect(openURLSpy.mock.calls[0][0]).toContain('https://wa.me/?text=')
+  })
+
+  it('shareOnWhatsapp deve alertar quando deep link e fallback falharem', async () => {
+    const openURLSpy = jest.spyOn(Linking, 'openURL').mockRejectedValue(new Error('sem handler'))
     const alertSpy = jest.spyOn(Alert, 'alert')
 
     await ShareService.shareOnWhatsapp(makeState())
 
-    expect(canOpenURLSpy).toHaveBeenCalledTimes(1)
-    expect(openURLSpy).not.toHaveBeenCalled()
+    expect(openURLSpy).toHaveBeenCalledTimes(2)
     expect(alertSpy).toHaveBeenCalledWith(
       'WhatsApp não disponível',
       'Não foi possível abrir o WhatsApp no dispositivo.'
