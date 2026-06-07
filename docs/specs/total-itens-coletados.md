@@ -1,6 +1,6 @@
 # Mini-spec: Total de itens coletados
 
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -23,6 +23,13 @@ Exibir o total dos itens marcados como coletados ao lado do total geral.
 - Layout definido: `Total Geral | Total Coletado`.
 - Destaque visual do total coletado deve seguir o mesmo estilo do total geral.
 - Compartilhamento via WhatsApp permanece fora de escopo nesta entrega.
+
+## Entrega realizada
+
+- O cálculo do total coletado foi implementado em função pura dedicada.
+- A tela principal passou a exibir `Total Geral | Total Coletado` com atualização imediata ao alternar itens coletados.
+- O layout foi ajustado para evitar sobreposição em telas pequenas com quebra de linha quando necessário.
+- Não houve alteração de persistência, contrato de dados ou formato de compartilhamento.
 
 ## Telas afetadas
 
@@ -61,3 +68,8 @@ Exibir o total dos itens marcados como coletados ao lado do total geral.
 
 - Preferir criar função pura para reduzir produtos coletados.
 - Cobrir com teste unitário quando a suíte existir.
+
+## Validação
+
+- Testes unitários de cálculo atualizados para cobrir total de itens coletados.
+- Teste de componente adicionado para validar exibição de `Total Geral` e `Total Coletado` na tela principal.

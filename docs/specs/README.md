@@ -19,12 +19,12 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./testes-automatizados.md)
+- [Total de itens coletados](./total-itens-coletados.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Total de itens coletados](./total-itens-coletados.md)
-2. [Gestão de itens duplicados](./gestao-itens-duplicados.md)
-3. [Web compatível com GitHub Pages](./web-github-pages.md)
-4. [Múltiplas listas](./multiplas-listas.md)
-5. [Notificações e lembretes](./notificacoes-lembretes.md)
-6. [Contas a pagar](./contas-a-pagar.md)
+1. [Gestão de itens duplicados](./gestao-itens-duplicados.md)
+2. [Web compatível com GitHub Pages](./web-github-pages.md)
+3. [Múltiplas listas](./multiplas-listas.md)
+4. [Notificações e lembretes](./notificacoes-lembretes.md)
+5. [Contas a pagar](./contas-a-pagar.md)

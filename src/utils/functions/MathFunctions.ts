@@ -91,3 +91,13 @@ export function ReduceProducts(cartStore: StateProps): number {
     0
   )
 }
+
+export function ReduceCollectedProducts(cartStore: StateProps): number {
+  return cartStore.products.reduce(
+    (acc: number, currentItem: ProductProps) =>
+      currentItem.collected
+        ? acc + Multiply(currentItem.quantity, currentItem.price)
+        : acc,
+    0
+  )
+}
