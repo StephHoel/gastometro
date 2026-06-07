@@ -1,6 +1,6 @@
 # Mini-specs do Gastômetro
 
-Esta pasta organiza mini-specs para funcionalidades e pendências que ainda precisam ser implementadas.
+Esta pasta organiza mini-specs para funcionalidades e pendências do projeto, incluindo itens implementados e planejados.
 
 Use estes documentos antes de iniciar qualquer alteração de produto. Quando uma mini-spec for implementada, atualize o status, registre decisões tomadas durante a execução e mantenha o `docs/SPEC.md` sincronizado quando houver mudança de diretriz.
 
@@ -15,11 +15,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Bloqueio de duplicados na criação](./bloqueio-duplicados-criacao.md)
 - [Validação de valores negativos](./validacao-valores-negativos.md)
 - [APK menor com foco em Android moderno e web](./apk-menor-android-moderno-web.md)
+- [Total de itens coletados](./total-itens-coletados.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./testes-automatizados.md)
-- [Total de itens coletados](./total-itens-coletados.md)
 
 ### Planejadas (ordem de prioridade)
 
