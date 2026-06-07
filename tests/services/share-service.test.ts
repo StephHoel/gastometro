@@ -21,12 +21,12 @@ function makeState(): StateProps {
 
 describe('ShareService', () => {
   beforeEach(() => {
-    Object.defineProperty(Platform, 'OS', { value: 'ios' })
+    Object.defineProperty(Platform, 'OS', { value: 'ios', configurable: true, writable: true })
     jest.spyOn(Alert, 'alert').mockImplementation(() => undefined)
   })
 
   afterAll(() => {
-    Object.defineProperty(Platform, 'OS', { value: originalPlatform })
+    Object.defineProperty(Platform, 'OS', { value: originalPlatform, configurable: true, writable: true })
   })
 
   it('GetTotalValueFormated deve retornar total em BRL', () => {
@@ -73,7 +73,7 @@ describe('ShareService', () => {
   })
 
   it('shareOnWhatsapp no web deve abrir somente fallback web', async () => {
-    Object.defineProperty(Platform, 'OS', { value: 'web' })
+    Object.defineProperty(Platform, 'OS', { value: 'web', configurable: true, writable: true })
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined)
 
     await ShareService.shareOnWhatsapp(makeState())
