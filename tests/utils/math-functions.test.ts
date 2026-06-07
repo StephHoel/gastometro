@@ -4,6 +4,7 @@ import {
   Multiply,
   NormalizeDecimalInput,
   NormalizeNumericString,
+  ReduceCollectedProducts,
   ParseToFloat,
   ReduceProducts,
   SetCurrency,
@@ -70,5 +71,37 @@ describe('MathFunctions', () => {
     }
 
     expect(ReduceProducts(cartStore)).toBe(32)
+  })
+
+  it('ReduceCollectedProducts deve somar apenas subtotais coletados', () => {
+    const cartStore: StateProps = {
+      products: [
+        { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
+        { id: '2', item: 'Feijão', quantity: '1,5', price: '8', collected: true },
+        { id: '3', item: 'Leite', quantity: '', price: '7', collected: true },
+      ],
+      add: jest.fn(),
+      edit: jest.fn(),
+      replace: jest.fn(),
+      remove: jest.fn(),
+      get: jest.fn(),
+      clear: jest.fn(),
+    }
+
+    expect(ReduceCollectedProducts(cartStore)).toBe(12)
+  })
+
+  it('ReduceCollectedProducts deve retornar 0 quando lista estiver vazia', () => {
+    const cartStore: StateProps = {
+      products: [],
+      add: jest.fn(),
+      edit: jest.fn(),
+      replace: jest.fn(),
+      remove: jest.fn(),
+      get: jest.fn(),
+      clear: jest.fn(),
+    }
+
+    expect(ReduceCollectedProducts(cartStore)).toBe(0)
   })
 })
