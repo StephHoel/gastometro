@@ -27,6 +27,7 @@ Público esperado:
 - Remoção total da lista.
 - Marcação de produtos como coletados.
 - Total geral calculado por `quantidade * preço`.
+- Total dos itens coletados exibido ao lado do total geral.
 - Ordenação alfabética dos produtos.
 - Compartilhamento da lista via WhatsApp.
 - Importação de lista copiada do WhatsApp quando o texto segue o formato do app.
@@ -44,7 +45,6 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
-- total dos itens marcados como coletados, exibido ao lado do total geral;
 - identificação de itens duplicados com uma ação para unir os itens ou alterar um deles.
 
 As mini-specs ficam em `docs/specs/` e devem ser consultadas antes da implementação.
