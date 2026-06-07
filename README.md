@@ -9,6 +9,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Cria, edita e remove itens da lista de compras.
 - Marca itens como coletados durante a compra.
 - Calcula o total geral da lista com base em quantidade e preço.
+- Exibe o total dos itens coletados ao lado do total geral.
 - Aceita valores com vírgula ou ponto como separador decimal.
 - Mantém os dados localmente no dispositivo, sem login e sem backend.
 - Ordena os itens alfabeticamente.
@@ -46,11 +47,7 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/sp
 - Notificações e lembretes.
 - Múltiplas listas.
 - Contas a pagar.
-- Total de itens coletados ao lado do total geral.
 - Gestão de itens duplicados.
-- Validação de valores negativos.
-- Bloqueio de duplicados na criação manual.
-- Suíte de testes automatizados.
 - Versão web compatível com GitHub Pages.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.

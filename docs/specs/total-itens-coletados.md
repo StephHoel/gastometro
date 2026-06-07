@@ -1,6 +1,6 @@
 # Mini-spec: Total de itens coletados
 
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -13,9 +13,23 @@ Exibir o total dos itens marcados como coletados ao lado do total geral.
 ## Comportamento esperado
 
 - O total geral deve continuar visível.
-- O total de coletados deve aparecer ao lado do total geral.
+- O total de coletados deve aparecer ao lado do total geral no formato visual `Total Geral | Total Coletado`.
 - Ao marcar ou desmarcar um item, o total de coletados deve atualizar imediatamente.
 - Itens não coletados não entram no total de coletados.
+
+## Decisões fechadas
+
+- Rótulo definido: `Total Coletado`.
+- Layout definido: `Total Geral | Total Coletado`.
+- Destaque visual do total coletado deve seguir o mesmo estilo do total geral.
+- Compartilhamento via WhatsApp permanece fora de escopo nesta entrega.
+
+## Entrega realizada
+
+- O cálculo do total coletado foi implementado em função pura dedicada.
+- A tela principal passou a exibir `Total Geral | Total Coletado` com atualização imediata ao alternar itens coletados.
+- O layout foi ajustado para evitar sobreposição em telas pequenas com quebra de linha quando necessário.
+- Não houve alteração de persistência, contrato de dados ou formato de compartilhamento.
 
 ## Telas afetadas
 
@@ -37,19 +51,25 @@ Exibir o total dos itens marcados como coletados ao lado do total geral.
 
 ## Critérios de aceite
 
-- Lista vazia mostra total geral e total coletado como zero.
-- Item não coletado afeta apenas total geral.
-- Item coletado afeta total geral e total coletado.
-- Alternar checkbox recalcula o total de coletados.
-- O layout funciona em telas pequenas sem sobreposição.
+- Lista vazia mostra `Total Geral` e `Total Coletado` como `R$ 0,00`.
+- Item não coletado entra apenas em `Total Geral`.
+- Item coletado entra em `Total Geral` e `Total Coletado`.
+- Marcar e desmarcar item atualiza imediatamente o `Total Coletado`.
+- Em telas pequenas, o layout não pode apresentar sobreposição.
 
 ## Fora de escopo
 
 - Histórico de gastos.
 - Total por categoria.
 - Relatório de compras.
+- Alteração no formato de compartilhamento via WhatsApp.
 
 ## Observações para IA
 
 - Preferir criar função pura para reduzir produtos coletados.
 - Cobrir com teste unitário quando a suíte existir.
+
+## Validação
+
+- Testes unitários de cálculo atualizados para cobrir total de itens coletados.
+- Teste de componente adicionado para validar exibição de `Total Geral` e `Total Coletado` na tela principal.

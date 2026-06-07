@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.4.9 - 2026-06-07
+
+Implementação da visualização de total de itens coletados na tela principal, com atualização de documentação e cobertura de testes.
+
+### Funcionalidade
+
+- Exibe `Total Geral | Total Coletado` na tela principal.
+- Atualiza o total coletado imediatamente ao marcar ou desmarcar itens.
+- Mantém formato monetário `pt-BR` com `BRL` e regras atuais de cálculo.
+
+### Qualidade
+
+- Adiciona função pura para cálculo de total coletado.
+- Expande testes unitários de matemática para cobrir total de coletados.
+- Adiciona teste de componente para validar exibição dos dois totais na Home.
+
+### Documentação
+
+- Atualiza mini-spec `docs/specs/total-itens-coletados.md` para `Status: implementado`.
+- Atualiza README e SPEC para refletir que o total coletado não é mais item planejado.
+
 ## 1.4.8 - 2026-06-07
 
 Melhorias de infraestrutura, UX e qualidade com foco em Android moderno e estabilidade do app.
