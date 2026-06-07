@@ -4,6 +4,7 @@ import { CalculatorIcon, HomeIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import React from 'react'
 import "@/styles/global.css"
+import { colors } from '@/constants/color'
 
 export default function Layout() {
   return (
@@ -12,11 +13,11 @@ export default function Layout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: "#0f172a",
+            backgroundColor: colors.background,
             borderColor: "transparent",
           },
-          tabBarActiveTintColor: "#22d3ee",
-          tabBarInactiveTintColor: "#94a3b8",
+          tabBarActiveTintColor: colors.active,
+          tabBarInactiveTintColor: colors.inactive,
         }}
       >
         <Tabs.Screen
@@ -25,7 +26,7 @@ export default function Layout() {
             // href: null,
             title: "Início",
             tabBarIcon: ({ color, size }) => (
-              <HomeIcon size={size} color={color.toString()} />
+              <HomeIcon size={size} color={color as string} />
             ),
           }}
         />
@@ -36,7 +37,7 @@ export default function Layout() {
             // href: null,
             title: "Calculadora",
             tabBarIcon: ({ color, size }) => (
-              <CalculatorIcon size={size} color={color.toString()} />
+              <CalculatorIcon size={size} color={color as string} />
             ),
           }}
         />
