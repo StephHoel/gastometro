@@ -2,7 +2,7 @@ name: Build APK and Release to GitHub
 
 on:
   push:
-    branches: ["main", "feat/apk-menor"]
+    branches: ["main"]
   # pull_request:
   #   types: [opened, synchronize, reopened]
 
