@@ -42,7 +42,7 @@ Compatibilidade atual de plataforma:
 
 ## Funcionalidades planejadas
 
-As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/README.md):
+As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - Notificações e lembretes.
 - Múltiplas listas.
@@ -195,7 +195,7 @@ O Dependabot abre PRs semanais para dependências npm.
 Contribuições são bem-vindas.
 
 1. Consulte o [`docs/SPEC.md`](docs/SPEC.md).
-2. Para features maiores, consulte a mini-spec correspondente ou crie uma nova em [`docs/specs/planned/`](docs/specs/README.md).
+2. Para features maiores, consulte a mini-spec correspondente ou crie uma nova em [`docs/specs/planned/`](docs/specs/planned/).
 3. Crie uma branch para a alteração.
 4. Faça commits pequenos e objetivos.
 5. Abra um pull request descrevendo mudança, impacto e validação feita.
