@@ -47,7 +47,7 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 - contas a pagar;
 - identificação de itens duplicados com uma ação para unir os itens ou alterar um deles.
 
-As mini-specs ficam em `docs/specs/` e devem ser consultadas antes da implementação.
+As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
 Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificação contendo comportamento esperado, telas afetadas, persistência e critérios de aceite.
 
@@ -308,7 +308,7 @@ Ao finalizar:
 
 ## 16. Template de Mini-Spec para Novas Features
 
-As mini-specs do projeto ficam em `docs/specs/`. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda não tenham documento próprio:
+As mini-specs do projeto ficam em `docs/specs/` e são separadas por status. Novas mini-specs devem nascer em `docs/specs/planned/`, migrar para `docs/specs/active/` quando entrarem em execução e ir para `docs/specs/done/` quando virarem referência estável. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda não tenham documento próprio:
 
 ```md
 ## Feature: <nome>
