@@ -3,15 +3,15 @@ name: Expo Doctor
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - "package.json"
-      - "package-lock.json"
-      - "app.json"
-      - "app.config.*"
-      - "eas.json"
-      - ".github/dependabot.yml"
-      - ".github/workflows/expo-doctor.yml"
-  workflow_dispatch:
+  #   paths:
+  #     - "package.json"
+  #     - "package-lock.json"
+  #     - "app.json"
+  #     - "app.config.*"
+  #     - "eas.json"
+  #     - ".github/dependabot.yml"
+  #     - ".github/workflows/expo-doctor.yml"
+  # workflow_dispatch:
 
 permissions:
   contents: read
