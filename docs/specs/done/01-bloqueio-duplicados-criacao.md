@@ -1,5 +1,6 @@
 # Mini-spec: Bloqueio de duplicados na criação manual
 
+Número: 01
 Status: implementado
 
 ## Problema

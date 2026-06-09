@@ -1,5 +1,6 @@
 # Mini-spec: Contas a pagar
 
+Número: 11
 Status: planejado
 
 ## Problema

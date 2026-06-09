@@ -1,5 +1,6 @@
 # Mini-spec: Notificações e lembretes
 
+Número: 10
 Status: planejado
 
 ## Problema
