@@ -18,19 +18,20 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Implementadas
 
-- [Bloqueio de duplicados na criação](./done/bloqueio-duplicados-criacao.md)
-- [Validação de valores negativos](./done/validacao-valores-negativos.md)
-- [APK menor com foco em Android moderno e web](./done/apk-menor-android-moderno-web.md)
-- [Total de itens coletados](./done/total-itens-coletados.md)
+- [01 - Bloqueio de duplicados na criação](./done/01-bloqueio-duplicados-criacao.md)
+- [02 - Validação de valores negativos](./done/02-validacao-valores-negativos.md)
+- [03 - Total de itens coletados](./done/03-total-itens-coletados.md)
+- [04 - APK menor com foco em Android moderno e web](./done/04-apk-menor-android-moderno-web.md)
 
 ### Ativas/Em andamento
 
-- [Suíte de testes automatizados](./active/testes-automatizados.md)
+- [05 - Suíte de testes automatizados](./active/05-testes-automatizados.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Gestão de itens duplicados](./planned/gestao-itens-duplicados.md)
-2. [Web compatível com GitHub Pages](./planned/web-github-pages.md)
-3. [Múltiplas listas](./planned/multiplas-listas.md)
-4. [Notificações e lembretes](./planned/notificacoes-lembretes.md)
-5. [Contas a pagar](./planned/contas-a-pagar.md)
+1. [07 - Itens coletados no final da lista](./planned/07-itens-coletados-no-final-da-lista.md)
+2. [06 - Gestão de itens duplicados](./planned/06-gestao-itens-duplicados.md)
+3. [08 - Web compatível com GitHub Pages](./planned/08-web-github-pages.md)
+4. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
+5. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
+6. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)

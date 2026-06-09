@@ -1,5 +1,6 @@
 # Mini-spec: Total de itens coletados
 
+Número: 03
 Status: implementado
 
 ## Problema

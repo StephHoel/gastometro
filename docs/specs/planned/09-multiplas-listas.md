@@ -1,5 +1,6 @@
 # Mini-spec: Múltiplas listas
 
+Número: 09
 Status: planejado
 
 ## Problema

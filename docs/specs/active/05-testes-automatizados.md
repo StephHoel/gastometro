@@ -1,5 +1,6 @@
 # Mini-spec: Suíte de testes automatizados
 
+Número: 05
 Status: ativa (evolução contínua)
 
 ## Problema Inicial

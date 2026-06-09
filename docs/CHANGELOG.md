@@ -18,7 +18,7 @@ Implementação da visualização de total de itens coletados na tela principal,
 
 ### Documentação
 
-- Atualiza mini-spec `docs/specs/total-itens-coletados.md` para `Status: implementado`.
+- Atualiza mini-spec `docs/specs/done/03-total-itens-coletados.md` para `Status: implementado`.
 - Atualiza README e SPEC para refletir que o total coletado não é mais item planejado.
 
 ## 1.4.8 - 2026-06-07

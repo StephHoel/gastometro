@@ -1,5 +1,6 @@
 # Mini-spec: APK menor com foco em Android moderno e web
 
+Número: 04
 Status: concluída
 
 ## Problema

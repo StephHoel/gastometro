@@ -1,5 +1,6 @@
 # Mini-spec: Gestão de itens duplicados
 
+Número: 06
 Status: planejado
 
 ## Problema

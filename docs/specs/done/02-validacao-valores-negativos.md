@@ -1,5 +1,6 @@
 # Mini-spec: Validação de valores negativos
 
+Número: 02
 Status: implementado
 
 ## Problema
