@@ -12,11 +12,13 @@ Resumo rápido:
 - Domínio principal: lista de compras, total em BRL, compartilhamento/importação via WhatsApp e calculadora de preço por unidade.
 - Use imports internos com alias `@/`.
 - Evite `any`.
-- Não assuma Prisma, PostgreSQL, Jest ou Zod: eles não fazem parte da stack atual.
+- Não assuma Prisma, PostgreSQL ou Zod: eles não fazem parte da stack atual.
+- A suíte de testes já existe com Jest (`npm run test`) e gate de cobertura global de 80%.
 - Preserve regras pt-BR de moeda, números com vírgula/ponto e textos do usuário.
 - Preserve comportamento existente, formato de dados persistidos e formato de WhatsApp, salvo confirmação explícita do usuário.
 - Tema escuro e identidade fixa do app.
 - Para funcionalidades maiores, preencha uma mini-spec no formato indicado em `docs/SPEC.md`.
+- Para mini-specs novas, usar nome com prefixo numérico sequencial em `docs/specs/planned/` (ex.: `12-nome-da-feature.md`) e incluir campo `Número: NN` no documento.
 
 Responsabilidades:
 

@@ -42,6 +42,7 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
+- itens coletados no final da lista (com divisão clara entre coletados e não coletados);
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
@@ -71,7 +72,7 @@ Use esta seção como verdade atual do repositório.
 - Plataforma futura: web compatível com GitHub Pages.
 - Baseline atual de compatibilidade Android: API 29+ (Android 10).
 
-Não assumir Prisma, PostgreSQL, Jest ou Zod sem antes adicionar essas dependências e justificar a mudança. O arquivo antigo do Copilot citava essas tecnologias, mas elas não aparecem na stack atual.
+Não assumir Prisma, PostgreSQL ou Zod sem antes adicionar essas dependências e justificar a mudança. O arquivo antigo do Copilot citava tecnologias que não aparecem na stack atual.
 
 ## 5. Estrutura de Pastas
 
@@ -308,10 +309,21 @@ Ao finalizar:
 
 ## 16. Template de Mini-Spec para Novas Features
 
-As mini-specs do projeto ficam em `docs/specs/` e são separadas por status. Novas mini-specs devem nascer em `docs/specs/planned/`, migrar para `docs/specs/active/` quando entrarem em execução e ir para `docs/specs/done/` quando virarem referência estável. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais. Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda não tenham documento próprio:
+As mini-specs do projeto ficam em `docs/specs/` e são separadas por status. Novas mini-specs devem nascer em `docs/specs/planned/`, migrar para `docs/specs/active/` quando entrarem em execução e ir para `docs/specs/done/` quando virarem referência estável. Elas devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais.
+
+Convenção obrigatória de mini-spec:
+
+- nome de arquivo com prefixo numérico sequencial de criação: `NN-nome-da-feature.md`;
+- campo `Número: NN` logo após o título;
+- campo `Status:` mantido e atualizado conforme o estágio (`planejado`, `ativa`, `implementado`, `concluída`).
+
+Copie e preencha o modelo abaixo antes de implementar funcionalidades maiores que ainda não tenham documento próprio:
 
 ```md
-## Feature: <nome>
+# Mini-spec: <nome>
+
+Número: <NN>
+Status: planejado
 
 Problema:
 - <qual problema do usuário resolve?>
