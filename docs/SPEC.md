@@ -278,6 +278,12 @@ Regras de versionamento:
 - nova feature: incrementar `minor`;
 - mudança que possa quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade: incrementar `major`.
 
+Fluxo de criação de versão (script oficial):
+
+- interativo: `npm run new-version`;
+- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>"`;
+- tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
+
 Estratégia atual de release/build Android: artefatos locais em APK arm64 e produção em AAB.
 
 ## 15. Como a IA Deve Trabalhar Neste Projeto

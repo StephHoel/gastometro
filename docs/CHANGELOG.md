@@ -15,6 +15,7 @@ Exibe itens coletados no final da lista, separados dos não coletados por cabeç
 - Função pura `SortProductsByCollected` em `src/utils/functions/SortList.ts` para agrupamento testável.
 - Novo componente `ListSectionHeader` com interface `ListSectionHeaderProps`.
 - Testes adicionados para cobertura de ordem visual e presença dos cabeçalhos.
+- Script `npm run new-version` atualizado para aceitar argumentos opcionais (`tipo` e texto do changelog), com suporte a execução não-interativa.
 
 ### Documentação
 
