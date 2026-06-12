@@ -1,7 +1,7 @@
 # Mini-spec: Itens coletados no final da lista
 
 Número: 07
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -64,3 +64,10 @@ Exibir itens não coletados primeiro e mover itens coletados para o final da lis
 - Implementar agrupamento em função pura testável antes da renderização.
 - Cobrir com testes de componente para validar ordem visual e presença/ausência do divisor.
 - Cobrir com testes de store/helper caso a regra de ordenação seja centralizada fora da UI.
+
+## Registro de implementação
+
+- A lista passou a agrupar itens em dois blocos visuais, mantendo a ordenação alfabética dentro de cada bloco.
+- O divisor entre blocos só aparece quando existem itens coletados e não coletados ao mesmo tempo.
+- A implementação usa função pura em `src/utils/functions/SortList.ts` para separar os blocos sem alterar persistência.
+- Testes de helper e componente foram adicionados para cobrir ordem visual e presença do divisor.
