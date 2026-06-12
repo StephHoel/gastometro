@@ -5,3 +5,14 @@ export function SortProductsAlphabetically(products: ProductProps[]) {
     a.item.toLowerCase().localeCompare(b.item.toLowerCase())
   )
 }
+
+export function SortProductsByCollected(products: ProductProps[]) {
+  return {
+    notCollected: SortProductsAlphabetically(
+      products.filter((product) => !product.collected),
+    ),
+    collected: SortProductsAlphabetically(
+      products.filter((product) => product.collected),
+    ),
+  }
+}
