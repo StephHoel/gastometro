@@ -26,6 +26,7 @@ Público esperado:
 - Adição, edição e remoção de produtos.
 - Remoção total da lista.
 - Marcação de produtos como coletados.
+- Itens coletados no final da lista, com divisão visual entre coletados e não coletados.
 - Total geral calculado por `quantidade * preço`.
 - Total dos itens coletados exibido ao lado do total geral.
 - Ordenação alfabética dos produtos.
@@ -42,7 +43,6 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- itens coletados no final da lista (com divisão clara entre coletados e não coletados);
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
