@@ -1,14 +1,19 @@
 # Adição ao CHANGELOG
 echo "$TAB1🔍 Atualizando docs/CHANGELOG.md..."
 
-printf '%s\n' "${TAB2}Descreva as mudanças na nova versão (pressione Enter em uma linha vazia para finalizar):"
-changes=""
-while true; do
-  printf "%s" "$TAB2"  # imprime tabulação
-  IFS= read -r line
-  [ -z "$line" ] && break
-  changes="${changes}${line}\n"
-done
+if [ -n "$CHANGELOG_ARG" ]; then
+  changes="$CHANGELOG_ARG\n"
+  echo "${TAB2}Changelog recebido via argumento."
+else
+  printf '%s\n' "${TAB2}Descreva as mudanças na nova versão (pressione Enter em uma linha vazia para finalizar):"
+  changes=""
+  while true; do
+    printf "%s" "$TAB2"
+    IFS= read -r line
+    [ -z "$line" ] && break
+    changes="${changes}${line}\n"
+  done
+fi
 
 timestamp=$(date "+%Y-%m-%d")
 tmpfile=$(mktemp)

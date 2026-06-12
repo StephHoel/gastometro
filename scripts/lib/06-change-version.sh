@@ -8,8 +8,13 @@ echo "${TAB2}1) Patch (ex: $current_version -> $(increment_version $current_vers
 echo "${TAB2}2) Minor (ex: $current_version -> $(increment_version $current_version minor))"
 echo "${TAB2}3) Major (ex: $current_version -> $(increment_version $current_version major))"
 echo "${TAB2}4) Especificar versão manualmente"
-printf "%s" "${TAB3}Digite sua opção: "
-IFS= read -r option
+if [ -n "$VERSION_TYPE_ARG" ]; then
+  option="$VERSION_TYPE_ARG"
+  echo "${TAB3}Opção recebida via argumento: $option"
+else
+  printf "%s" "${TAB3}Digite sua opcao: "
+  IFS= read -r option
+fi
 
 case $option in
   1) new_version=$(increment_version "$current_version" patch) ;;
