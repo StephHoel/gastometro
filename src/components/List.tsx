@@ -10,6 +10,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Divider } from '@/components/Divider'
 import { TextWhite } from './TextWhite'
 import { SortProductsByCollected } from '@/utils/functions/SortList'
+import { ListSectionHeader } from './ListSectionHeader'
 
 export function List({ cartStore }: ListProps) {
   const nav = useRouter()
@@ -21,6 +22,10 @@ export function List({ cartStore }: ListProps) {
 
   return (
     <ScrollView>
+      {notCollected.length > 0 && (
+        <ListSectionHeader label="Não coletados" count={notCollected.length} />
+      )}
+
       {notCollected.map((prod: ProductProps, i: number) => (
         <View className="px-4 " key={prod.id}>
           <View className="flex-row gap-2 items-center">
@@ -52,8 +57,8 @@ export function List({ cartStore }: ListProps) {
         </View>
       ))}
 
-      {notCollected.length > 0 && collected.length > 0 && (
-        <Divider testID="list-divider" />
+      {collected.length > 0 && (
+        <ListSectionHeader label="Coletados" count={collected.length} />
       )}
 
       {collected.map((prod: ProductProps, i: number) => (
