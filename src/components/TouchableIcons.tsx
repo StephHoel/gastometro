@@ -1,15 +1,11 @@
 import { AddIcon, BackIcon, TrashIcon, ShareIcon } from "@/components/Icons"
 import type { IconProps } from "@/interfaces/IconProps"
+import type { IconButtonProps } from '@/interfaces/IconButtonProps'
 import { TouchableOpacity, View } from "react-native"
 import React from 'react'
 import { colors } from '@/constants/color'
 
-function IconButton({ action, children, containerClass, wrapperClass }: {
-  action?: () => void
-  children: React.ReactNode
-  containerClass?: string
-  wrapperClass?: string
-}) {
+function IconButton({ action, children, containerClass, wrapperClass }: IconButtonProps) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
