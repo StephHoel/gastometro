@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Aceita argumentos opcionais para execução não-interativa:
+#   $1 — tipo de versão: 1=patch, 2=minor, 3=major, 4=manual
+#   $2 — texto do changelog (linha única ou multi-linha com \n literal)
+# Exemplo: npm run new-version -- 1 "Corrige bug na listagem"
+VERSION_TYPE_ARG="${1:-}"
+CHANGELOG_ARG="${2:-}"
+
 echo "🔍 Criando uma nova versão do aplicativo na branch atual..."
 
 . ./scripts/lib/00-utils.sh

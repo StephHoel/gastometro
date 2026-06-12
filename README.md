@@ -173,6 +173,13 @@ Regras atuais:
 - `minor`: novas funcionalidades.
 - `major`: mudanças que possam quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade.
 
+Fluxo de criação de versão:
+
+- Interativo: `npm run new-version`
+- Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>"`
+- Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual)
+- Exemplo: `npm run new-version -- 1 "Ajustes de documentação e scripts de release"`
+
 Regra de Pull Request:
 
 - Se o PR alterar arquivos em `src/` e/ou `tests/`, é obrigatório atualizar a versão do projeto.

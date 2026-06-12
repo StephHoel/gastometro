@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Header } from '@/components/Header'
 import { List } from '@/components/List'
@@ -153,5 +153,48 @@ describe('Header and List branch coverage', () => {
     expect(mockEdit).toHaveBeenCalled()
     expect(mockPush).toHaveBeenCalledWith('/list/edit/1')
     expect(mockRemove).toHaveBeenCalled()
+  })
+
+  it('List: mostra não coletados antes e exibe cabeçalhos de seção', () => {
+    const cartStore: StateProps = {
+      products: [
+        { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+        { id: '2', item: 'Arroz', quantity: '2', price: '10', collected: false },
+      ],
+      add: jest.fn(),
+      edit: mockEdit,
+      replace: jest.fn(),
+      remove: mockRemoveItem,
+      get: jest.fn(),
+      clear: jest.fn(),
+    }
+
+    const { toJSON, getByText } = render(<List cartStore={cartStore} />)
+    const serializedTree = JSON.stringify(toJSON())
+
+    expect(serializedTree.indexOf('2x Arroz')).toBeLessThan(serializedTree.indexOf('1x Feijão'))
+    expect(getByText('Não coletados')).toBeTruthy()
+    expect(getByText('Coletados')).toBeTruthy()
+  })
+
+  it('List: quando todos estão coletados mostra apenas a seção coletados', () => {
+    const cartStore: StateProps = {
+      products: [
+        { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+      ],
+      add: jest.fn(),
+      edit: mockEdit,
+      replace: jest.fn(),
+      remove: mockRemoveItem,
+      get: jest.fn(),
+      clear: jest.fn(),
+    }
+
+    const { queryByText, toJSON } = render(<List cartStore={cartStore} />)
+    const serializedTree = JSON.stringify(toJSON())
+
+    expect(serializedTree.indexOf('1x Feijão')).toBeGreaterThan(-1)
+    expect(queryByText('Não coletados')).toBeNull()
+    expect(queryByText('Coletados')).toBeTruthy()
   })
 })

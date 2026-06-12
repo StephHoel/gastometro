@@ -35,6 +35,7 @@ Regras:
 - Componentes complexos precisam de testes.
 - Cobertura: quando a suíte de testes existir, manter/expandir cobertura proporcional ao escopo.
 - Atualizar README quando APIs mudarem.
+- Nunca executar `git commit` (nem variações como `git commit --amend`) sem que o usuário solicite explicitamente. Editar arquivos e fazer stage são permitidos; o commit final depende sempre de pedido explícito.
 
 ## Fluxo obrigatório para criação de nova versão
 
@@ -43,6 +44,8 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 ### 1) Pré-condições obrigatórias
 
 - Executar o fluxo oficial via script: `npm run new-version` (internamente chama `scripts/add-new-version.sh`).
+- Quando apropriado, permitir modo não-interativo: `npm run new-version -- <tipo> "<texto do changelog>"`.
+- Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
 - Garantir que a execução acontece na raiz do repositório.
 - Confirmar que existe repositório Git válido.
 - Trabalhar a partir da branch `main` atualizada com `origin/main`.

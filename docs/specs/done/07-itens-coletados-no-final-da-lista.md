@@ -1,7 +1,7 @@
 # Mini-spec: Itens coletados no final da lista
 
 Número: 07
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -9,13 +9,13 @@ Hoje os itens podem ficar misturados entre coletados e não coletados na lista p
 
 ## Objetivo
 
-Exibir itens não coletados primeiro e mover itens coletados para o final da lista, com uma divisão visual clara entre os dois blocos.
+Exibir itens não coletados primeiro e mover itens coletados para o final da lista, com uma distinção visual clara entre os dois blocos.
 
 ## Comportamento esperado
 
 - A lista deve renderizar primeiro os itens com `collected: false`.
 - A lista deve renderizar no final os itens com `collected: true`.
-- Deve existir um divisor visual claro entre os blocos de não coletados e coletados.
+- Deve existir uma distinção visual clara entre os blocos de não coletados e coletados.
 - Ao marcar um item como coletado, ele deve migrar imediatamente para o bloco final.
 - Ao desmarcar um item coletado, ele deve voltar imediatamente para o bloco inicial.
 - Quando não houver itens coletados, o divisor não deve ser exibido.
@@ -42,12 +42,12 @@ Exibir itens não coletados primeiro e mover itens coletados para o final da lis
 
 - O agrupamento por coletado deve ser aplicado apenas na exibição da lista.
 - Dentro de cada bloco, manter a regra de ordenação alfabética vigente, salvo decisão explícita em outra mini-spec.
-- O divisor deve ter contraste compatível com o tema escuro atual.
+- A distinção visual deve ter contraste compatível com o tema escuro atual.
 
 ## Critérios de aceite
 
 - Com itens mistos, a lista mostra primeiro não coletados e depois coletados.
-- O divisor entre blocos aparece apenas quando ambos os grupos existem.
+- A distinção entre blocos aparece apenas quando ambos os grupos existem.
 - Marcar item move para o bloco final sem exigir recarregamento da tela.
 - Desmarcar item move para o bloco inicial sem exigir recarregamento da tela.
 - Editar e remover continuam funcionando nos dois blocos.
@@ -64,3 +64,13 @@ Exibir itens não coletados primeiro e mover itens coletados para o final da lis
 - Implementar agrupamento em função pura testável antes da renderização.
 - Cobrir com testes de componente para validar ordem visual e presença/ausência do divisor.
 - Cobrir com testes de store/helper caso a regra de ordenação seja centralizada fora da UI.
+
+## Registro de implementação
+
+- A lista passou a agrupar itens em dois blocos visuais, mantendo a ordenação alfabética dentro de cada bloco.
+- A separação visual principal usa cabeçalhos de seção com label e contador de itens: "Não coletados" (topo) e "Coletados" (antes do bloco coletado).
+- Cada cabeçalho é exibido de forma independente: "Não coletados" aparece quando há itens pendentes; "Coletados" aparece quando há itens marcados. Não há divisor central extra entre os blocos.
+- O componente `src/components/ListSectionHeader.tsx` concentra o layout do cabeçalho de seção.
+- A interface `src/interfaces/ListSectionHeaderProps.ts` define o contrato `{ label: string; count: number }`.
+- A implementação usa função pura em `src/utils/functions/SortList.ts` (`SortProductsByCollected`) para separar os blocos sem alterar persistência.
+- Testes de helper e componente foram adicionados para cobrir ordem visual e presença dos cabeçalhos.

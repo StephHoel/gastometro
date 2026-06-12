@@ -26,6 +26,7 @@ Público esperado:
 - Adição, edição e remoção de produtos.
 - Remoção total da lista.
 - Marcação de produtos como coletados.
+- Itens coletados no final da lista, com seções visuais claras entre coletados e não coletados.
 - Total geral calculado por `quantidade * preço`.
 - Total dos itens coletados exibido ao lado do total geral.
 - Ordenação alfabética dos produtos.
@@ -42,7 +43,6 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- itens coletados no final da lista (com divisão clara entre coletados e não coletados);
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
@@ -134,7 +134,7 @@ UI:
 
 - telas devem usar `Screen` ou `KeyboardScreen` para manter fundo e comportamento de teclado consistentes;
 - `Header` decide botões conforme a rota atual;
-- `CustomButton`, `CustomInput`, `Card`, `TextWhite`, `Divider`, `Row` e `TouchableIcons` devem ser preferidos antes de criar novos componentes.
+- `CustomButton`, `CustomInput`, `Card`, `TextWhite`, `Divider`, `Row`, `TouchableIcons` e `ListSectionHeader` devem ser preferidos antes de criar novos componentes.
 
 ## 8. Diretrizes de Código
 
@@ -277,6 +277,12 @@ Regras de versionamento:
 - fix ou atualização de stack: incrementar `patch`;
 - nova feature: incrementar `minor`;
 - mudança que possa quebrar comportamento, dados persistidos, importação/exportação ou compatibilidade: incrementar `major`.
+
+Fluxo de criação de versão (script oficial):
+
+- interativo: `npm run new-version`;
+- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>"`;
+- tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
 
 Estratégia atual de release/build Android: artefatos locais em APK arm64 e produção em AAB.
 

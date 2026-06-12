@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.4.10 - 2026-06-12
+
+Exibe itens coletados no final da lista, separados dos não coletados por cabeçalhos de seção com contador.
+
+### Funcionalidade
+
+- Itens não coletados aparecem primeiro; itens coletados aparecem no final.
+- Cabeçalhos de seção "Não coletados" e "Coletados" com contador de itens separam visualmente os dois blocos.
+- Marcar ou desmarcar item move-o imediatamente para o bloco correto, sem recarregar a tela.
+
+### Qualidade
+
+- Função pura `SortProductsByCollected` em `src/utils/functions/SortList.ts` para agrupamento testável.
+- Novo componente `ListSectionHeader` com interface `ListSectionHeaderProps`.
+- Testes adicionados para cobertura de ordem visual e presença dos cabeçalhos.
+- Script `npm run new-version` atualizado para aceitar argumentos opcionais (`tipo` e texto do changelog), com suporte a execução não-interativa.
+
+### Documentação
+
+- Mini-spec 07 movida para `docs/specs/done/` com status `implementado`.
+- `docs/SPEC.md` e `docs/specs/README.md` atualizados.
+- Regra adicionada nas instruções do Copilot: nunca executar `git commit` sem pedido explícito do usuário.
+
 ## 1.4.9 - 2026-06-07
 
 Implementação da visualização de total de itens coletados na tela principal, com atualização de documentação e cobertura de testes.
