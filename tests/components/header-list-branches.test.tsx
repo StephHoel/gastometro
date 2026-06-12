@@ -155,7 +155,7 @@ describe('Header and List branch coverage', () => {
     expect(mockRemove).toHaveBeenCalled()
   })
 
-  it('List: mostra não coletados antes e exibe divisor apenas entre blocos', () => {
+  it('List: mostra não coletados antes e exibe cabeçalhos de seção', () => {
     const cartStore: StateProps = {
       products: [
         { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
@@ -169,14 +169,15 @@ describe('Header and List branch coverage', () => {
       clear: jest.fn(),
     }
 
-    const { toJSON, getAllByTestId } = render(<List cartStore={cartStore} />)
+    const { toJSON, getByText } = render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
 
     expect(serializedTree.indexOf('2x Arroz')).toBeLessThan(serializedTree.indexOf('1x Feijão'))
-    expect(getAllByTestId('list-divider')).toHaveLength(1)
+    expect(getByText('Não coletados')).toBeTruthy()
+    expect(getByText('Coletados')).toBeTruthy()
   })
 
-  it('List: quando todos estão coletados não mostra divisor no topo', () => {
+  it('List: quando todos estão coletados mostra apenas a seção coletados', () => {
     const cartStore: StateProps = {
       products: [
         { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
@@ -189,10 +190,11 @@ describe('Header and List branch coverage', () => {
       clear: jest.fn(),
     }
 
-    const { queryAllByTestId, toJSON } = render(<List cartStore={cartStore} />)
+    const { queryByText, toJSON } = render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
 
     expect(serializedTree.indexOf('1x Feijão')).toBeGreaterThan(-1)
-    expect(queryAllByTestId('list-divider')).toHaveLength(0)
+    expect(queryByText('Não coletados')).toBeNull()
+    expect(queryByText('Coletados')).toBeTruthy()
   })
 })
