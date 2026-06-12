@@ -35,6 +35,7 @@ Regras:
 - Componentes complexos precisam de testes.
 - Cobertura: quando a suíte de testes existir, manter/expandir cobertura proporcional ao escopo.
 - Atualizar README quando APIs mudarem.
+- Nunca executar `git commit` (nem variações como `git commit --amend`) sem que o usuário solicite explicitamente. Editar arquivos e fazer stage são permitidos; o commit final depende sempre de pedido explícito.
 
 ## Fluxo obrigatório para criação de nova versão
 
