@@ -97,6 +97,30 @@ Observações:
 - `npm run build:local:eas` executa build local via EAS.
 - O diretório nativo `android/` pode ser gerado por `npm run prebuild` quando necessário.
 
+## Web e GitHub Pages
+
+O app possui suporte para build web estática compatível com GitHub Pages:
+
+```bash
+# Build web estática
+npm run web:build
+
+# Servir localmente para testar (requer http-server)
+npm run web:serve
+```
+
+**Notas sobre web:**
+
+- A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
+- O Expo Router funciona com hash-based routing para compatibilidade com GitHub Pages.
+- APIs nativas sem suporte web possuem fallbacks:
+  - **Clipboard:** usa Clipboard API do navegador com fallback para textarea.
+  - **WhatsApp Sharing:** usa `wa.me/` URLs com fallback para mensagem copiada.
+  - **AsyncStorage:** usa localStorage do navegador via react-native-web.
+- O tema escuro é preservado via CSS em web.
+- Dados persistidos localmente funcionam independente entre web e Android.
+- O deploy automático para GitHub Pages é executado a cada push na branch `main` via workflow em `.github/workflows/deploy-web.yml`.
+
 ## Qualidade e testes
 
 O projeto possui uma suíte automatizada alinhada ao spec, com foco em regras de domínio, store, serviços e contrato:
