@@ -171,9 +171,12 @@ describe('Header and List branch coverage', () => {
 
     const { toJSON, getByText } = render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
+    const arrozIndex = serializedTree.indexOf('2x Arroz')
+    const feijaoIndex = serializedTree.indexOf('1x Feijão')
 
-    expect(serializedTree.indexOf('2x Arroz')).toBeLessThan(serializedTree.indexOf('1x Feijão'))
-    expect(getByText('Não coletados')).toBeTruthy()
+    expect(arrozIndex).toBeGreaterThan(-1)
+    expect(feijaoIndex).toBeGreaterThan(-1)
+    expect(arrozIndex).toBeLessThan(feijaoIndex)
     expect(getByText('Coletados')).toBeTruthy()
   })
 

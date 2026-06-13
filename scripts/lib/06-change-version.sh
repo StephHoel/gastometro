@@ -12,7 +12,7 @@ if [ -n "$VERSION_TYPE_ARG" ]; then
   option="$VERSION_TYPE_ARG"
   echo "${TAB3}Opção recebida via argumento: $option"
 else
-  printf "%s" "${TAB3}Digite sua opcao: "
+  printf "%s" "${TAB3}Digite sua opção: "
   IFS= read -r option
 fi
 
