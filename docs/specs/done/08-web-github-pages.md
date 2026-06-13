@@ -1,7 +1,7 @@
 # Mini-spec: Web compatível com GitHub Pages
 
 Número: 08
-Status: em desenvolvimento
+Status: implementado
 
 ## Problema
 
@@ -59,3 +59,9 @@ Permitir publicar uma build web estática do app no GitHub Pages sem quebrar o c
 
 - Estratégia definida: usar build estática com `expo export --platform web` no Expo 56.
 - Manter template HTML padrão do Expo para compatibilidade entre `npm run web` e build estática.
+
+## Registro de implementação
+
+- 2026-06-13: build web estática e deploy no GitHub Pages habilitados.
+- 2026-06-13: fallback de roteamento SPA implementado com `public/404.html` e `scripts/inject-spa-routing.js`.
+- 2026-06-13: documentação principal atualizada em `README.md`, `docs/WEB_DEPLOY.md` e `docs/SPEC.md`.
