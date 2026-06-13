@@ -2,6 +2,29 @@
 
 ## 1.4.12 - 2026-06-13
 
+Implementação da união automática de itens duplicados na colagem/importação para a lista existente, com cobertura de testes e alinhamento da documentação.
+
+### Funcionalidade
+
+- Ao colar uma lista na lista existente, o app agora identifica duplicados por nome + preço normalizados antes de concluir a união.
+- Itens duplicados compatíveis passam a ser unidos automaticamente, somando a quantidade no item mantido.
+- O estado `collected` do item mantido é preservado apenas quando a quantidade final não muda; quando a soma altera a quantidade, o item resultante volta para `false`.
+- Itens com mesmo nome, mas preço diferente, continuam separados e não são mesclados.
+
+### Qualidade
+
+- Nova regra centralizada em `DuplicateProducts` para agrupar e mesclar duplicados com tipos dedicados para grupo e resultado de mesclagem.
+- Quantidades mescladas agora são arredondadas para até 3 casas decimais, evitando imprecisões de ponto flutuante no total consolidado.
+- Testes adicionados e ampliados para `AlertService`, mesclagem de duplicados e fluxo de colagem/importação com cenários de nome e preço normalizados.
+- Relatório de cobertura adicionado em `docs/coverages/2026-06-13_13-13.csv`.
+
+### Documentação
+
+- Mini-spec 06 consolidada em `docs/specs/done/06-uniao-itens-duplicados.md` com comportamento final de união automática de duplicados na colagem em lista existente.
+- `docs/SPEC.md` alinhado para refletir que a união de duplicados importados ocorre automaticamente no app.
+- `README.md` revisado para mover a união de duplicados de funcionalidade planejada para comportamento já implementado.
+- `docs/specs/README.md` atualizado para listar a mini-spec 06 como implementada.
+
 ## 1.4.11 - 2026-06-13
 
 Refatoração da spec 12: redução de código duplicado, remoção de código não utilizado e ampliação de cobertura de testes
@@ -25,8 +48,6 @@ Refatoração da spec 12: redução de código duplicado, remoção de código n
 - Mini-spec 12 movida para `docs/specs/done/` com status `implementado`.
 - `docs/specs/README.md` atualizado com o novo status da spec 12.
 - Regras de versionamento atualizadas para criar branch de release apenas quando o fluxo iniciar na `main`.
-- Mini-spec 06 consolidada em `docs/specs/done/06-uniao-itens-duplicados.md` com comportamento final de união automática de duplicados na colagem em lista existente.
-- `docs/SPEC.md` alinhado para refletir que a união de duplicados importados ocorre automaticamente no app.
 
 ## 1.4.10 - 2026-06-12
 
@@ -144,4 +165,3 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
-

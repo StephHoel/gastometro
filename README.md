@@ -15,6 +15,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Ordena os itens alfabeticamente.
 - Compartilha a lista via WhatsApp.
 - Importa uma lista copiada do WhatsApp quando ela segue o formato gerado pelo app.
+- Ao colar uma lista na lista existente, une automaticamente itens duplicados com mesmo nome e preço normalizados.
 - Permite salvar itens com preço ou quantidade zerada.
 - Bloqueia valores negativos em quantidade e preço nos fluxos manuais.
 - Bloqueia itens duplicados na criação manual de item.
@@ -47,7 +48,6 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/sp
 - Notificações e lembretes.
 - Múltiplas listas.
 - Contas a pagar.
-- União de itens duplicados.
 - Versão web compatível com GitHub Pages.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
@@ -153,6 +153,7 @@ Mitigações já aplicadas no código:
 
 - Validação de negativos em criação/edição manual e calculadora.
 - Bloqueio de duplicados na criação manual de itens.
+- União automática de duplicados por nome + preço normalizados ao colar na lista existente.
 
 ## Diretrizes do projeto
 
