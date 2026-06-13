@@ -36,3 +36,6 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 1. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
 2. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
 3. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
+4. [14 - Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
+5. [15 - Limitações web explicitamente documentadas](./planned/15-limitacoes-web-explicitas.md)
+6. [13 - Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
