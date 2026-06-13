@@ -6,7 +6,7 @@ import type { StateProps } from '@/interfaces/StateProps'
 const mockPush = jest.fn()
 const mockRemoveAlert = jest.fn()
 const mockSortProductsByCollected = jest.fn()
-const mockListItem = jest.fn(() => null)
+const mockListItem = jest.fn((_props: unknown) => null)
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockPush }),
@@ -54,12 +54,19 @@ describe('List callbacks coverage', () => {
 
     expect(mockListItem).toHaveBeenCalledTimes(2)
 
-    const firstProps = mockListItem.mock.calls[0][0] as {
+    const firstCall = mockListItem.mock.calls[0]
+    const secondCall = mockListItem.mock.calls[1]
+
+    if (!firstCall || !secondCall) {
+      throw new Error('ListItem deveria ter sido chamado duas vezes')
+    }
+
+    const firstProps = firstCall[0] as {
       onDelete: () => void
       onToggle: () => void
       onEdit: () => void
     }
-    const secondProps = mockListItem.mock.calls[1][0] as {
+    const secondProps = secondCall[0] as {
       onDelete: () => void
       onToggle: () => void
       onEdit: () => void

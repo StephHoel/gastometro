@@ -10,7 +10,7 @@ import type { StateProps } from '@/interfaces/StateProps'
 const mockPush = jest.fn()
 const mockRemove = jest.fn()
 const mockShare = jest.fn()
-const mockPaste = jest.fn(() => Promise.resolve())
+const mockPaste = jest.fn(async (..._args: unknown[]) => Promise.resolve())
 
 let mockProductsState = [
   { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
