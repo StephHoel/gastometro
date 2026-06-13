@@ -17,13 +17,13 @@ export function withWebFallback<T>(
   nativeFunction: () => Promise<T>,
   webFunction?: () => Promise<T>,
   fallbackValue?: T
-): Promise<T> {
+): Promise<T | undefined> {
   if (isWeb && webFunction) {
     return webFunction()
   }
 
   if (isWeb) {
-    return Promise.resolve(fallbackValue as T)
+    return Promise.resolve(fallbackValue)
   }
 
   return nativeFunction()

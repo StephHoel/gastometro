@@ -59,7 +59,7 @@ npm run web:serve
 
 **Testes recomendados:**
 
-- Tela principal (adicionar, editar, remover items)
+- Tela principal (adicionar, editar, remover itens)
 - Marcação de itens como coletados
 - Calculadora
 - Navegação entre abas (home e calculadora)
@@ -131,7 +131,7 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 
 **Dados armazenados:**
 
-- Lista de items e quantidades
+- Lista de itens e quantidades
 - Preços unitários
 - Estado de marcação (coletado/não coletado)
 
@@ -157,7 +157,7 @@ Se `npm run web:build` falhar:
 ### Página em branco após deploy
 
 1. Verifique o console do navegador (DevTools)
-2. Verifique os assets estão sendo carregados corretamente
+2. Verifique se os assets estão sendo carregados corretamente
 3. Limpe o cache do navegador (Ctrl+Shift+Del)
 4. Verifique se `.nojekyll` existe no `dist/`
 

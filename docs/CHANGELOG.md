@@ -13,7 +13,7 @@ Implementação da base de compatibilidade web com GitHub Pages, incluindo build
 ### Qualidade e Infraestrutura
 
 - Workflow de deploy web criado em `.github/workflows/deploy-web.yml`, com build, type-check e publicação em GitHub Pages.
-- Gatilhos do workflow de deploy web simplificados para rodar em alterações relevantes de código/configuração web na `main`.
+- Gatilhos do workflow de deploy web para rodar a cada alteração na `main`.
 - Arquivo `.nojekyll` adicionado para garantir compatibilidade de artefatos estáticos no GitHub Pages.
 
 ### Documentação
