@@ -9,7 +9,7 @@ import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { View } from "react-native"
-import { Stack } from 'expo-router'
+import { HeaderTitle } from 'expo-router/react-navigation'
 
 export default function Home() {
   const cartStore = useCartStore()
@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Gastômetro" }} />
+      <HeaderTitle>Gastômetro</HeaderTitle>
       <CustomAlert ref={alertRef} />
 
       <Screen>

@@ -11,7 +11,7 @@ import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { colors } from '@/constants/color'
-import { Stack } from 'expo-router'
+import { HeaderTitle } from 'expo-router/react-navigation'
 
 export default function Calculator() {
   const [answer, setAnswer] = useState<number | null>(null)
@@ -47,7 +47,7 @@ export default function Calculator() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Calculadora" }} />
+      <HeaderTitle>Calculadora</HeaderTitle>
       <KeyboardScreen>
         <ScrollView keyboardShouldPersistTaps="handled">
           <Header />
