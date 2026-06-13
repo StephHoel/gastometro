@@ -4,6 +4,26 @@
 
 Refatoração da spec 12: redução de código duplicado, remoção de código não utilizado e ampliação de cobertura de testes
 
+### Refatoração
+
+- Extração do item de lista para componente dedicado (`src/components/List/ListItem.tsx`), removendo duplicação em `List.tsx`.
+- Remoção de função não utilizada em `src/stores/helpers/CartInMemory.ts`.
+- Remoção de campo não utilizado em `src/interfaces/ListProps.ts`.
+- Remoção do arquivo sem uso `src/utils/products.ts` e ajuste correspondente em `jest.config.js`.
+- Movida a interface `CustomAlertRef` para `src/interfaces/CustomAlertRef.ts` e atualização dos consumidores.
+
+### Qualidade
+
+- Novos testes de componentes/lista para cobrir callbacks e interações do `ListItem`.
+- Ajustes em testes existentes para elevar e manter o gate mínimo de cobertura no escopo monitorado pelo Jest.
+- Relatório de cobertura adicionado em `docs/coverages/2026-06-13_10-04.csv`.
+
+### Documentação
+
+- Mini-spec 12 movida para `docs/specs/done/` com status `implementado`.
+- `docs/specs/README.md` atualizado com o novo status da spec 12.
+- Regras de versionamento atualizadas para criar branch de release apenas quando o fluxo iniciar na `main`.
+
 ## 1.4.10 - 2026-06-12
 
 Exibe itens coletados no final da lista, separados dos não coletados por cabeçalhos de seção com contador.
@@ -120,4 +140,3 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
-

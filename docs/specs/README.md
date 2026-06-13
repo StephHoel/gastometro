@@ -23,11 +23,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [03 - Total de itens coletados](./done/03-total-itens-coletados.md)
 - [04 - APK menor com foco em Android moderno e web](./done/04-apk-menor-android-moderno-web.md)
 - [07 - Itens coletados no final da lista](./done/07-itens-coletados-no-final-da-lista.md)
+- [12 - Refactor — dead code e duplicação de código](./done/12-refactor-dead-code-e-duplicacao.md)
 
 ### Ativas/Em andamento
 
 - [05 - Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [12 - Refactor — dead code e duplicação de código](./active/12-refactor-dead-code-e-duplicacao.md)
 
 ### Planejadas (ordem de prioridade)
 

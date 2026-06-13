@@ -1,7 +1,7 @@
 # Mini-spec: Refactor — dead code e duplicação de código
 
 Número: 12
-Status: ativa
+Status: implementado
 
 ## Problema
 
@@ -92,3 +92,12 @@ Eliminar os pontos levantados sem alterar comportamento observável do app nem f
 - Não alterar a API pública do `useCartStore` (métodos `add`, `edit`, `remove`, `replace`, `get`, `clear`).
 - A remoção de `CartInMemory.get` não afeta o método `get` do store; são implementações separadas.
 - Ao mover `CustomAlertRef`, usar `import type` em todos os arquivos consumidores conforme padrão do projeto.
+
+## Registro de implementação
+
+- O bloco duplicado de renderização em `src/components/List.tsx` foi extraído para `src/components/List/ListItem.tsx`, com interface dedicada em `src/interfaces/ListItemProps.ts`.
+- A função não utilizada `get` foi removida de `src/stores/helpers/CartInMemory.ts` e os testes do helper foram ajustados para refletir a API vigente.
+- O campo não utilizado `showAlert` foi removido de `src/interfaces/ListProps.ts`.
+- O arquivo sem uso `src/utils/products.ts` foi removido e `jest.config.js` foi atualizado para remover a exclusão específica desse arquivo.
+- A interface `CustomAlertRef` foi movida para `src/interfaces/CustomAlertRef.ts`, com atualização de imports em `CustomAlert.tsx`, `AlertService.ts`, `Header.tsx`, `Form.tsx` e `app/index.tsx`.
+- A cobertura foi ampliada com novos testes de componentes/lista e ajustes em testes existentes, mantendo o gate global mínimo do projeto.
