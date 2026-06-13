@@ -112,10 +112,11 @@ npm run web:serve
 **Notas sobre web:**
 
 - A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
-- O Expo Router funciona com hash-based routing para compatibilidade com GitHub Pages.
+- O roteamento web usa a configuração padrão do Expo Router para build estática.
+- Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
 - APIs nativas sem suporte web possuem fallbacks:
-  - **Clipboard:** usa Clipboard API do navegador com fallback para textarea.
-  - **WhatsApp Sharing:** usa `wa.me/` URLs com fallback para mensagem copiada.
+  - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
+  - **WhatsApp Sharing:** usa URL `wa.me` na web e fallback para deep link/web link no Android.
   - **AsyncStorage:** usa localStorage do navegador via react-native-web.
 - O tema escuro é preservado via CSS em web.
 - Dados persistidos localmente funcionam independente entre web e Android.
