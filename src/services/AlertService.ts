@@ -101,15 +101,7 @@ export const AlertService = {
             {
               text: alert.paste.buttons.oldList,
               action: () => {
-                const mergedList = [...cartStore.products, ...listToPaste]
-                const duplicatedGroups = DuplicateProducts.getGroups(mergedList)
-
-                if (duplicatedGroups.length > 0) {
-                  AlertService.ok(text.error.alert_title, text.error.duplicate_item_on_merge)
-                  return
-                }
-
-                listToPaste.forEach(cartStore.add)
+                mergeDuplicatesAndApply(cartStore, listToPaste)
               },
             },
             {
@@ -126,4 +118,50 @@ export const AlertService = {
       AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
     }
   },
+}
+
+function mergeDuplicatesAndApply(cartStore: StateProps, importedProducts: ProductProps[]) {
+  const mergedList = [...cartStore.products, ...importedProducts]
+  const deduplicatedList = mergeDuplicateGroups(mergedList)
+  cartStore.replace(deduplicatedList)
+}
+
+function mergeDuplicateGroups(products: ProductProps[]): ProductProps[] {
+  const groups = DuplicateProducts.getGroups(products)
+
+  if (groups.length === 0) return products
+
+  const workingList = [...products]
+
+  groups.forEach((group) => {
+    const refreshedGroup = buildGroupFromCurrentList(workingList, group)
+    const mergeResult = DuplicateProducts.mergeGroup(refreshedGroup)
+
+    if (!mergeResult) return
+
+    const removedIds = new Set(mergeResult.removedIds)
+    const withoutRemoved = workingList.filter((product) => !removedIds.has(product.id))
+    const mergedIndex = withoutRemoved.findIndex((product) => product.id === mergeResult.mergedProduct.id)
+
+    if (mergedIndex >= 0) {
+      withoutRemoved[mergedIndex] = mergeResult.mergedProduct
+      workingList.splice(0, workingList.length, ...withoutRemoved)
+    }
+  })
+
+  return workingList
+}
+
+function buildGroupFromCurrentList(
+  products: ProductProps[],
+  group: ReturnType<typeof DuplicateProducts.getGroups>[number],
+) {
+  const groupIds = new Set(group.products.map((product) => product.id))
+  const refreshedProducts = products.filter((product) => groupIds.has(product.id))
+
+  return {
+    keyItem: group.keyItem,
+    keyPrice: group.keyPrice,
+    products: refreshedProducts,
+  }
 }

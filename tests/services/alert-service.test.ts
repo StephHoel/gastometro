@@ -146,20 +146,19 @@ describe('AlertService', () => {
     expect(payload.buttons[1].text).toBe(alert.paste.buttons.newList)
 
     payload.buttons[0].action()
-    expect(store.add).toHaveBeenCalledTimes(2)
+    expect(store.replace).toHaveBeenCalledWith(parsed)
 
     payload.buttons[1].action()
     expect(store.replace).toHaveBeenCalledWith(parsed)
   })
 
-  it('paste deve bloquear colagem na lista existente quando houver duplicados por nome+preço', async () => {
+  it('paste deve unir duplicados automaticamente na lista existente', async () => {
     const clipboardSpy = jest.spyOn(ClipboardService, 'getClipboardContent')
     const convertSpy = jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList')
-    const okSpy = jest.spyOn(AlertService, 'ok').mockImplementation(() => undefined)
 
     const store = makeStore()
     store.products = [
-      { id: 'a', item: 'Arroz', quantity: '1', price: '10', collected: false },
+      { id: 'a', item: 'Arroz', quantity: '1', price: '10', collected: true },
     ]
 
     clipboardSpy.mockResolvedValue('#Gastômetro\n--\n|| 2x arroz | R$ 10,00 | R$ 20,00\n--')
@@ -176,9 +175,37 @@ describe('AlertService', () => {
 
     payload.buttons[0].action()
 
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.duplicate_item_on_merge)
+    expect(store.replace).toHaveBeenCalledWith([
+      { id: 'a', item: 'Arroz', quantity: '3', price: '10', collected: false },
+    ])
+    expect(showAlert).toHaveBeenCalledTimes(1)
     expect(store.add).not.toHaveBeenCalled()
-    expect(store.replace).not.toHaveBeenCalled()
+  })
+
+  it('paste deve unir apenas duplicados por nome+preço e manter os demais', async () => {
+    jest.spyOn(ClipboardService, 'getClipboardContent').mockResolvedValue('#Gastômetro\n--\n|| 2x arroz | R$ 10,00 | R$ 20,00\n--')
+    jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList').mockReturnValue([
+      { id: 'b', item: ' arroz ', quantity: '2', price: '10.00', collected: false },
+      { id: 'c', item: 'Arroz', quantity: '1', price: '12', collected: false },
+    ])
+
+    const store = makeStore()
+    store.products = [
+      { id: 'a', item: 'Arroz', quantity: '1', price: '10', collected: true },
+    ]
+
+    await AlertService.paste(store)
+
+    const payload = showAlert.mock.calls[0][0] as {
+      buttons: Array<{ text: string; action: () => void }>
+    }
+    payload.buttons[0].action()
+
+    expect(store.replace).toHaveBeenCalledWith([
+      { id: 'a', item: 'Arroz', quantity: '3', price: '10', collected: false },
+      { id: 'c', item: 'Arroz', quantity: '1', price: '12', collected: false },
+    ])
+    expect(showAlert).toHaveBeenCalledTimes(1)
   })
 
   it('paste deve mostrar erro quando lista convertida estiver vazia', async () => {

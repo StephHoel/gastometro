@@ -38,12 +38,9 @@ Público esperado:
 - Salvamento de itens com preço ou quantidade zerada quando normalizados pelas regras atuais.
 - Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
 - Bloqueio de itens duplicados na criação manual de item.
+- Identificação de itens duplicados com união automática ao colar na lista existente (mini-spec 06).
 
 ## 3. Funcionalidades Planejadas
-
-Em andamento:
-
-- identificação de itens duplicados com uma ação para unir os itens ou alterar um deles (mini-spec 06).
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
@@ -198,8 +195,6 @@ Regras decididas:
 
 Pendências de implementação:
 
-- implementar a feature de listar duplicados e permitir união ou alteração pelo usuário (mini-spec 06 ativa).
-- na mini-spec 06, para revisão/união de duplicados importados, considerar duplicados pela combinação de nome + preço normalizados.
 - definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importação
@@ -368,7 +363,7 @@ Fora de escopo:
 - Valores negativos não devem ser aceitos.
 - Nome de item deve ocupar no máximo aproximadamente três quartos da largura horizontal da tela.
 - Duplicados devem ser bloqueados na criação manual e permitidos na importação/colagem.
-- A mini-spec 06 está ativa para revisar duplicados importados e fazer sua união.
+- A mini-spec 06 foi implementada com união automática de duplicados importados no fluxo de colagem.
 - Total de itens coletados deve aparecer ao lado do total geral.
 - Formato atual de compartilhamento/importação via WhatsApp deve continuar retrocompatível.
 - O app permanece offline-first por tempo indeterminado.

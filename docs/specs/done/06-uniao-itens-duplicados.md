@@ -1,7 +1,7 @@
 # Mini-spec: União de itens duplicados da importação de lista
 
 Número: 06
-Status: ativa
+Status: implementado
 
 ## Problema
 
@@ -9,14 +9,14 @@ Duplicados são permitidos na importação/colagem, mas hoje geram ambiguidade p
 
 ## Objetivo
 
-Implementar revisão de duplicados importados para tratar os itens antes de concluir a união com a lista atual.
+Implementar união automática de duplicados importados antes de concluir a união com a lista atual.
 
 ## Comportamento esperado
 
 - O app deve identificar possíveis duplicados pela combinação de nome normalizado e preço normalizado.
-- A regra acima se aplica ao fluxo de revisão/união de duplicados importados, sem alterar a regra da criação manual (mini-spec 01).
+- A regra acima se aplica ao fluxo de união automática de duplicados importados, sem alterar a regra da criação manual (mini-spec 01).
 - Ao escolher colar/importar na lista existente, a comparação de duplicados deve ocorrer antes da união final das listas.
-- Quando houver duplicado, o app aplicar a regra de união aprovada para unir os itens antes da confirmação final.
+- Quando houver duplicado, o app deve aplicar automaticamente a regra de união aprovada antes da confirmação final.
 - Regra de união aprovada: se nome e preço normalizados forem equivalentes, a quantidade deve ser somada.
 - Regra de `collected` na união aprovada:
   - se a quantidade final após a soma mudar em relação ao item mantido, o estado final deve ser `false`;
@@ -44,11 +44,10 @@ Implementar revisão de duplicados importados para tratar os itens antes de conc
 ## Critérios de aceite
 
 - Identificar duplicados importados.
-- Exibir revisão dos duplicados com ação para unir ou editar.
-- Permitir unir duplicados conforme regra aprovada.
+- Unir duplicados automaticamente conforme regra aprovada.
 - Não bloquear a importação inteira por causa de duplicados.
 - Não afetar itens não duplicados.
-- Concluir importação com as decisões aplicadas aos duplicados.
+- Concluir importação com a união automática aplicada aos duplicados.
 
 ## Fora de escopo
 
@@ -70,3 +69,5 @@ Implementar revisão de duplicados importados para tratar os itens antes de conc
 - 2026-06-13: escopo ajustado para manter bloqueio manual por nome (mini-spec 01) e usar nome + preço na revisão/união de duplicados.
 - 2026-06-13: ao colar na lista existente, a comparação de duplicados (nome + preço) passou a ocorrer antes da união das listas.
 - 2026-06-13: mini-spec revisada para alinhar critérios de aceite com o `docs/SPEC.md` (importação permitida com revisão para unir ou editar duplicados).
+- 2026-06-13: implementação concluída com revisão de duplicados no fluxo de colar na lista existente, permitindo decisão por grupo entre unir itens ou editar depois.
+- 2026-06-13: ajuste de comportamento para união automática dos duplicados pelo app, sem exigir ação adicional do usuário.
