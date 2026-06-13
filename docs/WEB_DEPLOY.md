@@ -80,9 +80,32 @@ Workflow: `.github/workflows/deploy-web.yml`
 3. Roda verificação de tipos (TypeScript)
 4. Configura variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro`
 5. Gera build web com `expo export --platform web`
-6. Cria arquivo `.nojekyll` para desabilitar Jekyll
-7. Faz upload dos artefatos para GitHub Pages
-8. Deployment automático no ambiente de GitHub Pages
+6. Copia arquivo `404.html` para configurar SPA routing
+7. Injeta script de redirecionamento no `index.html`
+8. Cria arquivo `.nojekyll` para desabilitar Jekyll
+9. Faz upload dos artefatos para GitHub Pages
+10. Deployment automático no ambiente de GitHub Pages
+
+## SPA Routing no GitHub Pages
+
+O GitHub Pages não suporta nativamente roteamento SPA (Single Page Application). A solução implementada utiliza dois mecanismos:
+
+### 1. Arquivo `404.html` (public/404.html)
+
+Quando o navegador acessa uma rota que não existe como arquivo estático (ex: `/gastometro/list`), o servidor retorna 404. O arquivo `404.html` intercepta isso e:
+
+1. Armazena o caminho solicitado em `sessionStorage`
+2. Redireciona para o `index.html` na raiz
+
+### 2. Script de Injeção (scripts/inject-spa-routing.js)
+
+Após a build do Expo, um script Node.js injeta um trecho de código no `index.html` que:
+
+1. Recupera o caminho armazenado de `sessionStorage`
+2. Restaura o histórico do navegador usando `window.history.replaceState()`
+3. Deixa o Expo Router processar a navegação normalmente
+
+**Resultado:** O usuário vê o caminho correto na URL e navega normalmente, mesmo em rotas dinâmicas.
 
 ## Configuração de GitHub Pages
 
@@ -98,7 +121,7 @@ O projeto está configurado para usar GitHub Pages com as seguintes particularid
 
 - **Fonte:** Usa workflow automático (Actions)
 - **Branch:** Gerenciado pelo workflow em `.github/workflows/deploy-web.yml`
-- **Roteamento:** Build estática com Expo Router via `EXPO_PUBLIC_ROUTER_BASE=/gastometro`
+- **Roteamento:** SPA routing com fallback 404.html
 - **Base path:** A aplicação é servida em `https://stephhoel.github.io/gastometro/`
 
 ## Rotas Web

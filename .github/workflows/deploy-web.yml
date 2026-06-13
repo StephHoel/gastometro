@@ -43,6 +43,11 @@ jobs:
           EXPO_PUBLIC_ROUTER_BASE: /gastometro
         run: npm run web:build
 
+      - name: Configure SPA routing for GitHub Pages
+        run: |
+          cp public/404.html dist/404.html
+          node scripts/inject-spa-routing.js
+
       - name: Create .nojekyll file
         run: touch dist/.nojekyll
 
