@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.4.11",
+  "version": "1.4.12",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
     "new-version": "sh ./scripts/add-new-version.sh",
