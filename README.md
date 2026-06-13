@@ -124,6 +124,7 @@ npm run web:serve
 - O tema escuro é preservado via CSS em web.
 - Dados persistidos localmente funcionam independente entre web e Android.
 - O deploy para GitHub Pages é executado pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
+- Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 
 ## Qualidade e testes
 

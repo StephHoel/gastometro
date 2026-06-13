@@ -57,6 +57,14 @@ Workflow: `.github/workflows/deploy-web.yml`
 
 ## Configuração de GitHub Pages
 
+Pré-requisito obrigatório antes do primeiro deploy:
+
+1. Acesse `Settings > Pages` do repositório
+2. Em **Build and deployment**, selecione **Source: GitHub Actions**
+3. Salve a configuração
+
+Sem essa configuração inicial, o passo `actions/deploy-pages` falha com `404 Not Found` ao criar o deployment.
+
 O projeto está configurado para usar GitHub Pages com as seguintes particularidades:
 
 - **Fonte:** Usa workflow automático (Actions)
