@@ -1,6 +1,6 @@
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { SetProductProps } from "@/interfaces/SetProductProps"
-import { NormalizeNumericString } from '@/utils/functions/MathFunctions'
+import { GetQuantityNormalize, GetPriceNormalize } from '@/utils/functions/NumberFunctions'
 import { NormalizeItemName, ToTitleCase } from '@/utils/functions/StringFunctions'
 
 export const ProductService = {
@@ -24,12 +24,3 @@ export const ProductService = {
     })
   }
 }
-
-function GetPriceNormalize(price: string) {
-  return NormalizeNumericString(price, '0.00', ['0', '0.0', '0.00', '0,0', '0,00'])
-}
-
-function GetQuantityNormalize(qtt: string) {
-  return NormalizeNumericString(qtt, '0', ['0', '0.0', '0.00', '0,0', '0,00'])
-}
-

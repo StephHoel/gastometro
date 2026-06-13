@@ -2,7 +2,7 @@ import React, { createRef } from 'react'
 import { render } from '@testing-library/react-native'
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { AlertService } from '@/services/AlertService'
-import type { CustomAlertRef } from '@/components/CustomAlert'
+import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
 function Harness({ refValue }: { refValue: React.RefObject<CustomAlertRef | null> | null }) {
   useInitAlert(refValue)

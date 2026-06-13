@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.4.12 - 2026-06-13
+
 ## 1.4.11 - 2026-06-13
 
 Refatoração da spec 12: redução de código duplicado, remoção de código não utilizado e ampliação de cobertura de testes
@@ -23,6 +25,8 @@ Refatoração da spec 12: redução de código duplicado, remoção de código n
 - Mini-spec 12 movida para `docs/specs/done/` com status `implementado`.
 - `docs/specs/README.md` atualizado com o novo status da spec 12.
 - Regras de versionamento atualizadas para criar branch de release apenas quando o fluxo iniciar na `main`.
+- Mini-spec 06 consolidada em `docs/specs/done/06-uniao-itens-duplicados.md` com comportamento final de união automática de duplicados na colagem em lista existente.
+- `docs/SPEC.md` alinhado para refletir que a união de duplicados importados ocorre automaticamente no app.
 
 ## 1.4.10 - 2026-06-12
 
@@ -140,3 +144,4 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
+

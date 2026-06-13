@@ -33,14 +33,16 @@ describe('ProductService', () => {
     expect(product.price).toBe('0.00')
   })
 
-  it('isDuplicateItem deve considerar normalização e ignorar id informado', () => {
+  it('isDuplicateItem deve considerar nome normalizado e ignorar id informado', () => {
     const products: ProductProps[] = [
       { id: '1', item: 'Arroz  Branco', quantity: '1', price: '10', collected: false },
       { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: false },
+      { id: '3', item: 'Arroz Branco', quantity: '2', price: '12', collected: false },
     ]
 
     expect(ProductService.isDuplicateItem(' arroz branco ', products)).toBe(true)
-    expect(ProductService.isDuplicateItem(' arroz branco ', products, '1')).toBe(false)
+    expect(ProductService.isDuplicateItem(' arroz branco ', products, '1')).toBe(true)
+    expect(ProductService.isDuplicateItem(' arroz branco ', products, '3')).toBe(true)
     expect(ProductService.isDuplicateItem('macarrão', products)).toBe(false)
   })
 })

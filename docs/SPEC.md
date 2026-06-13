@@ -38,6 +38,7 @@ Público esperado:
 - Salvamento de itens com preço ou quantidade zerada quando normalizados pelas regras atuais.
 - Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
 - Bloqueio de itens duplicados na criação manual de item.
+- Identificação de itens duplicados com união automática ao colar na lista existente (mini-spec 06).
 
 ## 3. Funcionalidades Planejadas
 
@@ -46,7 +47,6 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
-- identificação de itens duplicados com uma ação para unir os itens ou alterar um deles.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
@@ -188,14 +188,13 @@ Regras decididas:
 - quantidade vazia deve ser aceita e tratada como `0`.
 - preço vazio deve ser aceito e tratado como `0.00`.
 - valores negativos não devem ser aceitos em quantidade nem preço.
-- itens duplicados devem ser bloqueados no modo de criação de item.
+- itens duplicados devem ser bloqueados no modo de criação de item pela comparação de nome normalizado.
 - itens duplicados devem ser permitidos no modo de colar/importar lista.
 - `ParseToFloat` remove caracteres não numéricos relevantes e interpreta vírgula como decimal.
 - divisão por zero retorna `0`.
 
 Pendências de implementação:
 
-- planejar feature para listar duplicados e permitir união ou alteração pelo usuário.
 - definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importação
@@ -214,6 +213,7 @@ Importação:
 - itens importados entram com `collected: false`;
 - a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
 - itens duplicados são permitidos na importação.
+- ao escolher colar na lista existente, deve haver comparação de duplicados por nome + preço normalizados antes de unir as listas.
 - linhas malformadas ou com valores negativos devem ser ignoradas na importação.
 
 Qualquer mudança nesse formato deve manter retrocompatibilidade com listas já compartilhadas.
@@ -363,7 +363,7 @@ Fora de escopo:
 - Valores negativos não devem ser aceitos.
 - Nome de item deve ocupar no máximo aproximadamente três quartos da largura horizontal da tela.
 - Duplicados devem ser bloqueados na criação manual e permitidos na importação/colagem.
-- Deve existir uma feature futura para mostrar itens duplicados e permitir união ou alteração.
+- A mini-spec 06 foi implementada com união automática de duplicados importados no fluxo de colagem.
 - Total de itens coletados deve aparecer ao lado do total geral.
 - Formato atual de compartilhamento/importação via WhatsApp deve continuar retrocompatível.
 - O app permanece offline-first por tempo indeterminado.

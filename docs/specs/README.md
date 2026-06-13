@@ -22,6 +22,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [02 - Validação de valores negativos](./done/02-validacao-valores-negativos.md)
 - [03 - Total de itens coletados](./done/03-total-itens-coletados.md)
 - [04 - APK menor com foco em Android moderno e web](./done/04-apk-menor-android-moderno-web.md)
+- [06 - União de itens duplicados](./done/06-uniao-itens-duplicados.md)
 - [07 - Itens coletados no final da lista](./done/07-itens-coletados-no-final-da-lista.md)
 - [12 - Refactor — dead code e duplicação de código](./done/12-refactor-dead-code-e-duplicacao.md)
 
@@ -31,8 +32,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [06 - Gestão de itens duplicados](./planned/06-gestao-itens-duplicados.md)
-2. [08 - Web compatível com GitHub Pages](./planned/08-web-github-pages.md)
-3. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
-4. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
-5. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
+1. [08 - Web compatível com GitHub Pages](./planned/08-web-github-pages.md)
+2. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
+3. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
+4. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
