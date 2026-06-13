@@ -31,6 +31,7 @@ npm run web:serve
 Depois abra seu navegador em `http://localhost:3000`.
 
 **Testes recomendados:**
+
 - Tela principal (adicionar, editar, remover items)
 - Marcação de itens como coletados
 - Calculadora
@@ -45,6 +46,7 @@ O deploy automático é executado a cada push na branch `main` via GitHub Action
 Workflow: `.github/workflows/deploy-web.yml`
 
 **O que o workflow faz:**
+
 1. Faz checkout do código
 2. Instala dependências com npm
 3. Roda verificação de tipos (TypeScript)
@@ -76,7 +78,7 @@ O app usa hash-based routing, então as URLs ficarão assim:
 
 Em web, o botão de compartilhamento abre um link `wa.me/`:
 
-```
+```url
 https://wa.me/?text=<mensagem_codificada>
 ```
 
@@ -91,6 +93,7 @@ Em web, o copy-paste usa a Clipboard API do navegador (`navigator.clipboard`), q
 Os dados são persistidos localmente usando `localStorage` do navegador através da biblioteca `react-native-web` + `AsyncStorage`.
 
 **Dados armazenados:**
+
 - Lista de items e quantidades
 - Preços unitários
 - Estado de marcação (coletado/não coletado)
