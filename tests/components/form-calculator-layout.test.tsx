@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 import { Text } from 'react-native'
 import { Form } from '@/components/Form'
@@ -15,7 +15,11 @@ jest.mock('@/stores/CartStore', () => ({
 
 jest.mock('expo-router', () => ({
   Tabs: Object.assign(
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    ({ children }: { children: ReactNode }) => <>{children}</>,
+    { Screen: () => null }
+  ),
+  Stack: Object.assign(
+    ({ children }: { children: ReactNode }) => <>{children}</>,
     { Screen: () => null }
   ),
   useRouter: jest.fn(),
@@ -67,18 +71,18 @@ jest.mock('@/components/List', () => ({
 }))
 
 jest.mock('@/components/Screen', () => ({
-  Screen: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  KeyboardScreen: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Screen: ({ children }: { children: ReactNode }) => <>{children}</>,
+  KeyboardScreen: ({ children }: { children: ReactNode }) => <>{children}</>,
 }))
 
 jest.mock('@/components/Button', () => ({
   CustomButton: Object.assign(
-    ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => (
+    ({ children, onPress }: { children: ReactNode; onPress?: () => void }) => (
       <button onClick={onPress}>{children}</button>
     ),
     {
-      Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-      Icon: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      Text: ({ children }: { children: ReactNode }) => <span>{children}</span>,
+      Icon: ({ children }: { children: ReactNode }) => <>{children}</>,
     }
   ),
 }))
@@ -119,11 +123,11 @@ jest.mock('@/components/TouchableIcons', () => ({
 }))
 
 jest.mock('@/components/Card', () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Card: ({ children }: { children: ReactNode }) => <>{children}</>,
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
+  TextWhite: ({ children }: { children: ReactNode }) => <span>{children}</span>,
 }))
 
 jest.mock('@/constants/pages', () => ({
