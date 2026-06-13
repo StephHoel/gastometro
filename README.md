@@ -123,7 +123,7 @@ npm run web:serve
   - **AsyncStorage:** usa localStorage do navegador via react-native-web.
 - O tema escuro é preservado via CSS em web.
 - Dados persistidos localmente funcionam independente entre web e Android.
-- O deploy automático para GitHub Pages é executado a cada push na branch `main` via workflow em `.github/workflows/deploy-web.yml`.
+- O deploy para GitHub Pages é executado pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 
 ## Qualidade e testes
 

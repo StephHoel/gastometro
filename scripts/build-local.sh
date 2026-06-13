@@ -18,6 +18,11 @@ npm install --loglevel=error
 echo "✅ Dependências instaladas"
 echo ""
 
+echo "🔍 Verificando erros de código..."
+npm run check
+echo "✅ Código sem problemas"
+echo ""
+
 echo "🧪 Executando testes automatizados..."
 npm run test:coverage
 echo "✅ Testes aprovados"
