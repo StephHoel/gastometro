@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gastômetro",
     "slug": "gastometro",
-    "version": "1.4.12",
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "gastometro",
@@ -18,7 +18,14 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "build": {
+        "babel": {
+          "include": [
+            "react-native-web"
+          ]
+        }
+      }
     },
     "plugins": [
       "expo-router",

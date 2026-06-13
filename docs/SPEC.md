@@ -69,7 +69,7 @@ Use esta seção como verdade atual do repositório.
 - Biome configurado parcialmente em `biome.json`.
 - Dependabot semanal para dependências npm.
 - Foco de plataforma: Android.
-- Plataforma futura: web compatível com GitHub Pages.
+- Plataforma em andamento: web compatível com GitHub Pages.
 - Baseline atual de compatibilidade Android: API 29+ (Android 10).
 
 Não assumir Prisma, PostgreSQL ou Zod sem antes adicionar essas dependências e justificar a mudança. O arquivo antigo do Copilot citava tecnologias que não aparecem na stack atual.
@@ -239,6 +239,12 @@ Diretrizes atuais de build Android para reduzir artefato:
 - build de produção Android deve gerar AAB (`app-bundle`);
 - manter compatibilidade web dos fluxos principais após ajustes de build.
 
+Configuração de build web para GitHub Pages:
+
+- A build web usa variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para roteamento correto no subdiretório do GitHub Pages.
+- O workflow `.github/workflows/deploy-web.yml` configura automaticamente essa variável e faz deploy via GitHub Actions.
+- Deploy local com `npm run web:build` pode incluir a variável para testar a mesma configuração de produção.
+
 Antes de finalizar mudanças, a IA deve tentar uma verificação proporcional ao escopo:
 
 - para regras puras: adicionar ou atualizar testes unitários quando a suíte existir;
@@ -371,6 +377,6 @@ Fora de escopo:
 - Todas as funcionalidades planejadas devem ser implementadas futuramente.
 - Tema escuro deve ser mantido como identidade fixa.
 - Versionamento segue patch para fix/stack, minor para feature e major para mudança potencialmente quebrável.
-- Foco continua Android, com versão web futura compatível com GitHub Pages.
+- Foco continua Android, com versão web em andamento compatível com GitHub Pages.
 - Baseline de Android suportado definida em API 29+, com foco em artefatos menores para Android moderno.
 - Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmação do usuário.

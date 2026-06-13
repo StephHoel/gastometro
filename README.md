@@ -33,7 +33,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - AsyncStorage para persistência local.
 - Node 24 conforme `.nvmrc`.
 
-O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pages está planejada.
+O foco atual da plataforma é Android. A versão web compatível com GitHub Pages está em implementação ativa.
 
 Compatibilidade atual de plataforma:
 
@@ -43,12 +43,15 @@ Compatibilidade atual de plataforma:
 
 ## Funcionalidades planejadas
 
-As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
+As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - Notificações e lembretes.
 - Múltiplas listas.
 - Contas a pagar.
-- Versão web compatível com GitHub Pages.
+
+Funcionalidade em andamento:
+
+- Versão web compatível com GitHub Pages (mini-spec 08 em `docs/specs/active/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
@@ -96,6 +99,33 @@ Observações:
 - `npm run build:android` usa EAS com o perfil `production` e gera AAB.
 - `npm run build:local:eas` executa build local via EAS.
 - O diretório nativo `android/` pode ser gerado por `npm run prebuild` quando necessário.
+
+## Web e GitHub Pages
+
+O app possui suporte para build web estática compatível com GitHub Pages:
+
+```bash
+# Build web estática (GitHub Pages)
+EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
+
+# Servir localmente para testar (requer http-server)
+npm run web:serve
+```
+
+**Notas sobre web:**
+
+- A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
+- O roteamento web é configurado via variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para funcionar corretamente no subdiretório do GitHub Pages.
+- Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
+- APIs nativas sem suporte web possuem fallbacks:
+  - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
+  - **WhatsApp Sharing:** usa URL `wa.me` na web e fallback para deep link/web link no Android.
+  - **AsyncStorage:** usa localStorage do navegador via react-native-web.
+- O tema escuro é preservado via CSS em web.
+- Dados persistidos localmente funcionam independente entre web e Android.
+- O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
+- Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
+- A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
 
 ## Qualidade e testes
 

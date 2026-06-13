@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.5.0 - 2026-06-13
+
+Implementação da base de compatibilidade web com GitHub Pages, incluindo build estática, deploy automatizado e ajustes de fallback para recursos nativos no navegador.
+
+### Funcionalidade
+
+- Build web estática habilitada com `expo export --platform web` e script dedicado `npm run web:build`.
+- Fluxo de compartilhamento via WhatsApp preservado, com uso de URL `wa.me` na web e fallback para deep link/web link no Android.
+- Leitura e escrita de clipboard adaptadas para web com `navigator.clipboard`, mantendo fallback seguro em caso de bloqueio/permissão negada.
+
+### Qualidade e Infraestrutura
+
+- Workflow de deploy web criado em `.github/workflows/deploy-web.yml`, com build, type-check e publicação em GitHub Pages.
+- Gatilhos do workflow de deploy web simplificados para rodar em alterações relevantes de código/configuração web na `main`.
+- Arquivo `.nojekyll` adicionado para garantir compatibilidade de artefatos estáticos no GitHub Pages.
+
+### Documentação
+
+- `README.md` atualizado com status da spec 08 em andamento e diretrizes de execução/build web.
+- `docs/WEB_DEPLOY.md` criado/atualizado com instruções de build, teste local, deploy e troubleshooting.
+- `docs/specs/active/08-web-github-pages.md` atualizado com regras de validação e decisões técnicas adotadas.
+- `docs/specs/README.md` atualizado para refletir a spec 08 em andamento.
+- `docs/SPEC.md` atualizado para refletir a plataforma web como frente em andamento, não mais futura.
+
 ## 1.4.12 - 2026-06-13
 
 Implementação da união automática de itens duplicados na colagem/importação para a lista existente, com cobertura de testes e alinhamento da documentação.

@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.4.12",
+  "version": "1.5.0",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
     "new-version": "sh ./scripts/add-new-version.sh",
@@ -22,6 +22,8 @@
     "build:android": "eas build -p android --profile production",
     "build:local:eas": "eas build --platform android --local",
     "web": "expo start --web --dev-client --clear",
+    "web:build": "expo export --platform web --clear",
+    "web:serve": "npx http-server dist -p 3000 -c-1",
     "check": "npx tsc --noEmit",
     "deps:check": "npx expo-doctor",
     "deps:audit": "npm audit --omit=dev"
