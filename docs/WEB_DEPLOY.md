@@ -169,7 +169,7 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 5. **WhatsApp na web:** O compartilhamento abre `wa.me`/WhatsApp Web; não há deep link nativo equivalente ao Android.
 6. **Clipboard e segurança:** `navigator.clipboard` exige ambiente seguro (`https`/`localhost`) e permissões do navegador.
 7. **Persistência local web:** Limpeza de dados do navegador pode remover o estado persistido da aplicação.
-8. **Fallback SPA:** O restore de rota profunda depende de `sessionStorage`; com storage desabilitado, o retorno de rota pode falhar.
+8. **Fallback SPA:** A restauração de rota profunda depende de `sessionStorage`; com storage desabilitado, o retorno de rota pode falhar.
 
 ## Troubleshooting
 
