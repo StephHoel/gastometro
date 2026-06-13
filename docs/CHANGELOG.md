@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.4.12 - 2026-06-13
+
 ## 1.4.11 - 2026-06-13
 
 Refatoração da spec 12: redução de código duplicado, remoção de código não utilizado e ampliação de cobertura de testes
@@ -142,3 +144,4 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
+
