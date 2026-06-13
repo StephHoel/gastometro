@@ -1,21 +1,26 @@
-# Mini-spec: Gestão de itens duplicados
+# Mini-spec: União de itens duplicados da importação de lista
 
 Número: 06
 Status: ativa
 
 ## Problema
 
-Duplicados devem ser tratados na importação/colagem.
+Duplicados são permitidos na importação/colagem, mas hoje geram ambiguidade para o usuário quando entram na lista existente sem revisão orientada.
 
 ## Objetivo
 
-Criar uma função que una os itens duplicados com base na regra a ser definida.
+Implementar revisão de duplicados importados para tratar os itens antes de concluir a união com a lista atual.
 
 ## Comportamento esperado
 
 - O app deve identificar possíveis duplicados pela combinação de nome normalizado e preço normalizado.
 - A regra acima se aplica ao fluxo de revisão/união de duplicados importados, sem alterar a regra da criação manual (mini-spec 01).
-- A regra deve ser aplicada antes de unir as listas, de forma que o item com mesmo nome e mesmo preço tenha sua quantidade somada para formar a quantidade final. Se a quantidade somada for maior do que a quantidade original, deve registrar o collected como false, caso contrário, mantém o collected igual.
+- Ao escolher colar/importar na lista existente, a comparação de duplicados deve ocorrer antes da união final das listas.
+- Quando houver duplicado, o app aplicar a regra de união aprovada para unir os itens antes da confirmação final.
+- Regra de união aprovada: se nome e preço normalizados forem equivalentes, a quantidade deve ser somada.
+- Regra de `collected` na união aprovada:
+  - se a quantidade final após a soma mudar em relação ao item mantido, o estado final deve ser `false`;
+  - se a quantidade final não mudar, o estado `collected` do item mantido deve ser preservado.
 
 ## Telas afetadas
 
@@ -39,22 +44,22 @@ Criar uma função que una os itens duplicados com base na regra a ser definida.
 ## Critérios de aceite
 
 - Identificar duplicados importados.
+- Exibir revisão dos duplicados com ação para unir ou editar.
 - Permitir unir duplicados conforme regra aprovada.
-- Bloquear importação por causa de duplicados.
+- Não bloquear a importação inteira por causa de duplicados.
 - Não afetar itens não duplicados.
-- União automática sem confirmação.
+- Concluir importação com as decisões aplicadas aos duplicados.
 
 ## Fora de escopo
 
-- Exibir lista de duplicados.
-- Permitir editar um duplicado.
 - Detecção por sinônimos.
 - Detecção fuzzy complexa.
+- Migração de dados persistidos antigos.
 
 ## Observações para IA
 
 - Esta feature não depende da regra de bloqueio de duplicados na criação manual.
-- Pedir confirmação da regra exata de união antes de implementar.
+- Preservar compatibilidade com o formato atual de importação via WhatsApp.
 
 ## Registro de implementação
 
@@ -64,3 +69,4 @@ Criar uma função que una os itens duplicados com base na regra a ser definida.
 - 2026-06-13: regra de união corrigida para ajustar `collected` com base na mudança da quantidade final em relação ao item mantido.
 - 2026-06-13: escopo ajustado para manter bloqueio manual por nome (mini-spec 01) e usar nome + preço na revisão/união de duplicados.
 - 2026-06-13: ao colar na lista existente, a comparação de duplicados (nome + preço) passou a ocorrer antes da união das listas.
+- 2026-06-13: mini-spec revisada para alinhar critérios de aceite com o `docs/SPEC.md` (importação permitida com revisão para unir ou editar duplicados).

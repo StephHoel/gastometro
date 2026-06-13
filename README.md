@@ -47,7 +47,7 @@ As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/sp
 - Notificações e lembretes.
 - Múltiplas listas.
 - Contas a pagar.
-- Gestão de itens duplicados.
+- União de itens duplicados.
 - Versão web compatível com GitHub Pages.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.

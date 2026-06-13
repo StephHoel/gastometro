@@ -28,7 +28,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [05 - Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [06 - Gestão de itens duplicados](./active/06-gestao-itens-duplicados.md)
+- [06 - União de itens duplicados](./active/06-uniao-itens-duplicados.md)
 
 ### Planejadas (ordem de prioridade)
 
