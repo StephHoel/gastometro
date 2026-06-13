@@ -5,7 +5,7 @@ Status: implementado
 
 ## Problema
 
-Duplicados são permitidos na importação/colagem, mas hoje geram ambiguidade para o usuário quando entram na lista existente sem revisão orientada.
+Duplicados são permitidos na importação/colagem e precisam de tratamento consistente antes da união com a lista existente.
 
 ## Objetivo
 
@@ -68,6 +68,6 @@ Implementar união automática de duplicados importados antes de concluir a uni�
 - 2026-06-13: regra de união corrigida para ajustar `collected` com base na mudança da quantidade final em relação ao item mantido.
 - 2026-06-13: escopo ajustado para manter bloqueio manual por nome (mini-spec 01) e usar nome + preço na revisão/união de duplicados.
 - 2026-06-13: ao colar na lista existente, a comparação de duplicados (nome + preço) passou a ocorrer antes da união das listas.
-- 2026-06-13: mini-spec revisada para alinhar critérios de aceite com o `docs/SPEC.md` (importação permitida com revisão para unir ou editar duplicados).
-- 2026-06-13: implementação concluída com revisão de duplicados no fluxo de colar na lista existente, permitindo decisão por grupo entre unir itens ou editar depois.
+- 2026-06-13: mini-spec revisada para alinhar critérios de aceite com o `docs/SPEC.md`.
+- 2026-06-13: implementação concluída com união automática de duplicados no fluxo de colar na lista existente.
 - 2026-06-13: ajuste de comportamento para união automática dos duplicados pelo app, sem exigir ação adicional do usuário.
