@@ -9,10 +9,8 @@ import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { View } from "react-native"
-import { usePageTitle } from '@/hooks/usePageTitle'
 
 export default function Home() {
-  usePageTitle("Gastômetro")
   const cartStore = useCartStore()
   const alertRef = useRef<CustomAlertRef>(null)
 

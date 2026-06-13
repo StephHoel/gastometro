@@ -11,10 +11,8 @@ import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { colors } from '@/constants/color'
-import { usePageTitle } from '@/hooks/usePageTitle'
 
 export default function Calculator() {
-  usePageTitle("Calculadora")
   const [answer, setAnswer] = useState<number | null>(null)
 
   const [price, setPrice] = useState("")

@@ -1,12 +1,23 @@
-import { Tabs } from "expo-router"
+import { Tabs, usePathname } from "expo-router"
 
 import { CalculatorIcon, HomeIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
-import React from 'react'
+import React, { useEffect } from 'react'
 import "@/styles/global.css"
 import { colors } from '@/constants/color'
 
 export default function Layout() {
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      "/": "Gastômetro",
+      "/calculator": "Calculadora",
+    }
+
+    document.title = titles[pathname] ?? "Gastômetro"
+  }, [pathname])
+
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
       <Tabs
@@ -28,6 +39,7 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (
               <HomeIcon size={size} color={color as string} />
             ),
+            headerTitle: "Início",
           }}
         />
 
@@ -39,6 +51,7 @@ export default function Layout() {
             tabBarIcon: ({ color, size }) => (
               <CalculatorIcon size={size} color={color as string} />
             ),
+            headerTitle: "Calculadora",
           }}
         />
 
