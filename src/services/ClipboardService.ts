@@ -31,6 +31,12 @@ export const ClipboardService = {
     }
 
     // Native: usar expo-clipboard
-    return await Clipboard.setStringAsync(text)
+    try {
+      await Clipboard.setStringAsync(text)
+      return true
+    } catch (error) {
+      console.warn('Erro ao escrever no clipboard nativo:', error)
+      return false
+    }
   }
 }
