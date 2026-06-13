@@ -191,7 +191,7 @@ Regras decididas:
 - quantidade vazia deve ser aceita e tratada como `0`.
 - preço vazio deve ser aceito e tratado como `0.00`.
 - valores negativos não devem ser aceitos em quantidade nem preço.
-- itens duplicados devem ser bloqueados no modo de criação de item.
+- itens duplicados devem ser bloqueados no modo de criação de item pela comparação de nome normalizado.
 - itens duplicados devem ser permitidos no modo de colar/importar lista.
 - `ParseToFloat` remove caracteres não numéricos relevantes e interpreta vírgula como decimal.
 - divisão por zero retorna `0`.
@@ -199,7 +199,7 @@ Regras decididas:
 Pendências de implementação:
 
 - implementar a feature de listar duplicados e permitir união ou alteração pelo usuário (mini-spec 06 ativa).
-- na mini-spec 06, considerar duplicados pela combinação de nome + preço normalizados.
+- na mini-spec 06, para revisão/união de duplicados importados, considerar duplicados pela combinação de nome + preço normalizados.
 - definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importação

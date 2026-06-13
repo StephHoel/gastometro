@@ -4,7 +4,7 @@ export const text = {
     invalid_list_format: "A lista copiada não está no padrão. Copie a lista do WhatsApp sem editar!",
     required_fields: 'Por favor, preencha todos os campos corretamente.',
     negative_value: 'Valores negativos não são permitidos.',
-    duplicate_item: 'Já existe um item com este nome e preço na lista.',
+    duplicate_item: 'Já existe um item com este nome na lista.',
 
     whatsapp_unavailable: 'WhatsApp não disponível',
     whatsapp_open_error: 'Não foi possível abrir o WhatsApp no dispositivo.',
