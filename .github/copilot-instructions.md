@@ -54,7 +54,7 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 - Se houver alterações locais, salvar WIP antes de continuar.
 - Validar existência dos arquivos obrigatórios:
 	- `package.json`
-	- `app.json`
+	- `app.config.js`
 - Validar existência do arquivo opcional:
 	- `android/app/build.gradle`
 - Garantir que `docs/CHANGELOG.md` exista (criar se faltar).
@@ -72,7 +72,7 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 
 - Atualizar obrigatoriamente estes pontos de versão:
 	- `package.json` -> `version`
-	- `app.json` -> `version`
+	- `app.config.js` -> `version`
 - Se `android/app/build.gradle` existir, atualizar também:
 	- `android/app/build.gradle` -> `versionName`
 - Coletar descrição da release e registrar no topo de `docs/CHANGELOG.md` com data no formato `YYYY-MM-DD`.
@@ -88,7 +88,7 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 - Criar commit com os arquivos de release:
 	- `package.json`
 	- `package-lock.json`
-	- `app.json`
+	- `app.config.js`
 	- `docs/CHANGELOG.md`
 - Se existir, incluir também no commit:
 	- `android/app/build.gradle`
