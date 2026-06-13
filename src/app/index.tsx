@@ -9,9 +9,10 @@ import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { View } from "react-native"
-import { StackTitle } from 'expo-router/build/layouts/stack-utils'
+import { usePageTitle } from '@/hooks/usePageTitle'
 
 export default function Home() {
+  usePageTitle("Gastômetro")
   const cartStore = useCartStore()
   const alertRef = useRef<CustomAlertRef>(null)
 
@@ -22,7 +23,6 @@ export default function Home() {
 
   return (
     <>
-      <StackTitle>Gastômetro</StackTitle>
       <CustomAlert ref={alertRef} />
 
       <Screen>
