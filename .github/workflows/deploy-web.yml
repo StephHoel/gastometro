@@ -39,6 +39,8 @@ jobs:
         run: npm run check
 
       - name: Build web
+        env:
+          EXPO_PUBLIC_ROUTER_BASE: /gastometro
         run: npm run web:build
 
       - name: Create .nojekyll file
