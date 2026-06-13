@@ -13,7 +13,7 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 
 ## Comportamento esperado
 
-- O app deve identificar possíveis duplicados pelo nome normalizado do item.
+- O app deve identificar possíveis duplicados pela combinação de nome normalizado e preço normalizado.
 - Quando houver duplicados, uma ação deve permitir visualizar esses itens.
 - O usuário deve poder unir duplicados.
 - O usuário deve poder editar um dos itens para remover a duplicidade.
@@ -34,7 +34,8 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 
 ## Regras de validação
 
-- Comparação deve ignorar diferenças simples de maiúsculas/minúsculas e espaços nas extremidades.
+- Comparação deve ignorar diferenças simples de maiúsculas/minúsculas e espaços nas extremidades do nome.
+- Duplicidade deve considerar nome e preço após normalização numérica (ex.: `10`, `10.0` e `10,00` devem ser equivalentes).
 - Antes de implementar, decidir regra de união:
   - somar quantidades e manter preço de qual item?
   - manter coletado se qualquer item estiver coletado?
@@ -63,3 +64,4 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 ## Registro de implementação
 
 - 2026-06-13: implementação iniciada; mini-spec movida de `planned/` para `active/`.
+- 2026-06-13: regra de detecção de duplicados definida como nome + preço normalizados.

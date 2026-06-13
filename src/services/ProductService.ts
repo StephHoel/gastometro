@@ -1,6 +1,6 @@
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { SetProductProps } from "@/interfaces/SetProductProps"
-import { NormalizeNumericString } from '@/utils/functions/MathFunctions'
+import { GetQuantityNormalize, GetPriceNormalize, NormalizePriceForComparison } from '@/utils/functions/NumberFunctions'
 import { NormalizeItemName, ToTitleCase } from '@/utils/functions/StringFunctions'
 
 export const ProductService = {
@@ -14,22 +14,17 @@ export const ProductService = {
     }
   },
 
-  isDuplicateItem(item: string, products: ProductProps[], ignoredId?: string): boolean {
+  isDuplicateItem(item: string, price: string, products: ProductProps[], ignoredId?: string): boolean {
     const normalizedItem = NormalizeItemName(item)
+    const normalizedPrice = NormalizePriceForComparison(price)
 
     return products.some((product) => {
       if (ignoredId && product.id === ignoredId) return false
 
-      return NormalizeItemName(product.item) === normalizedItem
+      return (
+        NormalizeItemName(product.item) === normalizedItem
+        && NormalizePriceForComparison(product.price) === normalizedPrice
+      )
     })
   }
 }
-
-function GetPriceNormalize(price: string) {
-  return NormalizeNumericString(price, '0.00', ['0', '0.0', '0.00', '0,0', '0,00'])
-}
-
-function GetQuantityNormalize(qtt: string) {
-  return NormalizeNumericString(qtt, '0', ['0', '0.0', '0.00', '0,0', '0,00'])
-}
-
