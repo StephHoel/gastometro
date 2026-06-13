@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 import Home from '@/app/index'
 import { SetCurrency } from '@/utils/functions/MathFunctions'
+
+jest.mock('expo-router', () => ({
+  Stack: Object.assign(
+    ({ children }: { children: ReactNode }) => <>{children}</>,
+    { Screen: () => null }
+  ),
+}))
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: jest.fn(),
