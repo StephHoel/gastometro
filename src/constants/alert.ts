@@ -33,5 +33,4 @@ export const alert = {
       newList: "Colar em Nova Lista",
     },
   },
-
 }
