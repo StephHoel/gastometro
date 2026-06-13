@@ -25,7 +25,7 @@ get_version_from_ref() {
 
   one_line="$(printf '%s' "$raw" | tr -d '\r\n')"
 
-  if [ "$file" = "app.json" ]; then
+  if [ "$file" = "app.config.js" ]; then
     expo_version="$(printf '%s' "$one_line" | sed -nE 's/.*"expo"[[:space:]]*:[[:space:]]*\{[^}]*"version"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/p')"
     if [ -n "$expo_version" ]; then
       echo "$expo_version"
@@ -49,7 +49,7 @@ echo "${TAB2}OK: Executando na raiz do repositório: $repo_root"
 echo ""
 
 echo "${TAB1}Verificando arquivos essenciais..."
-for file in package.json app.json; do
+for file in package.json app.config.js; do
   [ -f "$file" ] || fail "Arquivo obrigatório não encontrado: $file"
 done
 echo "${TAB2}OK: Todos os arquivos obrigatórios encontrados."
@@ -90,23 +90,23 @@ echo ""
 
 base_package_version="$(get_version_from_ref "$base_ref" package.json)"
 head_package_version="$(get_version_from_ref "$head_ref" package.json)"
-base_app_version="$(get_version_from_ref "$base_ref" app.json)"
-head_app_version="$(get_version_from_ref "$head_ref" app.json)"
+base_app_version="$(get_version_from_ref "$base_ref" app.config.js)"
+head_app_version="$(get_version_from_ref "$head_ref" app.config.js)"
 
 echo "${TAB1}Comparando versões..."
 echo "${TAB2}Versão base package.json: $base_package_version"
 echo "${TAB2}Versão head package.json: $head_package_version"
-echo "${TAB2}Versão base app.json: $base_app_version"
-echo "${TAB2}Versão head app.json: $head_app_version"
+echo "${TAB2}Versão base app.config.js: $base_app_version"
+echo "${TAB2}Versão head app.config.js: $head_app_version"
 echo ""
 
-[ -n "$head_package_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.json do head."
-[ -n "$head_app_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.json do head."
+[ -n "$head_package_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.config.js do head."
+[ -n "$head_app_version" ] || fail "Não foi possivel ler versão em package.json e/ou app.config.js do head."
 
-[ "$head_package_version" = "$head_app_version" ] || fail "Versões divergentes entre package.json ($head_package_version) e app.json ($head_app_version)."
+[ "$head_package_version" = "$head_app_version" ] || fail "Versões divergentes entre package.json ($head_package_version) e app.config.js ($head_app_version)."
 
 if [ "$base_package_version" = "$head_package_version" ] && [ "$base_app_version" = "$head_app_version" ]; then
-  fail "Houve alteração em src/ ou tests/, mas sem bump de versão. Atualize package.json e app.json (campo version) antes do merge."
+  fail "Houve alteração em src/ ou tests/, mas sem bump de versão. Atualize package.json e app.config.js (campo version) antes do merge."
 fi
 
 echo "${TAB2}OK: Bump de versão detectado e consistente. Check aprovado."
