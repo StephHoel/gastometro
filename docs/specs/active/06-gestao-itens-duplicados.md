@@ -1,7 +1,7 @@
 # Mini-spec: Gestão de itens duplicados
 
 Número: 06
-Status: planejado
+Status: ativa
 
 ## Problema
 
@@ -59,3 +59,7 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 
 - Esta feature depende da regra de bloqueio de duplicados na criação manual.
 - Pedir confirmação da regra exata de união antes de implementar.
+
+## Registro de implementação
+
+- 2026-06-13: implementação iniciada; mini-spec movida de `planned/` para `active/`.

@@ -41,12 +41,15 @@ Público esperado:
 
 ## 3. Funcionalidades Planejadas
 
+Em andamento:
+
+- identificação de itens duplicados com uma ação para unir os itens ou alterar um deles (mini-spec 06).
+
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - notificações/lembretes;
 - múltiplas listas com títulos personalizados;
 - contas a pagar;
-- identificação de itens duplicados com uma ação para unir os itens ou alterar um deles.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
@@ -195,7 +198,7 @@ Regras decididas:
 
 Pendências de implementação:
 
-- planejar feature para listar duplicados e permitir união ou alteração pelo usuário.
+- implementar a feature de listar duplicados e permitir união ou alteração pelo usuário (mini-spec 06 ativa).
 - definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importação
