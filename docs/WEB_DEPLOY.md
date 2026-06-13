@@ -12,6 +12,24 @@ npm run web:build
 
 A build será gerada no diretório `dist/` e será totalmente estática, sem necessidade de backend.
 
+### Variáveis de Ambiente de Build
+
+O Expo Router necessita da variável `EXPO_PUBLIC_ROUTER_BASE` para configurar corretamente as rotas quando a aplicação é servida em um subdiretório do GitHub Pages.
+
+Para GitHub Pages (subdiretório `/gastometro/`):
+
+```bash
+EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
+```
+
+Para testes locais (root path):
+
+```bash
+EXPO_PUBLIC_ROUTER_BASE=/ npm run web:build
+```
+
+**Nota:** O workflow automático (`.github/workflows/deploy-web.yml`) já possui essa configuração definida.
+
 ### Estrutura da Build
 
 - `dist/index.html` - HTML principal
@@ -21,20 +39,30 @@ A build será gerada no diretório `dist/` e será totalmente estática, sem nec
 
 ## Teste Local
 
-Para testar a build localmente antes de fazer deploy:
+Para testar a build localmente antes de fazer deploy, você pode simular o ambiente do GitHub Pages:
+
+### Teste com GitHub Pages (subdiretório)
+
+```bash
+EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
+npm run web:serve
+```
+
+Depois abra seu navegador em `http://localhost:3000`.
+
+### Teste com root path (padrão)
 
 ```bash
 npm run web:build
 npm run web:serve
 ```
 
-Depois abra seu navegador em `http://localhost:3000`.
-
 **Testes recomendados:**
 
 - Tela principal (adicionar, editar, remover items)
 - Marcação de itens como coletados
 - Calculadora
+- Navegação entre abas (home e calculadora)
 - Compartilhamento via WhatsApp (abrirá wa.me)
 - Importação de lista copiada
 - Persistência de dados (recarregue a página)
@@ -50,10 +78,11 @@ Workflow: `.github/workflows/deploy-web.yml`
 1. Faz checkout do código
 2. Instala dependências com npm
 3. Roda verificação de tipos (TypeScript)
-4. Gera build web com `expo export --platform web`
-5. Cria arquivo `.nojekyll` para desabilitar Jekyll
-6. Faz upload dos artefatos para GitHub Pages
-7. Deployment automático no ambiente de GitHub Pages
+4. Configura variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro`
+5. Gera build web com `expo export --platform web`
+6. Cria arquivo `.nojekyll` para desabilitar Jekyll
+7. Faz upload dos artefatos para GitHub Pages
+8. Deployment automático no ambiente de GitHub Pages
 
 ## Configuração de GitHub Pages
 
@@ -69,8 +98,8 @@ O projeto está configurado para usar GitHub Pages com as seguintes particularid
 
 - **Fonte:** Usa workflow automático (Actions)
 - **Branch:** Gerenciado pelo workflow em `.github/workflows/deploy-web.yml`
-- **Roteamento:** Build estática com Expo Router
-- **Base path:** A aplicação é servida na raiz do repositório
+- **Roteamento:** Build estática com Expo Router via `EXPO_PUBLIC_ROUTER_BASE=/gastometro`
+- **Base path:** A aplicação é servida em `https://stephhoel.github.io/gastometro/`
 
 ## Rotas Web
 
