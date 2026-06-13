@@ -36,6 +36,8 @@ Permitir publicar uma build web estática do app no GitHub Pages sem quebrar o c
 
 - Build web deve passar sem erros.
 - A navegação deve funcionar em URL base do GitHub Pages.
+- A execução local com `npm run web` não pode apresentar tela em branco.
+- Não introduzir `public/index.html` customizado para evitar quebra da injeção de scripts do Expo no ambiente web local.
 - APIs nativas sem suporte web devem ter fallback.
 - Tema escuro deve ser preservado.
 
@@ -55,5 +57,5 @@ Permitir publicar uma build web estática do app no GitHub Pages sem quebrar o c
 
 ## Observações para IA
 
-- Confirmar estratégia de base path do GitHub Pages antes de implementar.
-- Verificar se `expo export --platform web` ou fluxo equivalente é o caminho correto para Expo 56.
+- Estratégia definida: usar build estática com `expo export --platform web` no Expo 56.
+- Manter template HTML padrão do Expo para compatibilidade entre `npm run web` e build estática.

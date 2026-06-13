@@ -33,7 +33,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - AsyncStorage para persistência local.
 - Node 24 conforme `.nvmrc`.
 
-O foco atual da plataforma é Android. Uma versão web compatível com GitHub Pages está planejada.
+O foco atual da plataforma é Android. A versão web compatível com GitHub Pages está em implementação ativa.
 
 Compatibilidade atual de plataforma:
 
@@ -43,12 +43,15 @@ Compatibilidade atual de plataforma:
 
 ## Funcionalidades planejadas
 
-As próximas funcionalidades são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
+As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - Notificações e lembretes.
 - Múltiplas listas.
 - Contas a pagar.
-- Versão web compatível com GitHub Pages.
+
+Funcionalidade em andamento:
+
+- Versão web compatível com GitHub Pages (mini-spec 08 em `docs/specs/active/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
