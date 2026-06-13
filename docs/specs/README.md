@@ -27,6 +27,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [05 - Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [12 - Refactor — dead code e duplicação de código](./active/12-refactor-dead-code-e-duplicacao.md)
 
 ### Planejadas (ordem de prioridade)
 
