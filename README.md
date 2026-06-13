@@ -216,7 +216,7 @@ Fluxo de criação de versão:
 Regra de Pull Request:
 
 - Se o PR alterar arquivos em `src/` e/ou `tests/`, é obrigatório atualizar a versão do projeto.
-- O check automático valida o campo `version` em `package.json` e `app.json`.
+- O check automático valida o campo `version` em `package.json` e `app.config.js`.
 - Se a versão não for atualizada (ou ficar inconsistente entre os dois arquivos), o check falha e o merge fica bloqueado.
 
 ## Política de dependências

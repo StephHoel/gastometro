@@ -9,6 +9,9 @@
     // GitHub Pages SPA routing fix
     // Salva o caminho atual antes de redirecionar para index.html
     const redirect = function () {
+      if (sessionStorage.redirect === window.location.pathname)
+        throw new Error()
+
       if (window.location.pathname !== '/gastometro/') {
         sessionStorage.redirect = window.location.pathname + window.location.search
       }

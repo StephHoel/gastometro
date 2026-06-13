@@ -1,7 +1,7 @@
 # Verificação de arquivos essenciais
 echo "$TAB1🔍 Verificando arquivos essenciais..."
 
-for file in package.json app.json; do
+for file in package.json app.config.js; do
   if [ ! -f "$file" ]; then
     echo "$TAB2❌ Arquivo obrigatório não encontrado: $file"
     exit 1
