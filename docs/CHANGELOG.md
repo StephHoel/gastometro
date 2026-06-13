@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0 - 2026-06-13
+
+Preparar compatibilidade web para GitHub Pages
+
 ## 1.4.12 - 2026-06-13
 
 Implementação da união automática de itens duplicados na colagem/importação para a lista existente, com cobertura de testes e alinhamento da documentação.
@@ -165,3 +169,4 @@ Correção da v1.4.1
 ## 1.4.0 - 2025-05-01
 
 Criação de calculadora de preços
+
