@@ -368,7 +368,7 @@ Fora de escopo:
 - Valores negativos não devem ser aceitos.
 - Nome de item deve ocupar no máximo aproximadamente três quartos da largura horizontal da tela.
 - Duplicados devem ser bloqueados na criação manual e permitidos na importação/colagem.
-- Deve existir uma feature futura para mostrar itens duplicados e permitir união ou alteração.
+- A mini-spec 06 está ativa para revisar duplicados importados e fazer sua união.
 - Total de itens coletados deve aparecer ao lado do total geral.
 - Formato atual de compartilhamento/importação via WhatsApp deve continuar retrocompatível.
 - O app permanece offline-first por tempo indeterminado.
