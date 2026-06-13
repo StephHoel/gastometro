@@ -48,7 +48,8 @@ export const DuplicateProducts = {
 
     const quantities = group.products.map((product) => ParseToFloat(product.quantity))
     const originalKeepQuantity = ParseToFloat(productToKeep.quantity)
-    const mergedQuantity = quantities.reduce((acc, quantity) => acc + quantity, 0)
+    const rawSum = quantities.reduce((acc, quantity) => acc + quantity, 0)
+    const mergedQuantity = parseFloat(rawSum.toFixed(3))
     const hasQuantityChanged = mergedQuantity !== originalKeepQuantity
 
     const mergedProduct: ProductProps = {

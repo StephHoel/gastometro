@@ -153,4 +153,15 @@ describe('DuplicateProducts', () => {
       removedIds: ['2'],
     })
   })
+
+  it('deve arredondar a quantidade mesclada para 3 casas decimais evitando imprecisão de ponto flutuante', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Arroz', quantity: '0.1', price: '5', collected: false },
+      { id: '2', item: 'Arroz', quantity: '0.2', price: '5', collected: false },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0], '1')
+
+    expect(result?.mergedProduct.quantity).toBe('0.3')
+  })
 })
