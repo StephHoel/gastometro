@@ -9,15 +9,15 @@ export function IsValidImportedNumber(value: string): boolean {
   return /^\d+(?:[.,]\d+)?$/.test(normalized)
 }
 
-export function NormalizePriceForComparison(price: string) {
+export function NormalizePriceForComparison(price: string): string {
   return ParseToFloat(price).toString()
 }
 
-export function GetPriceNormalize(price: string) {
+export function GetPriceNormalize(price: string): string {
   return NormalizeNumericString(price, '0.00', numberFormats)
 }
 
-export function GetQuantityNormalize(qtt: string) {
+export function GetQuantityNormalize(qtt: string): string {
   return NormalizeNumericString(qtt, '0', numberFormats)
 }
 
