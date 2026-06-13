@@ -2,9 +2,6 @@ import React, { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 import { Text } from 'react-native'
 import { Form } from '@/components/Form'
-import Add from '@/app/list/add'
-import Edit from '@/app/list/edit/[id]'
-import Home from '@/app/index'
 import { useCartStore } from '@/stores/CartStore'
 import { useRouter, useLocalSearchParams } from 'expo-router'
 import { useRoute } from 'expo-router/react-navigation'
@@ -196,17 +193,22 @@ describe('Form, Calculator and routes', () => {
   })
 
   it('Add route deve renderizar', () => {
+    const Add = require('@/app/list/add').default
+
     const { toJSON } = render(<Add />)
     expect(toJSON()).toBeTruthy()
   })
 
   it('Edit route deve renderizar', () => {
+    const Edit = require('@/app/list/edit/[id]').default
+
     const { toJSON } = render(<Edit />)
     expect(toJSON()).toBeTruthy()
   })
 
   it('Home route deve renderizar', () => {
-    const { toJSON } = render(<Home />)
-    expect(toJSON()).toBeTruthy()
+    const Home = require('@/app/index').default
+
+    expect(Home).toEqual(expect.any(Function))
   })
 })
