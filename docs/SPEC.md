@@ -283,6 +283,8 @@ Fluxo de criação de versão (script oficial):
 - interativo: `npm run new-version`;
 - não-interativo: `npm run new-version -- <tipo> "<texto do changelog>"`;
 - tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
+- branch de release: criar branch nova para versionamento **somente se** o fluxo iniciar na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
+- se já estiver em branch de trabalho/release, reaproveitar a branch atual e não criar outra.
 
 Estratégia atual de release/build Android: artefatos locais em APK arm64 e produção em AAB.
 

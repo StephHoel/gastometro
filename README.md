@@ -179,6 +179,8 @@ Fluxo de criação de versão:
 - Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>"`
 - Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual)
 - Exemplo: `npm run new-version -- 1 "Ajustes de documentação e scripts de release"`
+- Branch de release: criar uma branch nova para versionamento **apenas se** o fluxo for iniciado na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
+- Se o fluxo já estiver sendo executado em uma branch de trabalho/release, reutilizar a branch atual e não criar outra.
 
 Regra de Pull Request:
 
