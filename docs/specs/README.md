@@ -28,11 +28,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [05 - Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [06 - Gestão de itens duplicados](./active/06-gestao-itens-duplicados.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [06 - Gestão de itens duplicados](./planned/06-gestao-itens-duplicados.md)
-2. [08 - Web compatível com GitHub Pages](./planned/08-web-github-pages.md)
-3. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
-4. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
-5. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
+1. [08 - Web compatível com GitHub Pages](./planned/08-web-github-pages.md)
+2. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
+3. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
+4. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
