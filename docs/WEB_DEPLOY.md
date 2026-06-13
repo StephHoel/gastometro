@@ -61,16 +61,16 @@ O projeto está configurado para usar GitHub Pages com as seguintes particularid
 
 - **Fonte:** Usa workflow automático (Actions)
 - **Branch:** Gerenciado pelo workflow em `.github/workflows/deploy-web.yml`
-- **Roteamento:** Hash-based routing via Expo Router
+- **Roteamento:** Build estática com Expo Router
 - **Base path:** A aplicação é servida na raiz do repositório
 
 ## Rotas Web
 
-O app usa hash-based routing, então as URLs ficarão assim:
+As rotas são exportadas de forma estática pelo Expo Router. Exemplos:
 
 - `https://stephhoel.github.io/gastometro/` - Tela inicial
-- `https://stephhoel.github.io/gastometro/#/calculator` - Calculadora
-- `https://stephhoel.github.io/gastometro/#/list` - Lista (se implementada)
+- `https://stephhoel.github.io/gastometro/calculator` - Calculadora
+- `https://stephhoel.github.io/gastometro/list/add` - Adicionar item
 
 ## API de Compartilhamento Web
 
@@ -123,6 +123,12 @@ Se `npm run web:build` falhar:
 2. Verifique os assets estão sendo carregados corretamente
 3. Limpe o cache do navegador (Ctrl+Shift+Del)
 4. Verifique se `.nojekyll` existe no `dist/`
+
+### Página em branco no `npm run web`
+
+1. Verifique se não existe `public/index.html` customizado no projeto
+2. Rode `npm run web -- --clear` para limpar cache do bundler
+3. Reinicie o servidor de desenvolvimento (`npm run web`)
 
 ### Dados não são persistidos
 
