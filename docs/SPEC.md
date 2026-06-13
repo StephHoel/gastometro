@@ -239,6 +239,12 @@ Diretrizes atuais de build Android para reduzir artefato:
 - build de produção Android deve gerar AAB (`app-bundle`);
 - manter compatibilidade web dos fluxos principais após ajustes de build.
 
+Configuração de build web para GitHub Pages:
+
+- A build web usa variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para roteamento correto no subdiretório do GitHub Pages.
+- O workflow `.github/workflows/deploy-web.yml` configura automaticamente essa variável e faz deploy via GitHub Actions.
+- Deploy local com `npm run web:build` pode incluir a variável para testar a mesma configuração de produção.
+
 Antes de finalizar mudanças, a IA deve tentar uma verificação proporcional ao escopo:
 
 - para regras puras: adicionar ou atualizar testes unitários quando a suíte existir;

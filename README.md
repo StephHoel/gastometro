@@ -105,8 +105,8 @@ Observações:
 O app possui suporte para build web estática compatível com GitHub Pages:
 
 ```bash
-# Build web estática
-npm run web:build
+# Build web estática (GitHub Pages)
+EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
 
 # Servir localmente para testar (requer http-server)
 npm run web:serve
@@ -115,7 +115,7 @@ npm run web:serve
 **Notas sobre web:**
 
 - A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
-- O roteamento web usa a configuração padrão do Expo Router para build estática.
+- O roteamento web é configurado via variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para funcionar corretamente no subdiretório do GitHub Pages.
 - Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
 - APIs nativas sem suporte web possuem fallbacks:
   - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
@@ -123,8 +123,9 @@ npm run web:serve
   - **AsyncStorage:** usa localStorage do navegador via react-native-web.
 - O tema escuro é preservado via CSS em web.
 - Dados persistidos localmente funcionam independente entre web e Android.
-- O deploy para GitHub Pages é executado pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
+- O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
+- A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
 
 ## Qualidade e testes
 
