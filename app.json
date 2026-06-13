@@ -21,7 +21,9 @@
       "favicon": "./assets/images/favicon.png",
       "build": {
         "babel": {
-          "include": ["react-native-web"]
+          "include": [
+            "react-native-web"
+          ]
         }
       }
     },

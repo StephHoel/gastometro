@@ -21,10 +21,10 @@ export function withWebFallback<T>(
   if (isWeb && webFunction) {
     return webFunction()
   }
-  
+
   if (isWeb) {
     return Promise.resolve(fallbackValue as T)
   }
-  
+
   return nativeFunction()
 }
