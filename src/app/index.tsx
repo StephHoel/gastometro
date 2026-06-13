@@ -9,6 +9,7 @@ import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { View } from "react-native"
+import { Stack } from 'expo-router'
 
 export default function Home() {
   const cartStore = useCartStore()
@@ -21,6 +22,7 @@ export default function Home() {
 
   return (
     <>
+      <Stack.Screen options={{ title: "Gastômetro" }} />
       <CustomAlert ref={alertRef} />
 
       <Screen>

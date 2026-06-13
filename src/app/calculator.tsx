@@ -11,6 +11,7 @@ import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { colors } from '@/constants/color'
+import { Stack } from 'expo-router'
 
 export default function Calculator() {
   const [answer, setAnswer] = useState<number | null>(null)
@@ -45,50 +46,53 @@ export default function Calculator() {
   }
 
   return (
-    <KeyboardScreen>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <Header />
+    <>
+      <Stack.Screen options={{ title: "Calculadora" }} />
+      <KeyboardScreen>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <Header />
 
-        <View className="mt-5 gap-5">
-          <CustomInput
-            nameField={"Preço"}
-            selfRef={inputRef1}
-            placeholder={"Preço da Embalagem"}
-            setItem={setPrice}
-            item={price}
-            keyboardType="number-pad"
-            onSubmit={() => inputRef2.current?.focus()}
-            returnKeyType={"next"}
-          />
+          <View className="mt-5 gap-5">
+            <CustomInput
+              nameField={"Preço"}
+              selfRef={inputRef1}
+              placeholder={"Preço da Embalagem"}
+              setItem={setPrice}
+              item={price}
+              keyboardType="number-pad"
+              onSubmit={() => inputRef2.current?.focus()}
+              returnKeyType={"next"}
+            />
 
-          <CustomInput
-            nameField={"Quantidade"}
-            selfRef={inputRef2}
-            placeholder={"Quantidade na Embalagem"}
-            setItem={setQuantity}
-            item={quantity}
-            keyboardType="number-pad"
-            onSubmit={handleToCalc}
-            returnKeyType={"done"}
-          />
+            <CustomInput
+              nameField={"Quantidade"}
+              selfRef={inputRef2}
+              placeholder={"Quantidade na Embalagem"}
+              setItem={setQuantity}
+              item={quantity}
+              keyboardType="number-pad"
+              onSubmit={handleToCalc}
+              returnKeyType={"done"}
+            />
 
-          <View className="flex-1 flex-row justify-between">
-            <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-              <Button.Icon><TrashIcon size={28} color={colors.black} /></Button.Icon>
-              <Button.Text className="text-2xl">Limpar</Button.Text>
-            </Button>
+            <View className="flex-1 flex-row justify-between">
+              <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
+                <Button.Icon><TrashIcon size={28} color={colors.black} /></Button.Icon>
+                <Button.Text className="text-2xl">Limpar</Button.Text>
+              </Button>
 
-            <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
-              <Button.Icon><CalculatorIcon size={28} color={colors.black} /></Button.Icon>
-              <Button.Text className="text-2xl">Calcular</Button.Text>
-            </Button>
+              <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
+                <Button.Icon><CalculatorIcon size={28} color={colors.black} /></Button.Icon>
+                <Button.Text className="text-2xl">Calcular</Button.Text>
+              </Button>
+            </View>
+
+            <Card className="mx-5 p-4">
+              <TextWhite>Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}</TextWhite>
+            </Card>
           </View>
-
-          <Card className="mx-5 p-4">
-            <TextWhite>Preço por Unidade: {answer == null ? "R$ ??" : `${SetCurrency(answer)}`}</TextWhite>
-          </Card>
-        </View>
-      </ScrollView>
-    </KeyboardScreen>
+        </ScrollView>
+      </KeyboardScreen>
+    </>
   )
 }
