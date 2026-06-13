@@ -1,7 +1,7 @@
 # Mini-spec: Web compatível com GitHub Pages
 
 Número: 08
-Status: planejado
+Status: em desenvolvimento
 
 ## Problema
 
