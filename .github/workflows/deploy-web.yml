@@ -2,17 +2,7 @@ name: Deploy Web to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "src/**"
-      - "app.json"
-      - "package.json"
-      - "package-lock.json"
-      - "tailwind.config.js"
-      - "metro.config.js"
-      - ".github/workflows/deploy-web.yml"
-  workflow_dispatch:
+    branches: [main]
 
 permissions:
   contents: read
