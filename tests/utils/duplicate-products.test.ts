@@ -1,4 +1,4 @@
-import { GetDuplicateProductsGroups } from '@/utils/functions/DuplicateProducts'
+import { DuplicateProducts } from '@/utils/functions/DuplicateProducts'
 
 describe('DuplicateProducts', () => {
   it('deve agrupar duplicados por nome e preço normalizados', () => {
@@ -10,7 +10,7 @@ describe('DuplicateProducts', () => {
       { id: '5', item: '  FEIJÃO ', quantity: '1', price: '8,0', collected: false },
     ]
 
-    const groups = GetDuplicateProductsGroups(products)
+    const groups = DuplicateProducts.getGroups(products)
 
     expect(groups).toHaveLength(2)
 
@@ -28,6 +28,66 @@ describe('DuplicateProducts', () => {
       { id: '3', item: 'Feijão', quantity: '1', price: '8', collected: false },
     ]
 
-    expect(GetDuplicateProductsGroups(products)).toEqual([])
+    expect(DuplicateProducts.getGroups(products)).toEqual([])
+  })
+
+  it('deve forçar collected para false quando a quantidade final mudar', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: true },
+      { id: '2', item: ' arroz ', quantity: '2', price: '10,00', collected: false },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0], '1')
+
+    expect(result).toEqual({
+      mergedProduct: {
+        id: '1',
+        item: 'Arroz',
+        quantity: '4',
+        price: '10',
+        collected: false,
+      },
+      removedIds: ['2'],
+    })
+  })
+
+  it('deve manter collected quando a quantidade final não mudar', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+      { id: '2', item: ' feijão ', quantity: '0', price: '8,0', collected: false },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0], '1')
+
+    expect(result).toEqual({
+      mergedProduct: {
+        id: '1',
+        item: 'Feijão',
+        quantity: '1',
+        price: '8',
+        collected: true,
+      },
+      removedIds: ['2'],
+    })
+  })
+
+  it('deve forçar collected para false quando a quantidade final mudar com quantidades diferentes', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+      { id: '2', item: ' feijão ', quantity: '3', price: '8,0', collected: true },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0], '1')
+
+    expect(result).toEqual({
+      mergedProduct: {
+        id: '1',
+        item: 'Feijão',
+        quantity: '4',
+        price: '8',
+        collected: false,
+      },
+      removedIds: ['2'],
+    })
   })
 })

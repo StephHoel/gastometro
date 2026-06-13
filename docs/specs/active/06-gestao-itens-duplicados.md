@@ -36,10 +36,10 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 
 - Comparação deve ignorar diferenças simples de maiúsculas/minúsculas e espaços nas extremidades do nome.
 - Duplicidade deve considerar nome e preço após normalização numérica (ex.: `10`, `10.0` e `10,00` devem ser equivalentes).
-- Antes de implementar, decidir regra de união:
-  - somar quantidades e manter preço de qual item?
-  - manter coletado se qualquer item estiver coletado?
-  - preservar ou remover item original?
+- Regra de união aprovada:
+  - se o preço for igual, a quantidade deve ser somada;
+  - se a quantidade final após a soma não mudar em relação ao item mantido, manter o estado `collected` do item mantido;
+  - se a quantidade final após a soma mudar, o estado final `collected` deve ser `false`.
 
 ## Critérios de aceite
 
@@ -65,3 +65,5 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 
 - 2026-06-13: implementação iniciada; mini-spec movida de `planned/` para `active/`.
 - 2026-06-13: regra de detecção de duplicados definida como nome + preço normalizados.
+- 2026-06-13: regra de união definida para somar quantidade e ajustar `collected` conforme igualdade das quantidades.
+- 2026-06-13: regra de união corrigida para ajustar `collected` com base na mudança da quantidade final em relação ao item mantido.
