@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import type { CustomAlertRef } from '@/components/CustomAlert'
 import { AlertService } from '@/services/AlertService'
+import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
 export function useInitAlert(ref: React.RefObject<CustomAlertRef | null> | null) {
   useEffect(() => {
