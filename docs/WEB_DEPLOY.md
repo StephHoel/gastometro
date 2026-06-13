@@ -41,7 +41,7 @@ Depois abra seu navegador em `http://localhost:3000`.
 
 ## Deploy Automático
 
-O deploy automático é executado a cada push na branch `main` via GitHub Actions.
+O deploy automático é executado via GitHub Actions quando há push na branch `main`.
 
 Workflow: `.github/workflows/deploy-web.yml`
 
@@ -53,7 +53,7 @@ Workflow: `.github/workflows/deploy-web.yml`
 4. Gera build web com `expo export --platform web`
 5. Cria arquivo `.nojekyll` para desabilitar Jekyll
 6. Faz upload dos artefatos para GitHub Pages
-7. Deployment automático ao `gh-pages`
+7. Deployment automático no ambiente de GitHub Pages
 
 ## Configuração de GitHub Pages
 
