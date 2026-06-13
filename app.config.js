@@ -3,4 +3,7 @@ export default {
     name: "Gastômetro",
     slug: "gastometro",
   },
+  android: {
+    package: "com.stephhoel.gastometro"
+  },
 }
