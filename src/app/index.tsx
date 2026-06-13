@@ -1,4 +1,5 @@
-import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert"
+import { CustomAlert } from "@/components/CustomAlert"
+import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { Header } from "@/components/Header"
 import { List } from "@/components/List"
 import { useCartStore } from "@/stores/CartStore"

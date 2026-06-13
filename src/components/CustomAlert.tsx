@@ -1,23 +1,12 @@
 import { alert } from "@/constants/alert"
 import type { ButtonProps } from "@/interfaces/ButtonProps"
+import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import React, { forwardRef, useImperativeHandle, useState } from "react"
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native"
-import type { ShowAlertProps } from "../interfaces/ShowAlertProps"
+import { Modal, Pressable, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
+import type { ShowAlertProps } from "@/interfaces/ShowAlertProps"
 import { WhatsappIcon } from './Icons'
 import { Row } from './Row'
 import { TextWhite } from './TextWhite'
-
-export interface CustomAlertRef {
-  showAlert: (params: ShowAlertProps) => void
-  hideAlert: () => void
-}
 
 export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
   const { width } = useWindowDimensions()

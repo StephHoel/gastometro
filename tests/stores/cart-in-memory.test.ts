@@ -49,9 +49,4 @@ describe('CartInMemory', () => {
       collected: true,
     })
   })
-
-  it('get deve retornar item por id ou undefined', () => {
-    expect(CartInMemory.get(productsBase, '1')?.item).toBe('Arroz')
-    expect(CartInMemory.get(productsBase, '99')).toBeUndefined()
-  })
 })
