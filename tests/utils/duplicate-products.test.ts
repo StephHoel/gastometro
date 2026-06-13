@@ -90,4 +90,67 @@ describe('DuplicateProducts', () => {
       removedIds: ['2'],
     })
   })
+
+  it('deve retornar undefined quando o grupo tiver menos de dois itens', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false },
+    ])
+
+    expect(groups).toEqual([])
+
+    const result = DuplicateProducts.mergeGroup(
+      {
+        keyItem: 'arroz',
+        keyPrice: '10',
+        products: [{ id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false }],
+      },
+      '1',
+    )
+
+    expect(result).toBeUndefined()
+  })
+
+  it('deve retornar undefined quando os preços do grupo não forem consistentes com a chave', () => {
+    const result = DuplicateProducts.mergeGroup({
+      keyItem: 'arroz',
+      keyPrice: '10',
+      products: [
+        { id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false },
+        { id: '2', item: 'Arroz', quantity: '2', price: '12', collected: false },
+      ],
+    })
+
+    expect(result).toBeUndefined()
+  })
+
+  it('deve retornar undefined quando keepProductId não existir no grupo', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false },
+      { id: '2', item: ' arroz ', quantity: '2', price: '10,00', collected: false },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0], 'nao-existe')
+
+    expect(result).toBeUndefined()
+  })
+
+  it('deve manter o primeiro item quando keepProductId não for informado', () => {
+    const groups = DuplicateProducts.getGroups([
+      { id: '1', item: 'Arroz', quantity: '1', price: '10', collected: true },
+      { id: '2', item: ' arroz ', quantity: '0', price: '10,00', collected: false },
+    ])
+
+    const result = DuplicateProducts.mergeGroup(groups[0])
+
+    expect(result).toEqual({
+      mergedProduct: {
+        id: '1',
+        item: 'Arroz',
+        quantity: '1',
+        price: '10',
+        collected: true,
+      },
+      removedIds: ['2'],
+    })
+  })
 })

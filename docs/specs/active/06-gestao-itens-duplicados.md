@@ -14,6 +14,7 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 ## Comportamento esperado
 
 - O app deve identificar possíveis duplicados pela combinação de nome normalizado e preço normalizado.
+- A regra acima se aplica ao fluxo de revisão/união de duplicados importados, sem alterar a regra da criação manual (mini-spec 01).
 - Quando houver duplicados, uma ação deve permitir visualizar esses itens.
 - O usuário deve poder unir duplicados.
 - O usuário deve poder editar um dos itens para remover a duplicidade.
@@ -67,3 +68,4 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 - 2026-06-13: regra de detecção de duplicados definida como nome + preço normalizados.
 - 2026-06-13: regra de união definida para somar quantidade e ajustar `collected` conforme igualdade das quantidades.
 - 2026-06-13: regra de união corrigida para ajustar `collected` com base na mudança da quantidade final em relação ao item mantido.
+- 2026-06-13: escopo ajustado para manter bloqueio manual por nome (mini-spec 01) e usar nome + preço na revisão/união de duplicados.
