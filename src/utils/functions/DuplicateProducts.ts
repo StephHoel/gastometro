@@ -3,7 +3,7 @@ import type { ProductProps } from '@/interfaces/ProductProps'
 import { ParseToFloat } from './MathFunctions'
 import { NormalizeItemName } from '@/utils/functions/StringFunctions'
 import { NormalizePriceForComparison } from './NumberFunctions'
-import { MergeDuplicateProductsResultProps } from '@/interfaces/MergeDuplicateProductsResultProps'
+import type { MergeDuplicateProductsResultProps } from '@/interfaces/MergeDuplicateProductsResultProps'
 
 export const DuplicateProducts = {
   getGroups: (products: ProductProps[]): DuplicateProductsGroupProps[] => {
