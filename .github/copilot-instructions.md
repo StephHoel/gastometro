@@ -49,6 +49,8 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 - Garantir que a execução acontece na raiz do repositório.
 - Confirmar que existe repositório Git válido.
 - Trabalhar a partir da branch `main` atualizada com `origin/main`.
+- Criar branch de release para versionamento **apenas se** o fluxo tiver sido iniciado na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
+- Se o fluxo já estiver em uma branch de trabalho/release, reutilizar a branch atual e não criar outra.
 - Se houver alterações locais, salvar WIP antes de continuar.
 - Validar existência dos arquivos obrigatórios:
 	- `package.json`
