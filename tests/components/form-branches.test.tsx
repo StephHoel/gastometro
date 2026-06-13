@@ -200,4 +200,19 @@ describe('Form branch coverage', () => {
     expect(mockAdd).not.toHaveBeenCalled()
     expect(mockPush).toHaveBeenCalledWith('/')
   })
+
+  it('executa callbacks de submit dos campos intermediários', () => {
+    const { getByTestId } = render(
+      <Form buttonTitle="Salvar">
+        <Text>+</Text>
+      </Form>
+    )
+
+    fireEvent.press(getByTestId('submit-Item'))
+    fireEvent.press(getByTestId('submit-Quantidade'))
+
+    expect(mockOk).not.toHaveBeenCalled()
+    expect(mockAdd).not.toHaveBeenCalled()
+    expect(mockEdit).not.toHaveBeenCalled()
+  })
 })

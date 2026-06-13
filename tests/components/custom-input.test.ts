@@ -69,4 +69,48 @@ describe('CustomInput', () => {
 
     expect(setItem).toHaveBeenCalledWith('')
   })
+
+  it('não deve limpar valor no foco quando não for zero', () => {
+    const setItem = jest.fn()
+
+    const { getByPlaceholderText } = render(
+      React.createElement(CustomInput, {
+        nameField: 'Quantidade',
+        placeholder: '1',
+        selfRef: createRef<TextInput | null>(),
+        returnKeyType: 'next',
+        setItem,
+        item: '2',
+        onSubmit: jest.fn(),
+        keyboardType: 'number-pad',
+      })
+    )
+
+    const input = getByPlaceholderText('1')
+    fireEvent(input, 'focus')
+
+    expect(setItem).not.toHaveBeenCalled()
+  })
+
+  it('deve limitar decimais para Quantidade em 3 casas', () => {
+    const setItem = jest.fn()
+
+    const { getByPlaceholderText } = render(
+      React.createElement(CustomInput, {
+        nameField: 'Quantidade',
+        placeholder: '1',
+        selfRef: createRef<TextInput | null>(),
+        returnKeyType: 'done',
+        setItem,
+        item: '',
+        onSubmit: jest.fn(),
+        keyboardType: 'number-pad',
+      })
+    )
+
+    const input = getByPlaceholderText('1')
+    fireEvent.changeText(input, '9,87654')
+
+    expect(setItem).toHaveBeenCalledWith('9.876')
+  })
 })
