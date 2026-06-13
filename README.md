@@ -122,7 +122,7 @@ npm run web:serve
   - **WhatsApp Sharing:** usa URL `wa.me` na web e fallback para deep link/web link no Android.
   - **AsyncStorage:** usa localStorage do navegador via react-native-web.
 - O tema escuro é preservado via CSS em web.
-- Dados persistidos localmente funcionam independente entre web e Android.
+- Dados persistidos localmente funcionam tanto na web quanto no Android.
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**

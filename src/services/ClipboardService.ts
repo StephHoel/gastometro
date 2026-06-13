@@ -31,7 +31,6 @@ export const ClipboardService = {
     }
 
     // Native: usar expo-clipboard
-    await Clipboard.setStringAsync(text)
-    return true
+    return await Clipboard.setStringAsync(text)
   }
 }
