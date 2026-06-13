@@ -33,7 +33,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - AsyncStorage para persistência local.
 - Node 24 conforme `.nvmrc`.
 
-O foco atual da plataforma é Android. A versão web compatível com GitHub Pages está em implementação ativa.
+O foco atual da plataforma é Android. A versão web compatível com GitHub Pages já está disponível com limitações documentadas.
 
 Compatibilidade atual de plataforma:
 
@@ -49,9 +49,9 @@ As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/s
 - Múltiplas listas.
 - Contas a pagar.
 
-Funcionalidade em andamento:
+Funcionalidades concluídas recentemente:
 
-- Versão web compatível com GitHub Pages (mini-spec 08 em `docs/specs/active/`).
+- Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
@@ -126,6 +126,15 @@ npm run web:serve
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
+
+### Limitações web conhecidas
+
+- Compartilhamento via WhatsApp na web usa `wa.me`/WhatsApp Web, sem deep link nativo equivalente ao Android.
+- Clipboard na web depende de `navigator.clipboard`, permissões do navegador e contexto compatível (`https` ou `localhost`).
+- Os dados da web ficam no storage local do navegador e podem ser perdidos ao limpar dados do site.
+- Não existe sincronização entre dados da web e do Android.
+- A versão web não possui PWA/service worker neste momento; o primeiro carregamento depende de internet.
+- O fallback de roteamento SPA no GitHub Pages depende de `404.html` + `sessionStorage`; com storage desabilitado, rotas profundas podem não ser restauradas.
 
 ## Qualidade e testes
 
