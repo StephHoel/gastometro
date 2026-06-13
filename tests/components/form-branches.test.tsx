@@ -7,7 +7,7 @@ const mockPush = jest.fn()
 const mockAdd = jest.fn()
 const mockEdit = jest.fn()
 const mockOk = jest.fn()
-const mockDuplicate = jest.fn((_item: string, _products: unknown[], _editingId?: string) => false)
+const mockDuplicate = jest.fn((_item: string, _price: string, _products: unknown[], _editingId?: string) => false)
 const mockCreateOrUpdateProduct = jest.fn((payload: { id: string; item: string; qtt: string; price: string; collected: boolean }) => ({
   id: payload.id,
   item: payload.item,
@@ -89,8 +89,8 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/services/ProductService', () => ({
   ProductService: {
-    isDuplicateItem: (item: string, products: unknown[], editingId?: string) =>
-      mockDuplicate(item, products, editingId),
+    isDuplicateItem: (item: string, price: string, products: unknown[], editingId?: string) =>
+      mockDuplicate(item, price, products, editingId),
     createOrUpdateProduct: (payload: { id: string; item: string; qtt: string; price: string; collected: boolean }) =>
       mockCreateOrUpdateProduct(payload),
   },

@@ -199,6 +199,7 @@ Regras decididas:
 Pendências de implementação:
 
 - implementar a feature de listar duplicados e permitir união ou alteração pelo usuário (mini-spec 06 ativa).
+- na mini-spec 06, considerar duplicados pela combinação de nome + preço normalizados.
 - definir estratégia para tratar valores negativos vindos de importação de lista antiga, sem quebrar retrocompatibilidade.
 
 ## 11. Compartilhamento e Importação

@@ -45,7 +45,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       return
     }
 
-    if (ProductService.isDuplicateItem(trimmedItem, cartStore.products, data?.id)) {
+    if (ProductService.isDuplicateItem(trimmedItem, price, cartStore.products, data?.id)) {
       AlertService.ok(text.error.alert_title, text.error.duplicate_item)
       return
     }
