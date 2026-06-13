@@ -152,6 +152,35 @@ describe('AlertService', () => {
     expect(store.replace).toHaveBeenCalledWith(parsed)
   })
 
+  it('paste deve bloquear colagem na lista existente quando houver duplicados por nome+preço', async () => {
+    const clipboardSpy = jest.spyOn(ClipboardService, 'getClipboardContent')
+    const convertSpy = jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList')
+    const okSpy = jest.spyOn(AlertService, 'ok').mockImplementation(() => undefined)
+
+    const store = makeStore()
+    store.products = [
+      { id: 'a', item: 'Arroz', quantity: '1', price: '10', collected: false },
+    ]
+
+    clipboardSpy.mockResolvedValue('#Gastômetro\n--\n|| 2x arroz | R$ 10,00 | R$ 20,00\n--')
+    convertSpy.mockReturnValue([
+      { id: 'b', item: ' arroz ', quantity: '2', price: '10.00', collected: false },
+    ])
+
+    await AlertService.paste(store)
+
+    const payload = showAlert.mock.calls[0][0] as {
+      title: string
+      buttons: Array<{ text: string; action: () => void }>
+    }
+
+    payload.buttons[0].action()
+
+    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.duplicate_item_on_merge)
+    expect(store.add).not.toHaveBeenCalled()
+    expect(store.replace).not.toHaveBeenCalled()
+  })
+
   it('paste deve mostrar erro quando lista convertida estiver vazia', async () => {
     const clipboardSpy = jest.spyOn(ClipboardService, 'getClipboardContent').mockResolvedValue('#Gastômetro\n--\n--')
     const convertSpy = jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList').mockReturnValue([])

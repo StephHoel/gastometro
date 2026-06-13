@@ -218,6 +218,7 @@ Importação:
 - itens importados entram com `collected: false`;
 - a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
 - itens duplicados são permitidos na importação.
+- ao escolher colar na lista existente, deve haver comparação de duplicados por nome + preço normalizados antes de unir as listas.
 - linhas malformadas ou com valores negativos devem ser ignoradas na importação.
 
 Qualquer mudança nesse formato deve manter retrocompatibilidade com listas já compartilhadas.

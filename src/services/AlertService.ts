@@ -5,6 +5,7 @@ import { whatsapp } from "@/constants/whatsapp"
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { StateProps } from "@/interfaces/StateProps"
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList"
+import { DuplicateProducts } from '@/utils/functions/DuplicateProducts'
 import { ClipboardService } from "./ClipboardService"
 import { ShareService } from "./ShareService"
 
@@ -99,7 +100,17 @@ export const AlertService = {
           buttons: [
             {
               text: alert.paste.buttons.oldList,
-              action: () => listToPaste.forEach(cartStore.add),
+              action: () => {
+                const mergedList = [...cartStore.products, ...listToPaste]
+                const duplicatedGroups = DuplicateProducts.getGroups(mergedList)
+
+                if (duplicatedGroups.length > 0) {
+                  AlertService.ok(text.error.alert_title, text.error.duplicate_item_on_merge)
+                  return
+                }
+
+                listToPaste.forEach(cartStore.add)
+              },
             },
             {
               text: alert.paste.buttons.newList,

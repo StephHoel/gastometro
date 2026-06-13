@@ -5,27 +5,21 @@ Status: ativa
 
 ## Problema
 
-Duplicados devem ser bloqueados na criação manual, mas continuam permitidos na importação/colagem. O usuário precisa de uma forma de revisar e resolver duplicados importados.
+Duplicados devem ser tratados na importação/colagem.
 
 ## Objetivo
 
-Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um deles.
+Criar uma função que una os itens duplicados com base na regra a ser definida.
 
 ## Comportamento esperado
 
 - O app deve identificar possíveis duplicados pela combinação de nome normalizado e preço normalizado.
 - A regra acima se aplica ao fluxo de revisão/união de duplicados importados, sem alterar a regra da criação manual (mini-spec 01).
-- Quando houver duplicados, uma ação deve permitir visualizar esses itens.
-- O usuário deve poder unir duplicados.
-- O usuário deve poder editar um dos itens para remover a duplicidade.
-- O usuário deve poder ignorar duplicados sem obrigatoriedade de correção.
+- A regra deve ser aplicada antes de unir as listas, de forma que o item com mesmo nome e mesmo preço tenha sua quantidade somada para formar a quantidade final. Se a quantidade somada for maior do que a quantidade original, deve registrar o collected como false, caso contrário, mantém o collected igual.
 
 ## Telas afetadas
 
-- Tela principal.
 - Header ou área de ações da lista.
-- Tela/modal de resolução de duplicados.
-- Fluxo de edição de item.
 
 ## Dados e persistência
 
@@ -39,27 +33,27 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 - Duplicidade deve considerar nome e preço após normalização numérica (ex.: `10`, `10.0` e `10,00` devem ser equivalentes).
 - Regra de união aprovada:
   - se o preço for igual, a quantidade deve ser somada;
-  - se a quantidade final após a soma não mudar em relação ao item mantido, manter o estado `collected` do item mantido;
+  - se a quantidade final após a soma não mudar em relação ao item original, manter o estado `collected` do item mantido;
   - se a quantidade final após a soma mudar, o estado final `collected` deve ser `false`.
 
 ## Critérios de aceite
 
 - Identificar duplicados importados.
-- Exibir lista de duplicados.
-- Permitir editar um duplicado.
 - Permitir unir duplicados conforme regra aprovada.
-- Não bloquear importação por causa de duplicados.
+- Bloquear importação por causa de duplicados.
 - Não afetar itens não duplicados.
+- União automática sem confirmação.
 
 ## Fora de escopo
 
-- União automática sem confirmação.
+- Exibir lista de duplicados.
+- Permitir editar um duplicado.
 - Detecção por sinônimos.
 - Detecção fuzzy complexa.
 
 ## Observações para IA
 
-- Esta feature depende da regra de bloqueio de duplicados na criação manual.
+- Esta feature não depende da regra de bloqueio de duplicados na criação manual.
 - Pedir confirmação da regra exata de união antes de implementar.
 
 ## Registro de implementação
@@ -69,3 +63,4 @@ Criar uma ação que mostre itens duplicados e permita unir itens ou alterar um 
 - 2026-06-13: regra de união definida para somar quantidade e ajustar `collected` conforme igualdade das quantidades.
 - 2026-06-13: regra de união corrigida para ajustar `collected` com base na mudança da quantidade final em relação ao item mantido.
 - 2026-06-13: escopo ajustado para manter bloqueio manual por nome (mini-spec 01) e usar nome + preço na revisão/união de duplicados.
+- 2026-06-13: ao colar na lista existente, a comparação de duplicados (nome + preço) passou a ocorrer antes da união das listas.
