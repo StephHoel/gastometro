@@ -11,7 +11,6 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/interfaces/**/*',
-    '!src/utils/products.ts',
     '!src/app/_layout.tsx',
     '!src/app/calculator.tsx',
   ],

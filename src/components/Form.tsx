@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Keyboard, View, type TextInput } from "react-native"
 import uuid from "react-native-uuid"
-
 import { useCartStore } from "@/stores/CartStore"
-
 import { CustomButton as Button } from "@/components/Button"
-import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert"
+import { CustomAlert } from "@/components/CustomAlert"
+import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { CustomInput } from "@/components/CustomInput"
 import { text } from "@/constants/text"

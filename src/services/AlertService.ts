@@ -1,4 +1,4 @@
-import type { CustomAlertRef } from "@/components/CustomAlert"
+import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { alert } from "@/constants/alert"
 import { text } from "@/constants/text"
 import { whatsapp } from "@/constants/whatsapp"

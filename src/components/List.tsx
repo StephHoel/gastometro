@@ -1,16 +1,12 @@
-import { CheckboxIcon } from "@/components/Icons"
-import { Delete } from "@/components/TouchableIcons"
 import type { ListProps } from "@/interfaces/ListProps"
 import type { ProductProps } from "@/interfaces/ProductProps"
 import { AlertService } from "@/services/AlertService"
-import { FormatTextLine } from "@/utils/functions/StringFunctions"
 import { useRouter } from "expo-router"
 import React from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { Divider } from '@/components/Divider'
-import { TextWhite } from './TextWhite'
+import { ScrollView } from "react-native"
 import { SortProductsByCollected } from '@/utils/functions/SortList'
 import { ListSectionHeader } from './ListSectionHeader'
+import { ListItem } from './List/ListItem'
 
 export function List({ cartStore }: ListProps) {
   const nav = useRouter()
@@ -27,34 +23,15 @@ export function List({ cartStore }: ListProps) {
       )}
 
       {notCollected.map((prod: ProductProps, i: number) => (
-        <View className="px-4 " key={prod.id}>
-          <View className="flex-row gap-2 items-center">
-            <Delete
-              action={() =>
-                AlertService.remove(() => cartStore.remove(prod.id), prod)
-              }
-            />
-
-            <TouchableOpacity
-              className="flex-row items-center space-x-2"
-              onPress={() => toggleCollected(prod)}
-            >
-              <CheckboxIcon checked={prod.collected} />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)} className="flex-1">
-              {prod.collected ? (
-                <Text className={`pl-2 mr-14 text-xl line-through text-gray-600`}>{FormatTextLine(prod)}</Text>
-              ) : (
-                <TextWhite className="pl-2 mr-14 text-xl">{FormatTextLine(prod)}</TextWhite>
-              )}
-            </TouchableOpacity>
-          </View>
-
-          {i !== notCollected.length - 1 && (
-            <Divider testID="list-divider" />
-          )}
-        </View>
+        <ListItem
+          key={prod.id}
+          product={prod}
+          index={i}
+          totalCount={notCollected.length}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onToggle={() => toggleCollected(prod)}
+          onEdit={() => nav.push(`/list/edit/${prod.id}`)}
+        />
       ))}
 
       {collected.length > 0 && (
@@ -62,34 +39,15 @@ export function List({ cartStore }: ListProps) {
       )}
 
       {collected.map((prod: ProductProps, i: number) => (
-        <View className="px-4 " key={prod.id}>
-          <View className="flex-row gap-2 items-center">
-            <Delete
-              action={() =>
-                AlertService.remove(() => cartStore.remove(prod.id), prod)
-              }
-            />
-
-            <TouchableOpacity
-              className="flex-row items-center space-x-2"
-              onPress={() => toggleCollected(prod)}
-            >
-              <CheckboxIcon checked={prod.collected} />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => nav.push(`/list/edit/${prod.id}`)} className="flex-1">
-              {prod.collected ? (
-                <Text className={`pl-2 mr-14 text-xl line-through text-gray-600`}>{FormatTextLine(prod)}</Text>
-              ) : (
-                <TextWhite className="pl-2 mr-14 text-xl">{FormatTextLine(prod)}</TextWhite>
-              )}
-            </TouchableOpacity>
-          </View>
-
-          {i !== collected.length - 1 && (
-            <Divider testID="list-divider" />
-          )}
-        </View>
+        <ListItem
+          key={prod.id}
+          product={prod}
+          index={i}
+          totalCount={collected.length}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onToggle={() => toggleCollected(prod)}
+          onEdit={() => nav.push(`/list/edit/${prod.id}`)}
+        />
       ))}
     </ScrollView>
   )

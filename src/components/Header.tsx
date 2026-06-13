@@ -1,4 +1,5 @@
-import { CustomAlert, type CustomAlertRef } from "@/components/CustomAlert"
+import { CustomAlert } from "@/components/CustomAlert"
+import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { Add, Back, Delete, Share } from "@/components/TouchableIcons"
 import { titlePages } from "@/constants/pages"
 import type { CurrentRoute } from "@/interfaces/CurrentRoute"
@@ -17,7 +18,7 @@ export function Header() {
   const route = useRoute<CurrentRoute>()
   const cartStore = useCartStore()
   const navigator = useRouter()
-  const alertRef = useRef<CustomAlertRef>(null)
+  const alertRef = useRef<CustomAlertRef | null>(null)
 
   useInitAlert(alertRef)
 

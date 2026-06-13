@@ -22,11 +22,3 @@ export function edit(products: ProductProps[], editProduct: ProductProps) {
 
   return SortProductsAlphabetically(productsList)
 }
-
-export function get(
-  products: ProductProps[],
-  productId: string,
-): ProductProps | undefined {
-  const newProducts = products.find((item) => item.id === productId)
-  return newProducts
-}
