@@ -1,6 +1,7 @@
 import React, { createRef } from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import { CustomAlert, type CustomAlertRef } from '@/components/CustomAlert'
+import { CustomAlert } from '@/components/CustomAlert'
+import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
 describe('CustomAlert', () => {
   it('deve exibir título, mensagem e botão cancelar quando há múltiplas ações', () => {
