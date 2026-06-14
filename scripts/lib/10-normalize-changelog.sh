@@ -41,7 +41,9 @@ echo "$TAB3✔ Título no topo."
 echo "$TAB2🔍 Garantindo que o arquivo tenha exatamente uma linha em branco no final..."
 awk '
 {
-  lines[NR] = $0
+  line = $0
+  sub(/\r$/, "", line)
+  lines[NR] = line
 }
 END {
   last = NR
