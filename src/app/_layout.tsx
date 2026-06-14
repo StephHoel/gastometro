@@ -3,6 +3,7 @@ import { Tabs, usePathname } from "expo-router"
 import { CalculatorIcon, HomeIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import React, { useEffect } from 'react'
+import { Platform } from 'react-native'
 import "@/styles/global.css"
 import { colors } from '@/constants/color'
 
@@ -10,6 +11,8 @@ export default function Layout() {
   const pathname = usePathname()
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return
+
     const titles: Record<string, string> = {
       "/": "Gastômetro",
       "/calculator": "Calculadora",
