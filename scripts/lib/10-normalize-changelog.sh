@@ -37,8 +37,8 @@ END {
 
 echo "$TAB3✔ Título no topo."
 
-# Garante exatamente uma linha em branco no final
-echo "$TAB2🔍 Garantindo que o arquivo tenha exatamente uma linha em branco no final..."
+# Garante apenas quebra de linha final, sem linha em branco extra
+echo "$TAB2🔍 Garantindo quebra de linha final sem linha em branco extra..."
 awk '
 {
   line = $0
@@ -54,11 +54,9 @@ END {
   for (i = 1; i <= last; i++) {
     print lines[i]
   }
-
-  print ""
 }
 ' "$FILE.tmp" > "$FILE"
-echo "$TAB3✔ Linha em branco final garantida."
+echo "$TAB3✔ Quebra de linha final garantida sem linha em branco extra."
 
 # Limpa temporário
 echo "$TAB2🔍 Removendo arquivo temporário..."
