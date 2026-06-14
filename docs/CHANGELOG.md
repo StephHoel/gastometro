@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.5.1 - 2026-06-14
+
+Correções no fluxo de versionamento/changelog e simplificação da gestão de título de página na web.
+
+### Correções
+
+- Ajustado o script de atualização de versão para melhorar a robustez de validações e tratamento de erro envolvendo `package-lock.json`.
+- Aprimorada a atualização de versão no `app.config.js` com regex mais resiliente.
+- Melhorado o script de criação de nova versão com texto de ajuda mais claro para os tipos de incremento e fluxo de commit mais previsível.
+
+### Changelog e normalização
+
+- Tratamento de argumento de changelog reforçado com trim de espaços para evitar entradas vazias acidentais.
+- Normalização de linhas em branco e quebra final do changelog refinada para evitar ruído entre execuções.
+
+### Web e navegação
+
+- Removido o uso do hook `usePageTitle` em favor de gestão centralizada de título no layout, reduzindo complexidade e divergência entre telas.
+- Ajustado `app.config.js` para manter consistência com o modelo atual de configuração.
+
 ## 1.5.0 - 2026-06-13
 
 Implementação da base de compatibilidade web com GitHub Pages, incluindo build estática, deploy automatizado e ajustes de fallback para recursos nativos no navegador.
