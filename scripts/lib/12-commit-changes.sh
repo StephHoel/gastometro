@@ -1,13 +1,8 @@
 # Commit das mudanças
 echo "${TAB1}🔍 Comitando mudanças..."
-echo "${TAB1}🔍 Executando npm i para atualizar package-lock.json..."
-npm i || {
-  echo "${TAB2}❌ Falha ao executar npm i. Commit cancelado."
-  exit 1
-}
 
 if [ ! -f "package-lock.json" ]; then
-  echo "${TAB2}❌ package-lock.json não encontrado após npm i. Commit cancelado."
+  echo "${TAB2}❌ package-lock.json não encontrado. Commit cancelado."
   exit 1
 fi
 

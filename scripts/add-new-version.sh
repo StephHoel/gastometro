@@ -1,11 +1,13 @@
 #!/bin/sh
 
 # Aceita argumentos opcionais para execução não-interativa:
-#   $1 — tipo de versão: 1=patch, 2=minor, 3=major, 4=manual
+#   $1 — tipo de versão: 1=patch, 2=minor, 3=major
 #   $2 — texto do changelog (linha única ou multi-linha com \n literal)
-# Exemplo: npm run new-version -- 1 "Corrige bug na listagem"
+#   $3 — se deve realizar commit ou não
+# Exemplo: npm run new-version -- 1 "Corrige bug na listagem" n
 VERSION_TYPE_ARG="${1:-}"
 CHANGELOG_ARG="${2:-}"
+COMMIT_ARG="${3:-}"
 
 echo "🔍 Criando uma nova versão do aplicativo na branch atual..."
 
@@ -24,8 +26,13 @@ trap 'rc=$?; if [ "$rc" -ne 0 ] && [ "${WIP_STASH_CREATED:-0}" = "1" ] && [ "${W
 . ./scripts/lib/09-add-log.sh
 . ./scripts/lib/10-normalize-changelog.sh
 . ./scripts/lib/11-clear-files.sh
-. ./scripts/lib/12-commit-changes.sh
 
-echo "✔ Versão atualizada para $new_version"
-echo "$TAB1➡ Publicando commit na branch atual..."
-git push
+if [ "$COMMIT_ARG" != 'n' ]; then
+  . ./scripts/lib/12-commit-changes.sh
+
+  echo "✔ Versão atualizada para $new_version"
+  echo "$TAB1➡ Publicando commit na branch atual..."
+  git push
+else
+  echo "✔ Versão atualizada para $new_version (sem commit)"
+fi
