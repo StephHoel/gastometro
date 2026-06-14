@@ -1,8 +1,11 @@
 # Adição ao CHANGELOG
 echo "$TAB1🔍 Atualizando docs/CHANGELOG.md..."
 
-if [ -n "$CHANGELOG_ARG" ]; then
-  changes="$CHANGELOG_ARG\n"
+# Remove espaços nas pontas para evitar entradas vazias como " "
+trimmed_changelog=$(printf '%s' "$CHANGELOG_ARG" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+if [ -n "$trimmed_changelog" ]; then
+  changes="$trimmed_changelog\n"
   echo "${TAB2}Changelog recebido via argumento."
 else
   printf '%s\n' "${TAB2}Descreva as mudanças na nova versão (pressione Enter em uma linha vazia para finalizar):"
