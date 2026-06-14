@@ -14,7 +14,7 @@ BEGIN {
   title = "# Changelog"
   next
 }
-/^$/ {
+/^[[:space:]]*$/ {
   if (!started) next
   if (blank == 0) { 
     output = output "\n"; 
