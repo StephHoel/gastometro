@@ -26,13 +26,4 @@ trap 'rc=$?; if [ "$rc" -ne 0 ] && [ "${WIP_STASH_CREATED:-0}" = "1" ] && [ "${W
 . ./scripts/lib/09-add-log.sh
 . ./scripts/lib/10-normalize-changelog.sh
 . ./scripts/lib/11-clear-files.sh
-
-if [ "$COMMIT_ARG" != 'n' ]; then
-  . ./scripts/lib/12-commit-changes.sh
-
-  echo "✔ Versão atualizada para $new_version"
-  echo "$TAB1➡ Publicando commit na branch atual..."
-  git push
-else
-  echo "✔ Versão atualizada para $new_version (sem commit)"
-fi
+. ./scripts/lib/13-final.sh
