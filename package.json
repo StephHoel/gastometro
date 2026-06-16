@@ -25,7 +25,8 @@
     "web": "expo start --web --dev-client --clear",
     "web:build": "expo export --platform web --clear",
     "web:serve": "npx http-server dist -p 3000 -c-1",
-    "check": "npx tsc --noEmit",
+    "check:ts": "npx tsc --noEmit",
+    "check:biome": "npx biome check .",
     "deps:check": "npx expo-doctor",
     "deps:audit": "npm audit --omit=dev"
   },

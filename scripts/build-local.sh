@@ -19,7 +19,7 @@ echo "✅ Dependências instaladas"
 echo ""
 
 echo "🔍 Verificando erros de código..."
-npm run check
+npm run check:ts
 echo "✅ Código sem problemas"
 echo ""
 
