@@ -39,6 +39,8 @@ jest.mock('@/components/TouchableIcons', () => ({
 
 function makeStore(): StateProps {
   return {
+    lists: [{ id: 'list-1', name: 'Test', products: [] }],
+    activeListId: 'list-1',
     products: [
       { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
       { id: '2', item: 'Banana', quantity: '1', price: '3', collected: false },
@@ -50,6 +52,10 @@ function makeStore(): StateProps {
     remove: jest.fn(),
     get: jest.fn(),
     clear: jest.fn(),
+    addList: jest.fn(),
+    removeList: jest.fn(),
+    renameList: jest.fn(),
+    setActiveList: jest.fn(),
   }
 }
 

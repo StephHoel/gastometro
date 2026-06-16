@@ -45,6 +45,8 @@ import { useCartStore } from '@/stores/CartStore'
 
 function makeStore(): StateProps {
   return {
+    lists: [{ id: 'list-1', name: 'Test', products: [] }],
+    activeListId: 'list-1',
     products: [
       { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
       { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: true },
@@ -55,6 +57,10 @@ function makeStore(): StateProps {
     remove: jest.fn(),
     get: jest.fn(),
     clear: jest.fn(),
+    addList: jest.fn(),
+    removeList: jest.fn(),
+    renameList: jest.fn(),
+    setActiveList: jest.fn(),
   }
 }
 

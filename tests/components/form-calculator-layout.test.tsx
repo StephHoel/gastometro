@@ -160,6 +160,8 @@ jest.mock('@/constants/text', () => ({
 
 function makeStore() {
   return {
+    lists: [{ id: 'list-1', name: 'Test', products: [] }],
+    activeListId: 'list-1',
     products: [
       { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
     ],
@@ -171,6 +173,10 @@ function makeStore() {
       id === '1' ? { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false } : undefined
     ),
     clear: jest.fn(),
+    addList: jest.fn(),
+    removeList: jest.fn(),
+    renameList: jest.fn(),
+    setActiveList: jest.fn(),
   }
 }
 
