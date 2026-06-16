@@ -28,6 +28,8 @@ jest.mock('@/components/List/ListItem', () => ({
 
 function makeStore(): StateProps {
   return {
+    lists: [{ id: 'list-1', name: 'Test', products: [] }],
+    activeListId: 'list-1',
     products: [],
     add: jest.fn(),
     edit: jest.fn(),
@@ -35,6 +37,10 @@ function makeStore(): StateProps {
     remove: jest.fn(),
     get: jest.fn(),
     clear: jest.fn(),
+    addList: jest.fn(),
+    removeList: jest.fn(),
+    renameList: jest.fn(),
+    setActiveList: jest.fn(),
   }
 }
 
