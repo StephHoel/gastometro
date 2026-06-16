@@ -2,7 +2,7 @@ export default {
   expo: {
     name: "Gastômetro",
     slug: "gastometro",
-    version: "1.5.1",
+    version: "1.6.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "gastometro",
