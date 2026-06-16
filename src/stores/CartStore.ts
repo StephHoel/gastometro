@@ -79,9 +79,12 @@ export const useCartStore = create(
 
       addList: (name: string, initialProducts: ProductProps[] = []) =>
         set((state) => {
+          const trimmed = name.trim()
+          if (!trimmed) return {}
+
           const newList: ShoppingListProps = {
             id: uuid.v4().toString(),
-            name: name.trim() || 'Nova Lista',
+            name: trimmed,
             products: CartInMemory.replace(initialProducts),
           }
           return {

@@ -1,4 +1,5 @@
-import { RefObject, useEffect } from 'react'
+import { useEffect } from 'react'
+import type { RefObject } from 'react'
 import { AlertService } from '@/services/AlertService'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 

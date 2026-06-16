@@ -1,4 +1,5 @@
-import { createElement, createRef, RefObject } from 'react'
+import { createElement, createRef } from 'react'
+import type { RefObject } from 'react'
 import { render } from '@testing-library/react-native'
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { AlertService } from '@/services/AlertService'

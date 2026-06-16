@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+import type { ReactNode } from 'react'
 import { Text } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Form } from '@/components/Form'

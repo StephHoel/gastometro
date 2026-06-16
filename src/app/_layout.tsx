@@ -6,19 +6,14 @@ import React, { useEffect } from 'react'
 import { Platform } from 'react-native'
 import "@/styles/global.css"
 import { colors } from '@/constants/color'
+import { TITLES } from '@/constants/titles'
 
 export default function Layout() {
   const pathname = usePathname()
 
   useEffect(() => {
     if (Platform.OS !== 'web') return
-
-    const titles: Record<string, string> = {
-      "/": "Gastômetro",
-      "/calculator": "Calculadora",
-    }
-
-    document.title = titles[pathname] ?? "Gastômetro"
+    document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
 
   return (
@@ -46,16 +41,16 @@ export default function Layout() {
           }}
         />
 
-        <Tabs.Screen 
+        <Tabs.Screen
           name="lists"
-          options={{ 
+          options={{
             // href: null,
             title: "Listas",
             tabBarIcon: ({ color, size }) => (
               <ListIcon size={size} color={color as string} />
             ),
-            headerTitle: "Listas", 
-          }} 
+            headerTitle: "Listas",
+          }}
         />
 
         <Tabs.Screen
