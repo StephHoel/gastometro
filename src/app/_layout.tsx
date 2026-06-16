@@ -1,6 +1,6 @@
 import { Tabs, usePathname } from "expo-router"
 
-import { CalculatorIcon, HomeIcon } from "@/components/Icons"
+import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import React, { useEffect } from 'react'
 import { Platform } from 'react-native'
@@ -44,6 +44,18 @@ export default function Layout() {
             ),
             headerTitle: "Início",
           }}
+        />
+
+        <Tabs.Screen 
+          name="lists"
+          options={{ 
+            // href: null,
+            title: "Listas",
+            tabBarIcon: ({ color, size }) => (
+              <ListIcon size={size} color={color as string} />
+            ),
+            headerTitle: "Listas", 
+          }} 
         />
 
         <Tabs.Screen

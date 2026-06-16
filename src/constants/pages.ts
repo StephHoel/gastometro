@@ -3,4 +3,5 @@ export const titlePages = {
   "list/edit/[id]": 'Editando item',
   "index": 'Lista de Compras',
   "calculator": "Calculadora de Preços",
+  "lists": "Minhas Listas",
 }
