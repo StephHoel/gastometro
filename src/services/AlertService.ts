@@ -106,13 +106,13 @@ export const AlertService = {
             },
             {
               text: alert.paste.buttons.newList,
-              action: () => cartStore.replace(listToPaste),
+              action: () => cartStore.addList(text.lists.imported_name, listToPaste),
             },
           ],
         })
-      }
-      else
+      } else {
         AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
+      }
     } catch (error) {
       console.error('Falha ao colar lista do clipboard:', error)
       AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
