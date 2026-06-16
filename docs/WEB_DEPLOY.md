@@ -177,7 +177,7 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 
 Se `npm run web:build` falhar:
 
-1. Verifique se há erros de TypeScript: `npm run check`
+1. Verifique se há erros de TypeScript: `npm run check:ts`
 2. Limpe cache: `npm run clear`
 3. Reinstale dependências: `npm install`
 

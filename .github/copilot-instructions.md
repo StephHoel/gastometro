@@ -43,11 +43,11 @@ Sempre que criar ou sugerir a abertura de um PR, use o template `.github/pull_re
 
 O template possui as seguintes seções — preencha todas as que se aplicarem ao PR:
 
-1. **Tipo de alteração** — marque apenas o label principal (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`).
+1. **Tipo de alteração** — marque apenas o tipo principal (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`).
 2. **Descrição** — explique o que foi feito e por quê, de forma objetiva.
 3. **Mini-spec relacionada** — link para o arquivo em `docs/specs/` ou "não se aplica".
 4. **Arquivos alterados** — liste os principais arquivos e o motivo resumido.
-5. **Verificações executadas** — confirme quais checks foram rodados (testes, tipos, lint).
+5. **Verificações executadas** — confirme quais checks foram rodados (testes, `npm run check:ts` para tipos, Biome quando aplicável).
 6. **Checklist de qualidade** — marque os itens de boas práticas do projeto.
 7. **Versionamento** — indique se `package.json`, `app.config.js`, `build.gradle` e `CHANGELOG.md` foram atualizados.
 8. **Riscos e pendências** — descreva breaking changes, impacto em dados persistidos ou decisões que precisam de confirmação humana.

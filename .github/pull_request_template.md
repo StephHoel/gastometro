@@ -26,9 +26,9 @@
 ## Verificações executadas
 
 - [ ] `npm run test` passou (cobertura ≥ 80%)
-- [ ] TypeScript sem erros de tipo
+- [ ] `npm run check:ts` passou (TypeScript sem erros de tipo)
 - [ ] Sem uso de `any`
-- [ ] Lint / Biome sem erros bloqueantes
+- [ ] Biome (`npm run check:biome`) sem erros bloqueantes — quando aplicável
 
 ## Checklist de qualidade
 
