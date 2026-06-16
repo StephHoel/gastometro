@@ -229,7 +229,7 @@ npm run android
 npm run prebuild
 npm run build:android
 npm run build:local:eas
-npm run deps:check
+npm run check:expo
 npm run deps:audit
 ```
 
@@ -253,7 +253,7 @@ Antes de finalizar mudanças, a IA deve tentar uma verificação proporcional ao
 - para integração: testar fluxos completos entre tela, store e serviços;
 - para contrato/formato: testar compartilhamento e importação do WhatsApp, preservando retrocompatibilidade;
 - para UI: rodar o app quando possível e verificar tela afetada;
-- para dependências: rodar `npm run deps:check` e `npm run deps:audit`;
+- para dependências: rodar `npm run check:expo` e `npm run deps:audit`;
 - para TypeScript: usar verificação de tipos quando houver script ou comando apropriado no projeto.
 
 Estratégia de testes escolhida:
@@ -274,7 +274,7 @@ Diretrizes do README:
 - atualizar stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
 - atualizar demais bibliotecas em PRs pequenos;
 - usar Dependabot semanal;
-- rodar `npm run deps:check` e `npm run deps:audit` antes de publicar alterações de dependência.
+- rodar `npm run check:expo` e `npm run deps:audit` antes de publicar alterações de dependência.
 
 ## 14. Versionamento e Release
 
