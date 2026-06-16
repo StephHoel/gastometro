@@ -22,7 +22,8 @@ Público esperado:
 
 ## 2. Funcionalidades Existentes
 
-- Gerenciamento de uma lista de compras.
+- Gerenciamento de múltiplas listas de compras com seleção de lista ativa.
+- Criação, renomeação e remoção de listas.
 - Adição, edição e remoção de produtos.
 - Remoção total da lista.
 - Marcação de produtos como coletados.
@@ -38,14 +39,13 @@ Público esperado:
 - Salvamento de itens com preço ou quantidade zerada quando normalizados pelas regras atuais.
 - Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
 - Bloqueio de itens duplicados na criação manual de item.
-- Identificação de itens duplicados com união automática ao colar na lista existente (mini-spec 06).
+- Identificação de itens duplicados com união automática ao colar na lista ativa.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - notificações/lembretes;
-- múltiplas listas com títulos personalizados;
 - contas a pagar;
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
@@ -211,9 +211,9 @@ Importação:
 - `ConvertToProductsList` extrai os produtos entre separadores `--`;
 - itens importados recebem novo `id`;
 - itens importados entram com `collected: false`;
-- a UI pergunta se deve adicionar a lista atual ou substituir por uma nova lista.
+- a UI pergunta se deve adicionar na lista ativa ou criar uma nova lista.
 - itens duplicados são permitidos na importação.
-- ao escolher colar na lista existente, deve haver comparação de duplicados por nome + preço normalizados antes de unir as listas.
+- ao escolher colar na lista ativa, deve haver comparação de duplicados por nome + preço normalizados antes de unir as listas.
 - linhas malformadas ou com valores negativos devem ser ignoradas na importação.
 
 Qualquer mudança nesse formato deve manter retrocompatibilidade com listas já compartilhadas.
@@ -363,7 +363,7 @@ Fora de escopo:
 
 ## 17. Decisões Registradas
 
-- Múltiplas listas e uma feature futura.
+- Múltiplas listas foram implementadas com seleção de lista ativa e migração do estado legado.
 - Quantidade vazia deve ser aceita e tratada como `0`.
 - Preço vazio deve ser aceito e tratado como `0.00`.
 - Valores negativos não devem ser aceitos.

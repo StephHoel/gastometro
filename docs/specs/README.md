@@ -27,6 +27,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [08 - Web compatível com GitHub Pages](./done/08-web-github-pages.md)
 - [12 - Refactor — dead code e duplicação de código](./done/12-refactor-dead-code-e-duplicacao.md)
 - [15 - Limitações web explicitamente documentadas](./done/15-limitacoes-web-explicitas.md)
+- [09 - Múltiplas listas](./done/09-multiplas-listas.md)
 
 ### Ativas/Em andamento
 
@@ -34,8 +35,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [09 - Múltiplas listas](./planned/09-multiplas-listas.md)
-2. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
-3. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
-4. [13 - Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
-5. [14 - Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
+1. [10 - Notificações e lembretes](./planned/10-notificacoes-lembretes.md)
+2. [11 - Contas a pagar](./planned/11-contas-a-pagar.md)
+3. [13 - Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
+4. [14 - Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)

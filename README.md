@@ -6,6 +6,8 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 
 ## O que o app faz hoje
 
+- Gerencia múltiplas listas de compras com seleção de lista ativa.
+- Cria, renomeia e remove listas de compras.
 - Cria, edita e remove itens da lista de compras.
 - Marca itens como coletados durante a compra.
 - Calcula o total geral da lista com base em quantidade e preço.
@@ -15,7 +17,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Ordena os itens alfabeticamente.
 - Compartilha a lista via WhatsApp.
 - Importa uma lista copiada do WhatsApp quando ela segue o formato gerado pelo app.
-- Ao colar uma lista na lista existente, une automaticamente itens duplicados com mesmo nome e preço normalizados.
+- Ao colar uma lista na lista ativa, une automaticamente itens duplicados com mesmo nome e preço normalizados.
 - Permite salvar itens com preço ou quantidade zerada.
 - Bloqueia valores negativos em quantidade e preço nos fluxos manuais.
 - Bloqueia itens duplicados na criação manual de item.
@@ -46,12 +48,12 @@ Compatibilidade atual de plataforma:
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - Notificações e lembretes.
-- Múltiplas listas.
 - Contas a pagar.
 
 Funcionalidades concluídas recentemente:
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
+- Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
@@ -192,7 +194,7 @@ Mitigações já aplicadas no código:
 
 - Validação de negativos em criação/edição manual e calculadora.
 - Bloqueio de duplicados na criação manual de itens.
-- União automática de duplicados por nome + preço normalizados ao colar na lista existente.
+- União automática de duplicados por nome + preço normalizados ao colar na lista ativa.
 
 ## Diretrizes do projeto
 
