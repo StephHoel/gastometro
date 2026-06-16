@@ -37,6 +37,27 @@ Regras:
 - Atualizar README quando APIs mudarem.
 - Nunca executar `git commit` (nem variações como `git commit --amend`) sem que o usuário solicite explicitamente. Editar arquivos e fazer stage são permitidos; o commit final depende sempre de pedido explícito.
 
+## Fluxo obrigatório para abertura de Pull Request
+
+Sempre que criar ou sugerir a abertura de um PR, use o template `.github/pull_request_template.md` como estrutura obrigatória do corpo da descrição.
+
+O template possui as seguintes seções — preencha todas as que se aplicarem ao PR:
+
+1. **Tipo de alteração** — marque apenas o label principal (`feat`, `fix`, `chore`, `refactor`, `docs`, `test`).
+2. **Descrição** — explique o que foi feito e por quê, de forma objetiva.
+3. **Mini-spec relacionada** — link para o arquivo em `docs/specs/` ou "não se aplica".
+4. **Arquivos alterados** — liste os principais arquivos e o motivo resumido.
+5. **Verificações executadas** — confirme quais checks foram rodados (testes, tipos, lint).
+6. **Checklist de qualidade** — marque os itens de boas práticas do projeto.
+7. **Versionamento** — indique se `package.json`, `app.config.js`, `build.gradle` e `CHANGELOG.md` foram atualizados.
+8. **Riscos e pendências** — descreva breaking changes, impacto em dados persistidos ou decisões que precisam de confirmação humana.
+
+Regras ao preencher:
+
+- Nunca omitir a seção de **Versionamento** quando o PR alterar `src/` ou `tests/`.
+- Nunca omitir **Riscos e pendências** quando houver mudança de comportamento de usuário, formato de dados persistidos ou formato de compartilhamento WhatsApp.
+- Manter o texto em **pt-BR**.
+
 ## Fluxo obrigatório para criação de nova versão
 
 Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular etapas.
@@ -95,7 +116,7 @@ Sempre que o usuário pedir para criar nova versão, siga este fluxo sem pular e
 - Não criar tag manualmente neste fluxo local.
 - A tag de versão é criada exclusivamente no workflow `build-apk_gh-release`.
 - Publicar commit na branch.
-- Abrir PR para a `main` seguindo o template.
+- Abrir PR para a `main` seguindo o template em `.github/pull_request_template.md`.
 
 ### 5) Pós-etapas recomendadas para disponibilização do APK
 
