@@ -58,6 +58,15 @@ describe('MathFunctions', () => {
 
   it('ReduceProducts deve somar subtotais da lista', () => {
     const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
+          { id: '2', item: 'Feijão', quantity: '1,5', price: '8', collected: false },
+        ]
+      }],
+      activeListId: 'list-1',
       products: [
         { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
         { id: '2', item: 'Feijão', quantity: '1,5', price: '8', collected: false },
@@ -68,6 +77,10 @@ describe('MathFunctions', () => {
       remove: jest.fn(),
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     expect(ReduceProducts(cartStore)).toBe(32)
@@ -75,6 +88,16 @@ describe('MathFunctions', () => {
 
   it('ReduceCollectedProducts deve somar apenas subtotais coletados', () => {
     const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
+          { id: '2', item: 'Feijão', quantity: '1,5', price: '8', collected: true },
+          { id: '3', item: 'Leite', quantity: '', price: '7', collected: true },
+        ]
+      }],
+      activeListId: 'list-1',
       products: [
         { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
         { id: '2', item: 'Feijão', quantity: '1,5', price: '8', collected: true },
@@ -86,6 +109,10 @@ describe('MathFunctions', () => {
       remove: jest.fn(),
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     expect(ReduceCollectedProducts(cartStore)).toBe(12)
@@ -93,6 +120,8 @@ describe('MathFunctions', () => {
 
   it('ReduceCollectedProducts deve retornar 0 quando lista estiver vazia', () => {
     const cartStore: StateProps = {
+      lists: [{ id: 'list-1', name: 'Test', products: [] }],
+      activeListId: 'list-1',
       products: [],
       add: jest.fn(),
       edit: jest.fn(),
@@ -100,6 +129,10 @@ describe('MathFunctions', () => {
       remove: jest.fn(),
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     expect(ReduceCollectedProducts(cartStore)).toBe(0)

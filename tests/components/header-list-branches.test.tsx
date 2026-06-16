@@ -134,6 +134,8 @@ describe('Header and List branch coverage', () => {
 
   it('List: alterna collected, navega para edição e aciona remoção', () => {
     const cartStore: StateProps = {
+      lists: [{ id: 'list-1', name: 'Test', products: mockProductsState }],
+      activeListId: 'list-1',
       products: mockProductsState,
       add: jest.fn(),
       edit: mockEdit,
@@ -141,6 +143,10 @@ describe('Header and List branch coverage', () => {
       remove: mockRemoveItem,
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     const { getAllByText, UNSAFE_getAllByType } = render(<List cartStore={cartStore} />)
@@ -157,6 +163,15 @@ describe('Header and List branch coverage', () => {
 
   it('List: mostra não coletados antes e exibe cabeçalhos de seção', () => {
     const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+          { id: '2', item: 'Arroz', quantity: '2', price: '10', collected: false },
+        ]
+      }],
+      activeListId: 'list-1',
       products: [
         { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
         { id: '2', item: 'Arroz', quantity: '2', price: '10', collected: false },
@@ -167,6 +182,10 @@ describe('Header and List branch coverage', () => {
       remove: mockRemoveItem,
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     const { toJSON, getByText } = render(<List cartStore={cartStore} />)
@@ -182,6 +201,14 @@ describe('Header and List branch coverage', () => {
 
   it('List: quando todos estão coletados mostra apenas a seção coletados', () => {
     const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+        ]
+      }],
+      activeListId: 'list-1',
       products: [
         { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
       ],
@@ -191,6 +218,10 @@ describe('Header and List branch coverage', () => {
       remove: mockRemoveItem,
       get: jest.fn(),
       clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
     }
 
     const { queryByText, toJSON } = render(<List cartStore={cartStore} />)

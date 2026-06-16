@@ -11,6 +11,7 @@ import Home from '@/assets/svgs/home.svg'
 import Share from '@/assets/svgs/share-social-outline.svg'
 import Trash from '@/assets/svgs/trash-outline.svg'
 import Whatsapp from '@/assets/svgs/logo-whatsapp.svg'
+import List from '@/assets/svgs/list.svg'
 import { colors } from '@/constants/color'
 
 export function AddIcon({ size = 24, color = colors.white }: IconsProps) {
@@ -49,4 +50,8 @@ export function ShareIcon({ size = 24, color = colors.white }: IconsProps) {
 
 export function WhatsappIcon() {
   return <Whatsapp width={18} height={18} color={colors.black} />
+}
+
+export function ListIcon({ size = 24, color = colors.white }: IconsProps) {
+  return <List width={size} height={size} color={color} />
 }
