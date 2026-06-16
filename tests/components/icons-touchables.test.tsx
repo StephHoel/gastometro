@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 
 jest.mock('react-native-svg', () => {
   const React = require('react')
   const { View } = require('react-native')
-  const Mock = ({ children }: { children?: React.ReactNode }) => <View>{children}</View>
+  const Mock = ({ children }: { children?: ReactNode }) => <View>{children}</View>
 
   return {
     __esModule: true,

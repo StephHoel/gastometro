@@ -1,10 +1,10 @@
-import React, { createRef } from 'react'
+import { createElement, createRef, RefObject } from 'react'
 import { render } from '@testing-library/react-native'
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { AlertService } from '@/services/AlertService'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
-function Harness({ refValue }: { refValue: React.RefObject<CustomAlertRef | null> | null }) {
+function Harness({ refValue }: { refValue: RefObject<CustomAlertRef | null> | null }) {
   useInitAlert(refValue)
   return null
 }
@@ -18,7 +18,7 @@ describe('useInitAlert', () => {
       hideAlert: jest.fn(),
     }
 
-    render(React.createElement(Harness, { refValue: ref }))
+    render(createElement(Harness, { refValue: ref }))
 
     expect(initSpy).toHaveBeenCalledTimes(1)
     expect(initSpy).toHaveBeenCalledWith(ref.current)
@@ -27,7 +27,7 @@ describe('useInitAlert', () => {
   it('não deve inicializar quando ref for nulo', () => {
     const initSpy = jest.spyOn(AlertService, 'init').mockImplementation(() => undefined)
 
-    render(React.createElement(Harness, { refValue: null }))
+    render(createElement(Harness, { refValue: null }))
 
     expect(initSpy).not.toHaveBeenCalled()
   })

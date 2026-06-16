@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { RefObject, useEffect } from 'react'
 import { AlertService } from '@/services/AlertService'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
-export function useInitAlert(ref: React.RefObject<CustomAlertRef | null> | null) {
+export function useInitAlert(ref: RefObject<CustomAlertRef | null> | null) {
   useEffect(() => {
     try {
       if (!ref) return

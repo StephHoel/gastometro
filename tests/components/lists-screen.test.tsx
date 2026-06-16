@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import { text } from '@/constants/text'
 
@@ -46,10 +46,11 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/components/CustomAlert', () => {
   const React = require('react')
+  const { forwardRef } = require('react')
   return {
-    CustomAlert: React.forwardRef((_props: unknown, ref: React.Ref<{ showAlert: jest.Mock }>) => {
+    CustomAlert: forwardRef((_props: unknown, ref: unknown) => {
       if (ref && typeof ref === 'object') {
-        ;(ref as React.MutableRefObject<{ showAlert: jest.Mock } | null>).current = {
+        ; (ref as { current?: { showAlert?: unknown } }).current = {
           showAlert: mockShowAlert,
         }
       }
@@ -67,7 +68,7 @@ jest.mock('@/components/Header', () => ({
 }))
 
 jest.mock('@/components/Screen', () => ({
-  Screen: ({ children }: { children: React.ReactNode }) => {
+  Screen: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { View } = require('react-native')
     return <View>{children}</View>
@@ -75,7 +76,7 @@ jest.mock('@/components/Screen', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: React.ReactNode }) => {
+  TextWhite: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { Text } = require('react-native')
     return <Text>{children}</Text>
@@ -83,7 +84,7 @@ jest.mock('@/components/TextWhite', () => ({
 }))
 
 jest.mock('@/components/Row', () => ({
-  Row: ({ children }: { children: React.ReactNode }) => {
+  Row: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { View } = require('react-native')
     return <View>{children}</View>

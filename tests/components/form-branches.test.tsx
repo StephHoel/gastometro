@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Text } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Form } from '@/components/Form'
@@ -48,18 +48,18 @@ jest.mock('@/components/CustomAlert', () => ({
 
 jest.mock('@/components/Button', () => ({
   CustomButton: Object.assign(
-    ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => {
+    ({ children, onPress }: { children: ReactNode; onPress?: () => void }) => {
       const React = require('react')
       const { Pressable } = require('react-native')
       return <Pressable testID="form-submit" onPress={onPress}>{children}</Pressable>
     },
     {
-      Text: ({ children }: { children: React.ReactNode }) => {
+      Text: ({ children }: { children: ReactNode }) => {
         const React = require('react')
         const { Text } = require('react-native')
         return <Text>{children}</Text>
       },
-      Icon: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      Icon: ({ children }: { children: ReactNode }) => <>{children}</>,
     }
   ),
 }))
