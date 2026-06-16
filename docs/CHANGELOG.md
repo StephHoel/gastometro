@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.6.0 - 2026-06-16
+
 ## 1.5.1 - 2026-06-14
 
 Correções no fluxo de versionamento/changelog e simplificação da gestão de título de página na web.
