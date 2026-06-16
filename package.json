@@ -27,7 +27,7 @@
     "web:serve": "npx http-server dist -p 3000 -c-1",
     "check:ts": "npx tsc --noEmit",
     "check:biome": "npx biome check .",
-    "deps:check": "npx expo-doctor",
+    "check:expo": "npx expo-doctor",
     "deps:audit": "npm audit --omit=dev"
   },
   "dependencies": {

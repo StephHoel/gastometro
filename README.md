@@ -89,7 +89,7 @@ npm run web
 npm run prebuild
 npm run build:android
 npm run build:local:eas
-npm run deps:check
+npm run check:expo
 npm run deps:audit
 ```
 
@@ -178,7 +178,7 @@ Header do arquivo: `File;% Stmts;% Branch;% Funcs;% Lines;Uncovered Line #s`.
 Além dos testes, rode as verificações disponíveis quando fizer sentido:
 
 ```bash
-npm run deps:check
+npm run check:expo
 npm run deps:audit
 ```
 
@@ -235,7 +235,7 @@ Para reduzir risco em atualizações:
 - use Node 24 e npm 11;
 - atualize o stack Expo em conjunto (`expo`, `expo-*`, `react`, `react-native`, `expo-router`);
 - atualize outras bibliotecas em PRs pequenos;
-- rode `npm run deps:check` e `npm run deps:audit` antes de publicar alterações de dependências.
+- rode `npm run check:expo` e `npm run deps:audit` antes de publicar alterações de dependências.
 
 O Dependabot abre PRs semanais para dependências npm.
 
