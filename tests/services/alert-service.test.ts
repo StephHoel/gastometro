@@ -127,7 +127,7 @@ describe('AlertService', () => {
     expect(pasteSpy).toHaveBeenCalledWith(store)
   })
 
-  it('paste deve oferecer colar em lista existente ou nova quando conteúdo é válido', async () => {
+  it('paste deve oferecer colar em lista ativa ou nova quando conteúdo é válido', async () => {
     const clipboardSpy = jest.spyOn(ClipboardService, 'getClipboardContent')
     const convertSpy = jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList')
     const store = makeStore()
@@ -158,7 +158,7 @@ describe('AlertService', () => {
     expect(store.replace).toHaveBeenCalledWith(parsed)
   })
 
-  it('paste deve unir duplicados automaticamente na lista existente', async () => {
+  it('paste deve unir duplicados automaticamente na lista ativa', async () => {
     const clipboardSpy = jest.spyOn(ClipboardService, 'getClipboardContent')
     const convertSpy = jest.spyOn(ConvertToProductsListModule, 'ConvertToProductsList')
 

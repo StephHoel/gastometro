@@ -28,8 +28,8 @@ Permitir criar lembretes locais para revisar listas ou itens sem depender de log
 ## Dados e persistência
 
 - Persistir lembretes localmente com AsyncStorage ou storage equivalente offline-first.
-- Relacionar o lembrete a uma lista quando múltiplas listas existirem.
-- Antes de múltiplas listas, permitir lembrete global da lista atual.
+- Relacionar cada lembrete a uma lista específica, considerando o modelo atual com múltiplas listas.
+- Permitir lembrete global opcional para casos sem vínculo direto com uma lista.
 
 ## Regras de validação
 

@@ -1,7 +1,7 @@
 # Mini-spec: Múltiplas listas
 
 Número: 09
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -38,8 +38,8 @@ Permitir que o usuário crie e gerencie múltiplas listas com títulos personali
 ## Regras de validação
 
 - Título de lista vazio não deve ser aceito.
-- Remover a última lista deve criar ou manter uma lista padrão, conforme decisão de UX.
-- Nomes duplicados de listas precisam de regra definida antes da implementação.
+- Remover a última lista não é permitido.
+- Nomes duplicados de listas são permitidos.
 
 ## Critérios de aceite
 
@@ -49,6 +49,12 @@ Permitir que o usuário crie e gerencie múltiplas listas com títulos personali
 - Calcular total por lista.
 - Compartilhar apenas a lista ativa.
 - Importar lista para a lista ativa ou para nova lista, conforme fluxo definido na implementação.
+
+## Decisões de implementação
+
+- A migração de dados legados cria `Lista 1` como lista padrão inicial.
+- O estado persistido evoluiu para `lists` e `activeListId`, mantendo a chave `gastometro`.
+- Ao colar/importar com opção de nova lista, o app cria uma lista com nome padrão de importação.
 
 ## Fora de escopo
 

@@ -2,6 +2,31 @@
 
 ## 1.6.0 - 2026-06-16
 
+Implementação da mini-spec 09 com suporte completo a múltiplas listas de compras, incluindo migração de dados, nova tela de gerenciamento e cobertura de testes.
+
+### Funcionalidade
+
+- Adicionada gestão de múltiplas listas com criação, renomeação, remoção e seleção de lista ativa.
+- Nova tela de listas em `src/app/lists.tsx`, com fluxo de gerenciamento dedicado e integração ao Header.
+- Operações de item (adicionar, editar, remover, limpar) passam a atuar na lista ativa.
+- Importação/colar via WhatsApp com opção de criar nova lista usando nome padrão de lista importada.
+
+### Persistência e migração
+
+- Evoluído o modelo de estado para suportar `lists` e `activeListId`, preservando compatibilidade com a chave `gastometro`.
+- Implementada migração automática do formato legado (lista única) para o novo formato sem perda de dados, criando lista padrão inicial.
+
+### Qualidade
+
+- Suite de testes ampliada para cobrir cenários de múltiplas listas no store e impactos em serviços/componentes.
+- Atualizados mocks de `StateProps` nos testes para o novo contrato do estado.
+- Execuções de validação da release: `npm run test` e `npm run check:ts` sem falhas.
+
+### Documentação
+
+- Mini-spec 09 movida para `docs/specs/done/` com status implementado.
+- `docs/specs/README.md`, `docs/SPEC.md` e `README.md` atualizados para refletir a funcionalidade entregue.
+
 ## 1.5.1 - 2026-06-14
 
 Correções no fluxo de versionamento/changelog e simplificação da gestão de título de página na web.

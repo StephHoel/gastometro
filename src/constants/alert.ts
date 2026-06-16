@@ -29,7 +29,7 @@ export const alert = {
     title: "Colar Lista",
     message: "",
     buttons: {
-      oldList: "Colar na Lista Existente",
+      oldList: "Colar na Lista Ativa",
       newList: "Colar em Nova Lista",
     },
   },
