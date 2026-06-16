@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 
 const mockUseCartStore = jest.fn()
@@ -25,7 +25,7 @@ jest.mock('@/components/Header', () => ({
 }))
 
 jest.mock('@/components/Screen', () => ({
-  Screen: ({ children }: { children: React.ReactNode }) => {
+  Screen: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { View } = require('react-native')
     return <View>{children}</View>
@@ -33,7 +33,7 @@ jest.mock('@/components/Screen', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: React.ReactNode }) => {
+  TextWhite: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { Text } = require('react-native')
     return <Text>{children}</Text>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { createElement } from 'react'
 import { createRef } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import type { TextInput } from 'react-native'
@@ -9,7 +9,7 @@ describe('CustomInput', () => {
     const setItem = jest.fn()
 
     const { getByPlaceholderText } = render(
-      React.createElement(CustomInput, {
+      createElement(CustomInput, {
         nameField: 'Preço',
         placeholder: '1,39',
         selfRef: createRef<TextInput | null>(),
@@ -31,7 +31,7 @@ describe('CustomInput', () => {
     const setItem = jest.fn()
 
     const { getByPlaceholderText } = render(
-      React.createElement(CustomInput, {
+      createElement(CustomInput, {
         nameField: 'Item',
         placeholder: 'Item',
         selfRef: createRef<TextInput | null>(),
@@ -52,7 +52,7 @@ describe('CustomInput', () => {
     const setItem = jest.fn()
 
     const { getByPlaceholderText } = render(
-      React.createElement(CustomInput, {
+      createElement(CustomInput, {
         nameField: 'Preço',
         placeholder: '1,39',
         selfRef: createRef<TextInput | null>(),
@@ -74,7 +74,7 @@ describe('CustomInput', () => {
     const setItem = jest.fn()
 
     const { getByPlaceholderText } = render(
-      React.createElement(CustomInput, {
+      createElement(CustomInput, {
         nameField: 'Quantidade',
         placeholder: '1',
         selfRef: createRef<TextInput | null>(),
@@ -96,7 +96,7 @@ describe('CustomInput', () => {
     const setItem = jest.fn()
 
     const { getByPlaceholderText } = render(
-      React.createElement(CustomInput, {
+      createElement(CustomInput, {
         nameField: 'Quantidade',
         placeholder: '1',
         selfRef: createRef<TextInput | null>(),

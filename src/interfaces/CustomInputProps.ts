@@ -1,8 +1,9 @@
+import { RefObject } from 'react'
 import type { TextInput } from "react-native"
 
 export interface CustomInputProps {
   nameField: "Item" | "Quantidade" | "Preço" | "Unidade"
-  selfRef: React.RefObject<TextInput | null>
+  selfRef: RefObject<TextInput | null>
   placeholder: string
   setItem: (value: string) => void
   item: string
