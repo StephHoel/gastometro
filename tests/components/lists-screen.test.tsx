@@ -5,8 +5,8 @@ import Lists from '@/app/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
+import { mockPush } from '../setup/mocks/expo-router'
 
-const mockPush = jest.fn()
 const mockUseInitAlert = jest.fn()
 const mockAlertOk = jest.fn()
 const mockShowAlert = jest.fn()
@@ -31,10 +31,6 @@ const mockStore = {
   renameList: jest.fn(),
   setActiveList: jest.fn(),
 }
-
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: () => mockStore,

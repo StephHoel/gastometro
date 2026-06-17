@@ -1,9 +1,9 @@
+import { CartStoreService } from '@/services/CartStoreService'
+import { useCartStore } from '@/stores/CartStore'
+
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: jest.fn(),
 }))
-
-import { CartStoreService } from '@/services/CartStoreService'
-import { useCartStore } from '@/stores/CartStore'
 
 describe('CartStoreService', () => {
   it('deve delegar para useCartStore', () => {

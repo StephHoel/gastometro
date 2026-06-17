@@ -2,15 +2,11 @@ import React from 'react'
 import { render } from '@testing-library/react-native'
 import { List } from '@/components/List'
 import type { StateProps } from '@/interfaces/StateProps'
+import { mockPush } from '../setup/mocks/expo-router'
 
-const mockPush = jest.fn()
 const mockRemoveAlert = jest.fn()
 const mockSortProductsByCollected = jest.fn()
 const mockListItem = jest.fn((_props: unknown) => null)
-
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {

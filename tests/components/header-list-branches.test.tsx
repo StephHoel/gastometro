@@ -11,23 +11,14 @@ const mockPush = jest.fn()
 const mockRemove = jest.fn()
 const mockShare = jest.fn()
 const mockPaste = jest.fn(async (..._args: unknown[]) => Promise.resolve())
+const mockClear = jest.fn()
+const mockEdit = jest.fn()
+const mockRemoveItem = jest.fn()
 
 let mockProductsState = [
   { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
   { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: true },
 ]
-
-const mockClear = jest.fn()
-const mockEdit = jest.fn()
-const mockRemoveItem = jest.fn()
-
-jest.mock('expo-router', () => ({
-  useRouter: jest.fn(),
-}))
-
-jest.mock('expo-router/react-navigation', () => ({
-  useRoute: jest.fn(),
-}))
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: () => ({

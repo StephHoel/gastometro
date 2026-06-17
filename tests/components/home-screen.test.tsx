@@ -1,6 +1,7 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
+import Home from '@/app/index'
 
 const mockUseCartStore = jest.fn()
 const mockUseInitAlert = jest.fn()
@@ -48,8 +49,6 @@ jest.mock('@/components/List', () => ({
     return <Text testID="list-products-count">{cartStore.products.length}</Text>
   },
 }))
-
-import Home from '@/app/index'
 
 describe('Home screen', () => {
   beforeEach(() => {
