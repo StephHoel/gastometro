@@ -22,6 +22,8 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Bloqueia valores negativos em quantidade e preço nos fluxos manuais.
 - Bloqueia itens duplicados na criação manual de item.
 - Inclui uma calculadora de mercado para calcular preço por unidade.
+- Possui lembretes locais por lista com suporte a notificações locais (quando disponível).
+- Possui central de lembretes com filtros por status.
 
 ## Stack
 
@@ -47,13 +49,13 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- Notificações e lembretes.
 - Contas a pagar.
 
 Funcionalidades concluídas recentemente:
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
+- Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 

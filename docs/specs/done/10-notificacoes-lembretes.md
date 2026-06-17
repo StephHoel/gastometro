@@ -1,7 +1,7 @@
 # Mini-spec: Notificações e lembretes
 
 Número: 10
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -162,3 +162,14 @@ Permitir criar lembretes locais para revisar listas ou itens sem depender de log
 - Verificar compatibilidade Expo antes de adicionar biblioteca.
 - Preservar foco Android; avaliar impacto futuro na versão web.
 - Priorizar implementação incremental: primeiro Android estável + fallback web, depois evolução de entrega web na spec 13.
+
+## Implementação concluída (2026-06-17)
+
+- Store dedicado `ReminderStore` com persistência separada em `gastometro-reminders`.
+- Camadas `ReminderService`, `NotificationService` e `ReminderOrchestrator` implementadas.
+- CRUD de lembretes por lista implementado em `src/app/reminders/[listId].tsx`.
+- Central de lembretes com filtros implementada em `src/app/reminders/index.tsx`.
+- Remoção de lista agora informa quantidade de lembretes impactados e executa remoção em cascata.
+- Atalho de lembretes na home e fallback de pendentes quando permissão de notificação não está concedida.
+- Integração de resposta de notificação para abrir app na lista relacionada quando disponível.
+- Limpeza de lembretes órfãos e sincronização de agendamentos no bootstrap do app.
