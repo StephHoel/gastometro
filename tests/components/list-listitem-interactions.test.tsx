@@ -3,13 +3,9 @@ import { fireEvent, render } from '@testing-library/react-native'
 import { List } from '@/components/List'
 import { ListItem } from '@/components/List/ListItem'
 import type { StateProps } from '@/interfaces/StateProps'
+import { mockPush } from '../setup/mocks/expo-router'
 
-const mockPush = jest.fn()
 const mockRemoveAlert = jest.fn()
-
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {

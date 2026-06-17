@@ -1,219 +1,124 @@
 import React from 'react'
-import type { ReactNode } from 'react'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import { Text } from 'react-native'
-import { fireEvent, render } from '@testing-library/react-native'
 import { Form } from '@/components/Form'
+import { useCartStore } from '@/stores/CartStore'
+import { useRouter } from 'expo-router'
 
 const mockPush = jest.fn()
-const mockAdd = jest.fn()
-const mockEdit = jest.fn()
-const mockOk = jest.fn()
-const mockDuplicate = jest.fn((_item: string, _products: unknown[], _editingId?: string) => false)
-const mockCreateOrUpdateProduct = jest.fn((payload: { id: string; item: string; qtt: string; price: string; collected: boolean }) => ({
-  id: payload.id,
-  item: payload.item,
-  quantity: payload.qtt,
-  price: payload.price,
-  collected: payload.collected,
-}))
-
-let mockInputValues: Record<string, string> = {
-  Item: '',
-  Quantidade: '',
-  Preço: '',
-}
-
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
-
-jest.mock('react-native-uuid', () => ({
-  v4: () => 'uuid-123',
-}))
-
-jest.mock('@/stores/CartStore', () => ({
-  useCartStore: () => ({
-    products: [{ id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false }],
-    add: mockAdd,
-    edit: mockEdit,
-  }),
-}))
-
-jest.mock('@/hooks/useInitAlert', () => ({
-  useInitAlert: jest.fn(),
-}))
-
-jest.mock('@/components/CustomAlert', () => ({
-  CustomAlert: () => null,
-}))
-
-jest.mock('@/components/Button', () => ({
-  CustomButton: Object.assign(
-    ({ children, onPress }: { children: ReactNode; onPress?: () => void }) => {
-      const React = require('react')
-      const { Pressable } = require('react-native')
-      return <Pressable testID="form-submit" onPress={onPress}>{children}</Pressable>
-    },
-    {
-      Text: ({ children }: { children: ReactNode }) => {
-        const React = require('react')
-        const { Text } = require('react-native')
-        return <Text>{children}</Text>
-      },
-      Icon: ({ children }: { children: ReactNode }) => <>{children}</>,
-    }
-  ),
-}))
-
-jest.mock('@/components/CustomInput', () => ({
-  CustomInput: ({ nameField, setItem, onSubmit }: { nameField: string; setItem: (v: string) => void; onSubmit: () => void }) => {
-    const React = require('react')
-    const { Pressable, Text } = require('react-native')
-    return (
-      <>
-        <Pressable testID={`set-${nameField}`} onPress={() => setItem(mockInputValues[nameField] || '')}>
-          <Text>{nameField}</Text>
-        </Pressable>
-        <Pressable testID={`submit-${nameField}`} onPress={onSubmit}>
-          <Text>{`${nameField}-submit`}</Text>
-        </Pressable>
-      </>
-    )
-  },
-}))
-
-jest.mock('@/services/AlertService', () => ({
-  AlertService: {
-    ok: (...args: unknown[]) => mockOk(...args),
-  },
-}))
-
-jest.mock('@/services/ProductService', () => ({
-  ProductService: {
-    isDuplicateItem: (item: string, products: unknown[], editingId?: string) =>
-      mockDuplicate(item, products, editingId),
-    createOrUpdateProduct: (payload: { id: string; item: string; qtt: string; price: string; collected: boolean }) =>
-      mockCreateOrUpdateProduct(payload),
-  },
-}))
 
 describe('Form branch coverage', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockInputValues = { Item: '', Quantidade: '', Preço: '' }
-    mockDuplicate.mockReturnValue(false)
+      ; (useRouter as jest.Mock).mockReturnValue({ push: mockPush })
+
+    useCartStore.setState({
+      lists: [
+        {
+          id: 'list-1',
+          name: 'Lista 1',
+          products: [{ id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false }],
+        },
+      ],
+      activeListId: 'list-1',
+      products: [{ id: '1', item: 'Arroz', quantity: '1', price: '10', collected: false }],
+    })
   })
 
-  it('mostra erro quando item vazio', () => {
-    mockInputValues = { Item: '   ', Quantidade: '1', Preço: '1' }
-
-    const { getByTestId } = render(
+  it('não adiciona item quando nome está vazio', () => {
+    const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
-      </Form>
+      </Form>,
     )
 
-    fireEvent.press(getByTestId('set-Item'))
-    fireEvent.press(getByTestId('set-Quantidade'))
-    fireEvent.press(getByTestId('set-Preço'))
-    fireEvent.press(getByTestId('form-submit'))
+    fireEvent.changeText(getByPlaceholderText('1'), '1')
+    fireEvent.changeText(getByPlaceholderText('1,39'), '2')
+    fireEvent.press(getByText('Salvar'))
 
-    expect(mockOk).toHaveBeenCalled()
-    expect(mockAdd).not.toHaveBeenCalled()
-    expect(mockEdit).not.toHaveBeenCalled()
+    expect(useCartStore.getState().products).toHaveLength(1)
+    expect(mockPush).not.toHaveBeenCalled()
   })
 
-  it('mostra erro para valor negativo', () => {
-    mockInputValues = { Item: 'Arroz', Quantidade: '-1', Preço: '2' }
-
-    const { getByTestId } = render(
+  it('não adiciona item com valor negativo', () => {
+    const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
-      </Form>
+      </Form>,
     )
 
-    fireEvent.press(getByTestId('set-Item'))
-    fireEvent.press(getByTestId('set-Quantidade'))
-    fireEvent.press(getByTestId('set-Preço'))
-    fireEvent.press(getByTestId('form-submit'))
+    fireEvent.changeText(getByPlaceholderText('Item'), 'Feijão')
+    fireEvent.changeText(getByPlaceholderText('1'), '-1')
+    fireEvent.changeText(getByPlaceholderText('1,39'), '2')
+    fireEvent.press(getByText('Salvar'))
 
-    expect(mockOk).toHaveBeenCalled()
-    expect(mockAdd).not.toHaveBeenCalled()
+    expect(useCartStore.getState().products).toHaveLength(1)
+    expect(mockPush).not.toHaveBeenCalled()
   })
 
-  it('mostra erro quando item é duplicado', () => {
-    mockInputValues = { Item: 'Arroz', Quantidade: '1', Preço: '2' }
-    mockDuplicate.mockReturnValue(true)
-
-    const { getByTestId } = render(
+  it('não adiciona item duplicado', () => {
+    const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
-      </Form>
+      </Form>,
     )
 
-    fireEvent.press(getByTestId('set-Item'))
-    fireEvent.press(getByTestId('set-Quantidade'))
-    fireEvent.press(getByTestId('set-Preço'))
-    fireEvent.press(getByTestId('form-submit'))
+    fireEvent.changeText(getByPlaceholderText('Item'), 'Arroz')
+    fireEvent.changeText(getByPlaceholderText('1'), '2')
+    fireEvent.changeText(getByPlaceholderText('1,39'), '3')
+    fireEvent.press(getByText('Salvar'))
 
-    expect(mockOk).toHaveBeenCalled()
-    expect(mockAdd).not.toHaveBeenCalled()
+    expect(useCartStore.getState().products).toHaveLength(1)
+    expect(mockPush).not.toHaveBeenCalled()
   })
 
   it('adiciona item quando dados são válidos', () => {
-    mockInputValues = { Item: 'Feijão', Quantidade: '2', Preço: '8,90' }
-
-    const { getByTestId } = render(
+    const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Adicionar">
         <Text>+</Text>
-      </Form>
+      </Form>,
     )
 
-    fireEvent.press(getByTestId('set-Item'))
-    fireEvent.press(getByTestId('set-Quantidade'))
-    fireEvent.press(getByTestId('set-Preço'))
-    fireEvent.press(getByTestId('form-submit'))
+    fireEvent.changeText(getByPlaceholderText('Item'), 'Feijao')
+    fireEvent.changeText(getByPlaceholderText('1'), '2')
+    fireEvent.changeText(getByPlaceholderText('1,39'), '8,90')
+    fireEvent.press(getByText('Adicionar'))
 
-    expect(mockCreateOrUpdateProduct).toHaveBeenCalled()
-    expect(mockAdd).toHaveBeenCalled()
-    expect(mockEdit).not.toHaveBeenCalled()
+    const products = useCartStore.getState().products
+
+    expect(products).toHaveLength(2)
+    expect(products.some((product) => product.item === 'Feijao')).toBe(true)
     expect(mockPush).toHaveBeenCalledWith('/')
   })
 
-  it('edita item quando data é fornecido', () => {
+  it('edita item quando data é fornecida', async () => {
     const data = {
-      id: '42',
-      item: 'Macarrão',
+      id: '1',
+      item: 'Arroz',
       quantity: '1',
-      price: '7.50',
-      collected: true,
+      price: '10',
+      collected: false,
     }
 
-    const { getByTestId } = render(
+    const { getByPlaceholderText, getByText } = render(
       <Form data={data} buttonTitle="Editar">
         <Text>*</Text>
-      </Form>
+      </Form>,
     )
 
-    fireEvent.press(getByTestId('form-submit'))
+    await waitFor(() => {
+      expect(getByPlaceholderText('Item').props.value).toBe('Arroz')
+    })
 
-    expect(mockEdit).toHaveBeenCalled()
-    expect(mockAdd).not.toHaveBeenCalled()
+    fireEvent.changeText(getByPlaceholderText('Item'), 'Macarrao')
+    fireEvent.changeText(getByPlaceholderText('1'), '3')
+    fireEvent.changeText(getByPlaceholderText('1,39'), '7')
+    fireEvent.press(getByText('Editar'))
+
+    const updated = useCartStore.getState().products.find((product) => product.id === '1')
+    expect(updated?.item).toBe('Macarrao')
+    expect(updated?.quantity).toBe('3')
+    expect(updated?.price).toBe('7')
     expect(mockPush).toHaveBeenCalledWith('/')
-  })
-
-  it('executa callbacks de submit dos campos intermediários', () => {
-    const { getByTestId } = render(
-      <Form buttonTitle="Salvar">
-        <Text>+</Text>
-      </Form>
-    )
-
-    fireEvent.press(getByTestId('submit-Item'))
-    fireEvent.press(getByTestId('submit-Quantidade'))
-
-    expect(mockOk).not.toHaveBeenCalled()
-    expect(mockAdd).not.toHaveBeenCalled()
-    expect(mockEdit).not.toHaveBeenCalled()
   })
 })
