@@ -7,6 +7,8 @@ const mockPush = jest.fn()
 const mockUseInitAlert = jest.fn()
 const mockAlertOk = jest.fn()
 const mockShowAlert = jest.fn()
+const mockRemoveByListId = jest.fn(async (_listId: string) => undefined)
+const mockGetByListId = jest.fn((_listId: string) => [] as Array<{ id: string }>)
 
 const mockStore = {
   lists: [
@@ -33,6 +35,18 @@ jest.mock('expo-router', () => ({
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: () => mockStore,
+}))
+
+jest.mock('@/stores/ReminderStore', () => ({
+  useReminderStore: () => ({
+    getByListId: (listId: string) => mockGetByListId(listId),
+  }),
+}))
+
+jest.mock('@/services/ReminderOrchestrator', () => ({
+  ReminderOrchestrator: {
+    removeByListId: (listId: string) => mockRemoveByListId(listId),
+  },
 }))
 
 jest.mock('@/hooks/useInitAlert', () => ({
@@ -115,6 +129,7 @@ import Lists from '@/app/lists'
 describe('Lists screen', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockGetByListId.mockReturnValue([])
     mockStore.lists = [
       { id: 'list-1', name: 'Lista 1', products: [{ id: 'p1', item: 'Arroz', quantity: '1', price: '10', collected: false }] },
       { id: 'list-2', name: 'Lista 2', products: [] },
@@ -180,7 +195,7 @@ describe('Lists screen', () => {
     expect(mockShowAlert).not.toHaveBeenCalled()
   })
 
-  it('abre confirmação e remove lista quando há mais de uma', () => {
+  it('abre confirmação e remove lista quando há mais de uma', async () => {
     const { getAllByText } = render(<Lists />)
 
     fireEvent.press(getAllByText('TrashIcon')[1])
@@ -192,8 +207,22 @@ describe('Lists screen', () => {
     }
 
     expect(payload.buttons[0].text).toBe(text.lists.confirm_remove_button)
-    payload.buttons[0].action()
+    await payload.buttons[0].action()
 
     expect(mockStore.removeList).toHaveBeenCalledWith('list-2')
+  })
+
+  it('mostra impacto de lembretes ao remover lista', () => {
+    mockGetByListId.mockReturnValue([{ id: 'r-1' }])
+
+    const { getAllByText } = render(<Lists />)
+
+    fireEvent.press(getAllByText('TrashIcon')[1])
+
+    const payload = mockShowAlert.mock.calls[0][0] as {
+      message: string
+    }
+
+    expect(payload.message).toContain('1 lembrete(s) também serão removidos')
   })
 })
