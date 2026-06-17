@@ -2,7 +2,8 @@ import type { ReminderProps } from '@/interfaces/ReminderProps'
 import * as Notifications from 'expo-notifications'
 import { PermissionState } from '@/enums/PermissionState'
 import { IsWeb } from '@/utils/platform'
-import { text } from '@/constants/text'
+import { ERROR } from '@/constants/text/error'
+import { REMINDERS } from '@/constants/text/reminders'
 
 const LIST_ID_KEY = 'listId'
 const REMINDER_ID_KEY = 'reminderId'
@@ -28,7 +29,7 @@ export const NotificationService = {
 
       return PermissionState.Undetermined
     } catch (error) {
-      console.error(text.error.notification_permission_read_failure, error)
+      console.error(ERROR.notification_permission_read_failure, error)
       return PermissionState.Unavailable
     }
   },
@@ -43,7 +44,7 @@ export const NotificationService = {
       const requested = await Notifications.requestPermissionsAsync()
       return requested.granted
     } catch (error) {
-      console.error(text.error.notification_permission_request_failure, error)
+      console.error(ERROR.notification_permission_request_failure, error)
       return false
     }
   },
@@ -58,7 +59,7 @@ export const NotificationService = {
       const notificationId = await Notifications.scheduleNotificationAsync({
         content: {
           title: reminder.title,
-          body: 'Abra sua lista para revisar os itens.',
+          body: REMINDERS.notification_body,
           data: {
             [LIST_ID_KEY]: reminder.listId,
             [REMINDER_ID_KEY]: reminder.id,
@@ -72,7 +73,7 @@ export const NotificationService = {
 
       return notificationId
     } catch (error) {
-      console.error('Falha ao agendar notificacao local:', error)
+      console.error(ERROR.notification_schedule_failure, error)
       return null
     }
   },
@@ -83,7 +84,7 @@ export const NotificationService = {
     try {
       await Notifications.cancelScheduledNotificationAsync(notificationId)
     } catch (error) {
-      console.error('Falha ao cancelar notificacao local:', error)
+      console.error(ERROR.notification_cancel_failure, error)
     }
   },
 

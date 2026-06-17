@@ -1,7 +1,10 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import { text } from '@/constants/text'
+import Lists from '@/app/lists'
+import { INPUTS } from '@/constants/text/inputs'
+import { ERROR } from '@/constants/text/error'
+import { LISTS } from '@/constants/text/lists'
 
 const mockPush = jest.fn()
 const mockUseInitAlert = jest.fn()
@@ -124,8 +127,6 @@ jest.mock('@/components/Icons', () => ({
   },
 }))
 
-import Lists from '@/app/lists'
-
 describe('Lists screen', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -140,7 +141,7 @@ describe('Lists screen', () => {
   it('cria lista quando nome é válido', () => {
     const { getByPlaceholderText, getByText } = render(<Lists />)
 
-    fireEvent.changeText(getByPlaceholderText(text.input.placeholder.list_name), '  Feira  ')
+    fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
     fireEvent.press(getByText('AddIcon'))
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
@@ -152,7 +153,7 @@ describe('Lists screen', () => {
 
     fireEvent.press(getByText('AddIcon'))
 
-    expect(mockAlertOk).toHaveBeenCalledWith(text.error.alert_title, text.error.empty_list_name)
+    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
     expect(mockStore.addList).not.toHaveBeenCalled()
   })
 
@@ -170,7 +171,7 @@ describe('Lists screen', () => {
 
     fireEvent.press(getAllByText('EditIcon')[0])
     fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
-    fireEvent.press(getByText(text.lists.rename_save))
+    fireEvent.press(getByText(LISTS.rename_save))
 
     expect(mockStore.renameList).toHaveBeenCalledWith('list-1', 'Lista Mercado')
   })
@@ -179,9 +180,9 @@ describe('Lists screen', () => {
     const { getAllByText, getByText, queryByText } = render(<Lists />)
 
     fireEvent.press(getAllByText('EditIcon')[0])
-    fireEvent.press(getByText(text.lists.rename_cancel))
+    fireEvent.press(getByText(LISTS.rename_cancel))
 
-    expect(queryByText(text.lists.rename_save)).toBeNull()
+    expect(queryByText(LISTS.rename_save)).toBeNull()
     expect(mockStore.renameList).not.toHaveBeenCalled()
   })
 
@@ -191,7 +192,7 @@ describe('Lists screen', () => {
     const { getByText } = render(<Lists />)
     fireEvent.press(getByText('TrashIcon'))
 
-    expect(mockAlertOk).toHaveBeenCalledWith(text.error.alert_title, text.error.cannot_remove_last_list)
+    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.cannot_remove_last_list)
     expect(mockShowAlert).not.toHaveBeenCalled()
   })
 
@@ -206,7 +207,7 @@ describe('Lists screen', () => {
       buttons: Array<{ text: string; action: () => void }>
     }
 
-    expect(payload.buttons[0].text).toBe(text.lists.confirm_remove_button)
+    expect(payload.buttons[0].text).toBe(LISTS.confirm_remove_button)
     await payload.buttons[0].action()
 
     expect(mockStore.removeList).toHaveBeenCalledWith('list-2')

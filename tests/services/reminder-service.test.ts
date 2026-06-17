@@ -1,4 +1,5 @@
 import { ReminderService } from '@/services/ReminderService'
+import { ERROR } from '@/constants/text/error'
 
 describe('ReminderService', () => {
   it('deve validar campos obrigatórios na criação', () => {
@@ -8,7 +9,7 @@ describe('ReminderService', () => {
       listId: 'list-1',
     })
 
-    expect(error).toBe('Título do lembrete é obrigatório.')
+    expect(error).toBe(ERROR.reminder_title_required)
   })
 
   it('deve rejeitar data no passado', () => {
@@ -18,7 +19,7 @@ describe('ReminderService', () => {
       listId: 'list-1',
     })
 
-    expect(error).toBe('Escolha uma data/hora futura para o lembrete.')
+    expect(error).toBe(ERROR.reminder_past_datetime)
   })
 
   it('deve converter data e hora para ISO', () => {
