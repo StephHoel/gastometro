@@ -1,6 +1,5 @@
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { alert } from "@/constants/alert"
-import { text } from "@/constants/text"
 import { whatsapp } from "@/constants/whatsapp"
 import type { ProductProps } from "@/interfaces/ProductProps"
 import type { StateProps } from "@/interfaces/StateProps"
@@ -8,6 +7,8 @@ import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList"
 import { DuplicateProducts } from '@/utils/functions/DuplicateProducts'
 import { ClipboardService } from "./ClipboardService"
 import { ShareService } from "./ShareService"
+import { ERROR } from '@/constants/text/error'
+import { LISTS } from '@/constants/text/lists'
 
 let alertRef: CustomAlertRef | null = null
 
@@ -90,7 +91,7 @@ export const AlertService = {
         const listToPaste = ConvertToProductsList(clipboard)
 
         if (listToPaste.length === 0) {
-          AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
+          AlertService.ok(ERROR.alert_title, ERROR.invalid_list_format)
           return
         }
 
@@ -106,16 +107,16 @@ export const AlertService = {
             },
             {
               text: alert.paste.buttons.newList,
-              action: () => cartStore.addList(text.lists.imported_name, listToPaste),
+              action: () => cartStore.addList(LISTS.imported_name, listToPaste),
             },
           ],
         })
       } else {
-        AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
+        AlertService.ok(ERROR.alert_title, ERROR.invalid_list_format)
       }
     } catch (error) {
-      console.error('Falha ao colar lista do clipboard:', error)
-      AlertService.ok(text.error.alert_title, text.error.invalid_list_format)
+      console.error(ERROR.clipboard_paste_failure, error)
+      AlertService.ok(ERROR.alert_title, ERROR.invalid_list_format)
     }
   },
 }

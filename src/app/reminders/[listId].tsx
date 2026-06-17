@@ -4,7 +4,6 @@ import { Row } from '@/components/Row'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { colors } from '@/constants/color'
-import { text } from '@/constants/text'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 import { AlertService } from '@/services/AlertService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
@@ -16,6 +15,8 @@ import { FlatList, TextInput, TouchableOpacity, View } from 'react-native'
 import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
 import { makeDefaultDateTime, toDisplayDate } from '@/utils/functions/DateFunctions'
+import { ERROR } from '@/constants/text/error'
+import { REMINDERS } from '@/constants/text/reminders'
 
 export function ListReminders() {
   const router = useRouter()
@@ -62,20 +63,20 @@ export function ListReminders() {
 
   async function handleSaveReminder() {
     if (!list) {
-      AlertService.ok(text.error.alert_title, text.reminders.list_required)
+      AlertService.ok(ERROR.alert_title, REMINDERS.list_required)
       return
     }
 
     const datetimeISO = ReminderService.fromDateAndTime(dateValue, timeValue)
     if (!datetimeISO) {
-      AlertService.ok(text.error.alert_title, text.reminders.invalid_datetime)
+      AlertService.ok(ERROR.alert_title, REMINDERS.invalid_datetime)
       return
     }
 
     if (editingId) {
       const validationError = ReminderService.validateUpdateInput({ title, datetimeISO })
       if (validationError) {
-        AlertService.ok(text.error.alert_title, validationError)
+        AlertService.ok(ERROR.alert_title, validationError)
         return
       }
 
@@ -85,7 +86,7 @@ export function ListReminders() {
       })
 
       if (!updated) {
-        AlertService.ok(text.error.alert_title, text.reminders.not_found)
+        AlertService.ok(ERROR.alert_title, REMINDERS.not_found)
         return
       }
 
@@ -101,7 +102,7 @@ export function ListReminders() {
     })
 
     if (validationError) {
-      AlertService.ok(text.error.alert_title, validationError)
+      AlertService.ok(ERROR.alert_title, validationError)
       return
     }
 
@@ -118,7 +119,7 @@ export function ListReminders() {
     if (!enabled) {
       const result = await ReminderOrchestrator.enableReminder(reminderId)
       if (result === 'no-permission') {
-        AlertService.ok(text.reminders.permission_title, text.reminders.permission_denied_message)
+        AlertService.ok(REMINDERS.permission_title, REMINDERS.permission_denied_message)
       }
       return
     }
@@ -128,11 +129,11 @@ export function ListReminders() {
 
   function handleRemoveReminder(reminderId: string) {
     alertRef.current?.showAlert({
-      title: text.reminders.remove_title,
-      message: text.reminders.remove_message,
+      title: REMINDERS.remove_title,
+      message: REMINDERS.remove_message,
       buttons: [
         {
-          text: text.reminders.remove_button,
+          text: REMINDERS.remove_button,
           action: async () => {
             await ReminderOrchestrator.removeReminder(reminderId)
             if (editingId === reminderId) {
@@ -152,12 +153,12 @@ export function ListReminders() {
         <Screen>
           <Header />
           <View className="px-4 py-6 gap-4">
-            <TextWhite>{text.reminders.invalid_list}</TextWhite>
+            <TextWhite>{REMINDERS.invalid_list}</TextWhite>
             <TouchableOpacity
               className="bg-lime-400 rounded-lg px-3 py-2 self-start"
               onPress={() => router.push('/lists')}
             >
-              <TextWhite className="text-black">{text.reminders.back_to_lists}</TextWhite>
+              <TextWhite className="text-black">{REMINDERS.back_to_lists}</TextWhite>
             </TouchableOpacity>
           </View>
         </Screen>
@@ -173,14 +174,14 @@ export function ListReminders() {
         <Header />
 
         <View className="px-4 pt-4 pb-2 gap-2">
-          <TextWhite className="text-lg font-bold">{text.reminders.list_title(list.name)}</TextWhite>
-          <TextWhite className="text-slate-400 text-xs">{text.reminders.list_hint}</TextWhite>
+          <TextWhite className="text-lg font-bold">{REMINDERS.list_title(list.name)}</TextWhite>
+          <TextWhite className="text-slate-400 text-xs">{REMINDERS.list_hint}</TextWhite>
         </View>
 
         <View className="mx-4 mb-4 bg-slate-800 rounded-lg p-3 gap-2">
           <TextInput
             className="bg-slate-700 text-white rounded-lg px-3 py-2"
-            placeholder={text.reminders.title_placeholder}
+            placeholder={REMINDERS.title_placeholder}
             placeholderTextColor={colors.inactive}
             value={title}
             onChangeText={setTitle}
@@ -190,7 +191,7 @@ export function ListReminders() {
           <Row className="gap-2">
             <TextInput
               className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2"
-              placeholder={text.reminders.date_placeholder}
+              placeholder={REMINDERS.date_placeholder}
               placeholderTextColor={colors.inactive}
               value={dateValue}
               onChangeText={setDateValue}
@@ -198,7 +199,7 @@ export function ListReminders() {
             />
             <TextInput
               className="w-24 bg-slate-700 text-white rounded-lg px-3 py-2"
-              placeholder={text.reminders.time_placeholder}
+              placeholder={REMINDERS.time_placeholder}
               placeholderTextColor={colors.inactive}
               value={timeValue}
               onChangeText={setTimeValue}
@@ -214,13 +215,13 @@ export function ListReminders() {
               }}
             >
               <TextWhite className="text-black font-bold">
-                {editingId ? text.reminders.update_button : text.reminders.create_button}
+                {editingId ? REMINDERS.update_button : REMINDERS.create_button}
               </TextWhite>
             </TouchableOpacity>
 
             {editingId && (
               <TouchableOpacity className="bg-slate-500 rounded-lg px-3 py-2" onPress={resetForm}>
-                <TextWhite>{text.reminders.cancel_edit_button}</TextWhite>
+                <TextWhite>{REMINDERS.cancel_edit_button}</TextWhite>
               </TouchableOpacity>
             )}
           </Row>
@@ -231,17 +232,17 @@ export function ListReminders() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
           ListEmptyComponent={
-            <TextWhite className="text-slate-400 mt-2">{text.reminders.empty_list}</TextWhite>
+            <TextWhite className="text-slate-400 mt-2">{REMINDERS.empty_list}</TextWhite>
           }
           renderItem={({ item }) => {
             const overdue = ReminderService.isOverdue(item)
             const status = overdue
-              ? text.reminders.status_overdue
+              ? REMINDERS.status_overdue
               : item.enabled
                 ? item.notificationId
-                  ? text.reminders.status_scheduled
-                  : text.reminders.status_not_scheduled
-                : text.reminders.status_disabled
+                  ? REMINDERS.status_scheduled
+                  : REMINDERS.status_not_scheduled
+                : REMINDERS.status_disabled
 
             return (
               <View className="bg-slate-800 rounded-lg p-3 mb-3">
@@ -257,7 +258,7 @@ export function ListReminders() {
                     }}
                   >
                     <TextWhite className={item.enabled ? 'text-white text-xs' : 'text-black text-xs'}>
-                      {item.enabled ? text.reminders.disable_button : text.reminders.enable_button}
+                      {item.enabled ? REMINDERS.disable_button : REMINDERS.enable_button}
                     </TextWhite>
                   </TouchableOpacity>
 
@@ -265,14 +266,14 @@ export function ListReminders() {
                     className="bg-slate-500 rounded px-2 py-1"
                     onPress={() => fillFormFromReminder(item.id)}
                   >
-                    <TextWhite className="text-xs">{text.reminders.edit_button}</TextWhite>
+                    <TextWhite className="text-xs">{REMINDERS.edit_button}</TextWhite>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     className="bg-red-600 rounded px-2 py-1"
                     onPress={() => handleRemoveReminder(item.id)}
                   >
-                    <TextWhite className="text-xs">{text.reminders.remove_button}</TextWhite>
+                    <TextWhite className="text-xs">{REMINDERS.remove_button}</TextWhite>
                   </TouchableOpacity>
                 </Row>
               </View>

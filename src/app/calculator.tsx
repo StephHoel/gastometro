@@ -2,7 +2,6 @@ import { CustomButton as Button } from "@/components/Button"
 import { CustomInput } from "@/components/CustomInput"
 import { Header } from "@/components/Header"
 import { TrashIcon, CalculatorIcon } from "@/components/Icons"
-import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
 import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
 import React, { useRef, useState } from "react"
@@ -11,6 +10,7 @@ import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { colors } from '@/constants/color'
+import { ERROR } from '@/constants/text/error'
 
 export default function Calculator() {
   const [answer, setAnswer] = useState<number | null>(null)
@@ -30,10 +30,10 @@ export default function Calculator() {
     Keyboard.dismiss()
 
     if (price === "" || quantity === "")
-      return AlertService.ok(text.error.alert_title, text.error.required_fields)
+      return AlertService.ok(ERROR.alert_title, ERROR.required_fields)
 
     if (HasNegativeSignal(price) || HasNegativeSignal(quantity))
-      return AlertService.ok(text.error.alert_title, text.error.negative_value)
+      return AlertService.ok(ERROR.alert_title, ERROR.negative_value)
 
     setAnswer(Divide(price, quantity))
   }

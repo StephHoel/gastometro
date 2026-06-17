@@ -12,6 +12,7 @@ import type { NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { colors } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
+import { ERROR } from '@/constants/text/error'
 
 export default function Layout() {
   const pathname = usePathname()
@@ -40,7 +41,7 @@ export default function Layout() {
         cartStore.setActiveList(targetList.id)
         router.push('/')
       } catch (error) {
-        console.error('Falha ao tratar resposta de notificacao:', error)
+        console.error(ERROR.notification_response_failure, error)
       }
     },
     [cartStore, router],
@@ -92,7 +93,7 @@ export default function Layout() {
 
         await handleNotificationResponse(lastResponse)
       } catch (error) {
-        console.error('Falha na inicializacao de lembretes:', error)
+        console.error(ERROR.reminder_bootstrap_failure, error)
       }
     }
 

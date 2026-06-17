@@ -1,4 +1,5 @@
 import { alert } from "@/constants/alert"
+import { INPUTS } from '@/constants/text/inputs'
 import type { ButtonProps } from "@/interfaces/ButtonProps"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import React, { forwardRef, useImperativeHandle, useState } from "react"
@@ -32,7 +33,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
       setButtons(
         hasSingleOk
           ? buttons
-          : [...buttons, { text: "Cancelar", action: internalHideAlert }],
+          : [...buttons, { text: INPUTS.buttons.cancel, action: internalHideAlert }],
       )
 
       setIsVisible(true)
@@ -63,7 +64,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
               <TouchableOpacity
                 key={index}
                 className={`p-2 mb-2 rounded items-center 
-                  ${button.text === "Cancelar"
+                  ${button.text === INPUTS.buttons.cancel
                     ? "bg-red-500"
                     : "bg-slate-400"}
                   `}
@@ -80,7 +81,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
                 ) : (
                   <Text
                     className={`font-bold 
-                    ${button.text === "Cancelar"
+                    ${button.text === INPUTS.buttons.cancel
                         ? "text-white"
                         : "text-black/90"
                       }`}

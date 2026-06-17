@@ -1,14 +1,15 @@
 import type { ReminderProps } from '@/interfaces/ReminderProps'
 import { parseReminderDate } from '@/utils/functions/DateFunctions'
+import { ERROR } from '@/constants/text/error'
 
 export const ReminderService = {
   validateCreateInput(payload: { title: string; datetimeISO: string; listId: string }): string | null {
-    if (!payload.listId.trim()) return 'Lembrete precisa estar vinculado a uma lista.'
-    if (!payload.title.trim()) return 'Título do lembrete é obrigatório.'
+    if (!payload.listId.trim()) return ERROR.reminder_list_required
+    if (!payload.title.trim()) return ERROR.reminder_title_required
 
     const parsed = parseReminderDate(payload.datetimeISO)
-    if (!parsed) return 'Data/hora inválida para o lembrete.'
-    if (parsed.getTime() <= Date.now()) return 'Escolha uma data/hora futura para o lembrete.'
+    if (!parsed) return ERROR.reminder_invalid_datetime
+    if (parsed.getTime() <= Date.now()) return ERROR.reminder_past_datetime
 
     return null
   },

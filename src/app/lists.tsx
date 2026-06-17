@@ -4,7 +4,6 @@ import { Header } from "@/components/Header"
 import { Screen } from "@/components/Screen"
 import { TextWhite } from "@/components/TextWhite"
 import { colors } from "@/constants/color"
-import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from "@/stores/CartStore"
@@ -22,6 +21,10 @@ import {
 } from "react-native"
 import { AddIcon, EditIcon, TrashIcon } from "@/components/Icons"
 import { Row } from "@/components/Row"
+import { ERROR } from '@/constants/text/error'
+import { LISTS } from '@/constants/text/lists'
+import { REMINDERS } from '@/constants/text/reminders'
+import { INPUTS } from '@/constants/text/inputs'
 
 export default function Lists() {
   const cartStore = useCartStore()
@@ -37,7 +40,7 @@ export default function Lists() {
   function handleCreateList() {
     const trimmed = newListName.trim()
     if (!trimmed) {
-      AlertService.ok(text.error.alert_title, text.error.empty_list_name)
+      AlertService.ok(ERROR.alert_title, ERROR.empty_list_name)
       return
     }
     cartStore.addList(trimmed)
@@ -57,7 +60,7 @@ export default function Lists() {
   function handleSaveEdit(listId: string) {
     const trimmed = editingName.trim()
     if (!trimmed) {
-      AlertService.ok(text.error.alert_title, text.error.empty_list_name)
+      AlertService.ok(ERROR.alert_title, ERROR.empty_list_name)
       return
     }
     cartStore.renameList(listId, trimmed)
@@ -72,18 +75,18 @@ export default function Lists() {
 
   function handleRemoveList(listId: string, listName: string) {
     if (cartStore.lists.length <= 1) {
-      AlertService.ok(text.error.alert_title, text.error.cannot_remove_last_list)
+      AlertService.ok(ERROR.alert_title, ERROR.cannot_remove_last_list)
       return
     }
 
     const impactedReminders = reminderStore.getByListId(listId).length
 
     alertRef.current?.showAlert({
-      title: text.lists.confirm_remove_title,
-      message: text.lists.confirm_remove_message(listName, impactedReminders),
+      title: LISTS.confirm_remove_title,
+      message: LISTS.confirm_remove_message(listName, impactedReminders),
       buttons: [
         {
-          text: text.lists.confirm_remove_button,
+          text: LISTS.confirm_remove_button,
           action: async () => {
             await ReminderOrchestrator.removeByListId(listId)
             cartStore.removeList(listId)
@@ -106,7 +109,7 @@ export default function Lists() {
             onPress={() => router.push('../reminders')}
             activeOpacity={0.7}
           >
-            <TextWhite>{text.reminders.open_center_button}</TextWhite>
+            <TextWhite>{REMINDERS.open_center_button}</TextWhite>
           </TouchableOpacity>
         </Row>
 
@@ -114,7 +117,7 @@ export default function Lists() {
         <Row className="mx-4 mt-4 gap-2">
           <TextInput
             className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2 text-base"
-            placeholder={text.input.placeholder.list_name}
+            placeholder={INPUTS.placeholder.list_name}
             placeholderTextColor={colors.inactive}
             value={newListName}
             onChangeText={setNewListName}
@@ -133,7 +136,7 @@ export default function Lists() {
 
         {cartStore.lists.length === 0 && (
           <TextWhite className="text-center mt-6 text-slate-400">
-            {text.lists.empty_hint}
+            {LISTS.empty_hint}
           </TextWhite>
         )}
 
@@ -169,7 +172,7 @@ export default function Lists() {
                         {item.name}
                         {isActive && (
                           <Text className="text-lime-400 text-xs">
-                            {" "}({text.lists.active_label})
+                            {" "}({LISTS.active_label})
                           </Text>
                         )}
                       </TextWhite>
@@ -189,7 +192,7 @@ export default function Lists() {
                           activeOpacity={0.7}
                         >
                           <Text className="text-black font-bold text-xs">
-                            {text.lists.rename_save}
+                            {LISTS.rename_save}
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -198,7 +201,7 @@ export default function Lists() {
                           activeOpacity={0.7}
                         >
                           <Text className="text-white text-xs">
-                            {text.lists.rename_cancel}
+                            {LISTS.rename_cancel}
                           </Text>
                         </TouchableOpacity>
                       </>
@@ -210,7 +213,7 @@ export default function Lists() {
                           activeOpacity={0.7}
                         >
                           <Text className="text-white text-xs">
-                            {text.reminders.open_list_reminders_button}
+                            {REMINDERS.open_list_reminders_button}
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity

@@ -3,7 +3,6 @@ import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { Header } from "@/components/Header"
 import { List } from "@/components/List"
 import { Row } from '@/components/Row'
-import { text } from '@/constants/text'
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useCartStore } from "@/stores/CartStore"
@@ -16,6 +15,8 @@ import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { TouchableOpacity, View } from "react-native"
 import { PermissionState } from '@/enums/PermissionState'
+import { ERROR } from '@/constants/text/error'
+import { REMINDERS } from '@/constants/text/reminders'
 
 export default function Home() {
   const router = useRouter()
@@ -38,7 +39,7 @@ export default function Home() {
         if (!isMounted) return
         setPermissionState(status)
       } catch (error) {
-        console.error(text.error.notification_permission_failure, error)
+        console.error(ERROR.notification_permission_failure, error)
       }
     }
 
@@ -76,13 +77,13 @@ export default function Home() {
             className="bg-slate-700 rounded-lg px-3 py-2"
             onPress={() => router.push(`../reminders/${cartStore.activeListId}`)}
           >
-            <TextWhite>{text.reminders.open_list_reminders_button}</TextWhite>
+            <TextWhite>{REMINDERS.open_list_reminders_button}</TextWhite>
           </TouchableOpacity>
         </Row>
 
         {shouldShowPending && (
           <View className="mx-4 mb-3 bg-amber-800/40 border border-amber-500 rounded-lg p-3">
-            <TextWhite className="font-bold">{text.reminders.pending_title}</TextWhite>
+            <TextWhite className="font-bold">{REMINDERS.pending_title}</TextWhite>
             {activePendingReminders.map((reminder) => (
               <TextWhite key={reminder.id} className="text-xs mt-1 text-amber-100">
                 • {reminder.title}
