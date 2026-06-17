@@ -40,12 +40,15 @@ Público esperado:
 - Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
 - Bloqueio de itens duplicados na criação manual de item.
 - Identificação de itens duplicados com união automática ao colar na lista ativa.
+- CRUD de lembretes locais por lista, com persistência dedicada offline-first.
+- Central de lembretes com filtros por status (ativos, desativados e vencidos).
+- Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento.
+- Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- notificações/lembretes;
 - contas a pagar;
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.

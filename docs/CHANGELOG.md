@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.6.1 - 2026-06-17
+
+Atualização de documentação para refletir a implementação concluída da mini-spec 10 (notificações e lembretes).
+
+### Documentação
+
+- Mini-spec 10 movida de `docs/specs/planned/` para `docs/specs/done/` e marcada como `Status: implementado`.
+- `README.md` atualizado para listar lembretes/notificações como funcionalidade existente.
+- `docs/specs/README.md` atualizado para refletir a mudança de status da spec 10.
+- `docs/SPEC.md` sincronizado com capacidades atuais de lembretes e notificações locais.
+
 ## 1.6.0 - 2026-06-16
 
 Implementação da mini-spec 09 com suporte completo a múltiplas listas de compras, incluindo migração de dados, nova tela de gerenciamento e cobertura de testes.
