@@ -3,6 +3,10 @@ import { Platform } from 'react-native'
 export const isWeb = Platform.OS === 'web'
 export const isNative = !isWeb
 
+export function IsWeb(): boolean {
+  return Platform.OS === 'web'
+}
+
 /**
  * Detecta se o app está rodando em ambiente web
  */

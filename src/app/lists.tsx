@@ -6,7 +6,9 @@ import { TextWhite } from "@/components/TextWhite"
 import { colors } from "@/constants/color"
 import { text } from "@/constants/text"
 import { AlertService } from "@/services/AlertService"
+import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from "@/stores/CartStore"
+import { useReminderStore } from '@/stores/ReminderStore'
 import { useInitAlert } from "@/hooks/useInitAlert"
 import { useRouter } from "expo-router"
 import React, { useRef, useState } from "react"
@@ -23,6 +25,7 @@ import { Row } from "@/components/Row"
 
 export default function Lists() {
   const cartStore = useCartStore()
+  const reminderStore = useReminderStore()
   const router = useRouter()
   const alertRef = useRef<CustomAlertRef>(null)
   useInitAlert(alertRef)
@@ -73,13 +76,18 @@ export default function Lists() {
       return
     }
 
+    const impactedReminders = reminderStore.getByListId(listId).length
+
     alertRef.current?.showAlert({
       title: text.lists.confirm_remove_title,
-      message: text.lists.confirm_remove_message(listName),
+      message: text.lists.confirm_remove_message(listName, impactedReminders),
       buttons: [
         {
           text: text.lists.confirm_remove_button,
-          action: () => cartStore.removeList(listId),
+          action: async () => {
+            await ReminderOrchestrator.removeByListId(listId)
+            cartStore.removeList(listId)
+          },
         },
       ],
     })
@@ -91,6 +99,16 @@ export default function Lists() {
 
       <Screen>
         <Header />
+
+        <Row className="mx-4 mt-4 gap-2">
+          <TouchableOpacity
+            className="bg-slate-700 rounded-lg px-3 py-2"
+            onPress={() => router.push('../reminders')}
+            activeOpacity={0.7}
+          >
+            <TextWhite>{text.reminders.open_center_button}</TextWhite>
+          </TouchableOpacity>
+        </Row>
 
         {/* Criar nova lista */}
         <Row className="mx-4 mt-4 gap-2">
@@ -186,6 +204,15 @@ export default function Lists() {
                       </>
                     ) : (
                       <>
+                        <TouchableOpacity
+                          onPress={() => router.push(`../reminders/${item.id}`)}
+                          className="bg-slate-500 rounded px-2 py-1"
+                          activeOpacity={0.7}
+                        >
+                          <Text className="text-white text-xs">
+                            {text.reminders.open_list_reminders_button}
+                          </Text>
+                        </TouchableOpacity>
                         <TouchableOpacity
                           onPress={() => handleStartEdit(item.id, item.name)}
                           activeOpacity={0.7}
