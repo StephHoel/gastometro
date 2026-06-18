@@ -1,6 +1,6 @@
 import { CustomAlert } from "@/components/CustomAlert"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
-import { Add, Back, Delete, Share } from "@/components/TouchableIcons"
+import { Add, Back, Delete, Notification, Share } from "@/components/TouchableIcons"
 import { titlePages } from "@/constants/pages"
 import type { CurrentRoute } from "@/interfaces/CurrentRoute"
 import { AlertService } from "@/services/AlertService"
@@ -14,7 +14,7 @@ import { View } from "react-native"
 import { TextWhite } from '@/components/TextWhite'
 import { Divider } from '@/components/Divider'
 
-export function Header() {
+export function Header({ activeListId }: { activeListId?: string }) {
   const route = useRoute<CurrentRoute>()
   const cartStore = useCartStore()
   const navigator = useRouter()
@@ -27,6 +27,13 @@ export function Header() {
       case "index":
         return (
           <>
+            <Notification action={() => {
+              if (activeListId)
+                navigator.push(`/reminders/${activeListId}`)
+              else
+                navigator.push('/reminders')
+            }} />
+
             {cartStore.products.length > 0 && (
               <Delete
                 action={() => AlertService.remove(() => cartStore.clear())}

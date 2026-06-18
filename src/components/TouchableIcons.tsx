@@ -1,4 +1,4 @@
-import { AddIcon, BackIcon, TrashIcon, ShareIcon } from "@/components/Icons"
+import { AddIcon, BackIcon, TrashIcon, ShareIcon, NotificationIcon } from "@/components/Icons"
 import type { IconProps } from "@/interfaces/IconProps"
 import type { IconButtonProps } from '@/interfaces/IconButtonProps'
 import { TouchableOpacity, View } from "react-native"
@@ -53,6 +53,14 @@ export function Back({ action }: IconProps) {
   return (
     <IconButton action={action}>
       <BackIcon size={35} />
+    </IconButton>
+  )
+}
+
+export function Notification({ action, checked }: IconProps) {
+  return (
+    <IconButton action={action}>
+      <NotificationIcon size={35} checked={checked} />
     </IconButton>
   )
 }

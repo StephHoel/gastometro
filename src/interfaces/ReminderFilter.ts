@@ -1,1 +1,6 @@
-export type ReminderFilter = 'all' | 'enabled' | 'disabled' | 'overdue'
+export enum ReminderFilter {
+  All = 'all',
+  Enabled = 'enabled',
+  Disabled = 'disabled',
+  Overdue = 'overdue',
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import type { IconsProps } from "@/interfaces/IconsProps"
+import { colors } from '@/constants/color'
 
 import Add from '@/assets/svgs/add-circle-outline.svg'
 import Back from '@/assets/svgs/arrow-back.svg'
@@ -12,7 +13,8 @@ import Share from '@/assets/svgs/share-social-outline.svg'
 import Trash from '@/assets/svgs/trash-outline.svg'
 import Whatsapp from '@/assets/svgs/logo-whatsapp.svg'
 import List from '@/assets/svgs/list.svg'
-import { colors } from '@/constants/color'
+import Notification from '@/assets/svgs/notifications.svg'
+import NotificationOutline from '@/assets/svgs/notifications-outline.svg'
 
 export function AddIcon({ size = 24, color = colors.white }: IconsProps) {
   return <Add width={size} height={size} color={color} />
@@ -54,4 +56,10 @@ export function WhatsappIcon() {
 
 export function ListIcon({ size = 24, color = colors.white }: IconsProps) {
   return <List width={size} height={size} color={color} />
+}
+
+export function NotificationIcon({ size = 24, color = colors.white, checked }: IconsProps) {
+  return checked
+    ? <Notification width={size} height={size} color={color} />
+    : <NotificationOutline width={size} height={size} color={color} />
 }
