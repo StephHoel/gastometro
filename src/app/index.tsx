@@ -75,7 +75,7 @@ export default function Home() {
         <Row className="px-4 pb-3">
           <TouchableOpacity
             className="bg-slate-700 rounded-lg px-3 py-2"
-            onPress={() => router.push(`../reminders/${cartStore.activeListId}`)}
+            onPress={() => router.push(`/reminders/${cartStore.activeListId}`)}
           >
             <TextWhite>{REMINDERS.open_list_reminders_button}</TextWhite>
           </TouchableOpacity>

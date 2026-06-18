@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { forwardRef, ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import { ListReminders } from '@/app/reminders/[listId]'
+import ListReminders from '@/app/reminders/[listId]'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
 import { AlertService } from '@/services/AlertService'
@@ -9,6 +9,7 @@ import { ReminderService } from '@/services/ReminderService'
 import { useLocalSearchParams } from 'expo-router'
 import { createCartStoreMock, createReminderStoreMock, makeReminder } from '../setup/helpers/reminder-test-factories'
 import { mockPush } from '../setup/mocks/expo-router'
+import { Text } from 'react-native'
 
 const mockShowAlert = jest.fn()
 
@@ -59,24 +60,29 @@ jest.mock('@/utils/functions/DateFunctions', () => ({
 
 jest.mock('@/components/Header', () => ({ Header: () => null }))
 
-jest.mock('@/components/Screen', () => ({
-  Screen: ({ children }: { children: React.ReactNode }) => children,
-}))
+jest.mock('@/components/Screen', () => {
+  return {
+    Screen: forwardRef(({ children }: { children: ReactNode }, ref: unknown) => {
+      return children
+    }),
+  }
+})
 
-jest.mock('@/components/Row', () => ({
-  Row: ({ children }: { children: React.ReactNode }) => children,
-}))
+jest.mock('@/components/Row', () => {
+  return {
+    Row: forwardRef(({ children }: { children: ReactNode }, ref: unknown) => {
+      return children
+    }),
+  }
+})
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: React.ReactNode }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
+  TextWhite: ({ children }: { children: ReactNode }) => {
     return <Text>{children}</Text>
   },
 }))
 
 jest.mock('@/components/CustomAlert', () => {
-  const React = require('react')
   const { forwardRef } = require('react')
   return {
     CustomAlert: forwardRef((_props: unknown, ref: { current?: { showAlert: typeof mockShowAlert } }) => {

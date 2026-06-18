@@ -18,7 +18,7 @@ import { makeDefaultDateTime, toDisplayDate } from '@/utils/functions/DateFuncti
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
 
-export function ListReminders() {
+export default function ListReminders() {
   const router = useRouter()
   const cartStore = useCartStore()
   const reminderStore = useReminderStore()

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef, ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import ReminderCenter from '@/app/reminders'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -21,15 +21,15 @@ jest.mock('@/components/Header', () => ({
 }))
 
 jest.mock('@/components/Screen', () => ({
-  Screen: ({ children }: { children: React.ReactNode }) => children,
+  Screen: ({ children }: { children: ReactNode }) => children,
 }))
 
 jest.mock('@/components/Row', () => ({
-  Row: ({ children }: { children: React.ReactNode }) => children,
+  Row: ({ children }: { children: ReactNode }) => children,
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: React.ReactNode }) => {
+  TextWhite: ({ children }: { children: ReactNode }) => {
     const React = require('react')
     const { Text } = require('react-native')
     return <Text>{children}</Text>
