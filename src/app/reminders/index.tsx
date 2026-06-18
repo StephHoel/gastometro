@@ -16,7 +16,7 @@ export default function ReminderCenter() {
   const router = useRouter()
   const cartStore = useCartStore()
   const reminderStore = useReminderStore()
-  const [filter, setFilter] = useState<ReminderFilter>('all')
+  const [filter, setFilter] = useState<ReminderFilter>(ReminderFilter.All)
 
   const listNameMap = useMemo(() => {
     const entries = cartStore.lists.map((list): [string, string] => [list.id, list.name])
@@ -29,11 +29,19 @@ export default function ReminderCenter() {
     return reminderStore.reminders.filter((reminder) => {
       const overdue = ReminderService.isOverdue(reminder, now)
 
-      if (filter === 'enabled') return reminder.enabled
-      if (filter === 'disabled') return !reminder.enabled
-      if (filter === 'overdue') return overdue
+      switch (filter) {
+        case ReminderFilter.Enabled:
+          return reminder.enabled
 
-      return true
+        case ReminderFilter.Disabled:
+          return !reminder.enabled
+
+        case ReminderFilter.Overdue:
+          return overdue
+
+        default:
+          return true
+      }
     })
   }, [filter, reminderStore.reminders])
 

@@ -19,11 +19,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import { AddIcon, EditIcon, TrashIcon } from "@/components/Icons"
+import { AddIcon, EditIcon, NotificationIcon, TrashIcon } from "@/components/Icons"
 import { Row } from "@/components/Row"
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
-import { REMINDERS } from '@/constants/text/reminders'
 import { INPUTS } from '@/constants/text/inputs'
 
 export default function Lists() {
@@ -102,16 +101,6 @@ export default function Lists() {
 
       <Screen>
         <Header />
-
-        <Row className="mx-4 mt-4 gap-2">
-          <TouchableOpacity
-            className="bg-slate-700 rounded-lg px-3 py-2"
-            onPress={() => router.push('../reminders')}
-            activeOpacity={0.7}
-          >
-            <TextWhite>{REMINDERS.open_center_button}</TextWhite>
-          </TouchableOpacity>
-        </Row>
 
         {/* Criar nova lista */}
         <Row className="mx-4 mt-4 gap-2">
@@ -209,12 +198,10 @@ export default function Lists() {
                       <>
                         <TouchableOpacity
                           onPress={() => router.push(`../reminders/${item.id}`)}
-                          className="bg-slate-500 rounded px-2 py-1"
                           activeOpacity={0.7}
+                          hitSlop={8}
                         >
-                          <Text className="text-white text-xs">
-                            {REMINDERS.open_list_reminders_button}
-                          </Text>
+                          <NotificationIcon size={22} />
                         </TouchableOpacity>
                         <TouchableOpacity
                           onPress={() => handleStartEdit(item.id, item.name)}

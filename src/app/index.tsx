@@ -2,7 +2,6 @@ import { CustomAlert } from "@/components/CustomAlert"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { Header } from "@/components/Header"
 import { List } from "@/components/List"
-import { Row } from '@/components/Row'
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useCartStore } from "@/stores/CartStore"
@@ -13,7 +12,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
-import { TouchableOpacity, View } from "react-native"
+import { View } from "react-native"
 import { PermissionState } from '@/enums/PermissionState'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -64,22 +63,13 @@ export default function Home() {
       <CustomAlert ref={alertRef} />
 
       <Screen>
-        <Header />
+        <Header activeListId={cartStore.activeListId} />
 
         <View className="flex-row flex-wrap justify-center items-center gap-x-2 pt-2 pb-4">
           <TextWhite className="text-center">Total Geral: {SetCurrency(totalGeral)}</TextWhite>
           <TextWhite className="text-center">|</TextWhite>
           <TextWhite className="text-center">Total Coletado: {SetCurrency(totalColetado)}</TextWhite>
         </View>
-
-        <Row className="px-4 pb-3">
-          <TouchableOpacity
-            className="bg-slate-700 rounded-lg px-3 py-2"
-            onPress={() => router.push(`/reminders/${cartStore.activeListId}`)}
-          >
-            <TextWhite>{REMINDERS.open_list_reminders_button}</TextWhite>
-          </TouchableOpacity>
-        </Row>
 
         {shouldShowPending && (
           <View className="mx-4 mb-3 bg-amber-800/40 border border-amber-500 rounded-lg p-3">
