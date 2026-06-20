@@ -11,6 +11,7 @@ import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { COLORS } from '@/constants/color'
 import { ERROR } from '@/constants/text/error'
+import { NameField } from '@/enums/NameField'
 
 export default function Calculator() {
   const [answer, setAnswer] = useState<number | null>(null)
@@ -51,7 +52,7 @@ export default function Calculator() {
 
         <View className="mt-5 gap-5">
           <CustomInput
-            nameField={"Preço"}
+            nameField={NameField.Price}
             selfRef={inputRef1}
             placeholder={"Preço da Embalagem"}
             setItem={setPrice}
@@ -62,7 +63,7 @@ export default function Calculator() {
           />
 
           <CustomInput
-            nameField={"Quantidade"}
+            nameField={NameField.Quantity}
             selfRef={inputRef2}
             placeholder={"Quantidade na Embalagem"}
             setItem={setQuantity}

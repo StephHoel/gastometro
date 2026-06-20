@@ -14,6 +14,7 @@ import { useRouter } from "expo-router"
 import { HasNegativeSignal } from '@/utils/functions/MathFunctions'
 import { ERROR } from '@/constants/text/error'
 import { INPUTS } from '@/constants/text/inputs'
+import { NameField } from '@/enums/NameField'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const [item, setItem] = useState("")
@@ -84,7 +85,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       <CustomAlert ref={alertRef} />
 
       <CustomInput
-        nameField="Item"
+        nameField={NameField.Item}
         placeholder={INPUTS.placeholder.item}
         selfRef={inputRef1}
         returnKeyType={"next"}
@@ -94,7 +95,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       />
 
       <CustomInput
-        nameField="Quantidade"
+        nameField={NameField.Quantity}
         placeholder={INPUTS.placeholder.quantity}
         selfRef={inputRef2}
         returnKeyType={"next"}
@@ -105,7 +106,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       />
 
       <CustomInput
-        nameField="Preço"
+        nameField={NameField.Price}
         placeholder={INPUTS.placeholder.price}
         selfRef={inputRef3}
         returnKeyType={"done"}

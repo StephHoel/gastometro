@@ -3,6 +3,7 @@ import { createRef } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import type { TextInput } from 'react-native'
 import { CustomInput } from '@/components/CustomInput'
+import { NameField } from '@/enums/NameField'
 
 describe('CustomInput', () => {
   it('deve normalizar decimais quando campo for Preço', () => {
@@ -10,7 +11,7 @@ describe('CustomInput', () => {
 
     const { getByPlaceholderText } = render(
       createElement(CustomInput, {
-        nameField: 'Preço',
+        nameField: NameField.Price,
         placeholder: '1,39',
         selfRef: createRef<TextInput | null>(),
         returnKeyType: 'done',
@@ -32,7 +33,7 @@ describe('CustomInput', () => {
 
     const { getByPlaceholderText } = render(
       createElement(CustomInput, {
-        nameField: 'Item',
+        nameField: NameField.Item,
         placeholder: 'Item',
         selfRef: createRef<TextInput | null>(),
         returnKeyType: 'next',
@@ -53,7 +54,7 @@ describe('CustomInput', () => {
 
     const { getByPlaceholderText } = render(
       createElement(CustomInput, {
-        nameField: 'Preço',
+        nameField: NameField.Price,
         placeholder: '1,39',
         selfRef: createRef<TextInput | null>(),
         returnKeyType: 'done',
@@ -75,7 +76,7 @@ describe('CustomInput', () => {
 
     const { getByPlaceholderText } = render(
       createElement(CustomInput, {
-        nameField: 'Quantidade',
+        nameField: NameField.Quantity,
         placeholder: '1',
         selfRef: createRef<TextInput | null>(),
         returnKeyType: 'next',
@@ -97,7 +98,7 @@ describe('CustomInput', () => {
 
     const { getByPlaceholderText } = render(
       createElement(CustomInput, {
-        nameField: 'Quantidade',
+        nameField: NameField.Quantity,
         placeholder: '1',
         selfRef: createRef<TextInput | null>(),
         returnKeyType: 'done',
@@ -112,5 +113,49 @@ describe('CustomInput', () => {
     fireEvent.changeText(input, '9,87654')
 
     expect(setItem).toHaveBeenCalledWith('9.876')
+  })
+
+  it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', () => {
+    const setItem = jest.fn()
+
+    const { getByPlaceholderText } = render(
+      createElement(CustomInput, {
+        nameField: NameField.Date,
+        placeholder: 'yyyy-MM-dd',
+        selfRef: createRef<TextInput | null>(),
+        returnKeyType: 'done',
+        setItem,
+        item: '',
+        onSubmit: jest.fn(),
+        keyboardType: 'number-pad',
+      })
+    )
+
+    const input = getByPlaceholderText('yyyy-MM-dd')
+    fireEvent.changeText(input, '2026030a5')
+
+    expect(setItem).toHaveBeenCalledWith('2026-03-05')
+  })
+
+  it('deve formatar Hora no padrão HH:mm com dois-pontos automático', () => {
+    const setItem = jest.fn()
+
+    const { getByPlaceholderText } = render(
+      createElement(CustomInput, {
+        nameField: NameField.Time,
+        placeholder: 'HH:mm',
+        selfRef: createRef<TextInput | null>(),
+        returnKeyType: 'done',
+        setItem,
+        item: '',
+        onSubmit: jest.fn(),
+        keyboardType: 'number-pad',
+      })
+    )
+
+    const input = getByPlaceholderText('HH:mm')
+    fireEvent.changeText(input, '12h3:4')
+
+    expect(setItem).toHaveBeenCalledWith('12:34')
   })
 })
