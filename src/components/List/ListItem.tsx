@@ -11,7 +11,7 @@ export function ListItem({ product, index, totalCount, onDelete, onToggle, onEdi
   return (
     <View className="px-4">
       <View className="flex-row gap-2 items-center">
-        <Delete action={onDelete} />
+        <Delete action={onDelete} size={35} />
 
         <TouchableOpacity
           onPress={onToggle}

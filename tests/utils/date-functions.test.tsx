@@ -1,4 +1,11 @@
-import { makeDefaultDateTime, nowISO, parseReminderDate, toDisplayDate } from '@/utils/functions/DateFunctions'
+import {
+  formatDateInput,
+  formatTimeInput,
+  makeDefaultDateTime,
+  nowISO,
+  parseReminderDate,
+  toDisplayDate,
+} from '@/utils/functions/DateFunctions'
 
 describe('DateFunctions', () => {
   it('toDisplayDate deve retornar o valor original quando inválido', () => {
@@ -21,5 +28,25 @@ describe('DateFunctions', () => {
     const parsed = new Date(iso)
 
     expect(Number.isNaN(parsed.getTime())).toBe(false)
+  })
+
+  it('formatDateInput deve limitar mês para faixa válida', () => {
+    expect(formatDateInput('202613')).toBe('2026-12')
+  })
+
+  it('formatDateInput deve limitar dia para o máximo do mês', () => {
+    expect(formatDateInput('20260231')).toBe('2026-02-28')
+  })
+
+  it('formatDateInput deve considerar ano bissexto no limite do dia', () => {
+    expect(formatDateInput('20240231')).toBe('2024-02-29')
+  })
+
+  it('formatTimeInput deve limitar hora para 23', () => {
+    expect(formatTimeInput('29')).toBe('23')
+  })
+
+  it('formatTimeInput deve limitar minutos para 59', () => {
+    expect(formatTimeInput('2361')).toBe('23:59')
   })
 })

@@ -4,5 +4,5 @@ import { CustomAlertRef } from './CustomAlertRef'
 export interface PageProps {
   children: ReactNode
   activeListId?: string
-  alertRef: RefObject<CustomAlertRef | null>
+  alertRef?: RefObject<CustomAlertRef | null>
 }

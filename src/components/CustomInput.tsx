@@ -5,10 +5,13 @@ import colors from "tailwindcss/colors"
 import React from 'react'
 import { TextWhite } from './TextWhite'
 import { NormalizeDecimalInput } from '@/utils/functions/MathFunctions'
+import { NameField } from '@/enums/NameField'
+import { formatDateInput, formatTimeInput } from '@/utils/functions/DateFunctions'
 
 export function CustomInput({
   nameField,
   placeholder,
+  maxLength,
   selfRef,
   returnKeyType,
   setItem,
@@ -17,14 +20,25 @@ export function CustomInput({
   keyboardType = "default",
 }: CustomInputProps) {
   function handleChangeText(text: string) {
-    if (nameField === "Quantidade" || nameField === "Preço") {
-      const maxDecimals = nameField === "Preço" ? 2 : 3
+    if (nameField === NameField.Quantity || nameField === NameField.Price) {
+      const maxDecimals = nameField === NameField.Price ? 2 : 3
       const filtered = NormalizeDecimalInput(text, maxDecimals)
 
       setItem(filtered)
-    } else {
-      setItem(text)
+      return
     }
+
+    if (nameField === NameField.Date) {
+      setItem(formatDateInput(text))
+      return
+    }
+
+    if (nameField === NameField.Time) {
+      setItem(formatTimeInput(text))
+      return
+    }
+
+    setItem(text)
   }
 
   return (
@@ -37,6 +51,7 @@ export function CustomInput({
         placeholder={placeholder}
         onChangeText={handleChangeText}
         value={item}
+        maxLength={maxLength}
         ref={selfRef}
         keyboardType={keyboardType}
         onFocus={() => { if (item == "0.00" || item == "0") setItem("") }}
