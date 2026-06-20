@@ -39,3 +39,4 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 1. [Contas a pagar](./planned/11-contas-a-pagar.md)
 2. [Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
 3. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
+4. [Refatoração de formulários para react-hook-form](./planned/16-refatoracao-formularios-react-hook-form.md)
