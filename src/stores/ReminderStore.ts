@@ -25,7 +25,7 @@ export const useReminderStore = create(
           id: uuid.v4().toString(),
           title: title.trim(),
           datetimeISO,
-          enabled: false,
+          enabled: true,
           listId,
           itemId,
           createdAt: timestamp,
