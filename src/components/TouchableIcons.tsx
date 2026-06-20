@@ -3,7 +3,7 @@ import type { IconProps } from "@/interfaces/IconProps"
 import type { IconButtonProps } from '@/interfaces/IconButtonProps'
 import { TouchableOpacity, View } from "react-native"
 import React from 'react'
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 
 function IconButton({ action, children, containerClass, wrapperClass }: IconButtonProps) {
   return (
@@ -28,7 +28,7 @@ export function Add({ action }: IconProps) {
       wrapperClass="absolute bottom-6 right-6 z-50"
       containerClass="bg-lime-400 rounded-full w-14 h-14 items-center justify-center"
     >
-      <AddIcon size={35} color={colors.black} />
+      <AddIcon size={35} color={COLORS.black} />
     </IconButton>
   )
 }

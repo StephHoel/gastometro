@@ -9,7 +9,7 @@ import { Keyboard, ScrollView, TextInput, View } from "react-native"
 import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 import { ERROR } from '@/constants/text/error'
 
 export default function Calculator() {
@@ -74,12 +74,12 @@ export default function Calculator() {
 
           <View className="flex-1 flex-row justify-between">
             <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-              <Button.Icon><TrashIcon size={28} color={colors.black} /></Button.Icon>
+              <Button.Icon><TrashIcon size={28} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">Limpar</Button.Text>
             </Button>
 
             <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
-              <Button.Icon><CalculatorIcon size={28} color={colors.black} /></Button.Icon>
+              <Button.Icon><CalculatorIcon size={28} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">Calcular</Button.Text>
             </Button>
           </View>
