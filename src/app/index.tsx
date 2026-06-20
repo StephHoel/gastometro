@@ -1,6 +1,4 @@
-import { CustomAlert } from "@/components/CustomAlert"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
-import { Header } from "@/components/Header"
 import { List } from "@/components/List"
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
@@ -10,12 +8,12 @@ import { ReduceCollectedProducts, ReduceProducts, SetCurrency } from "@/utils/fu
 import { useRouter } from 'expo-router'
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useInitAlert } from '@/hooks/useInitAlert'
-import { Screen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 import { View } from "react-native"
 import { PermissionState } from '@/enums/PermissionState'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
+import { Page } from '@/components/Page'
 
 export default function Home() {
   const router = useRouter()
@@ -59,31 +57,25 @@ export default function Home() {
   const shouldShowPending = permissionState !== PermissionState.Granted && activePendingReminders.length > 0
 
   return (
-    <>
-      <CustomAlert ref={alertRef} />
+    <Page alertRef={alertRef} activeListId={cartStore.activeListId}>
+      <View className="flex-row flex-wrap justify-center items-center gap-x-2 pt-2 pb-4">
+        <TextWhite className="text-center">Total Geral: {SetCurrency(totalGeral)}</TextWhite>
+        <TextWhite className="text-center">|</TextWhite>
+        <TextWhite className="text-center">Total Coletado: {SetCurrency(totalColetado)}</TextWhite>
+      </View>
 
-      <Screen>
-        <Header activeListId={cartStore.activeListId} />
-
-        <View className="flex-row flex-wrap justify-center items-center gap-x-2 pt-2 pb-4">
-          <TextWhite className="text-center">Total Geral: {SetCurrency(totalGeral)}</TextWhite>
-          <TextWhite className="text-center">|</TextWhite>
-          <TextWhite className="text-center">Total Coletado: {SetCurrency(totalColetado)}</TextWhite>
+      {shouldShowPending && (
+        <View className="mx-4 mb-3 bg-amber-800/40 border border-amber-500 rounded-lg p-3">
+          <TextWhite className="font-bold">{REMINDERS.pending_title}</TextWhite>
+          {activePendingReminders.map((reminder) => (
+            <TextWhite key={reminder.id} className="text-xs mt-1 text-amber-100">
+              • {reminder.title}
+            </TextWhite>
+          ))}
         </View>
+      )}
 
-        {shouldShowPending && (
-          <View className="mx-4 mb-3 bg-amber-800/40 border border-amber-500 rounded-lg p-3">
-            <TextWhite className="font-bold">{REMINDERS.pending_title}</TextWhite>
-            {activePendingReminders.map((reminder) => (
-              <TextWhite key={reminder.id} className="text-xs mt-1 text-amber-100">
-                • {reminder.title}
-              </TextWhite>
-            ))}
-          </View>
-        )}
-
-        <List cartStore={cartStore} />
-      </Screen>
-    </>
+      <List cartStore={cartStore} />
+    </Page>
   )
 }
