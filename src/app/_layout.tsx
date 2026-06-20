@@ -10,7 +10,7 @@ import { Platform } from 'react-native'
 import * as Notifications from 'expo-notifications'
 import type { NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
 
@@ -110,11 +110,11 @@ export default function Layout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: colors.background,
+            backgroundColor: COLORS.background,
             borderColor: "transparent",
           },
-          tabBarActiveTintColor: colors.active,
-          tabBarInactiveTintColor: colors.inactive,
+          tabBarActiveTintColor: COLORS.active,
+          tabBarInactiveTintColor: COLORS.inactive,
         }}
       >
         <Tabs.Screen

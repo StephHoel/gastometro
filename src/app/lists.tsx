@@ -1,6 +1,6 @@
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { TextWhite } from "@/components/TextWhite"
-import { colors } from "@/constants/color"
+import { COLORS } from "@/constants/color"
 import { AlertService } from "@/services/AlertService"
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from "@/stores/CartStore"
@@ -100,7 +100,7 @@ export default function Lists() {
         <TextInput
           className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2 text-base"
           placeholder={INPUTS.placeholder.list_name}
-          placeholderTextColor={colors.inactive}
+          placeholderTextColor={COLORS.inactive}
           value={newListName}
           onChangeText={setNewListName}
           onSubmitEditing={handleCreateList}
@@ -112,7 +112,7 @@ export default function Lists() {
           activeOpacity={0.7}
           onPress={handleCreateList}
         >
-          <AddIcon size={26} color={colors.black} />
+          <AddIcon size={26} color={COLORS.black} />
         </TouchableOpacity>
       </Row>
 

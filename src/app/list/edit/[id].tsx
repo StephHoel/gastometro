@@ -9,7 +9,7 @@ import { Header } from "@/components/Header"
 import { EditIcon } from "@/components/Icons"
 
 import React from 'react'
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 import { INPUTS } from '@/constants/text/inputs'
 
 export default function Edit() {
@@ -23,7 +23,7 @@ export default function Edit() {
         <Header />
 
         <Form data={prod} buttonTitle={INPUTS.buttons.edit}>
-          <EditIcon size={32} color={colors.black} />
+          <EditIcon size={32} color={COLORS.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>
