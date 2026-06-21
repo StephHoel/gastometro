@@ -1,9 +1,11 @@
 export const titlePages = {
-  "list/add": 'Adicionando item',
-  "list/edit/[id]": 'Editando item',
-  "reminders/index": 'Central de Lembretes',
-  "reminders/[listId]": 'Lembretes da Lista',
   "index": 'Gastômetro',
   "calculator": "Calculadora",
-  "lists": "Minhas Listas",
+  "lists": "Listas",
+  "list/add": 'Novo Item',
+  "list/edit/[id]": 'Editar Item',
+  "reminders/index": 'Central de Lembretes',
+  "reminders/[listId]/index": 'Lembretes',
+  "reminders/[listId]/new": 'Novo',
+  "reminders/[listId]/edit/[reminderId]": 'Editar',
 }

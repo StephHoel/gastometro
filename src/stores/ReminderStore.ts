@@ -44,6 +44,7 @@ export const useReminderStore = create(
           ...current,
           ...payload,
           title: payload.title !== undefined ? payload.title.trim() : current.title,
+          enabled: true,
           updatedAt: nowISO(),
         }
 

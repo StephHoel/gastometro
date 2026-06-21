@@ -12,6 +12,10 @@ describe('DateFunctions', () => {
     expect(toDisplayDate('invalida')).toBe('invalida')
   })
 
+  it('toDisplayDate deve formatar no padrão dd/MM/yyyy HH:mm', () => {
+    expect(toDisplayDate('2026-06-21T12:34:56')).toBe('21/06/2026 12:34')
+  })
+
   it('parseReminderDate deve retornar null para data inválida', () => {
     expect(parseReminderDate('sem-data')).toBeNull()
   })

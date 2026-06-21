@@ -1,6 +1,6 @@
 import React, { forwardRef, ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import ListReminders from '@/app/reminders/[listId]'
+import ListReminders from '@/app/reminders/[listId]/index'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
 import { AlertService } from '@/services/AlertService'
@@ -144,13 +144,13 @@ describe('ListReminders screen', () => {
     const { getByText, getByPlaceholderText } = render(<ListReminders />)
 
     fromDateAndTime.mockReturnValueOnce(null)
-    fireEvent.press(getByText(REMINDERS.create_button))
-    expect(alertOk).toHaveBeenCalledWith(ERROR.alert_title, REMINDERS.invalid_datetime)
+    fireEvent.press(getByText(REMINDERS.button.create))
+    expect(alertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.reminder.invalid_datetime)
 
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.title_placeholder), 'Comprar frutas')
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.date_placeholder), '2099-01-11')
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.time_placeholder), '11:30')
-    fireEvent.press(getByText(REMINDERS.create_button))
+    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Comprar frutas')
+    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.date), '2099-01-11')
+    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.time), '11:30')
+    fireEvent.press(getByText(REMINDERS.button.create))
 
     expect(mockReminderStore.addReminder).toHaveBeenCalledWith({
       title: 'Comprar frutas',
@@ -165,11 +165,11 @@ describe('ListReminders screen', () => {
     fireEvent.press(getAllByText(REMINDERS.edit_button)[0])
 
     validateUpdateInput.mockReturnValueOnce('erro-validacao')
-    fireEvent.press(getByText(REMINDERS.update_button))
+    fireEvent.press(getByText(REMINDERS.button.update))
     expect(alertOk).toHaveBeenCalledWith(ERROR.alert_title, 'erro-validacao')
 
       ; (mockReminderStore.updateReminder as jest.Mock).mockReturnValueOnce(null)
-    fireEvent.press(getByText(REMINDERS.update_button))
+    fireEvent.press(getByText(REMINDERS.button.update))
     expect(alertOk).toHaveBeenCalledWith(ERROR.alert_title, REMINDERS.not_found)
   })
 
