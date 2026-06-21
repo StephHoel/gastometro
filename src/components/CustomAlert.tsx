@@ -2,14 +2,14 @@ import { alert } from "@/constants/alert"
 import { INPUTS } from '@/constants/text/inputs'
 import type { ButtonProps } from "@/interfaces/ButtonProps"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
-import React, { RefObject, useImperativeHandle, useState } from "react"
+import React, { ForwardedRef, useImperativeHandle, useState } from "react"
 import { Modal, Pressable, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import type { ShowAlertProps } from "@/interfaces/ShowAlertProps"
 import { WhatsappIcon } from './Icons'
 import { Row } from './Row'
 import { TextWhite } from './TextWhite'
 
-export function CustomAlert({ ref }: { ref: RefObject<CustomAlertRef | null> }) {
+export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
   const { width } = useWindowDimensions()
   const [isVisible, setIsVisible] = useState(false)
   const [title, setTitle] = useState("")
