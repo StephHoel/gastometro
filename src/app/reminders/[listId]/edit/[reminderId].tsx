@@ -1,15 +1,15 @@
 import React from 'react'
 import { FormReminder } from '@/components/Form/Reminder'
 import { Page } from '@/components/Page'
-import { getListIdParam, getReminderIdParam } from '@/hooks/getParams'
+import { useListIdParam, useReminderIdParam } from '@/hooks/useParams'
 import { EditIcon } from '@/components/Icons'
 import { COLORS } from '@/constants/color'
 import { REMINDERS } from '@/constants/text/reminders'
 import { SIZE } from '@/constants/size'
 
 export default function EditReminder() {
-  const listId = getListIdParam()
-  const reminderId = getReminderIdParam()
+  const listId = useListIdParam()
+  const reminderId = useReminderIdParam()
 
   return (
     <Page>

@@ -1,5 +1,5 @@
 import { Back, Delete, Notification, Share } from "@/components/TouchableIcons"
-import { getListIdParam } from '@/hooks/getParams'
+import { useListIdParam } from '@/hooks/useParams'
 import { HeaderActionsProps } from '@/interfaces/HeaderActionsProps'
 import { AlertService } from "@/services/AlertService"
 import { useCartStore } from "@/stores/CartStore"
@@ -9,7 +9,7 @@ import React from "react"
 export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
   const cartStore = useCartStore()
   const router = useRouter()
-  const listId = getListIdParam()
+  const listId = useListIdParam()
 
   function notificationActions() {
     if (activeListId)
