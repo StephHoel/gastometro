@@ -1,7 +1,14 @@
 import { ReminderState } from '@/enums/ReminderState'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { useReminderStore } from '@/stores/ReminderStore'
+
+jest.mock('@/services/AlertService', () => ({
+  AlertService: {
+    ok: jest.fn(),
+  },
+}))
 
 jest.mock('@/services/NotificationService', () => ({
   NotificationService: {
@@ -35,6 +42,7 @@ describe('ReminderOrchestrator', () => {
   const cancelScheduled = NotificationService.cancelScheduled as jest.Mock
   const scheduleReminder = NotificationService.scheduleReminder as jest.Mock
   const getPermissionState = NotificationService.getPermissionState as jest.Mock
+  const alertOk = AlertService.ok as jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -163,5 +171,48 @@ describe('ReminderOrchestrator', () => {
     expect(cancelScheduled).toHaveBeenCalledWith('n1')
     expect(useReminderStore.getState().getById('r1')).toBeUndefined()
     expect(useReminderStore.getState().getById('r2')).toBeDefined()
+  })
+
+  it('saveReminder solicita permissão ao criar e alerta quando negada', async () => {
+    ensurePermissionForScheduling.mockResolvedValueOnce(false)
+
+    await expect(
+      ReminderOrchestrator.saveReminder({
+        listId: 'list-1',
+        title: 'Comprar pão',
+        dateValue: '2099-01-01',
+        timeValue: '10:00',
+        editingId: null,
+      }),
+    ).resolves.toBe(true)
+
+    expect(ensurePermissionForScheduling).toHaveBeenCalledTimes(1)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+    expect(scheduleReminder).not.toHaveBeenCalled()
+    expect(useReminderStore.getState().reminders).toHaveLength(1)
+    expect(useReminderStore.getState().reminders[0]?.notificationId).toBeUndefined()
+  })
+
+  it('saveReminder solicita permissão ao editar lembrete ativo e agenda quando concedida', async () => {
+    seedReminders([makeReminder('r1', { enabled: true, notificationId: 'old-id' })])
+    ensurePermissionForScheduling.mockResolvedValueOnce(true)
+    getPermissionState.mockResolvedValueOnce('granted')
+    scheduleReminder.mockResolvedValueOnce('new-id')
+
+    await expect(
+      ReminderOrchestrator.saveReminder({
+        listId: 'list-1',
+        title: 'Comprar arroz',
+        dateValue: '2099-01-01',
+        timeValue: '11:30',
+        editingId: 'r1',
+      }),
+    ).resolves.toBe(true)
+
+    expect(ensurePermissionForScheduling).toHaveBeenCalledTimes(1)
+    expect(cancelScheduled).toHaveBeenCalledWith('old-id')
+    expect(scheduleReminder).toHaveBeenCalledTimes(1)
+    expect(alertOk).not.toHaveBeenCalled()
+    expect(useReminderStore.getState().getById('r1')?.notificationId).toBe('new-id')
   })
 })
