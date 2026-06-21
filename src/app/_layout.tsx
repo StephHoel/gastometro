@@ -77,18 +77,6 @@ export default function Layout() {
   useEffect(() => {
     if (Platform.OS === 'web') return
 
-    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
-      void handleNotificationResponse(response)
-    })
-
-    return () => {
-      subscription.remove()
-    }
-  }, [handleNotificationResponse])
-
-  useEffect(() => {
-    if (Platform.OS === 'web') return
-
     let isMounted = true
 
     async function bootstrapNotificationOpen() {
@@ -106,8 +94,13 @@ export default function Layout() {
 
     void bootstrapNotificationOpen()
 
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      void handleNotificationResponse(response)
+    })
+
     return () => {
       isMounted = false
+      subscription.remove()
     }
   }, [handleNotificationResponse])
 
