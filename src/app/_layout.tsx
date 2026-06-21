@@ -63,6 +63,15 @@ export default function Layout() {
         shouldSetBadge: false,
       }),
     })
+
+    if (Platform.OS === 'android') {
+      void Notifications.setNotificationChannelAsync('default', {
+        name: 'Lembretes',
+        importance: Notifications.AndroidImportance.HIGH,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: COLORS.active,
+      })
+    }
   }, [])
 
   useEffect(() => {
