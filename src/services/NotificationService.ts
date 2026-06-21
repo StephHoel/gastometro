@@ -1,9 +1,9 @@
 import type { ReminderProps } from '@/interfaces/ReminderProps'
-import * as Notifications from 'expo-notifications'
 import { PermissionState } from '@/enums/PermissionState'
 import { IsWeb } from '@/utils/platform'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
+import { getPermissionsAsync, requestPermissionsAsync, scheduleNotificationAsync, SchedulableTriggerInputTypes, cancelScheduledNotificationAsync, dismissAllNotificationsAsync, PermissionStatus } from 'expo-notifications'
 
 const LIST_ID_KEY = 'listId'
 const REMINDER_ID_KEY = 'reminderId'
@@ -20,10 +20,10 @@ export const NotificationService = {
     if (IsWeb()) return PermissionState.Unavailable
 
     try {
-      const settings = await Notifications.getPermissionsAsync()
+      const settings = await getPermissionsAsync()
       if (settings.granted) return PermissionState.Granted
 
-      if (settings.status === Notifications.PermissionStatus.DENIED) {
+      if (settings.status === PermissionStatus.DENIED) {
         return PermissionState.Denied
       }
 
@@ -38,10 +38,10 @@ export const NotificationService = {
     if (IsWeb()) return false
 
     try {
-      const current = await Notifications.getPermissionsAsync()
+      const current = await getPermissionsAsync()
       if (current.granted) return true
 
-      const requested = await Notifications.requestPermissionsAsync()
+      const requested = await requestPermissionsAsync()
       return requested.granted
     } catch (error) {
       console.error(ERROR.notification_permission_request_failure, error)
@@ -56,7 +56,7 @@ export const NotificationService = {
     if (!triggerDate) return null
 
     try {
-      const notificationId = await Notifications.scheduleNotificationAsync({
+      const notificationId = await scheduleNotificationAsync({
         content: {
           title: reminder.title,
           body: REMINDERS.notification_body,
@@ -66,7 +66,7 @@ export const NotificationService = {
           },
         },
         trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          type: SchedulableTriggerInputTypes.DATE,
           date: triggerDate,
           channelId: 'default',
         },
@@ -83,7 +83,7 @@ export const NotificationService = {
     if (IsWeb() || !notificationId) return
 
     try {
-      await Notifications.cancelScheduledNotificationAsync(notificationId)
+      await cancelScheduledNotificationAsync(notificationId)
     } catch (error) {
       console.error(ERROR.notification_cancel_failure, error)
     }
@@ -93,7 +93,7 @@ export const NotificationService = {
     if (IsWeb()) return
 
     try {
-      await Notifications.dismissAllNotificationsAsync()
+      await dismissAllNotificationsAsync()
     } catch (error) {
       console.error(ERROR.notification_dismiss_failure, error)
     }

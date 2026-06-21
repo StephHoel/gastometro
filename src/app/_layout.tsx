@@ -7,8 +7,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from '@/stores/CartStore'
 import React, { useCallback, useEffect } from 'react'
 import { Platform } from 'react-native'
-import * as Notifications from 'expo-notifications'
-import type { NotificationResponse } from 'expo-notifications'
+import { addNotificationResponseReceivedListener, AndroidImportance, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
@@ -55,7 +54,7 @@ export default function Layout() {
   useEffect(() => {
     if (Platform.OS === 'web') return
 
-    Notifications.setNotificationHandler({
+    setNotificationHandler({
       handleNotification: async () => ({
         shouldShowBanner: true,
         shouldShowList: true,
@@ -65,9 +64,9 @@ export default function Layout() {
     })
 
     if (Platform.OS === 'android') {
-      void Notifications.setNotificationChannelAsync('default', {
+      void setNotificationChannelAsync('default', {
         name: 'Lembretes',
-        importance: Notifications.AndroidImportance.HIGH,
+        importance: AndroidImportance.HIGH,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: COLORS.active,
       })
@@ -81,7 +80,7 @@ export default function Layout() {
 
     async function bootstrapNotificationOpen() {
       try {
-        const lastResponse = await Notifications.getLastNotificationResponseAsync()
+        const lastResponse = getLastNotificationResponse()
         if (!isMounted || !lastResponse) return
 
         await handleNotificationResponse(lastResponse)
@@ -94,7 +93,7 @@ export default function Layout() {
 
     void bootstrapNotificationOpen()
 
-    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+    const subscription = addNotificationResponseReceivedListener((response) => {
       void handleNotificationResponse(response)
     })
 
