@@ -1,12 +1,11 @@
 import { CustomAlert } from "@/components/CustomAlert"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
-import { Add, Back, Delete, Notification, Share } from "@/components/TouchableIcons"
+import { Add } from "@/components/TouchableIcons"
 import { titlePages } from "@/constants/pages"
 import type { CurrentRoute } from "@/interfaces/CurrentRoute"
-import { AlertService } from "@/services/AlertService"
+import { HeaderActions } from "@/components/HeaderActions"
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { Row } from '@/components/Row'
-import { useCartStore } from "@/stores/CartStore"
 import { useRoute } from "expo-router/react-navigation"
 import { useRouter } from "expo-router"
 import React, { useRef } from "react"
@@ -16,46 +15,10 @@ import { Divider } from '@/components/Divider'
 
 export function Header({ activeListId }: { activeListId?: string }) {
   const route = useRoute<CurrentRoute>()
-  const cartStore = useCartStore()
-  const navigator = useRouter()
+  const router = useRouter()
   const alertRef = useRef<CustomAlertRef | null>(null)
 
   useInitAlert(alertRef)
-
-  function buttonsByRouteName() {
-    switch (route.name) {
-      case "index":
-        return (
-          <>
-            <Notification action={() => {
-              if (activeListId)
-                navigator.push(`/reminders/${activeListId}`)
-              else
-                navigator.push('/reminders')
-            }} />
-
-            {cartStore.products.length > 0 && (
-              <Delete
-                action={() => AlertService.remove(() => cartStore.clear())}
-              />
-            )}
-
-            <Share
-              action={async () => {
-                if (cartStore.products.length === 0)
-                  await AlertService.paste(cartStore)
-                else AlertService.share(cartStore)
-              }}
-            />
-          </>
-        )
-
-      case "calculator":
-        return null
-      default:
-        return <Back action={() => navigator.push("/")} />
-    }
-  }
 
   return (
     <>
@@ -69,13 +32,15 @@ export function Header({ activeListId }: { activeListId?: string }) {
         </TextWhite>
 
         <View className="flex-1 flex-row">
-          <Row className="gap-4 items-center" style={{ marginLeft: 'auto' }}>{buttonsByRouteName()}</Row>
+          <Row className="gap-4 items-center" style={{ marginLeft: 'auto' }}>
+            <HeaderActions routeName={route.name} activeListId={activeListId} />
+          </Row>
         </View>
       </View>
 
       <Divider className="border-white pt-3 mx-2" />
 
-      {route.name === "index" && <Add action={() => navigator.push("/list/add")} />}
+      {route.name === "index" && <Add action={() => router.push("/list/add")} />}
     </>
   )
 }
