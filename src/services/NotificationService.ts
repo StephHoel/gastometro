@@ -88,6 +88,16 @@ export const NotificationService = {
     }
   },
 
+  async clearDeliveredNotifications(): Promise<void> {
+    if (IsWeb()) return
+
+    try {
+      await Notifications.dismissAllNotificationsAsync()
+    } catch (error) {
+      console.error(ERROR.notification_dismiss_failure, error)
+    }
+  },
+
   getListIdFromNotification(data: unknown): string | null {
     if (!data || typeof data !== 'object') return null
 

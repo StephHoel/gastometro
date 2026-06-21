@@ -22,6 +22,7 @@ export const ERROR = {
   // Notificações — agendamento e cancelamento
   notification_schedule_failure: 'Falha ao agendar notificação local:',
   notification_cancel_failure: 'Falha ao cancelar notificação local:',
+  notification_dismiss_failure: 'Falha ao limpar notificações antigas:',
   notification_response_failure: 'Falha ao tratar resposta de notificação:',
 
   // Lembretes — bootstrap e validação

@@ -35,7 +35,7 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
         )}
 
         <Share
-          action={async () => shareActions}
+          action={shareActions}
         />
       </>
     )

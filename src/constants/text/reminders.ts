@@ -31,6 +31,9 @@ export const REMINDERS = {
   open_list_reminders_button: 'Lembretes',
   open_center_button: 'Central de lembretes',
   pending_title: 'Lembretes pendentes sem notificação',
+  pending_alert_title: 'Lembrete Vencido',
+  pending_alert_message: (title: string, listName: string) =>
+    `O lembrete "${title}" da lista "${listName}" está vencido.\nDeseja desativar ou apagar?`,
   notification_body: 'Abra sua lista para revisar os itens.',
   filter_label: {
     all: 'Todos',
