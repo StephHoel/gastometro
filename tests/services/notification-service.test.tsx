@@ -27,6 +27,7 @@ describe('NotificationService', () => {
   const requestPermissionsAsync = Notifications.requestPermissionsAsync as jest.Mock
   const scheduleNotificationAsync = Notifications.scheduleNotificationAsync as jest.Mock
   const cancelScheduledNotificationAsync = Notifications.cancelScheduledNotificationAsync as jest.Mock
+  const dismissAllNotificationsAsync = Notifications.dismissAllNotificationsAsync as jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -114,6 +115,22 @@ describe('NotificationService', () => {
     cancelScheduledNotificationAsync.mockRejectedValueOnce(new Error('erro'))
 
     await expect(NotificationService.cancelScheduled('notif-1')).resolves.toBeUndefined()
+  })
+
+  it('clearDeliveredNotifications ignora web e limpa notificações no mobile', async () => {
+    mockedIsWeb.mockReturnValue(true)
+    await NotificationService.clearDeliveredNotifications()
+    expect(dismissAllNotificationsAsync).not.toHaveBeenCalled()
+
+    mockedIsWeb.mockReturnValue(false)
+    await NotificationService.clearDeliveredNotifications()
+    expect(dismissAllNotificationsAsync).toHaveBeenCalledTimes(1)
+  })
+
+  it('clearDeliveredNotifications captura erro sem lançar', async () => {
+    dismissAllNotificationsAsync.mockRejectedValueOnce(new Error('erro'))
+
+    await expect(NotificationService.clearDeliveredNotifications()).resolves.toBeUndefined()
   })
 
   it('extrai listId e reminderId do payload de notificação', () => {

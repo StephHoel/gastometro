@@ -4,6 +4,7 @@ export const mockPush = jest.fn()
 
 const mockUseRouter = jest.fn(() => ({ push: mockPush }))
 const mockUseLocalSearchParams = jest.fn(() => ({}))
+const mockUseFocusEffect = jest.fn()
 
 jest.mock('expo-router', () => {
   const MockScreen = () => null
@@ -14,5 +15,6 @@ jest.mock('expo-router', () => {
     Tabs: Object.assign(MockContainer, { Screen: MockScreen }),
     useRouter: mockUseRouter,
     useLocalSearchParams: mockUseLocalSearchParams,
+    useFocusEffect: mockUseFocusEffect,
   }
 })

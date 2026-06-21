@@ -1,8 +1,9 @@
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
+import type { ProductProps } from "@/interfaces/ProductProps"
+import type { ShowAlertProps } from '@/interfaces/ShowAlertProps'
+import type { StateProps } from "@/interfaces/StateProps"
 import { alert } from "@/constants/alert"
 import { whatsapp } from "@/constants/whatsapp"
-import type { ProductProps } from "@/interfaces/ProductProps"
-import type { StateProps } from "@/interfaces/StateProps"
 import { ConvertToProductsList } from "@/utils/functions/ConvertToProductsList"
 import { DuplicateProducts } from '@/utils/functions/DuplicateProducts'
 import { ClipboardService } from "./ClipboardService"
@@ -17,8 +18,14 @@ export const AlertService = {
     alertRef = ref
   },
 
+  show(params: ShowAlertProps): boolean {
+    if (!alertRef) return false
+    alertRef.showAlert(params)
+    return true
+  },
+
   alert(title: string, message: string) {
-    alertRef?.showAlert({
+    this.show({
       title,
       message,
     })

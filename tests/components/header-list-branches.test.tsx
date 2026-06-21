@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Header } from '@/components/Header'
 import { List } from '@/components/List'
@@ -31,6 +31,10 @@ jest.mock('@/hooks/useInitAlert', () => ({
   useInitAlert: jest.fn(),
 }))
 
+jest.mock('@/hooks/useReminderPendingAlerts', () => ({
+  useReminderPendingAlerts: jest.fn(),
+}))
+
 jest.mock('@/components/CustomAlert', () => ({
   CustomAlert: () => null,
 }))
@@ -45,24 +49,19 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/components/TouchableIcons', () => ({
   Add: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
     return <Text onPress={action}>Add</Text>
   },
   Back: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
     return <Text onPress={action}>Back</Text>
   },
   Delete: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
     return <Text onPress={action}>Delete</Text>
   },
   Share: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
     return <Text onPress={action}>Share</Text>
+  },
+  Notification: ({ action }: { action?: () => void }) => {
+    return <Text onPress={action}>Notification</Text>
   },
 }))
 

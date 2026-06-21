@@ -15,15 +15,20 @@ export function CustomAlert({ ref }: { ref: RefObject<CustomAlertRef | null> }) 
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
   const [buttons, setButtons] = useState<ButtonProps[]>([])
+  const [onClose, setOnClose] = useState<(() => void) | undefined>(undefined)
 
   const alertWidth = width >= 1024 ? "50%" : "75%"
 
   function internalHideAlert() {
     setIsVisible(false)
+    if (onClose) {
+      onClose()
+    }
+    setOnClose(undefined)
   }
 
   useImperativeHandle(ref, () => ({
-    showAlert({ title, message, buttons = [] }: ShowAlertProps) {
+    showAlert({ title, message, buttons = [], onClose }: ShowAlertProps) {
       const hasSingleOk =
         buttons.length === 1 && buttons[0].text === alert.share.buttons.ok
 
@@ -35,6 +40,7 @@ export function CustomAlert({ ref }: { ref: RefObject<CustomAlertRef | null> }) 
           ? buttons
           : [...buttons, { text: INPUTS.buttons.cancel, action: internalHideAlert }],
       )
+      setOnClose(() => onClose)
 
       setIsVisible(true)
     },

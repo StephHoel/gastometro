@@ -11,6 +11,10 @@ jest.mock('@/stores/CartStore', () => ({
   useCartStore: jest.fn(),
 }))
 
+jest.mock('@/hooks/useReminderPendingAlerts', () => ({
+  useReminderPendingAlerts: jest.fn(),
+}))
+
 jest.mock('@/services/AlertService', () => ({
   AlertService: {
     remove: jest.fn(),
@@ -32,6 +36,7 @@ jest.mock('@/components/TouchableIcons', () => ({
   Back: () => null,
   Delete: () => null,
   Share: () => null,
+  Notification: () => null,
 }))
 
 function makeStore(): StateProps {

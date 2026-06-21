@@ -78,6 +78,31 @@ export default function Layout() {
   }, [handleNotificationResponse])
 
   useEffect(() => {
+    if (Platform.OS === 'web') return
+
+    let isMounted = true
+
+    async function bootstrapNotificationOpen() {
+      try {
+        const lastResponse = await Notifications.getLastNotificationResponseAsync()
+        if (!isMounted || !lastResponse) return
+
+        await handleNotificationResponse(lastResponse)
+      } catch (error) {
+        console.error(ERROR.reminder_bootstrap_failure, error)
+      } finally {
+        await NotificationService.clearDeliveredNotifications()
+      }
+    }
+
+    void bootstrapNotificationOpen()
+
+    return () => {
+      isMounted = false
+    }
+  }, [handleNotificationResponse])
+
+  useEffect(() => {
     let isMounted = true
 
     async function bootstrapReminders() {
@@ -86,12 +111,7 @@ export default function Layout() {
         await ReminderOrchestrator.cleanupOrphans(listIds)
         await ReminderOrchestrator.syncWithPermissions()
 
-        if (Platform.OS === 'web') return
-
-        const lastResponse = await Notifications.getLastNotificationResponseAsync()
-        if (!isMounted || !lastResponse) return
-
-        await handleNotificationResponse(lastResponse)
+        if (!isMounted) return
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       }
@@ -102,7 +122,7 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [cartStore.lists, handleNotificationResponse])
+  }, [cartStore.lists])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
