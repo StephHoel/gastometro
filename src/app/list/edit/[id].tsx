@@ -11,6 +11,7 @@ import { EditIcon } from "@/components/Icons"
 import React from 'react'
 import { COLORS } from '@/constants/color'
 import { INPUTS } from '@/constants/text/inputs'
+import { SIZE } from '@/constants/size'
 
 export default function Edit() {
   const { id } = useLocalSearchParams()
@@ -23,7 +24,7 @@ export default function Edit() {
         <Header />
 
         <Form data={prod} buttonTitle={INPUTS.buttons.edit}>
-          <EditIcon size={32} color={COLORS.black} />
+          <EditIcon size={SIZE.iconButton} color={COLORS.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>

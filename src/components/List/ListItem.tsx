@@ -6,12 +6,13 @@ import { Divider } from '../Divider'
 import { CheckboxIcon } from '../Icons'
 import { TextWhite } from '../TextWhite'
 import { Delete } from '../TouchableIcons'
+import { SIZE } from '@/constants/size'
 
 export function ListItem({ product, index, totalCount, onDelete, onToggle, onEdit }: ListItemProps) {
   return (
     <View className="px-4">
       <View className="flex-row gap-2 items-center">
-        <Delete action={onDelete} size={35} />
+        <Delete action={onDelete} size={SIZE.iconActions} />
 
         <TouchableOpacity
           onPress={onToggle}

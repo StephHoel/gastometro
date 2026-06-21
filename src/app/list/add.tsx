@@ -7,6 +7,7 @@ import { KeyboardScreen } from '@/components/Screen'
 
 import { COLORS } from '@/constants/color'
 import { INPUTS } from '@/constants/text/inputs'
+import { SIZE } from '@/constants/size'
 
 export default function Add() {
   return (
@@ -15,7 +16,7 @@ export default function Add() {
         <Header />
 
         <Form buttonTitle={INPUTS.buttons.add}>
-          <AddIcon size={32} color={COLORS.black} />
+          <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>

@@ -12,6 +12,7 @@ import { TextWhite } from '@/components/TextWhite'
 import { COLORS } from '@/constants/color'
 import { ERROR } from '@/constants/text/error'
 import { NameField } from '@/enums/NameField'
+import { SIZE } from '@/constants/size'
 
 export default function Calculator() {
   const [answer, setAnswer] = useState<number | null>(null)
@@ -75,12 +76,12 @@ export default function Calculator() {
 
           <View className="flex-1 flex-row justify-between">
             <Button type="Normal" onPress={handleToClear} className="flex-1 border text-sm mr-2">
-              <Button.Icon><TrashIcon size={28} color={COLORS.black} /></Button.Icon>
+              <Button.Icon><TrashIcon size={SIZE.iconCalculator} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">Limpar</Button.Text>
             </Button>
 
             <Button onPress={handleToCalc} className="flex-1 border text-xl ml-2">
-              <Button.Icon><CalculatorIcon size={28} color={COLORS.black} /></Button.Icon>
+              <Button.Icon><CalculatorIcon size={SIZE.iconCalculator} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">Calcular</Button.Text>
             </Button>
           </View>
