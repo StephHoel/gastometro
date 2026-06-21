@@ -22,6 +22,7 @@ import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { Page } from '@/components/Page'
+import { SIZE } from '@/constants/size'
 
 export default function Lists() {
   const cartStore = useCartStore()
@@ -112,7 +113,7 @@ export default function Lists() {
           activeOpacity={0.7}
           onPress={handleCreateList}
         >
-          <AddIcon size={26} color={COLORS.black} />
+          <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
       </Row>
 
@@ -194,21 +195,21 @@ export default function Lists() {
                         activeOpacity={0.7}
                         hitSlop={8}
                       >
-                        <NotificationIcon size={22} />
+                        <NotificationIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleStartEdit(item.id, item.name)}
                         activeOpacity={0.7}
                         hitSlop={8}
                       >
-                        <EditIcon size={22} />
+                        <EditIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleRemoveList(item.id, item.name)}
                         activeOpacity={0.7}
                         hitSlop={8}
                       >
-                        <TrashIcon size={22} />
+                        <TrashIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
                     </>
                   )}
