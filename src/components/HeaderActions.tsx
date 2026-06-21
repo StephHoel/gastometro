@@ -9,6 +9,7 @@ import React from "react"
 export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
   const cartStore = useCartStore()
   const router = useRouter()
+  const listId = getListIdParam()
 
   function notificationActions() {
     if (activeListId)
@@ -47,7 +48,6 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
 
     case "reminders/[listId]/edit/[reminderId]":
     case "reminders/[listId]/new":
-      const listId = getListIdParam()
       return <Back action={() => router.push(`/reminders/${listId}`)} />
 
     case "calculator":

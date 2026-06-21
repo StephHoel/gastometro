@@ -1,5 +1,3 @@
-import { ReminderService } from '@/services/ReminderService'
-
 export function toDisplayDate(datetimeISO: string) {
   const parsed = new Date(datetimeISO)
 
@@ -18,7 +16,7 @@ export function toDisplayDate(datetimeISO: string) {
 export function makeDefaultDateTime() {
   const oneHourAhead = new Date(Date.now() + 60 * 60 * 1000)
 
-  return ReminderService.toDateInputValue(oneHourAhead.toISOString())
+  return toDateInputValue(oneHourAhead.toISOString())
 }
 
 export function parseReminderDate(datetimeISO: string): Date | null {
@@ -93,4 +91,33 @@ export function formatTimeInput(text: string): string {
   }
 
   return `${hours}:${minutes}`
+}
+
+export function toDateInputValue(datetimeISO: string) {
+  const parsed = parseReminderDate(datetimeISO)
+  if (!parsed) return { date: '', time: '' }
+
+  const pad = (value: number) => value.toString().padStart(2, '0')
+  const yyyy = parsed.getFullYear()
+  const mm = pad(parsed.getMonth() + 1)
+  const dd = pad(parsed.getDate())
+  const hh = pad(parsed.getHours())
+  const min = pad(parsed.getMinutes())
+
+  return {
+    date: `${yyyy}-${mm}-${dd}`,
+    time: `${hh}:${min}`,
+  }
+}
+
+export function fromDateAndTime(date: string, time: string): string | null {
+  const trimmedDate = date.trim()
+  const trimmedTime = time.trim()
+  if (!trimmedDate || !trimmedTime) return null
+
+  const raw = `${trimmedDate}T${trimmedTime}:00`
+  const parsed = new Date(raw)
+  if (Number.isNaN(parsed.getTime())) return null
+
+  return parsed.toISOString()
 }

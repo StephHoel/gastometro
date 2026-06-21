@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, type TextInput } from 'react-native'
 import { REMINDERS } from '@/constants/text/reminders'
-import { makeDefaultDateTime } from '@/utils/functions/DateFunctions'
+import { makeDefaultDateTime, toDateInputValue } from '@/utils/functions/DateFunctions'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
@@ -30,7 +30,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton }: For
   useEffect(() => {
     if (!reminder) return
 
-    const dateValue = ReminderService.toDateInputValue(reminder.datetimeISO)
+    const dateValue = toDateInputValue(reminder.datetimeISO)
     setTitle(reminder.title)
     setDateValue(dateValue.date)
     setTimeValue(dateValue.time)

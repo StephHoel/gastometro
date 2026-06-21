@@ -1,5 +1,6 @@
 import { ReminderService } from '@/services/ReminderService'
 import { ERROR } from '@/constants/text/error'
+import { fromDateAndTime } from '@/utils/functions/DateFunctions'
 
 describe('ReminderService', () => {
   it('deve validar campos obrigatórios na criação', () => {
@@ -23,7 +24,7 @@ describe('ReminderService', () => {
   })
 
   it('deve converter data e hora para ISO', () => {
-    const iso = ReminderService.fromDateAndTime('2099-12-31', '23:59')
+    const iso = fromDateAndTime('2099-12-31', '23:59')
 
     expect(iso).toBeTruthy()
     expect(Number.isNaN(new Date(iso as string).getTime())).toBe(false)
