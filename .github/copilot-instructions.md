@@ -12,6 +12,9 @@ Resumo rápido:
 - Domínio principal: lista de compras, total em BRL, compartilhamento/importação via WhatsApp e calculadora de preço por unidade.
 - Use imports internos com alias `@/`.
 - Evite `any`.
+- Crie e mantenha interfaces TypeScript em `src/interfaces/`.
+- Mantenha componentes pequenos, com responsabilidade única.
+- Mantenha funções e regras desacopladas dos componentes sempre que possível.
 - Não assuma Prisma, PostgreSQL ou Zod: eles não fazem parte da stack atual.
 - A suíte de testes já existe com Jest (`npm run test`) e gate de cobertura global de 80%.
 - Preserve regras pt-BR de moeda, números com vírgula/ponto e textos do usuário.
