@@ -20,33 +20,33 @@ jest.mock('@/components/CustomAlert', () => ({
 
 jest.mock('@/components/Header', () => ({
   Header: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>Header</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'Header')
   },
 }))
 
 jest.mock('@/components/Screen', () => ({
   Screen: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { View } = require('react-native')
-    return <View>{children}</View>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { View } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(View, null, children)
   },
 }))
 
 jest.mock('@/components/TextWhite', () => ({
   TextWhite: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>{children}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, children)
   },
 }))
 
 jest.mock('@/components/List', () => ({
   List: ({ cartStore }: { cartStore: { products: unknown[] } }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text testID="list-products-count">{cartStore.products.length}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, { testID: 'list-products-count' }, cartStore.products.length)
   },
 }))
 

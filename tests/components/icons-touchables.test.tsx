@@ -3,17 +3,17 @@ import type { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
 
 jest.mock('react-native-svg', () => {
-  const React = require('react')
-  const { View } = require('react-native')
+  const ReactModule = jest.requireActual('react') as typeof import('react')
+  const { View } = jest.requireActual('react-native') as typeof import('react-native')
   const Mock = ({ children }: { children?: ReactNode }) => <View>{children}</View>
 
   return {
     __esModule: true,
-    default: Mock,
-    Circle: Mock,
-    Line: Mock,
-    Path: Mock,
-    Rect: Mock,
+    default: ReactModule.memo(Mock),
+    Circle: ReactModule.memo(Mock),
+    Line: ReactModule.memo(Mock),
+    Path: ReactModule.memo(Mock),
+    Rect: ReactModule.memo(Mock),
   }
 })
 
