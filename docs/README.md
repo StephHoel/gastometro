@@ -6,6 +6,7 @@ Esta pasta concentra a documentação principal do projeto.
 
 - [Guia principal do projeto](./SPEC.md)
 - [Histórico de versões](./CHANGELOG.md)
+- [Deploy web e GitHub Pages](./WEB_DEPLOY.md)
 - [Mini-specs](./specs/README.md)
 - [Relatórios de cobertura](./coverages/README.md)
 

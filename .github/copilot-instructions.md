@@ -35,6 +35,9 @@ Regras:
 - Componentes complexos precisam de testes.
 - Cobertura: quando a suíte de testes existir, manter/expandir cobertura proporcional ao escopo.
 - Atualizar README quando APIs mudarem.
+- Nunca alterar automaticamente a ordenação manual da lista de mini-specs em `docs/specs/README.md`.
+- Em `Implementadas`, manter ordenação por ordem de conclusão definida manualmente no arquivo.
+- Em `Planejadas`, manter ordenação por prioridade definida manualmente no arquivo.
 - Nunca executar `git commit` (nem variações como `git commit --amend`) sem que o usuário solicite explicitamente. Editar arquivos e fazer stage são permitidos; o commit final depende sempre de pedido explícito.
 - Nunca criar ou abrir Pull Request sem que o usuário solicite explicitamente. Preparar a descrição (draft) e sugerir a abertura são permitidos; a criação final do PR depende sempre de pedido explícito.
 
