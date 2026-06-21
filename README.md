@@ -49,7 +49,10 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- Contas a pagar.
+- [Refatoração de formulários para react-hook-form](docs/specs/planned/16-refatoracao-formularios-react-hook-form.md)
+- [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
+- [Service Worker para funcionamento offline em web](docs/specs/planned/13-service-worker-offline-web.md)
+- [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 
 Funcionalidades concluídas recentemente:
 
@@ -89,10 +92,14 @@ Outros comandos disponíveis:
 
 ```bash
 npm run android
+npm run ios
 npm run web
 npm run prebuild
 npm run build:android
+npm run build:local
 npm run build:local:eas
+npm run check:ts
+npm run check:biome
 npm run check:expo
 npm run deps:audit
 ```
@@ -101,6 +108,7 @@ Observações:
 
 - `npm run web` inicia o app no modo web de desenvolvimento.
 - `npm run build:android` usa EAS com o perfil `production` e gera AAB.
+- `npm run build:local` gera APK local e move o artefato para `_apks/`.
 - `npm run build:local:eas` executa build local via EAS.
 - O diretório nativo `android/` pode ser gerado por `npm run prebuild` quando necessário.
 
@@ -125,6 +133,7 @@ npm run web:serve
   - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
   - **WhatsApp Sharing:** usa URL `wa.me` na web e fallback para deep link/web link no Android.
   - **AsyncStorage:** usa localStorage do navegador via react-native-web.
+- Lembretes funcionam na web com persistência local e fallback in-app para itens pendentes, mas sem agendamento de notificação local do sistema.
 - O tema escuro é preservado via CSS em web.
 - Dados persistidos localmente funcionam tanto na web quanto no Android.
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
@@ -182,6 +191,8 @@ Header do arquivo: `File;% Stmts;% Branch;% Funcs;% Lines;Uncovered Line #s`.
 Além dos testes, rode as verificações disponíveis quando fizer sentido:
 
 ```bash
+npm run check:ts
+npm run check:biome
 npm run check:expo
 npm run deps:audit
 ```
@@ -205,6 +216,7 @@ Este repositório segue um fluxo spec-driven para orientar mudanças humanas e a
 - [`docs/SPEC.md`](docs/SPEC.md) é a referência principal de produto, arquitetura, UX, validações e processo.
 - [`docs/specs/`](docs/specs/README.md) contém mini-specs organizadas por status em `planned/`, `active/` e `done/`.
 - [`docs/CHANGELOG.md`](docs/CHANGELOG.md) registra o histórico das versões.
+- [`docs/WEB_DEPLOY.md`](docs/WEB_DEPLOY.md) detalha build/deploy da versão web no GitHub Pages.
 - [`.github/copilot-instructions.md`](.github/copilot-instructions.md) orienta sugestões do GitHub Copilot.
 
 Ao alterar comportamento de usuário, persistência, formato de WhatsApp ou compatibilidade, atualize a documentação relevante.

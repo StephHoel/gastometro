@@ -16,7 +16,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ## Status das mini-specs
 
-### Implementadas
+### Implementadas (ordem de conclusão)
 
 - [Bloqueio de duplicados na criação](./done/01-bloqueio-duplicados-criacao.md)
 - [Validação de valores negativos](./done/02-validacao-valores-negativos.md)

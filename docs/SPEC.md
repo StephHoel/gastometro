@@ -49,7 +49,10 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
+- refatoração de formulários para react-hook-form;
 - contas a pagar;
+- service worker para funcionamento offline em web;
+- testes E2E para roteamento web SPA.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
@@ -126,12 +129,15 @@ Estado:
 - `useCartStore` é o store global.
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual é `gastometro`.
+- `useReminderStore` mantém lembretes com persistência dedicada.
+- A chave de storage de lembretes é `gastometro-reminders`.
 
 Manipulação da lista:
 
 - telas e componentes chamam a API do store (`add`, `edit`, `remove`, `replace`, `get`, `clear`);
 - o store delega operações puras para `src/stores/helpers/CartInMemory.ts`;
 - serviços como `ProductService`, `AlertService`, `ShareService` e `ClipboardService` concentram regras de criação, alertas, compartilhamento e integrações.
+- lembretes são orquestrados por `ReminderOrchestrator` e usam `NotificationService` quando há permissão/plataforma suportada.
 
 UI:
 
@@ -229,11 +235,21 @@ Comandos existentes:
 npm run start
 npm run web
 npm run android
+npm run ios
 npm run prebuild
 npm run build:android
+npm run build:local
 npm run build:local:eas
+npm run test
+npm run test:watch
+npm run test:coverage
+npm run test:coverage:csv
+npm run check:ts
+npm run check:biome
 npm run check:expo
 npm run deps:audit
+npm run verify:version-bump
+npm run new-version
 ```
 
 Diretrizes atuais de build Android para reduzir artefato:
