@@ -9,7 +9,7 @@ import { useReminderStore } from '@/stores/ReminderStore'
 import { REMINDERS } from '@/constants/text/reminders'
 import { Add } from '@/components/TouchableIcons'
 import { Page } from '@/components/Page'
-import { getListIdParam } from '@/hooks/getParams'
+import { useListIdParam } from '@/hooks/useParams'
 import { ReminderItem } from '@/components/Reminder/Item'
 
 export default function ListReminders() {
@@ -19,7 +19,7 @@ export default function ListReminders() {
   const alertRef = useRef<CustomAlertRef>(null)
   useInitAlert(alertRef)
 
-  const listId = getListIdParam()
+  const listId = useListIdParam()
   const list = cartStore.lists.find((candidate) => candidate.id === listId)
 
   const reminders = useMemo(() => {

@@ -1,4 +1,4 @@
-import { getListIdParam, getReminderIdParam } from '@/hooks/getParams'
+import { useListIdParam, useReminderIdParam } from '@/hooks/useParams'
 import { useLocalSearchParams } from 'expo-router'
 
 describe('getParams hooks', () => {
@@ -6,27 +6,27 @@ describe('getParams hooks', () => {
     jest.clearAllMocks()
   })
 
-  it('getListIdParam retorna listId quando parametro e string', () => {
+  it('useListIdParam retorna listId quando parametro e string', () => {
     ; (useLocalSearchParams as jest.Mock).mockReturnValue({ listId: 'list-123' })
 
-    expect(getListIdParam()).toBe('list-123')
+    expect(useListIdParam()).toBe('list-123')
   })
 
-  it('getListIdParam retorna vazio quando parametro nao e string', () => {
+  it('useListIdParam retorna vazio quando parametro nao e string', () => {
     ; (useLocalSearchParams as jest.Mock).mockReturnValue({ listId: 123 })
 
-    expect(getListIdParam()).toBe('')
+    expect(useListIdParam()).toBe('')
   })
 
-  it('getReminderIdParam retorna reminderId quando parametro e string', () => {
+  it('useReminderIdParam retorna reminderId quando parametro e string', () => {
     ; (useLocalSearchParams as jest.Mock).mockReturnValue({ reminderId: 'rem-123' })
 
-    expect(getReminderIdParam()).toBe('rem-123')
+    expect(useReminderIdParam()).toBe('rem-123')
   })
 
-  it('getReminderIdParam retorna vazio quando parametro nao e string', () => {
+  it('useReminderIdParam retorna vazio quando parametro nao e string', () => {
     ; (useLocalSearchParams as jest.Mock).mockReturnValue({ reminderId: null })
 
-    expect(getReminderIdParam()).toBe('')
+    expect(useReminderIdParam()).toBe('')
   })
 })
