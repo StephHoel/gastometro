@@ -31,6 +31,13 @@ export const ERROR = {
   reminder_invalid_datetime: 'Data/hora inválida para o lembrete.',
   reminder_past_datetime: 'Escolha uma data/hora futura para o lembrete.',
 
+  reminder: {
+    title_required: 'Título do lembrete é obrigatório.',
+    past_datetime: 'Escolha uma data/hora futura para o lembrete.',
+    list_required: 'Lembrete precisa estar vinculado a uma lista existente.',
+    invalid_datetime: 'Data/hora inválida. Use data no formato YYYY-MM-DD e hora no formato HH:mm.',
+  },
+
   // Clipboard
   clipboard_read_web_failure: 'Erro ao ler clipboard na web:',
   clipboard_write_web_failure: 'Erro ao escrever no clipboard na web:',

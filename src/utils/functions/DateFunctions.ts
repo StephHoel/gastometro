@@ -6,7 +6,13 @@ export function toDisplayDate(datetimeISO: string) {
   if (Number.isNaN(parsed.getTime()))
     return datetimeISO
 
-  return parsed.toLocaleString('pt-BR')
+  const day = parsed.getDate().toString().padStart(2, '0')
+  const month = (parsed.getMonth() + 1).toString().padStart(2, '0')
+  const year = parsed.getFullYear().toString()
+  const hours = parsed.getHours().toString().padStart(2, '0')
+  const minutes = parsed.getMinutes().toString().padStart(2, '0')
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
 export function makeDefaultDateTime() {

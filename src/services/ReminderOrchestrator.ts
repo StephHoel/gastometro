@@ -1,5 +1,9 @@
 import { ReminderState } from '@/enums/ReminderState'
+import { ERROR } from '@/constants/text/error'
+import { REMINDERS } from '@/constants/text/reminders'
+import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
+import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
 
 export const ReminderOrchestrator = {
@@ -120,5 +124,66 @@ export const ReminderOrchestrator = {
         reminderStore.removeReminder(reminder.id)
       }
     }
+  },
+
+  async saveReminder(payload: {
+    listId: string
+    title: string
+    dateValue: string
+    timeValue: string
+    editingId: string | null
+  }): Promise<boolean> {
+    const { listId, title, dateValue, timeValue, editingId } = payload
+    const reminderStore = useReminderStore.getState()
+
+    if (!listId) {
+      AlertService.ok(ERROR.alert_title, ERROR.reminder.list_required)
+      return false
+    }
+
+    const datetimeISO = ReminderService.fromDateAndTime(dateValue, timeValue)
+    if (!datetimeISO) {
+      AlertService.ok(ERROR.alert_title, ERROR.reminder.invalid_datetime)
+      return false
+    }
+
+    if (editingId) {
+      const validationError = ReminderService.validateUpdateInput({ title, datetimeISO })
+      if (validationError) {
+        AlertService.ok(ERROR.alert_title, validationError)
+        return false
+      }
+
+      const updated = reminderStore.updateReminder(editingId, {
+        title,
+        datetimeISO,
+      })
+
+      if (!updated) {
+        AlertService.ok(ERROR.alert_title, REMINDERS.not_found)
+        return false
+      }
+
+      await this.rescheduleReminder(editingId)
+      return true
+    }
+
+    const validationError = ReminderService.validateCreateInput({
+      title,
+      datetimeISO,
+      listId,
+    })
+
+    if (validationError) {
+      AlertService.ok(ERROR.alert_title, validationError)
+      return false
+    }
+
+    reminderStore.addReminder({
+      title,
+      datetimeISO,
+      listId,
+    })
+    return true
   },
 }
