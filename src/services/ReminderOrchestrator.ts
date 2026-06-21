@@ -8,6 +8,16 @@ import { useReminderStore } from '@/stores/ReminderStore'
 import { fromDateAndTime } from '@/utils/functions/DateFunctions'
 
 export const ReminderOrchestrator = {
+  async ensurePermissionOnSave(): Promise<boolean> {
+    const allowed = await NotificationService.ensurePermissionForScheduling()
+
+    if (!allowed) {
+      AlertService.ok(REMINDERS.permission_title, REMINDERS.permission_denied_message)
+    }
+
+    return allowed
+  },
+
   async enableReminder(reminderId: string): Promise<ReminderState> {
     const reminderStore = useReminderStore.getState()
     const reminder = reminderStore.getById(reminderId)
@@ -165,6 +175,14 @@ export const ReminderOrchestrator = {
         return false
       }
 
+      if (updated.enabled) {
+        const allowed = await this.ensurePermissionOnSave()
+        if (!allowed) {
+          reminderStore.setReminderNotification(editingId, undefined)
+          return true
+        }
+      }
+
       await this.rescheduleReminder(editingId)
       return true
     }
@@ -180,11 +198,21 @@ export const ReminderOrchestrator = {
       return false
     }
 
-    reminderStore.addReminder({
+    const created = reminderStore.addReminder({
       title,
       datetimeISO,
       listId,
     })
+
+    if (created.enabled) {
+      const allowed = await this.ensurePermissionOnSave()
+      if (!allowed) {
+        reminderStore.setReminderNotification(created.id, undefined)
+        return true
+      }
+    }
+
+    await this.rescheduleReminder(created.id)
     return true
   },
 }
