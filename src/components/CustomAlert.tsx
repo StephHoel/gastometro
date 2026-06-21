@@ -1,28 +1,34 @@
 import { alert } from "@/constants/alert"
+import { INPUTS } from '@/constants/text/inputs'
 import type { ButtonProps } from "@/interfaces/ButtonProps"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
-import React, { forwardRef, useImperativeHandle, useState } from "react"
+import React, { ForwardedRef, useImperativeHandle, useState } from "react"
 import { Modal, Pressable, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import type { ShowAlertProps } from "@/interfaces/ShowAlertProps"
 import { WhatsappIcon } from './Icons'
 import { Row } from './Row'
 import { TextWhite } from './TextWhite'
 
-export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
+export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
   const { width } = useWindowDimensions()
   const [isVisible, setIsVisible] = useState(false)
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
   const [buttons, setButtons] = useState<ButtonProps[]>([])
+  const [onClose, setOnClose] = useState<(() => void) | undefined>(undefined)
 
   const alertWidth = width >= 1024 ? "50%" : "75%"
 
   function internalHideAlert() {
     setIsVisible(false)
+    if (onClose) {
+      onClose()
+    }
+    setOnClose(undefined)
   }
 
   useImperativeHandle(ref, () => ({
-    showAlert({ title, message, buttons = [] }: ShowAlertProps) {
+    showAlert({ title, message, buttons = [], onClose }: ShowAlertProps) {
       const hasSingleOk =
         buttons.length === 1 && buttons[0].text === alert.share.buttons.ok
 
@@ -32,8 +38,9 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
       setButtons(
         hasSingleOk
           ? buttons
-          : [...buttons, { text: "Cancelar", action: internalHideAlert }],
+          : [...buttons, { text: INPUTS.buttons.cancel, action: internalHideAlert }],
       )
+      setOnClose(() => onClose)
 
       setIsVisible(true)
     },
@@ -63,7 +70,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
               <TouchableOpacity
                 key={index}
                 className={`p-2 mb-2 rounded items-center 
-                  ${button.text === "Cancelar"
+                  ${button.text === INPUTS.buttons.cancel
                     ? "bg-red-500"
                     : "bg-slate-400"}
                   `}
@@ -80,7 +87,7 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
                 ) : (
                   <Text
                     className={`font-bold 
-                    ${button.text === "Cancelar"
+                    ${button.text === INPUTS.buttons.cancel
                         ? "text-white"
                         : "text-black/90"
                       }`}
@@ -95,4 +102,4 @@ export const CustomAlert = forwardRef<CustomAlertRef>((_, ref) => {
       </Pressable>
     </Modal>
   )
-})
+}

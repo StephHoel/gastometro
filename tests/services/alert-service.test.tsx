@@ -1,5 +1,5 @@
 import { alert } from '@/constants/alert'
-import { text } from '@/constants/text'
+import { ERROR } from '@/constants/text/error'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 import type { ProductProps } from '@/interfaces/ProductProps'
 import type { StateProps } from '@/interfaces/StateProps'
@@ -223,7 +223,7 @@ describe('AlertService', () => {
 
     expect(clipboardSpy).toHaveBeenCalledTimes(1)
     expect(convertSpy).toHaveBeenCalledTimes(1)
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
+    expect(okSpy).toHaveBeenCalledWith(ERROR.alert_title, ERROR.invalid_list_format)
   })
 
   it('paste deve mostrar erro quando conteúdo não estiver no padrão', async () => {
@@ -232,7 +232,7 @@ describe('AlertService', () => {
 
     await AlertService.paste(makeStore())
 
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
+    expect(okSpy).toHaveBeenCalledWith(ERROR.alert_title, ERROR.invalid_list_format)
   })
 
   it('paste deve tratar erro de clipboard e mostrar alerta', async () => {
@@ -243,6 +243,6 @@ describe('AlertService', () => {
     await AlertService.paste(makeStore())
 
     expect(consoleSpy).toHaveBeenCalledTimes(1)
-    expect(okSpy).toHaveBeenCalledWith(text.error.alert_title, text.error.invalid_list_format)
+    expect(okSpy).toHaveBeenCalledWith(ERROR.alert_title, ERROR.invalid_list_format)
   })
 })

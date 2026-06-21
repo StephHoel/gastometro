@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "homepage": "https://stephhoel.github.io/gastometro/",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
@@ -37,6 +37,7 @@
     "expo-clipboard": "~56.0.4",
     "expo-constants": "~56.0.16",
     "expo-linking": "~56.0.14",
+    "expo-notifications": "~56.0.18",
     "expo-router": "~56.2.11",
     "expo-splash-screen": "~56.0.10",
     "nativewind": "^4.2.5",

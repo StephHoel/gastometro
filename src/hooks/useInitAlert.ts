@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import type { RefObject } from 'react'
 import { AlertService } from '@/services/AlertService'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
+import { ERROR } from '@/constants/text/error'
 
 export function useInitAlert(ref: RefObject<CustomAlertRef | null> | null) {
   useEffect(() => {
@@ -11,7 +12,7 @@ export function useInitAlert(ref: RefObject<CustomAlertRef | null> | null) {
         AlertService.init(ref.current)
       }
     } catch (error) {
-      console.error('Falha ao inicializar alerta customizado:', error)
+      console.error(ERROR.alert_init_failure, error)
     }
   }, [ref])
 }

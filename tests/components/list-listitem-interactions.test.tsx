@@ -3,13 +3,9 @@ import { fireEvent, render } from '@testing-library/react-native'
 import { List } from '@/components/List'
 import { ListItem } from '@/components/List/ListItem'
 import type { StateProps } from '@/interfaces/StateProps'
+import { mockPush } from '../setup/mocks/expo-router'
 
-const mockPush = jest.fn()
 const mockRemoveAlert = jest.fn()
-
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {
@@ -19,20 +15,20 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/components/Icons', () => ({
   CheckboxIcon: ({ checked }: { checked?: boolean }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>{checked ? 'checked' : 'unchecked'}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, checked ? 'checked' : 'unchecked')
   },
 }))
 
 jest.mock('@/components/TouchableIcons', () => ({
   Delete: ({ action }: { action: () => void }) => {
-    const React = require('react')
-    const { Pressable, Text } = require('react-native')
-    return (
-      <Pressable testID="delete-item" onPress={action}>
-        <Text>Delete</Text>
-      </Pressable>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Pressable, Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(
+      Pressable,
+      { testID: 'delete-item', onPress: action },
+      ReactModule.createElement(Text, null, 'Delete')
     )
   },
 }))

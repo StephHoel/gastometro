@@ -1,16 +1,17 @@
 import { useLocalSearchParams } from "expo-router"
 import { ScrollView } from "react-native"
-import { KeyboardScreen } from '@/components/Screen'
 
 import { useCartStore } from "@/stores/CartStore"
 
+import { KeyboardScreen } from '@/components/Screen'
 import { Form } from "@/components/Form"
 import { Header } from "@/components/Header"
-
 import { EditIcon } from "@/components/Icons"
-import { text } from "@/constants/text"
+
 import React from 'react'
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
+import { INPUTS } from '@/constants/text/inputs'
+import { SIZE } from '@/constants/size'
 
 export default function Edit() {
   const { id } = useLocalSearchParams()
@@ -22,8 +23,8 @@ export default function Edit() {
       <ScrollView keyboardShouldPersistTaps="handled">
         <Header />
 
-        <Form data={prod} buttonTitle={text.buttons.edit}>
-          <EditIcon size={32} color={colors.black} />
+        <Form data={prod} buttonTitle={INPUTS.buttons.edit}>
+          <EditIcon size={SIZE.iconButton} color={COLORS.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>

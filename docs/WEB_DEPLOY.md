@@ -62,9 +62,10 @@ npm run web:serve
 - Tela principal (adicionar, editar, remover itens)
 - Marcação de itens como coletados
 - Calculadora
-- Navegação entre abas (home e calculadora)
+- Navegação entre abas (home, listas e calculadora)
 - Compartilhamento via WhatsApp (abrirá wa.me)
 - Importação de lista copiada
+- Fluxo de lembretes (lista por lista e central de lembretes)
 - Persistência de dados (recarregue a página)
 
 ## Deploy Automático
@@ -129,8 +130,9 @@ O projeto está configurado para usar GitHub Pages com as seguintes particularid
 As rotas são exportadas de forma estática pelo Expo Router. Exemplos:
 
 - `https://stephhoel.github.io/gastometro/` - Tela inicial
+- `https://stephhoel.github.io/gastometro/lists` - Gerenciamento de listas
 - `https://stephhoel.github.io/gastometro/calculator` - Calculadora
-- `https://stephhoel.github.io/gastometro/list/add` - Adicionar item
+- `https://stephhoel.github.io/gastometro/reminders` - Central de lembretes
 
 ## API de Compartilhamento Web
 
@@ -163,6 +165,7 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 ## Limitações Conhecidas
 
 1. **APIs Nativas:** Recursos como notificações, sensores, câmera não funcionam em web.
+   - Observação: a funcionalidade de lembretes permanece disponível na web com fallback in-app e persistência local, porém sem agendamento de notificação do sistema.
 2. **Geolocalização:** Não implementado em web.
 3. **Sincronização:** Web e Android mantêm dados separados.
 4. **Offline-first:** A versão web requer internet para atualizar componentes da Expo, mas pode funcionar offline após o carregamento inicial.

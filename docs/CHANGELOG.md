@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.7.0 - 2026-06-21
+
+Implementação completa da mini-spec 10 com sistema de lembretes locais e notificações, incluindo CRUD por lista, central consolidada, fallback sem permissão e sincronização no bootstrap do app.
+
+### Funcionalidade
+
+- Store dedicado `ReminderStore` com persistência isolada em `gastometro-reminders` (sem impacto na chave `gastometro` do carrinho).
+- Serviços de domínio: `ReminderService` (validações/regras), `NotificationService` (permissões/agendamento), `ReminderOrchestrator` (sincronização).
+- CRUD de lembretes por lista em `src/app/reminders/[listId]/` (novo, edit, listagem).
+- Central de lembretes consolidada em `src/app/reminders/index.tsx` com filtros (ativos, desativados, vencidos).
+- Hook `useReminderPendingAlerts` para fallback de lembretes pendentes quando permissão de notificação não está concedida.
+- Integração com notificações nativas: agendamento, cancelamento, sincronização no bootstrap.
+- Navegação por payload: notificação abre app na lista relacionada quando disponível.
+- Remoção de lista agora informa quantidade de lembretes impactados e executa remoção em cascata.
+- Limpeza de lembretes órfãos na inicialização.
+- Atalho de lembretes na tela home.
+
+### Arquitetura e qualidade
+
+- Separação de camadas: store + serviços dedicados reduz risco de regressão no domínio principal de compras.
+- Componentes novos: `Form/Reminder.tsx`, `Reminder/Item.tsx`, `HeaderActions.tsx` para suporte a ações de lembrete.
+- Refatoração: `Header` refatorizado com `HeaderActions` para melhor gestão de botões/ações.
+- Constantes: separação de mensagens por domínio em `src/constants/text/` (error, inputs, lists, reminders).
+- Enums novos: `NameField`, `PermissionState`, `ReminderState`, `ReminderStatus`.
+- Testes: 20+ novos testes cobrindo store, serviços, hooks, telas e componentes de lembrete (cobertura mantida ≥80%).
+
+### Interfaces TypeScript
+
+- `ReminderProps`, `ReminderStateProps`, `ReminderFilter`, `FormReminderProps`, `ReminderItemProps` adicionadas.
+- Refatoração de interfaces existentes para melhor consistência e type-safety.
+
+### Compatibilidade
+
+- Nenhuma alteração no formato de persistência do carrinho ou compartilhamento WhatsApp.
+- Persistência de lembretes usa chave dedicada, sem impacto em migração de dados legada.
+- App continua funcional quando permissão de notificação for negada (fallback local).
+
+### Documentação
+
+- Mini-spec 10 movida de `docs/specs/planned/` para `docs/specs/done/` e marcada como `Status: implementado`.
+- `README.md` atualizado para listar lembretes/notificações como funcionalidade existente.
+- `docs/specs/README.md` atualizado para refletir a mudança de status da spec 10.
+- `docs/SPEC.md` sincronizado com capacidades atuais de lembretes e notificações locais.
+
 ## 1.6.0 - 2026-06-16
 
 Implementação da mini-spec 09 com suporte completo a múltiplas listas de compras, incluindo migração de dados, nova tela de gerenciamento e cobertura de testes.

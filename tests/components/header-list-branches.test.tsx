@@ -11,23 +11,14 @@ const mockPush = jest.fn()
 const mockRemove = jest.fn()
 const mockShare = jest.fn()
 const mockPaste = jest.fn(async (..._args: unknown[]) => Promise.resolve())
+const mockClear = jest.fn()
+const mockEdit = jest.fn()
+const mockRemoveItem = jest.fn()
 
 let mockProductsState = [
   { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
   { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: true },
 ]
-
-const mockClear = jest.fn()
-const mockEdit = jest.fn()
-const mockRemoveItem = jest.fn()
-
-jest.mock('expo-router', () => ({
-  useRouter: jest.fn(),
-}))
-
-jest.mock('expo-router/react-navigation', () => ({
-  useRoute: jest.fn(),
-}))
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: () => ({
@@ -38,6 +29,10 @@ jest.mock('@/stores/CartStore', () => ({
 
 jest.mock('@/hooks/useInitAlert', () => ({
   useInitAlert: jest.fn(),
+}))
+
+jest.mock('@/hooks/useReminderPendingAlerts', () => ({
+  useReminderPendingAlerts: jest.fn(),
 }))
 
 jest.mock('@/components/CustomAlert', () => ({
@@ -54,24 +49,29 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/components/TouchableIcons', () => ({
   Add: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text onPress={action}>Add</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Add')
   },
   Back: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text onPress={action}>Back</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Back')
   },
   Delete: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text onPress={action}>Delete</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Delete')
   },
   Share: ({ action }: { action?: () => void }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text onPress={action}>Share</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Share')
+  },
+  Notification: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Notification')
   },
 }))
 

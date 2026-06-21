@@ -23,7 +23,8 @@ function loadClipboardService(platform: 'web' | 'android') {
   let clipboardService: ClipboardServiceModule['ClipboardService']
 
   jest.isolateModules(() => {
-    clipboardService = require('@/services/ClipboardService').ClipboardService
+    const serviceModule = jest.requireActual('@/services/ClipboardService') as ClipboardServiceModule
+    clipboardService = serviceModule.ClipboardService
   })
 
   return {

@@ -1,11 +1,13 @@
+import React from 'react'
+import { ScrollView } from "react-native"
 import { Form } from "@/components/Form"
 import { Header } from "@/components/Header"
 import { AddIcon } from "@/components/Icons"
-import { text } from "@/constants/text"
-import { ScrollView } from "react-native"
 import { KeyboardScreen } from '@/components/Screen'
-import React from 'react'
-import { colors } from '@/constants/color'
+
+import { COLORS } from '@/constants/color'
+import { INPUTS } from '@/constants/text/inputs'
+import { SIZE } from '@/constants/size'
 
 export default function Add() {
   return (
@@ -13,8 +15,8 @@ export default function Add() {
       <ScrollView keyboardShouldPersistTaps="handled">
         <Header />
 
-        <Form buttonTitle={text.buttons.add}>
-          <AddIcon size={32} color={colors.black} />
+        <Form buttonTitle={INPUTS.buttons.add}>
+          <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </Form>
       </ScrollView>
     </KeyboardScreen>

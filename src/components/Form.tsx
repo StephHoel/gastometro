@@ -7,12 +7,14 @@ import { CustomAlert } from "@/components/CustomAlert"
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { useInitAlert } from '@/hooks/useInitAlert'
 import { CustomInput } from "@/components/CustomInput"
-import { text } from "@/constants/text"
 import type { FormProps } from "@/interfaces/FormProps"
 import { AlertService } from "@/services/AlertService"
 import { ProductService } from "@/services/ProductService"
 import { useRouter } from "expo-router"
 import { HasNegativeSignal } from '@/utils/functions/MathFunctions'
+import { ERROR } from '@/constants/text/error'
+import { INPUTS } from '@/constants/text/inputs'
+import { NameField } from '@/enums/NameField'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const [item, setItem] = useState("")
@@ -36,17 +38,17 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     const trimmedItem = item.trim()
 
     if (trimmedItem === "") {
-      AlertService.ok(text.error.alert_title, text.error.required_fields)
+      AlertService.ok(ERROR.alert_title, ERROR.required_fields)
       return
     }
 
     if (HasNegativeSignal(qtt) || HasNegativeSignal(price)) {
-      AlertService.ok(text.error.alert_title, text.error.negative_value)
+      AlertService.ok(ERROR.alert_title, ERROR.negative_value)
       return
     }
 
     if (ProductService.isDuplicateItem(trimmedItem, cartStore.products, data?.id)) {
-      AlertService.ok(text.error.alert_title, text.error.duplicate_item)
+      AlertService.ok(ERROR.alert_title, ERROR.duplicate_item)
       return
     }
 
@@ -83,8 +85,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       <CustomAlert ref={alertRef} />
 
       <CustomInput
-        nameField="Item"
-        placeholder={text.input.placeholder.item}
+        nameField={NameField.Item}
+        placeholder={INPUTS.placeholder.item}
         selfRef={inputRef1}
         returnKeyType={"next"}
         setItem={setItem}
@@ -93,8 +95,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       />
 
       <CustomInput
-        nameField="Quantidade"
-        placeholder={text.input.placeholder.quantity}
+        nameField={NameField.Quantity}
+        placeholder={INPUTS.placeholder.quantity}
         selfRef={inputRef2}
         returnKeyType={"next"}
         keyboardType={"number-pad"}
@@ -104,8 +106,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
       />
 
       <CustomInput
-        nameField="Preço"
-        placeholder={text.input.placeholder.price}
+        nameField={NameField.Price}
+        placeholder={INPUTS.placeholder.price}
         selfRef={inputRef3}
         returnKeyType={"done"}
         keyboardType={"number-pad"}

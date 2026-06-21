@@ -1,4 +1,4 @@
-import { text } from '@/constants/text'
+import { ERROR } from '@/constants/text/error'
 import { whatsapp } from "@/constants/whatsapp"
 import type { StateProps } from "@/interfaces/StateProps"
 import { SetCurrency, Multiply, ReduceProducts, ParseToFloat } from "@/utils/functions/MathFunctions"
@@ -15,8 +15,8 @@ export const ShareService = {
       try {
         await Linking.openURL(whatsappWebLink)
       } catch (webLinkError) {
-        console.error(text.error.whatsapp_open_failure_message, webLinkError)
-        Alert.alert(text.error.whatsapp_unavailable, text.error.whatsapp_open_error)
+        console.error(ERROR.whatsapp_open_failure_message, webLinkError)
+        Alert.alert(ERROR.whatsapp_unavailable, ERROR.whatsapp_open_error)
       }
       return
     }
@@ -24,13 +24,13 @@ export const ShareService = {
     try {
       await Linking.openURL(whatsappDeepLink)
     } catch (deepLinkError) {
-      console.warn(text.error.whatsapp_deep_link_error, deepLinkError)
+      console.warn(ERROR.whatsapp_deep_link_error, deepLinkError)
 
       try {
         await Linking.openURL(whatsappWebLink)
       } catch (webLinkError) {
-        console.error(text.error.whatsapp_open_failure_message, webLinkError)
-        Alert.alert(text.error.whatsapp_unavailable, text.error.whatsapp_open_error)
+        console.error(ERROR.whatsapp_open_failure_message, webLinkError)
+        Alert.alert(ERROR.whatsapp_unavailable, ERROR.whatsapp_open_error)
       }
     }
   }

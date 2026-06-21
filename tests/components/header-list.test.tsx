@@ -5,17 +5,14 @@ import { List } from '@/components/List'
 import { useRouter } from 'expo-router'
 import { useRoute } from 'expo-router/react-navigation'
 import type { StateProps } from '@/interfaces/StateProps'
+import { useCartStore } from '@/stores/CartStore'
 
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: jest.fn(),
 }))
 
-jest.mock('expo-router', () => ({
-  useRouter: jest.fn(),
-}))
-
-jest.mock('expo-router/react-navigation', () => ({
-  useRoute: jest.fn(),
+jest.mock('@/hooks/useReminderPendingAlerts', () => ({
+  useReminderPendingAlerts: jest.fn(),
 }))
 
 jest.mock('@/services/AlertService', () => ({
@@ -39,9 +36,8 @@ jest.mock('@/components/TouchableIcons', () => ({
   Back: () => null,
   Delete: () => null,
   Share: () => null,
+  Notification: () => null,
 }))
-
-import { useCartStore } from '@/stores/CartStore'
 
 function makeStore(): StateProps {
   return {
@@ -74,7 +70,7 @@ describe('Header and List', () => {
   it('Header em index deve renderizar ações principais', () => {
     const { getByText } = render(<Header />)
 
-    expect(getByText('Lista de Compras')).toBeTruthy()
+    expect(getByText('Gastômetro')).toBeTruthy()
   })
 
   it('Header em calculator não deve renderizar ações extras', () => {

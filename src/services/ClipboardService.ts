@@ -1,5 +1,6 @@
 import * as Clipboard from 'expo-clipboard'
 import { Platform } from 'react-native'
+import { ERROR } from '@/constants/text/error'
 
 export const ClipboardService = {
   async getClipboardContent() {
@@ -9,7 +10,7 @@ export const ClipboardService = {
         const text = await navigator.clipboard.readText()
         return text
       } catch (error) {
-        console.warn('Erro ao ler clipboard na web:', error)
+        console.warn(ERROR.clipboard_read_web_failure, error)
         return ''
       }
     }
@@ -25,7 +26,7 @@ export const ClipboardService = {
         await navigator.clipboard.writeText(text)
         return true
       } catch (error) {
-        console.warn('Erro ao escrever no clipboard na web:', error)
+        console.warn(ERROR.clipboard_write_web_failure, error)
         return false
       }
     }
@@ -35,7 +36,7 @@ export const ClipboardService = {
       await Clipboard.setStringAsync(text)
       return true
     } catch (error) {
-      console.warn('Erro ao escrever no clipboard nativo:', error)
+      console.warn(ERROR.clipboard_write_native_failure, error)
       return false
     }
   }

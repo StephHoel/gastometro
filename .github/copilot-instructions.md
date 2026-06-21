@@ -12,6 +12,9 @@ Resumo rápido:
 - Domínio principal: lista de compras, total em BRL, compartilhamento/importação via WhatsApp e calculadora de preço por unidade.
 - Use imports internos com alias `@/`.
 - Evite `any`.
+- Crie e mantenha interfaces TypeScript em `src/interfaces/`.
+- Mantenha componentes pequenos, com responsabilidade única.
+- Mantenha funções e regras desacopladas dos componentes sempre que possível.
 - Não assuma Prisma, PostgreSQL ou Zod: eles não fazem parte da stack atual.
 - A suíte de testes já existe com Jest (`npm run test`) e gate de cobertura global de 80%.
 - Preserve regras pt-BR de moeda, números com vírgula/ponto e textos do usuário.
@@ -35,6 +38,9 @@ Regras:
 - Componentes complexos precisam de testes.
 - Cobertura: quando a suíte de testes existir, manter/expandir cobertura proporcional ao escopo.
 - Atualizar README quando APIs mudarem.
+- Nunca alterar automaticamente a ordenação manual da lista de mini-specs em `docs/specs/README.md`.
+- Em `Implementadas`, manter ordenação por ordem de conclusão definida manualmente no arquivo.
+- Em `Planejadas`, manter ordenação por prioridade definida manualmente no arquivo.
 - Nunca executar `git commit` (nem variações como `git commit --amend`) sem que o usuário solicite explicitamente. Editar arquivos e fazer stage são permitidos; o commit final depende sempre de pedido explícito.
 - Nunca criar ou abrir Pull Request sem que o usuário solicite explicitamente. Preparar a descrição (draft) e sugerir a abertura são permitidos; a criação final do PR depende sempre de pedido explícito.
 

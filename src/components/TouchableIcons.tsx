@@ -1,9 +1,9 @@
-import { AddIcon, BackIcon, TrashIcon, ShareIcon } from "@/components/Icons"
-import type { IconProps } from "@/interfaces/IconProps"
+import { AddIcon, BackIcon, TrashIcon, ShareIcon, NotificationIcon, EditIcon } from "@/components/Icons"
+import type { IconsProps } from "@/interfaces/IconsProps"
 import type { IconButtonProps } from '@/interfaces/IconButtonProps'
 import { TouchableOpacity, View } from "react-native"
 import React from 'react'
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 
 function IconButton({ action, children, containerClass, wrapperClass }: IconButtonProps) {
   return (
@@ -21,38 +21,54 @@ function IconButton({ action, children, containerClass, wrapperClass }: IconButt
   )
 }
 
-export function Add({ action }: IconProps) {
+export function Add({ action, size = 35 }: IconsProps) {
   return (
     <IconButton
       action={action}
       wrapperClass="absolute bottom-6 right-6 z-50"
       containerClass="bg-lime-400 rounded-full w-14 h-14 items-center justify-center"
     >
-      <AddIcon size={35} color={colors.black} />
+      <AddIcon size={size} color={COLORS.black} />
     </IconButton>
   )
 }
 
-export function Delete({ action }: IconProps) {
+export function Delete({ action, size }: IconsProps) {
   return (
     <IconButton action={action}>
-      <TrashIcon size={35} />
+      <TrashIcon size={size} />
     </IconButton>
   )
 }
 
-export function Share({ action }: IconProps) {
+export function Edit({ action, size }: IconsProps) {
   return (
     <IconButton action={action}>
-      <ShareIcon size={35} />
+      <EditIcon size={size} />
     </IconButton>
   )
 }
 
-export function Back({ action }: IconProps) {
+export function Share({ action, size }: IconsProps) {
   return (
     <IconButton action={action}>
-      <BackIcon size={35} />
+      <ShareIcon size={size} />
+    </IconButton>
+  )
+}
+
+export function Back({ action, size = 35 }: IconsProps) {
+  return (
+    <IconButton action={action}>
+      <BackIcon size={size} />
+    </IconButton>
+  )
+}
+
+export function Notification({ action, checked, size }: IconsProps) {
+  return (
+    <IconButton action={action}>
+      <NotificationIcon size={size} checked={checked} />
     </IconButton>
   )
 }

@@ -1,12 +1,17 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import { text } from '@/constants/text'
+import Lists from '@/app/lists'
+import { INPUTS } from '@/constants/text/inputs'
+import { ERROR } from '@/constants/text/error'
+import { LISTS } from '@/constants/text/lists'
+import { mockPush } from '../setup/mocks/expo-router'
 
-const mockPush = jest.fn()
 const mockUseInitAlert = jest.fn()
 const mockAlertOk = jest.fn()
 const mockShowAlert = jest.fn()
+const mockRemoveByListId = jest.fn(async (_listId: string) => undefined)
+const mockGetByListId = jest.fn((_listId: string) => [] as Array<{ id: string }>)
 
 const mockStore = {
   lists: [
@@ -27,12 +32,20 @@ const mockStore = {
   setActiveList: jest.fn(),
 }
 
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
-}))
-
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: () => mockStore,
+}))
+
+jest.mock('@/stores/ReminderStore', () => ({
+  useReminderStore: () => ({
+    getByListId: (listId: string) => mockGetByListId(listId),
+  }),
+}))
+
+jest.mock('@/services/ReminderOrchestrator', () => ({
+  ReminderOrchestrator: {
+    removeByListId: (listId: string) => mockRemoveByListId(listId),
+  },
 }))
 
 jest.mock('@/hooks/useInitAlert', () => ({
@@ -46,10 +59,9 @@ jest.mock('@/services/AlertService', () => ({
 }))
 
 jest.mock('@/components/CustomAlert', () => {
-  const React = require('react')
-  const { forwardRef } = require('react')
+  const ReactModule = jest.requireActual('react') as typeof import('react')
   return {
-    CustomAlert: forwardRef((_props: unknown, ref: unknown) => {
+    CustomAlert: ReactModule.forwardRef((_props: unknown, ref: unknown) => {
       if (ref && typeof ref === 'object') {
         ; (ref as { current?: { showAlert?: unknown } }).current = {
           showAlert: mockShowAlert,
@@ -62,59 +74,63 @@ jest.mock('@/components/CustomAlert', () => {
 
 jest.mock('@/components/Header', () => ({
   Header: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>Header</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'Header')
   },
 }))
 
 jest.mock('@/components/Screen', () => ({
   Screen: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { View } = require('react-native')
-    return <View>{children}</View>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { View } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(View, null, children)
   },
 }))
 
 jest.mock('@/components/TextWhite', () => ({
   TextWhite: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>{children}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, children)
   },
 }))
 
 jest.mock('@/components/Row', () => ({
   Row: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { View } = require('react-native')
-    return <View>{children}</View>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { View } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(View, null, children)
   },
 }))
 
 jest.mock('@/components/Icons', () => ({
   AddIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>AddIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'AddIcon')
   },
   EditIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>EditIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'EditIcon')
   },
   TrashIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>TrashIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'TrashIcon')
+  },
+  NotificationIcon: () => {
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'NotificationIcon')
   },
 }))
-
-import Lists from '@/app/lists'
 
 describe('Lists screen', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockGetByListId.mockReturnValue([])
     mockStore.lists = [
       { id: 'list-1', name: 'Lista 1', products: [{ id: 'p1', item: 'Arroz', quantity: '1', price: '10', collected: false }] },
       { id: 'list-2', name: 'Lista 2', products: [] },
@@ -125,7 +141,7 @@ describe('Lists screen', () => {
   it('cria lista quando nome é válido', () => {
     const { getByPlaceholderText, getByText } = render(<Lists />)
 
-    fireEvent.changeText(getByPlaceholderText(text.input.placeholder.list_name), '  Feira  ')
+    fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
     fireEvent.press(getByText('AddIcon'))
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
@@ -137,7 +153,7 @@ describe('Lists screen', () => {
 
     fireEvent.press(getByText('AddIcon'))
 
-    expect(mockAlertOk).toHaveBeenCalledWith(text.error.alert_title, text.error.empty_list_name)
+    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
     expect(mockStore.addList).not.toHaveBeenCalled()
   })
 
@@ -155,7 +171,7 @@ describe('Lists screen', () => {
 
     fireEvent.press(getAllByText('EditIcon')[0])
     fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
-    fireEvent.press(getByText(text.lists.rename_save))
+    fireEvent.press(getByText(LISTS.rename_save))
 
     expect(mockStore.renameList).toHaveBeenCalledWith('list-1', 'Lista Mercado')
   })
@@ -164,9 +180,9 @@ describe('Lists screen', () => {
     const { getAllByText, getByText, queryByText } = render(<Lists />)
 
     fireEvent.press(getAllByText('EditIcon')[0])
-    fireEvent.press(getByText(text.lists.rename_cancel))
+    fireEvent.press(getByText(LISTS.rename_cancel))
 
-    expect(queryByText(text.lists.rename_save)).toBeNull()
+    expect(queryByText(LISTS.rename_save)).toBeNull()
     expect(mockStore.renameList).not.toHaveBeenCalled()
   })
 
@@ -176,11 +192,11 @@ describe('Lists screen', () => {
     const { getByText } = render(<Lists />)
     fireEvent.press(getByText('TrashIcon'))
 
-    expect(mockAlertOk).toHaveBeenCalledWith(text.error.alert_title, text.error.cannot_remove_last_list)
+    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.cannot_remove_last_list)
     expect(mockShowAlert).not.toHaveBeenCalled()
   })
 
-  it('abre confirmação e remove lista quando há mais de uma', () => {
+  it('abre confirmação e remove lista quando há mais de uma', async () => {
     const { getAllByText } = render(<Lists />)
 
     fireEvent.press(getAllByText('TrashIcon')[1])
@@ -191,9 +207,23 @@ describe('Lists screen', () => {
       buttons: Array<{ text: string; action: () => void }>
     }
 
-    expect(payload.buttons[0].text).toBe(text.lists.confirm_remove_button)
-    payload.buttons[0].action()
+    expect(payload.buttons[0].text).toBe(LISTS.confirm_remove_button)
+    await payload.buttons[0].action()
 
     expect(mockStore.removeList).toHaveBeenCalledWith('list-2')
+  })
+
+  it('mostra impacto de lembretes ao remover lista', () => {
+    mockGetByListId.mockReturnValue([{ id: 'r-1' }])
+
+    const { getAllByText } = render(<Lists />)
+
+    fireEvent.press(getAllByText('TrashIcon')[1])
+
+    const payload = mockShowAlert.mock.calls[0][0] as {
+      message: string
+    }
+
+    expect(payload.message).toContain('1 lembrete(s) também serão removidos')
   })
 })

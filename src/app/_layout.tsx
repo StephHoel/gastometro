@@ -1,20 +1,128 @@
-import { Tabs, usePathname } from "expo-router"
+import { Tabs, usePathname, useRouter } from "expo-router"
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
-import React, { useEffect } from 'react'
+import { NotificationService } from '@/services/NotificationService'
+import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import { useCartStore } from '@/stores/CartStore'
+import React, { useCallback, useEffect } from 'react'
 import { Platform } from 'react-native'
+import * as Notifications from 'expo-notifications'
+import type { NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
-import { colors } from '@/constants/color'
+import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
+import { ERROR } from '@/constants/text/error'
 
 export default function Layout() {
   const pathname = usePathname()
+  const router = useRouter()
+  const cartStore = useCartStore()
+
+  const handleNotificationResponse = useCallback(
+    async (response: NotificationResponse) => {
+      try {
+        const data = response.notification.request.content.data
+        const listId = NotificationService.getListIdFromNotification(data)
+        const reminderId = NotificationService.getReminderIdFromNotification(data)
+
+        if (!listId) return
+
+        const targetList = cartStore.lists.find((list) => list.id === listId)
+
+        if (!targetList) {
+          if (reminderId) {
+            await ReminderOrchestrator.removeReminder(reminderId)
+          }
+          router.push('/')
+          return
+        }
+
+        cartStore.setActiveList(targetList.id)
+        router.push('/')
+      } catch (error) {
+        console.error(ERROR.notification_response_failure, error)
+      }
+    },
+    [cartStore, router],
+  )
 
   useEffect(() => {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+
+  useEffect(() => {
+    if (Platform.OS === 'web') return
+
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowBanner: true,
+        shouldShowList: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    })
+  }, [])
+
+  useEffect(() => {
+    if (Platform.OS === 'web') return
+
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      void handleNotificationResponse(response)
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [handleNotificationResponse])
+
+  useEffect(() => {
+    if (Platform.OS === 'web') return
+
+    let isMounted = true
+
+    async function bootstrapNotificationOpen() {
+      try {
+        const lastResponse = await Notifications.getLastNotificationResponseAsync()
+        if (!isMounted || !lastResponse) return
+
+        await handleNotificationResponse(lastResponse)
+      } catch (error) {
+        console.error(ERROR.reminder_bootstrap_failure, error)
+      } finally {
+        await NotificationService.clearDeliveredNotifications()
+      }
+    }
+
+    void bootstrapNotificationOpen()
+
+    return () => {
+      isMounted = false
+    }
+  }, [handleNotificationResponse])
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function bootstrapReminders() {
+      try {
+        const listIds = cartStore.lists.map((list) => list.id)
+        await ReminderOrchestrator.cleanupOrphans(listIds)
+        await ReminderOrchestrator.syncWithPermissions()
+
+        if (!isMounted) return
+      } catch (error) {
+        console.error(ERROR.reminder_bootstrap_failure, error)
+      }
+    }
+
+    void bootstrapReminders()
+
+    return () => {
+      isMounted = false
+    }
+  }, [cartStore.lists])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
@@ -22,11 +130,11 @@ export default function Layout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: colors.background,
+            backgroundColor: COLORS.background,
             borderColor: "transparent",
           },
-          tabBarActiveTintColor: colors.active,
-          tabBarInactiveTintColor: colors.inactive,
+          tabBarActiveTintColor: COLORS.active,
+          tabBarInactiveTintColor: COLORS.inactive,
         }}
       >
         <Tabs.Screen
@@ -67,6 +175,10 @@ export default function Layout() {
 
         <Tabs.Screen name="list/add" options={{ href: null }} />
         <Tabs.Screen name="list/edit/[id]" options={{ href: null }} />
+        <Tabs.Screen name="reminders/index" options={{ href: null }} />
+        <Tabs.Screen name="reminders/[listId]/index" options={{ href: null }} />
+        <Tabs.Screen name="reminders/[listId]/new" options={{ href: null }} />
+        <Tabs.Screen name="reminders/[listId]/edit/[reminderId]" options={{ href: null }} />
       </Tabs>
     </SafeAreaView>
   )

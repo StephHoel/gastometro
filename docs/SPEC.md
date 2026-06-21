@@ -40,13 +40,19 @@ Público esperado:
 - Bloqueio de valores negativos nos fluxos manuais (formulário e calculadora).
 - Bloqueio de itens duplicados na criação manual de item.
 - Identificação de itens duplicados com união automática ao colar na lista ativa.
+- CRUD de lembretes locais por lista, com persistência dedicada offline-first.
+- Central de lembretes com filtros por status (ativos, desativados e vencidos).
+- Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento.
+- Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- notificações/lembretes;
+- refatoração de formulários para react-hook-form;
 - contas a pagar;
+- service worker para funcionamento offline em web;
+- testes E2E para roteamento web SPA.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
@@ -123,12 +129,15 @@ Estado:
 - `useCartStore` é o store global.
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual é `gastometro`.
+- `useReminderStore` mantém lembretes com persistência dedicada.
+- A chave de storage de lembretes é `gastometro-reminders`.
 
 Manipulação da lista:
 
 - telas e componentes chamam a API do store (`add`, `edit`, `remove`, `replace`, `get`, `clear`);
 - o store delega operações puras para `src/stores/helpers/CartInMemory.ts`;
 - serviços como `ProductService`, `AlertService`, `ShareService` e `ClipboardService` concentram regras de criação, alertas, compartilhamento e integrações.
+- lembretes são orquestrados por `ReminderOrchestrator` e usam `NotificationService` quando há permissão/plataforma suportada.
 
 UI:
 
@@ -142,13 +151,16 @@ Ao trabalhar neste projeto, a IA deve:
 
 - manter TypeScript estrito;
 - evitar `any`;
-- preferir tipos em `src/interfaces` sempre;
+- criar e manter interfaces TypeScript em `src/interfaces/`;
 - usar alias `@/` para imports internos;
 - manter funções pequenas e com responsabilidade clara;
+- manter componentes pequenos, com responsabilidade única e composição por partes menores;
+- manter funções e regras desacopladas de componentes sempre que possível;
 - preservar as regras pt-BR de moeda, texto e números;
 - escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuação e caracteres especiais;
 - escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
 - preferir funções puras em `src/utils` ou `src/stores/helpers` para regras testáveis;
+- preferir orquestração em `src/services` e utilitários em `src/utils` em vez de lógica dentro da camada de UI;
 - centralizar textos reutilizáveis em `src/constants`;
 - evitar alterar formato de dados persistidos sem plano de migração;
 - evitar mudar a chave do AsyncStorage sem necessidade explícita;
@@ -226,11 +238,21 @@ Comandos existentes:
 npm run start
 npm run web
 npm run android
+npm run ios
 npm run prebuild
 npm run build:android
+npm run build:local
 npm run build:local:eas
+npm run test
+npm run test:watch
+npm run test:coverage
+npm run test:coverage:csv
+npm run check:ts
+npm run check:biome
 npm run check:expo
 npm run deps:audit
+npm run verify:version-bump
+npm run new-version
 ```
 
 Diretrizes atuais de build Android para reduzir artefato:

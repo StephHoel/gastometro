@@ -1,10 +1,3 @@
-jest.mock('react-native-uuid', () => ({
-  __esModule: true,
-  default: {
-    v4: jest.fn(() => 'mock-uuid'),
-  },
-}))
-
 import uuid from 'react-native-uuid'
 import { ConvertToProductsList } from '@/utils/functions/ConvertToProductsList'
 
