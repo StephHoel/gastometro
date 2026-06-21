@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Header } from '@/components/Header'
 import { List } from '@/components/List'
@@ -49,19 +49,29 @@ jest.mock('@/services/AlertService', () => ({
 
 jest.mock('@/components/TouchableIcons', () => ({
   Add: ({ action }: { action?: () => void }) => {
-    return <Text onPress={action}>Add</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Add')
   },
   Back: ({ action }: { action?: () => void }) => {
-    return <Text onPress={action}>Back</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Back')
   },
   Delete: ({ action }: { action?: () => void }) => {
-    return <Text onPress={action}>Delete</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Delete')
   },
   Share: ({ action }: { action?: () => void }) => {
-    return <Text onPress={action}>Share</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Share')
   },
   Notification: ({ action }: { action?: () => void }) => {
-    return <Text onPress={action}>Notification</Text>
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Notification')
   },
 }))
 

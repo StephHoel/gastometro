@@ -59,10 +59,9 @@ jest.mock('@/services/AlertService', () => ({
 }))
 
 jest.mock('@/components/CustomAlert', () => {
-  const React = require('react')
-  const { forwardRef } = require('react')
+  const ReactModule = jest.requireActual('react') as typeof import('react')
   return {
-    CustomAlert: forwardRef((_props: unknown, ref: unknown) => {
+    CustomAlert: ReactModule.forwardRef((_props: unknown, ref: unknown) => {
       if (ref && typeof ref === 'object') {
         ; (ref as { current?: { showAlert?: unknown } }).current = {
           showAlert: mockShowAlert,
@@ -75,51 +74,56 @@ jest.mock('@/components/CustomAlert', () => {
 
 jest.mock('@/components/Header', () => ({
   Header: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>Header</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'Header')
   },
 }))
 
 jest.mock('@/components/Screen', () => ({
   Screen: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { View } = require('react-native')
-    return <View>{children}</View>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { View } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(View, null, children)
   },
 }))
 
 jest.mock('@/components/TextWhite', () => ({
   TextWhite: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>{children}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, children)
   },
 }))
 
 jest.mock('@/components/Row', () => ({
   Row: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { View } = require('react-native')
-    return <View>{children}</View>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { View } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(View, null, children)
   },
 }))
 
 jest.mock('@/components/Icons', () => ({
   AddIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>AddIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'AddIcon')
   },
   EditIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>EditIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'EditIcon')
   },
   TrashIcon: () => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>TrashIcon</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'TrashIcon')
+  },
+  NotificationIcon: () => {
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, 'NotificationIcon')
   },
 }))
 

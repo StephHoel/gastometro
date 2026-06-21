@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import ReminderCenter from '@/app/reminders'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -30,9 +30,9 @@ jest.mock('@/components/Row', () => ({
 
 jest.mock('@/components/TextWhite', () => ({
   TextWhite: ({ children }: { children: ReactNode }) => {
-    const React = require('react')
-    const { Text } = require('react-native')
-    return <Text>{children}</Text>
+    const ReactModule = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(Text, null, children)
   },
 }))
 

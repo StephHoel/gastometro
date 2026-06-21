@@ -11,7 +11,10 @@ import './mocks/expo-notifications'
 beforeEach(() => { jest.clearAllMocks() })
 
 afterEach(async () => {
-  const asyncStorageModule = require('@react-native-async-storage/async-storage')
-  const AsyncStorage = asyncStorageModule.default ?? asyncStorageModule
+  const asyncStorageModule = jest.requireMock('@react-native-async-storage/async-storage') as {
+    default?: { clear: () => Promise<void> }
+    clear?: () => Promise<void>
+  }
+  const AsyncStorage = (asyncStorageModule.default ?? asyncStorageModule) as { clear: () => Promise<void> }
   await AsyncStorage.clear()
 })

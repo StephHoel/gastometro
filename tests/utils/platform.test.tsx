@@ -28,28 +28,36 @@ describe('platform utils', () => {
     globalWithDom.window = undefined
     globalWithDom.document = undefined
 
-    const { detectWeb } = require('@/utils/platform') as typeof import('@/utils/platform')
+    jest.isolateModules(() => {
+      const { detectWeb } = jest.requireActual('@/utils/platform') as typeof import('@/utils/platform')
 
-    expect(detectWeb()).toBe(false)
+      expect(detectWeb()).toBe(false)
+    })
   })
 
   it('detectWeb retorna true quando window/document existem', () => {
     globalWithDom.window = {} as Window & typeof globalThis
     globalWithDom.document = {} as Document
 
-    const { detectWeb } = require('@/utils/platform') as typeof import('@/utils/platform')
+    jest.isolateModules(() => {
+      const { detectWeb } = jest.requireActual('@/utils/platform') as typeof import('@/utils/platform')
 
-    expect(detectWeb()).toBe(true)
+      expect(detectWeb()).toBe(true)
+    })
   })
 
   it('withWebFallback executa função nativa em plataforma não web', async () => {
     const nativeFunction = jest.fn().mockResolvedValue('native-value')
     const webFunction = jest.fn().mockResolvedValue('web-value')
+    let platformModule!: typeof import('@/utils/platform')
 
-    const { withWebFallback, isWeb, isNative } = require('@/utils/platform') as typeof import('@/utils/platform')
-    const result = await withWebFallback(nativeFunction, webFunction, 'fallback')
+    jest.isolateModules(() => {
+      platformModule = jest.requireActual('@/utils/platform') as typeof import('@/utils/platform')
+    })
 
-    expect(isNative).toBe(!isWeb)
+    const result = await platformModule.withWebFallback(nativeFunction, webFunction, 'fallback')
+
+    expect(platformModule.isNative).toBe(!platformModule.isWeb)
     expect(nativeFunction).toHaveBeenCalledTimes(1)
     expect(webFunction).not.toHaveBeenCalled()
     expect(result).toBe('native-value')
@@ -60,9 +68,13 @@ describe('platform utils', () => {
       Platform: { OS: 'web' },
     }))
 
-    const platformModule = require('@/utils/platform') as typeof import('@/utils/platform')
     const nativeFunction = jest.fn().mockResolvedValue('native-value')
     const webFunction = jest.fn().mockResolvedValue('web-value')
+    let platformModule!: typeof import('@/utils/platform')
+
+    jest.isolateModules(() => {
+      platformModule = jest.requireActual('@/utils/platform') as typeof import('@/utils/platform')
+    })
 
     const result = await platformModule.withWebFallback(nativeFunction, webFunction, 'fallback')
 
@@ -77,8 +89,12 @@ describe('platform utils', () => {
       Platform: { OS: 'web' },
     }))
 
-    const platformModule = require('@/utils/platform') as typeof import('@/utils/platform')
     const nativeFunction = jest.fn().mockResolvedValue('native-value')
+    let platformModule!: typeof import('@/utils/platform')
+
+    jest.isolateModules(() => {
+      platformModule = jest.requireActual('@/utils/platform') as typeof import('@/utils/platform')
+    })
 
     const result = await platformModule.withWebFallback(nativeFunction, undefined, 'fallback-value')
 
