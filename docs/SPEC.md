@@ -151,13 +151,16 @@ Ao trabalhar neste projeto, a IA deve:
 
 - manter TypeScript estrito;
 - evitar `any`;
-- preferir tipos em `src/interfaces` sempre;
+- criar e manter interfaces TypeScript em `src/interfaces/`;
 - usar alias `@/` para imports internos;
 - manter funções pequenas e com responsabilidade clara;
+- manter componentes pequenos, com responsabilidade única e composição por partes menores;
+- manter funções e regras desacopladas de componentes sempre que possível;
 - preservar as regras pt-BR de moeda, texto e números;
 - escrever entradas do `docs/CHANGELOG.md` em pt-BR, incluindo acentuação e caracteres especiais;
 - escrever mini-specs em pt-BR, incluindo acentuação e caracteres especiais;
 - preferir funções puras em `src/utils` ou `src/stores/helpers` para regras testáveis;
+- preferir orquestração em `src/services` e utilitários em `src/utils` em vez de lógica dentro da camada de UI;
 - centralizar textos reutilizáveis em `src/constants`;
 - evitar alterar formato de dados persistidos sem plano de migração;
 - evitar mudar a chave do AsyncStorage sem necessidade explícita;

@@ -16,3 +16,6 @@ Esta pasta concentra a documentação principal do projeto.
 - Consulte o `docs/SPEC.md` antes de alterar produto, UX, persistência ou dependências.
 - Use as mini-specs em `docs/specs/`, organizadas em `planned/`, `active/` e `done/`, para funcionalidades planejadas ou mudanças maiores.
 - Registre decisões relevantes no `docs/CHANGELOG.md` quando houver versão nova.
+- Todas as interfaces TypeScript do projeto devem ser definidas em `src/interfaces/`.
+- Componentes devem permanecer pequenos, focados em responsabilidade única e composição.
+- Funções e regras de negócio devem ser desacopladas dos componentes sempre que possível, priorizando `src/utils/`, `src/services/` e helpers de store.

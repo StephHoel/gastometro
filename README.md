@@ -219,6 +219,12 @@ Este repositório segue um fluxo spec-driven para orientar mudanças humanas e a
 - [`docs/WEB_DEPLOY.md`](docs/WEB_DEPLOY.md) detalha build/deploy da versão web no GitHub Pages.
 - [`.github/copilot-instructions.md`](.github/copilot-instructions.md) orienta sugestões do GitHub Copilot.
 
+Regras de desenvolvimento que devem ser reforçadas em qualquer alteração:
+
+- Todas as interfaces TypeScript devem ser criadas e mantidas em `src/interfaces/`.
+- Componentes devem ser pequenos, com responsabilidade única e composição de blocos reutilizáveis.
+- Funções e regras de negócio devem ficar desacopladas dos componentes sempre que possível, priorizando `src/utils/`, `src/services/` e helpers de store.
+
 Ao alterar comportamento de usuário, persistência, formato de WhatsApp ou compatibilidade, atualize a documentação relevante.
 
 ## Versionamento
