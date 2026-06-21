@@ -62,12 +62,17 @@ export function Header({ activeListId }: { activeListId?: string }) {
       <CustomAlert ref={alertRef} />
 
       <View className="pt-4 px-3 flex-row justify-between">
-        <TextWhite className="text-2xl font-heading">
+        <View className="flex-1" />
+
+        <TextWhite className="text-2xl font-heading flex-1 text-center">
           {titlePages[route.name as keyof typeof titlePages]}
         </TextWhite>
 
-        <Row className="gap-4">{buttonsByRouteName()}</Row>
+        <View className="flex-1 flex-row">
+          <Row className="gap-4 items-center" style={{ marginLeft: 'auto' }}>{buttonsByRouteName()}</Row>
+        </View>
       </View>
+
       <Divider className="border-white pt-3 mx-2" />
 
       {route.name === "index" && <Add action={() => navigator.push("/list/add")} />}
