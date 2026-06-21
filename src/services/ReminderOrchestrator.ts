@@ -5,6 +5,7 @@ import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
+import { fromDateAndTime } from '@/utils/functions/DateFunctions'
 
 export const ReminderOrchestrator = {
   async enableReminder(reminderId: string): Promise<ReminderState> {
@@ -141,7 +142,7 @@ export const ReminderOrchestrator = {
       return false
     }
 
-    const datetimeISO = ReminderService.fromDateAndTime(dateValue, timeValue)
+    const datetimeISO = fromDateAndTime(dateValue, timeValue)
     if (!datetimeISO) {
       AlertService.ok(ERROR.alert_title, ERROR.reminder.invalid_datetime)
       return false

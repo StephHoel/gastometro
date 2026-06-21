@@ -176,7 +176,7 @@ export default function Layout() {
         <Tabs.Screen name="list/add" options={{ href: null }} />
         <Tabs.Screen name="list/edit/[id]" options={{ href: null }} />
         <Tabs.Screen name="reminders/index" options={{ href: null }} />
-        <Tabs.Screen name="reminders/[listId]" options={{ href: null }} />
+        <Tabs.Screen name="reminders/[listId]/index" options={{ href: null }} />
         <Tabs.Screen name="reminders/[listId]/new" options={{ href: null }} />
         <Tabs.Screen name="reminders/[listId]/edit/[reminderId]" options={{ href: null }} />
       </Tabs>

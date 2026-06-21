@@ -1,7 +1,7 @@
 import type { ReminderProps } from '@/interfaces/ReminderProps'
 import { parseReminderDate } from '@/utils/functions/DateFunctions'
 import { ERROR } from '@/constants/text/error'
-import { ReminderStatus } from '../enums/ReminderStatus'
+import { ReminderStatus } from '@/enums/ReminderStatus'
 
 export const ReminderService = {
   validateCreateInput(payload: { title: string; datetimeISO: string; listId: string }): string | null {
@@ -44,34 +44,5 @@ export const ReminderService = {
     if (!this.isEnabled(reminder)) return ReminderStatus.Disabled
     if (this.isScheduled(reminder)) return ReminderStatus.Scheduled
     return ReminderStatus.NotScheduled
-  },
-
-  toDateInputValue(datetimeISO: string) {
-    const parsed = parseReminderDate(datetimeISO)
-    if (!parsed) return { date: '', time: '' }
-
-    const pad = (value: number) => value.toString().padStart(2, '0')
-    const yyyy = parsed.getFullYear()
-    const mm = pad(parsed.getMonth() + 1)
-    const dd = pad(parsed.getDate())
-    const hh = pad(parsed.getHours())
-    const min = pad(parsed.getMinutes())
-
-    return {
-      date: `${yyyy}-${mm}-${dd}`,
-      time: `${hh}:${min}`,
-    }
-  },
-
-  fromDateAndTime(date: string, time: string): string | null {
-    const trimmedDate = date.trim()
-    const trimmedTime = time.trim()
-    if (!trimmedDate || !trimmedTime) return null
-
-    const raw = `${trimmedDate}T${trimmedTime}:00`
-    const parsed = new Date(raw)
-    if (Number.isNaN(parsed.getTime())) return null
-
-    return parsed.toISOString()
   },
 }
