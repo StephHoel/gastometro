@@ -55,6 +55,17 @@ describe('useCartStore - Multiple Lists', () => {
     expect(useCartStore.getState().activeListId).toBe(thirdListId)
   })
 
+  it('não deve emitir update ao selecionar a lista já ativa', () => {
+    const store = useCartStore.getState()
+    const listener = jest.fn()
+    const unsubscribe = useCartStore.subscribe(listener)
+
+    store.setActiveList(store.activeListId)
+
+    expect(listener).not.toHaveBeenCalled()
+    unsubscribe()
+  })
+
   it('deve adicionar item à lista ativa', () => {
     const store = useCartStore.getState()
     store.addList('Segunda')
