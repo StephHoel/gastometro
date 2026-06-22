@@ -9,6 +9,7 @@ import { Delete } from '@/components/TouchableIcons'
 import { useRouter } from 'expo-router'
 import { SIZE } from '@/constants/size'
 import { AlertService } from '@/services/AlertService'
+import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 
 export function ReminderItem({ item }: ReminderItemProps) {
   const router = useRouter()
@@ -16,6 +17,12 @@ export function ReminderItem({ item }: ReminderItemProps) {
 
   function handleEditReminder(): void {
     router.push(`/reminders/${item.listId}/edit/${item.id}`)
+  }
+
+  function removeReminder() {
+    AlertService.removeReminder(async () =>
+      await ReminderOrchestrator.removeReminder(item.id)
+    )
   }
 
   return (
@@ -27,10 +34,7 @@ export function ReminderItem({ item }: ReminderItemProps) {
       </View>
 
       <Row className='gap-5 mx-4'>
-        <Delete
-          action={() => AlertService.removeReminder(item.id, () => { })}
-          size={SIZE.iconActions}
-        />
+        <Delete action={removeReminder} size={SIZE.iconActions} />
       </Row>
     </TouchableOpacity>
   )
