@@ -15,6 +15,16 @@ export function useReminderPendingAlerts() {
   const shownRef = useRef<Set<string>>(new Set())
   const showingRef = useRef(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const scheduleRetryFlush = useCallback((flush: () => void) => {
+    if (retryTimeoutRef.current) return
+
+    retryTimeoutRef.current = setTimeout(() => {
+      retryTimeoutRef.current = null
+      flush()
+    }, 120)
+  }, [])
 
   const flushQueue = useCallback(() => {
     if (showingRef.current) return
@@ -60,8 +70,9 @@ export function useReminderPendingAlerts() {
     if (!shown) {
       showingRef.current = false
       queuedRef.current.unshift(nextReminderId)
+      scheduleRetryFlush(flushQueue)
     }
-  }, [])
+  }, [scheduleRetryFlush])
 
   const enqueuePendingOverdues = useCallback(() => {
     const reminders = useReminderStore.getState().reminders
@@ -113,6 +124,11 @@ export function useReminderPendingAlerts() {
 
   useFocusEffect(
     useCallback(() => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current)
+        retryTimeoutRef.current = null
+      }
+
       shownRef.current.clear()
       queuedRef.current = []
       showingRef.current = false
@@ -129,6 +145,10 @@ export function useReminderPendingAlerts() {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
+      }
+
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current)
       }
     }
   }, [enqueuePendingOverdues, scheduleNextCheck, reminderStore.reminders, cartStore.lists])

@@ -138,4 +138,24 @@ describe('useReminderPendingAlerts', () => {
 
     expect(alertShowMock).toHaveBeenCalledTimes(2)
   })
+
+  it('tenta novamente quando AlertService ainda não está pronto no primeiro flush', () => {
+    jest.useFakeTimers()
+
+    alertShowMock
+      .mockReturnValueOnce(false)
+      .mockReturnValue(true)
+
+    render(<HookHarness />)
+
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+
+    act(() => {
+      jest.runOnlyPendingTimers()
+    })
+
+    expect(alertShowMock).toHaveBeenCalledTimes(2)
+
+    jest.useRealTimers()
+  })
 })
