@@ -42,7 +42,7 @@ Público esperado:
 - Identificação de itens duplicados com união automática ao colar na lista ativa.
 - CRUD de lembretes locais por lista, com persistência dedicada offline-first.
 - Central de lembretes com filtros por status (ativos, desativados e vencidos).
-- Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento.
+- Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento; ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 
 ## 3. Funcionalidades Planejadas
@@ -137,7 +137,7 @@ Manipulação da lista:
 - telas e componentes chamam a API do store (`add`, `edit`, `remove`, `replace`, `get`, `clear`);
 - o store delega operações puras para `src/stores/helpers/CartInMemory.ts`;
 - serviços como `ProductService`, `AlertService`, `ShareService` e `ClipboardService` concentram regras de criação, alertas, compartilhamento e integrações.
-- lembretes são orquestrados por `ReminderOrchestrator` e usam `NotificationService` quando há permissão/plataforma suportada.
+- lembretes são orquestrados por `ReminderOrchestrator` e usam `NotificationService` quando há permissão/plataforma suportada; a resposta da notificação seleciona a lista relacionada e retorna para a home.
 
 UI:
 

@@ -12,7 +12,7 @@ Implementação completa da mini-spec 10 com sistema de lembretes locais e notif
 - Central de lembretes consolidada em `src/app/reminders/index.tsx` com filtros (ativos, desativados, vencidos).
 - Hook `useReminderPendingAlerts` para fallback de lembretes pendentes quando permissão de notificação não está concedida.
 - Integração com notificações nativas: agendamento, cancelamento, sincronização no bootstrap.
-- Navegação por payload: notificação abre app na lista relacionada quando disponível.
+- Navegação por payload: ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal quando disponível.
 - Remoção de lista agora informa quantidade de lembretes impactados e executa remoção em cascata.
 - Limpeza de lembretes órfãos na inicialização.
 - Atalho de lembretes na tela home.

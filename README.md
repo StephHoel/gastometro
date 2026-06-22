@@ -22,7 +22,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Bloqueia valores negativos em quantidade e preço nos fluxos manuais.
 - Bloqueia itens duplicados na criação manual de item.
 - Inclui uma calculadora de mercado para calcular preço por unidade.
-- Possui lembretes locais por lista com suporte a notificações locais (quando disponível).
+- Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 
 ## Stack
