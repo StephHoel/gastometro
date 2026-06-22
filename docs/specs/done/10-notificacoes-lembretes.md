@@ -15,7 +15,7 @@ Permitir criar lembretes locais para revisar listas ou itens sem depender de log
 
 - O usuário deve poder criar, editar e remover lembretes locais.
 - O lembrete deve disparar uma notificação no dispositivo no horário configurado.
-- A notificação deve abrir o app na lista relacionada quando isso for tecnicamente possível.
+- Ao tocar na notificação, o app deve selecionar a lista relacionada e voltar para a tela principal quando isso for tecnicamente possível.
 - O app deve continuar funcionando quando permissões de notificação forem negadas.
 - Permissões devem ser solicitadas apenas no momento em que o usuário tentar ativar notificações.
 
@@ -171,5 +171,5 @@ Permitir criar lembretes locais para revisar listas ou itens sem depender de log
 - Central de lembretes com filtros implementada em `src/app/reminders/index.tsx`.
 - Remoção de lista agora informa quantidade de lembretes impactados e executa remoção em cascata.
 - Atalho de lembretes na home e fallback de pendentes quando permissão de notificação não está concedida.
-- Integração de resposta de notificação para abrir app na lista relacionada quando disponível.
+- Integração de resposta de notificação para selecionar a lista relacionada e voltar para a tela principal quando disponível.
 - Limpeza de lembretes órfãos e sincronização de agendamentos no bootstrap do app.
