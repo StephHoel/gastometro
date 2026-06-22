@@ -9,6 +9,7 @@ import { createCartStoreMock, createReminderStoreMock, makeReminder } from '../s
 import { mockPush } from '../setup/mocks/expo-router'
 
 const mockShowAlert = jest.fn()
+let capturedAlertCallback: (() => Promise<void>) | null = null
 
 let mockCartStore = createCartStoreMock()
 let mockReminderStore = createReminderStoreMock()
@@ -34,6 +35,14 @@ jest.mock('@/services/ReminderOrchestrator', () => ({
 jest.mock('@/services/ReminderService', () => ({
   ReminderService: {
     getStatus: jest.fn(() => 'Ativo'),
+  },
+}))
+
+jest.mock('@/services/AlertService', () => ({
+  AlertService: {
+    removeReminder: jest.fn((callback: () => Promise<void>) => {
+      capturedAlertCallback = callback
+    }),
   },
 }))
 
@@ -75,11 +84,6 @@ jest.mock('@/components/TouchableIcons', () => ({
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
     return ReactModule.createElement(Text, { onPress: action }, 'Add')
   },
-  Edit: ({ action }: { action?: () => void }) => {
-    const ReactModule = jest.requireActual('react') as typeof import('react')
-    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, { onPress: action }, 'Edit')
-  },
   Delete: ({ action }: { action?: () => void }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
@@ -92,11 +96,9 @@ function setListIdParam(listId: string) {
 }
 
 describe('ListReminders screen', () => {
-  const removeReminder = ReminderOrchestrator.removeReminder as jest.Mock
-  const getStatus = ReminderService.getStatus as jest.Mock
-
   beforeEach(() => {
     jest.clearAllMocks()
+    capturedAlertCallback = null
 
     mockCartStore = createCartStoreMock({
       lists: [{ id: 'list-1', name: 'Mercado', products: [] }],
@@ -108,8 +110,8 @@ describe('ListReminders screen', () => {
     ])
 
     setListIdParam('list-1')
-    removeReminder.mockResolvedValue(undefined)
-    getStatus.mockReturnValue('Ativo')
+      ; (ReminderOrchestrator.removeReminder as jest.Mock).mockResolvedValue(undefined)
+      ; (ReminderService.getStatus as jest.Mock).mockReturnValue('Ativo')
   })
 
   it('renderiza fallback quando lista nao existe e volta para listas', () => {
@@ -135,16 +137,15 @@ describe('ListReminders screen', () => {
   it('navega para edicao ao clicar em edit e remove ao confirmar no alert', async () => {
     const { getAllByText } = render(<ListReminders />)
 
-    fireEvent.press(getAllByText('Edit')[0])
+    fireEvent.press(getAllByText('Pao')[0])
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1/edit/r2')
 
     fireEvent.press(getAllByText('Delete')[0])
 
-    const payload = mockShowAlert.mock.calls[0][0] as {
-      buttons: Array<{ action: () => Promise<void> }>
+    expect(capturedAlertCallback).toBeTruthy()
+    if (capturedAlertCallback) {
+      await capturedAlertCallback()
+      expect(ReminderOrchestrator.removeReminder).toHaveBeenCalledWith('r2')
     }
-
-    await payload.buttons[0].action()
-    expect(removeReminder).toHaveBeenCalledWith('r2')
   })
 })
