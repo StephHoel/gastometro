@@ -5,9 +5,9 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from '@/stores/CartStore'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
-import { addNotificationResponseReceivedListener, AndroidImportance, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
+import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
@@ -16,34 +16,49 @@ import { ERROR } from '@/constants/text/error'
 export default function Layout() {
   const pathname = usePathname()
   const router = useRouter()
-  const cartStore = useCartStore()
+  const lists = useCartStore((state) => state.lists)
+  const activeListId = useCartStore((state) => state.activeListId)
+  const setActiveList = useCartStore((state) => state.setActiveList)
+  const handledNotificationKeysRef = useRef(new Set<string>())
 
   const handleNotificationResponse = useCallback(
     async (response: NotificationResponse) => {
       try {
+        const responseKey = `${response.notification.request.identifier}:${response.actionIdentifier}`
+        if (handledNotificationKeysRef.current.has(responseKey)) return
+
+        handledNotificationKeysRef.current.add(responseKey)
+
         const data = response.notification.request.content.data
         const listId = NotificationService.getListIdFromNotification(data)
         const reminderId = NotificationService.getReminderIdFromNotification(data)
 
         if (!listId) return
 
-        const targetList = cartStore.lists.find((list) => list.id === listId)
+        const targetList = lists.find((list) => list.id === listId)
 
         if (!targetList) {
           if (reminderId) {
             await ReminderOrchestrator.removeReminder(reminderId)
           }
-          router.push('/')
+          if (pathname !== '/') {
+            router.replace('/')
+          }
           return
         }
 
-        cartStore.setActiveList(targetList.id)
-        router.push('/')
+        if (activeListId !== targetList.id) {
+          setActiveList(targetList.id)
+        }
+
+        if (pathname !== '/') {
+          router.replace('/')
+        }
       } catch (error) {
         console.error(ERROR.notification_response_failure, error)
       }
     },
-    [cartStore, router],
+    [activeListId, lists, pathname, router, setActiveList],
   )
 
   useEffect(() => {
@@ -80,10 +95,11 @@ export default function Layout() {
 
     async function bootstrapNotificationOpen() {
       try {
-        const lastResponse = getLastNotificationResponse()
+        const lastResponse = await getLastNotificationResponseAsync()
         if (!isMounted || !lastResponse) return
 
         await handleNotificationResponse(lastResponse)
+        await clearLastNotificationResponseAsync()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       } finally {
@@ -108,7 +124,7 @@ export default function Layout() {
 
     async function bootstrapReminders() {
       try {
-        const listIds = cartStore.lists.map((list) => list.id)
+        const listIds = lists.map((list) => list.id)
         await ReminderOrchestrator.cleanupOrphans(listIds)
         await ReminderOrchestrator.syncWithPermissions()
 
@@ -123,7 +139,7 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [cartStore.lists])
+  }, [lists])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>

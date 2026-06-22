@@ -115,15 +115,16 @@ export const useCartStore = create(
           }
         }),
 
-      setActiveList: (listId: string) =>
-        set((state) => {
-          const exists = state.lists.some((l) => l.id === listId)
-          if (!exists) return {}
-          return {
-            activeListId: listId,
-            products: getActiveProducts(state.lists, listId),
-          }
-        }),
+      setActiveList: (listId: string) => {
+        const state = get()
+        const exists = state.lists.some((l) => l.id === listId)
+        if (!exists || state.activeListId === listId) return
+
+        set({
+          activeListId: listId,
+          products: getActiveProducts(state.lists, listId),
+        })
+      },
     }),
     {
       name: 'gastometro',
