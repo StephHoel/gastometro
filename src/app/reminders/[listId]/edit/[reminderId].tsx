@@ -18,6 +18,7 @@ export default function EditReminder() {
         reminderId={reminderId}
         textButton={REMINDERS.button.update}
         iconButton={<EditIcon color={COLORS.black} size={SIZE.iconButton} />}
+        includeDeleteButton
       />
     </Page>
   )

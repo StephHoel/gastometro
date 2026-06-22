@@ -3,15 +3,19 @@ import { View, type TextInput } from 'react-native'
 import { REMINDERS } from '@/constants/text/reminders'
 import { makeDefaultDateTime, toDateInputValue } from '@/utils/functions/DateFunctions'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
-import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
-import { CustomInput } from '../CustomInput'
+import { CustomInput } from '@/components/CustomInput'
 import { NameField } from '@/enums/NameField'
 import { CustomButton as Button } from "@/components/Button"
 import type { FormReminderProps } from '@/interfaces/FormReminderProps'
 import { useRouter } from 'expo-router'
+import { TrashIcon } from '@/components/Icons'
+import { COLORS } from '@/constants/color'
+import { SIZE } from '@/constants/size'
+import { Row } from '@/components/Row'
+import { AlertService } from '@/services/AlertService'
 
-export function FormReminder({ listId, reminderId, textButton, iconButton }: FormReminderProps) {
+export function FormReminder({ listId, reminderId, textButton, iconButton, includeDeleteButton }: FormReminderProps) {
   const reminderStore = useReminderStore()
   const router = useRouter()
 
@@ -47,7 +51,15 @@ export function FormReminder({ listId, reminderId, textButton, iconButton }: For
     })
 
     if (saved)
-      router.push(`/reminders/${listId}`)
+      redirect()
+  }
+
+  function redirect() {
+    router.push(`/reminders/${listId}`)
+  }
+
+  function handleRemoveReminder() {
+    AlertService.removeReminder(reminderId ?? '', redirect)
   }
 
   return (
@@ -85,10 +97,21 @@ export function FormReminder({ listId, reminderId, textButton, iconButton }: For
         onSubmit={handleSaveReminder}
       />
 
-      <Button onPress={handleSaveReminder}>
-        <Button.Icon>{iconButton}</Button.Icon>
-        <Button.Text>{textButton}</Button.Text>
-      </Button>
+      <Row>
+        {includeDeleteButton && (
+          <Button onPress={handleRemoveReminder} type='Fail' className='flex-1'>
+            <Button.Icon>
+              <TrashIcon color={COLORS.black} size={SIZE.iconButton} />
+            </Button.Icon>
+            <Button.Text>{REMINDERS.button.remove}</Button.Text>
+          </Button>
+        )}
+
+        <Button onPress={handleSaveReminder} className='flex-1'>
+          <Button.Icon>{iconButton}</Button.Icon>
+          <Button.Text>{textButton}</Button.Text>
+        </Button>
+      </Row>
     </View>
   )
 }

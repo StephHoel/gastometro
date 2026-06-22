@@ -10,7 +10,7 @@ import { REMINDERS } from '@/constants/text/reminders'
 import { Add } from '@/components/TouchableIcons'
 import { Page } from '@/components/Page'
 import { useListIdParam } from '@/hooks/useParams'
-import { ReminderItem } from '@/components/Reminder/Item'
+import { ReminderItem } from '@/components/Reminder/ReminderItem'
 
 export default function ListReminders() {
   const router = useRouter()
@@ -27,11 +27,11 @@ export default function ListReminders() {
     return [...byList].sort((left, right) => left.datetimeISO.localeCompare(right.datetimeISO))
   }, [listId, reminderStore, reminderStore.reminders])
 
-  if (!list) { // TODO refatorar
-    return (
-      <Page alertRef={alertRef}>
+  return (
+    <Page alertRef={alertRef}>
+      {!list && (
         <View className="px-4 py-6 gap-4">
-          <TextWhite>{REMINDERS.invalid_list}</TextWhite>
+          <TextWhite className='text-center'>{REMINDERS.invalid_list}</TextWhite>
           <TouchableOpacity
             className="bg-lime-400 rounded-lg px-3 py-2 self-start"
             onPress={() => router.push('/lists')}
@@ -39,25 +39,23 @@ export default function ListReminders() {
             <TextWhite className="text-black">{REMINDERS.back_to_lists}</TextWhite>
           </TouchableOpacity>
         </View>
-      </Page>
-    )
-  }
+      )}
 
-  return (
-    <Page alertRef={alertRef}>
-      <TextWhite className="px-4 pt-4 pb-2 text-lg font-bold">{REMINDERS.list_title(list.name)}</TextWhite>
+      {list && (<>
+        <TextWhite className="py-2 text-lg font-bold text-center">{REMINDERS.list_title(list.name)}</TextWhite>
 
-      <FlatList
-        data={reminders}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
-        ListEmptyComponent={
-          <TextWhite className="text-slate-400 mt-2">{REMINDERS.empty_list}</TextWhite>
-        }
-        renderItem={({ item }) => <ReminderItem item={item} alertRef={alertRef} />}
-      />
+        <FlatList
+          data={reminders}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
+          ListEmptyComponent={
+            <TextWhite className="text-slate-400 mt-2 text-center">{REMINDERS.empty_list}</TextWhite>
+          }
+          renderItem={({ item }) => <ReminderItem item={item} alertRef={alertRef} />}
+        />
 
-      <Add action={() => router.push(`/reminders/${listId}/new`)} />
+        <Add action={() => router.push(`/reminders/${listId}/new`)} />
+      </>)}
     </Page>
   )
 }

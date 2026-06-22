@@ -45,7 +45,7 @@ export function useReminderPendingAlerts() {
           },
         },
         {
-          text: REMINDERS.remove_button,
+          text: REMINDERS.button.remove,
           action: () => {
             void ReminderOrchestrator.removeReminder(reminder.id)
           },
