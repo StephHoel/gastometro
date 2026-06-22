@@ -59,7 +59,10 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   }
 
   function handleRemoveReminder() {
-    AlertService.removeReminder(reminderId ?? '', redirect)
+    AlertService.removeReminder(async () => {
+      await ReminderOrchestrator.removeReminder(reminderId ?? '')
+      redirect()
+    })
   }
 
   return (

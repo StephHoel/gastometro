@@ -11,7 +11,6 @@ import { ShareService } from "./ShareService"
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
 import { REMINDERS } from '@/constants/text/reminders'
-import { ReminderOrchestrator } from './ReminderOrchestrator'
 
 let alertRef: CustomAlertRef | null = null
 
@@ -129,17 +128,14 @@ export const AlertService = {
     }
   },
 
-  removeReminder(reminderId: string, redirect: () => void) {
+  removeReminder(removeAction: () => void) {
     alertRef?.showAlert({
       title: REMINDERS.button.remove,
       message: REMINDERS.remove_message,
       buttons: [
         {
           text: REMINDERS.button.remove,
-          action: async () => {
-            await ReminderOrchestrator.removeReminder(reminderId)
-            redirect()
-          }
+          action: removeAction
         },
       ],
     })
