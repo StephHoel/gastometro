@@ -11,13 +11,12 @@ export const REMINDERS = {
   button: {
     create: 'Novo Lembrete',
     update: 'Editar Lembrete',
+    remove: 'Remover Lembrete',
   },
   empty_list: 'Nenhum lembrete para esta lista.',
   enable_button: 'Ativar',
   disable_button: 'Desativar',
   edit_button: 'Editar',
-  remove_button: 'Remover',
-  remove_title: 'Remover lembrete',
   remove_message: 'Deseja remover este lembrete?',
   permission_title: 'Permissão de notificação negada',
   permission_denied_message:

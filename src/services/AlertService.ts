@@ -10,6 +10,8 @@ import { ClipboardService } from "./ClipboardService"
 import { ShareService } from "./ShareService"
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
+import { REMINDERS } from '@/constants/text/reminders'
+import { ReminderOrchestrator } from './ReminderOrchestrator'
 
 let alertRef: CustomAlertRef | null = null
 
@@ -125,6 +127,22 @@ export const AlertService = {
       console.error(ERROR.clipboard_paste_failure, error)
       AlertService.ok(ERROR.alert_title, ERROR.invalid_list_format)
     }
+  },
+
+  removeReminder(reminderId: string, redirect: () => void) {
+    alertRef?.showAlert({
+      title: REMINDERS.button.remove,
+      message: REMINDERS.remove_message,
+      buttons: [
+        {
+          text: REMINDERS.button.remove,
+          action: async () => {
+            await ReminderOrchestrator.removeReminder(reminderId)
+            redirect()
+          }
+        },
+      ],
+    })
   },
 }
 
