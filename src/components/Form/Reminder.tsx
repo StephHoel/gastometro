@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { View, type TextInput } from 'react-native'
 import { REMINDERS } from '@/constants/text/reminders'
 import { makeDefaultDateTime, toDateInputValue } from '@/utils/functions/DateFunctions'
@@ -14,6 +15,7 @@ import { COLORS } from '@/constants/color'
 import { SIZE } from '@/constants/size'
 import { Row } from '@/components/Row'
 import { AlertService } from '@/services/AlertService'
+import { ReminderFormData } from '@/interfaces/FormData/ReminderFormData'
 
 export function FormReminder({ listId, reminderId, textButton, iconButton, includeDeleteButton }: FormReminderProps) {
   const reminderStore = useReminderStore()
@@ -24,30 +26,23 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   const inputRef3 = useRef<TextInput | null>(null)
 
   const defaultDateTime = makeDefaultDateTime()
-  const [title, setTitle] = useState('')
-  const [dateValue, setDateValue] = useState(defaultDateTime.date)
-  const [timeValue, setTimeValue] = useState(defaultDateTime.time)
-  const [editingId, setEditingId] = useState<string | null>(null)
-
   const reminder = reminderStore.getById(reminderId ?? '')
 
-  useEffect(() => {
-    if (!reminder) return
+  const { control, handleSubmit, reset } = useForm<ReminderFormData>({
+    defaultValues: {
+      title: reminder?.title ?? '',
+      dateValue: reminder ? toDateInputValue(reminder.datetimeISO).date : defaultDateTime.date,
+      timeValue: reminder ? toDateInputValue(reminder.datetimeISO).time : defaultDateTime.time,
+    },
+  })
 
-    const dateValue = toDateInputValue(reminder.datetimeISO)
-    setTitle(reminder.title)
-    setDateValue(dateValue.date)
-    setTimeValue(dateValue.time)
-    setEditingId(reminder.id)
-  }, [reminder])
-
-  async function handleSaveReminder() {
-    var saved = await ReminderOrchestrator.saveReminder({
-      title,
-      dateValue,
-      timeValue,
+  async function onSubmit(formData: ReminderFormData): Promise<void> {
+    const saved = await ReminderOrchestrator.saveReminder({
+      title: formData.title,
+      dateValue: formData.dateValue,
+      timeValue: formData.timeValue,
       listId,
-      editingId,
+      editingId: reminderId ?? null,
     })
 
     if (saved)
@@ -65,39 +60,68 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
     })
   }
 
+  useEffect(() => {
+    if (reminder) {
+      const dateValue = toDateInputValue(reminder.datetimeISO)
+      reset({
+        title: reminder.title,
+        dateValue: dateValue.date,
+        timeValue: dateValue.time,
+      })
+    }
+  }, [reminder, reset])
+
   return (
     <View className="my-5 gap-5">
-      <CustomInput
-        nameField={NameField.Title}
-        placeholder={REMINDERS.placeholder.title}
-        maxLength={60}
-        selfRef={inputRef1}
-        returnKeyType={"next"}
-        setItem={setTitle}
-        item={title}
-        onSubmit={() => inputRef2.current?.focus()}
+      <Controller
+        control={control}
+        name="title"
+        render={({ field: { value, onChange } }) => (
+          <CustomInput
+            nameField={NameField.Title}
+            placeholder={REMINDERS.placeholder.title}
+            maxLength={60}
+            selfRef={inputRef1}
+            returnKeyType={"next"}
+            setItem={onChange}
+            item={value}
+            onSubmit={() => inputRef2.current?.focus()}
+          />
+        )}
       />
 
-      <CustomInput
-        nameField={NameField.Date}
-        placeholder={REMINDERS.placeholder.date}
-        maxLength={10}
-        selfRef={inputRef2}
-        returnKeyType={"next"}
-        item={dateValue}
-        setItem={setDateValue}
-        onSubmit={() => inputRef3.current?.focus()}
+      <Controller
+        control={control}
+        name="dateValue"
+        render={({ field: { value, onChange } }) => (
+          <CustomInput
+            nameField={NameField.Date}
+            placeholder={REMINDERS.placeholder.date}
+            maxLength={10}
+            selfRef={inputRef2}
+            returnKeyType={"next"}
+            item={value}
+            setItem={onChange}
+            onSubmit={() => inputRef3.current?.focus()}
+          />
+        )}
       />
 
-      <CustomInput
-        nameField={NameField.Time}
-        placeholder={REMINDERS.placeholder.time}
-        maxLength={5}
-        selfRef={inputRef3}
-        returnKeyType={"next"}
-        item={timeValue}
-        setItem={setTimeValue}
-        onSubmit={handleSaveReminder}
+      <Controller
+        control={control}
+        name="timeValue"
+        render={({ field: { value, onChange } }) => (
+          <CustomInput
+            nameField={NameField.Time}
+            placeholder={REMINDERS.placeholder.time}
+            maxLength={5}
+            selfRef={inputRef3}
+            returnKeyType={"next"}
+            item={value}
+            setItem={onChange}
+            onSubmit={handleSubmit(onSubmit)}
+          />
+        )}
       />
 
       <Row>
@@ -110,7 +134,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
           </Button>
         )}
 
-        <Button onPress={handleSaveReminder} className='flex-1'>
+        <Button onPress={handleSubmit(onSubmit)} className='flex-1'>
           <Button.Icon>{iconButton}</Button.Icon>
           <Button.Text className='text-2xl'>{textButton}</Button.Text>
         </Button>

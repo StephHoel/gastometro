@@ -18,9 +18,9 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
-| **Implementadas** | 11 | Mini-spec 10 (notificações/lembretes) |
+| **Implementadas** | 12 | Mini-spec 16 (refatoração react-hook-form) |
 | **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 4 | Em prioridade de execução |
+| **Planejadas** | 3 | Em prioridade de execução |
 | **Total** | 16 | - |
 
 ## Status das mini-specs
@@ -38,11 +38,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Limitações web explicitamente documentadas](./done/15-limitacoes-web-explicitas.md)
 - [Múltiplas listas](./done/09-multiplas-listas.md)
 - [Notificações e lembretes](./done/10-notificacoes-lembretes.md)
+- [Refatoração de formulários para react-hook-form](./done/16-refatoracao-formularios-react-hook-form.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [Refatoração de formulários para react-hook-form](./planned/16-refatoracao-formularios-react-hook-form.md)
 
 ### Planejadas (ordem de prioridade)
 

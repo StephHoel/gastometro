@@ -1,6 +1,6 @@
 import React from 'react'
 import type { ReactNode } from 'react'
-import { fireEvent, render } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import Lists from '@/app/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { ERROR } from '@/constants/text/error'
@@ -138,22 +138,29 @@ describe('Lists screen', () => {
     mockStore.activeListId = 'list-1'
   })
 
-  it('cria lista quando nome é válido', () => {
+  it('cria lista quando nome é válido', async () => {
     const { getByPlaceholderText, getByText } = render(<Lists />)
 
     fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
-    fireEvent.press(getByText('AddIcon'))
+
+    await waitFor(() => {
+      fireEvent.press(getByText('AddIcon'))
+    })
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
   })
 
-  it('mostra erro ao tentar criar lista com nome vazio', () => {
+  it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = render(<Lists />)
 
-    fireEvent.press(getByText('AddIcon'))
+    await waitFor(() => {
+      fireEvent.press(getByText('AddIcon'))
+    })
 
-    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
+    await waitFor(() => {
+      expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
+    })
     expect(mockStore.addList).not.toHaveBeenCalled()
   })
 
@@ -166,14 +173,19 @@ describe('Lists screen', () => {
     expect(mockPush).toHaveBeenCalledWith('/')
   })
 
-  it('renomeia lista no modo edição', () => {
+  it('renomeia lista no modo edição', async () => {
     const { getAllByText, getByDisplayValue, getByText } = render(<Lists />)
 
     fireEvent.press(getAllByText('EditIcon')[0])
     fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
-    fireEvent.press(getByText(LISTS.rename_save))
 
-    expect(mockStore.renameList).toHaveBeenCalledWith('list-1', 'Lista Mercado')
+    await waitFor(() => {
+      fireEvent.press(getByText(LISTS.rename_save))
+    })
+
+    await waitFor(() => {
+      expect(mockStore.renameList).toHaveBeenCalledWith('list-1', 'Lista Mercado')
+    })
   })
 
   it('cancela edição da lista', () => {
