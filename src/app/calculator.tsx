@@ -5,7 +5,7 @@ import { TrashIcon, CalculatorIcon } from "@/components/Icons"
 import { AlertService } from "@/services/AlertService"
 import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
 import React, { useRef, useState } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Keyboard, ScrollView, TextInput, View } from "react-native"
 import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
@@ -54,38 +54,26 @@ export default function Calculator() {
         <Header />
 
         <View className="mt-5 gap-5">
-          <Controller
+          <CustomInput
             control={control}
             name="price"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                nameField={NameField.Price}
-                selfRef={inputRef1}
-                placeholder={CALC.placeholder.price}
-                setItem={onChange}
-                item={value}
-                keyboardType="number-pad"
-                onSubmit={() => inputRef2.current?.focus()}
-                returnKeyType={"next"}
-              />
-            )}
+            nameField={NameField.Price}
+            selfRef={inputRef1}
+            placeholder={CALC.placeholder.price}
+            keyboardType="number-pad"
+            onSubmit={() => inputRef2.current?.focus()}
+            returnKeyType={"next"}
           />
 
-          <Controller
+          <CustomInput
             control={control}
             name="quantity"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                nameField={NameField.Quantity}
-                selfRef={inputRef2}
-                placeholder={CALC.placeholder.quantity}
-                setItem={onChange}
-                item={value}
-                keyboardType="number-pad"
-                onSubmit={handleSubmit(onCalculate)}
-                returnKeyType={"done"}
-              />
-            )}
+            nameField={NameField.Quantity}
+            selfRef={inputRef2}
+            placeholder={CALC.placeholder.quantity}
+            keyboardType="number-pad"
+            onSubmit={handleSubmit(onCalculate)}
+            returnKeyType={"done"}
           />
 
           <View className="flex-1 flex-row justify-between">

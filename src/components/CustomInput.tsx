@@ -7,57 +7,64 @@ import { TextWhite } from './TextWhite'
 import { NormalizeDecimalInput } from '@/utils/functions/MathFunctions'
 import { NameField } from '@/enums/NameField'
 import { formatDateInput, formatTimeInput } from '@/utils/functions/DateFunctions'
+import { Controller, type FieldValues } from 'react-hook-form'
 
-export function CustomInput({
+export function CustomInput<TFieldValues extends FieldValues>({
+  control,
+  name,
   nameField,
   placeholder,
   maxLength,
   selfRef,
   returnKeyType,
-  setItem,
-  item,
   onSubmit,
   keyboardType = "default",
-}: CustomInputProps) {
-  function handleChangeText(text: string) {
+}: CustomInputProps<TFieldValues>) {
+  function normalizeText(text: string): string {
     if (nameField === NameField.Quantity || nameField === NameField.Price) {
       const maxDecimals = nameField === NameField.Price ? 2 : 3
-      const filtered = NormalizeDecimalInput(text, maxDecimals)
-
-      setItem(filtered)
-      return
+      return NormalizeDecimalInput(text, maxDecimals)
     }
 
-    if (nameField === NameField.Date) {
-      setItem(formatDateInput(text))
-      return
-    }
+    if (nameField === NameField.Date)
+      return formatDateInput(text)
 
-    if (nameField === NameField.Time) {
-      setItem(formatTimeInput(text))
-      return
-    }
+    if (nameField === NameField.Time)
+      return formatTimeInput(text)
 
-    setItem(text)
+    return text
   }
 
   return (
-    <Card className="mx-5 py-1 flex-row">
-      <TextWhite className="p-2">{nameField}:</TextWhite>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value, onChange } }) => {
+        const inputValue = typeof value === 'string' ? value : ''
 
-      <TextInput
-        className={"text-white flex-1 py-2 mr-3 outline-none"}
-        placeholderTextColor={colors.slate[400]}
-        placeholder={placeholder}
-        onChangeText={handleChangeText}
-        value={item}
-        maxLength={maxLength}
-        ref={selfRef}
-        keyboardType={keyboardType}
-        onFocus={() => { if (item == "0.00" || item == "0") setItem("") }}
-        onSubmitEditing={onSubmit}
-        returnKeyType={returnKeyType}
-      />
-    </Card>
+        return (
+          <Card className="mx-5 py-1 flex-row">
+            <TextWhite className="p-2">{nameField}:</TextWhite>
+
+            <TextInput
+              className={"text-white flex-1 py-2 mr-3 outline-none"}
+              placeholderTextColor={colors.slate[400]}
+              placeholder={placeholder}
+              onChangeText={(text) => onChange(normalizeText(text))}
+              value={inputValue}
+              maxLength={maxLength}
+              ref={selfRef}
+              keyboardType={keyboardType}
+              onFocus={() => {
+                if (typeof value === 'string' && (value === "0.00" || value === "0"))
+                  onChange("")
+              }}
+              onSubmitEditing={onSubmit}
+              returnKeyType={returnKeyType}
+            />
+          </Card>
+        )
+      }}
+    />
   )
 }

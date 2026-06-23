@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { View, type TextInput } from 'react-native'
 import { REMINDERS } from '@/constants/text/reminders'
 import { makeDefaultDateTime, toDateInputValue } from '@/utils/functions/DateFunctions'
@@ -73,55 +73,37 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
 
   return (
     <View className="my-5 gap-5">
-      <Controller
+      <CustomInput
         control={control}
         name="title"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Title}
-            placeholder={REMINDERS.placeholder.title}
-            maxLength={60}
-            selfRef={inputRef1}
-            returnKeyType={"next"}
-            setItem={onChange}
-            item={value}
-            onSubmit={() => inputRef2.current?.focus()}
-          />
-        )}
+        nameField={NameField.Title}
+        placeholder={REMINDERS.placeholder.title}
+        maxLength={60}
+        selfRef={inputRef1}
+        returnKeyType={"next"}
+        onSubmit={() => inputRef2.current?.focus()}
       />
 
-      <Controller
+      <CustomInput
         control={control}
         name="dateValue"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Date}
-            placeholder={REMINDERS.placeholder.date}
-            maxLength={10}
-            selfRef={inputRef2}
-            returnKeyType={"next"}
-            item={value}
-            setItem={onChange}
-            onSubmit={() => inputRef3.current?.focus()}
-          />
-        )}
+        nameField={NameField.Date}
+        placeholder={REMINDERS.placeholder.date}
+        maxLength={10}
+        selfRef={inputRef2}
+        returnKeyType={"next"}
+        onSubmit={() => inputRef3.current?.focus()}
       />
 
-      <Controller
+      <CustomInput
         control={control}
         name="timeValue"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Time}
-            placeholder={REMINDERS.placeholder.time}
-            maxLength={5}
-            selfRef={inputRef3}
-            returnKeyType={"next"}
-            item={value}
-            setItem={onChange}
-            onSubmit={handleSubmit(onSubmit)}
-          />
-        )}
+        nameField={NameField.Time}
+        placeholder={REMINDERS.placeholder.time}
+        maxLength={5}
+        selfRef={inputRef3}
+        returnKeyType={"next"}
+        onSubmit={handleSubmit(onSubmit)}
       />
 
       <Row>
