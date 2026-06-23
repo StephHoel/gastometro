@@ -1,6 +1,10 @@
 # Gastômetro - Spec Driven Guide para IA
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
+>
+> **Versão do App:** 1.7.1
+> **Data:** 2026-06-23
+> **Cobertura de Testes:** 92.58%
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -97,7 +101,7 @@ Não assumir Prisma, PostgreSQL ou Zod sem antes adicionar essas dependências e
 
 ## 6. Domínio Principal
 
-Produto da lista:
+### Produto da Lista
 
 ```ts
 interface ProductProps {
@@ -109,7 +113,7 @@ interface ProductProps {
 }
 ```
 
-Regras atuais:
+Regras de produto:
 
 - `item` é normalizado para title case por `ProductService`.
 - `quantity` e `price` são armazenados como string, mas convertidos para número nas operações matemáticas.
@@ -121,6 +125,32 @@ Regras atuais:
 - exclusão usa alerta de confirmação.
 - o app permanece offline-first por tempo indeterminado.
 - todos os comportamentos existentes devem ser preservados, exceto quando uma feature aprovada alterar explicitamente esse comportamento.
+
+### Lembrete Local
+
+```ts
+interface ReminderProps {
+  id: string
+  title: string
+  datetimeISO: string // ISO 8601 format para armazenamento e comparação
+  enabled: boolean
+  listId: string // referência à lista relacionada
+  itemId?: string // referência opcional ao item (para contexto)
+  notificationId?: string // ID retornado pelo serviço de notificação nativo
+  createdAt: string
+  updatedAt: string
+}
+```
+
+Regras de lembretes:
+
+- lembretes são específicos de uma lista e persistidos separadamente (chave `gastometro-reminders`).
+- lembretes podem ser agendados para notificação nativa via `NotificationService` quando a plataforma suporta.
+- ao tocar uma notificação, o app navega para a lista relacionada e volta para a home.
+- se não há permissão de notificação, o app exibe fallback in-app na tela de lembretes.
+- lembretes com `enabled: false` são filtrados em exibição normal, mas inclusos em relatório de desativados.
+- ao remover uma lista, todos os lembretes associados são removidos em cascata.
+- lembretes órfãos (com `listId` que não existe) são limpos no bootstrap do app.
 
 ## 7. Arquitetura e Fluxo de Dados
 
