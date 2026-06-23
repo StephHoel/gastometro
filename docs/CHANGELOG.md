@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.7.1 - 2026-06-23
+
+Ajustes visuais nos botões do formulário de lembretes para melhorar legibilidade e simplificação dos rótulos de ação.
+
+### Funcionalidade
+
+- Aumentado o tamanho do texto nos botões de ação do formulário de lembretes (`Salvar/Editar` e `Remover`) para melhorar a leitura.
+- Simplificados os rótulos dos botões de edição e remoção de lembretes de `Editar Lembrete`/`Remover Lembrete` para `Editar`/`Remover`.
+
+### Impacto
+
+- Mudança focada em UX/visual; sem alteração de formato de dados persistidos e sem impacto no compartilhamento via WhatsApp.
+
 ## 1.7.0 - 2026-06-21
 
 Implementação completa da mini-spec 10 com sistema de lembretes locais e notificações, incluindo CRUD por lista, central consolidada, fallback sem permissão e sincronização no bootstrap do app.
