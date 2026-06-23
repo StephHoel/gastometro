@@ -14,6 +14,15 @@ Use estes documentos antes de iniciar qualquer alteração de produto. Quando um
 
 Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais.
 
+## Resumo de Status
+
+| Status | Quantidade | Últimas Atualizações |
+| ------ | ---------- | -------------------- |
+| **Implementadas** | 12 | Mini-spec 16 (refatoração react-hook-form) |
+| **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
+| **Planejadas** | 3 | Em prioridade de execução |
+| **Total** | 16 | - |
+
 ## Status das mini-specs
 
 ### Implementadas (ordem de conclusão)
@@ -29,6 +38,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Limitações web explicitamente documentadas](./done/15-limitacoes-web-explicitas.md)
 - [Múltiplas listas](./done/09-multiplas-listas.md)
 - [Notificações e lembretes](./done/10-notificacoes-lembretes.md)
+- [Refatoração de formulários para react-hook-form](./done/16-refatoracao-formularios-react-hook-form.md)
 
 ### Ativas/Em andamento
 
@@ -39,4 +49,3 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 1. [Contas a pagar](./planned/11-contas-a-pagar.md)
 2. [Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
 3. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
-4. [Refatoração de formulários para react-hook-form](./planned/16-refatoracao-formularios-react-hook-form.md)

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
+import { useForm } from "react-hook-form"
 import { Keyboard, View, type TextInput } from "react-native"
 import uuid from "react-native-uuid"
 import { useCartStore } from "@/stores/CartStore"
@@ -15,12 +16,17 @@ import { HasNegativeSignal } from '@/utils/functions/MathFunctions'
 import { ERROR } from '@/constants/text/error'
 import { INPUTS } from '@/constants/text/inputs'
 import { NameField } from '@/enums/NameField'
+import { ProductFormData } from '@/interfaces/FormData/ProductFormData'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
-  const [item, setItem] = useState("")
-  const [qtt, setQtt] = useState("")
-  const [price, setPrice] = useState("")
-  const [collected, setCollected] = useState(false)
+  const { control, handleSubmit, reset } = useForm<ProductFormData>({
+    defaultValues: {
+      item: data?.item ?? "",
+      qtt: data?.quantity ?? "",
+      price: data?.price ?? "",
+      collected: data?.collected ?? false,
+    },
+  })
 
   const cartStore = useCartStore()
   const navigation = useRouter()
@@ -32,17 +38,17 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
 
   useInitAlert(alertRef)
 
-  function handleSubmit(): void {
+  function onSubmit(formData: ProductFormData): void {
     Keyboard.dismiss()
 
-    const trimmedItem = item.trim()
+    const trimmedItem = formData.item.trim()
 
     if (trimmedItem === "") {
       AlertService.ok(ERROR.alert_title, ERROR.required_fields)
       return
     }
 
-    if (HasNegativeSignal(qtt) || HasNegativeSignal(price)) {
+    if (HasNegativeSignal(formData.qtt) || HasNegativeSignal(formData.price)) {
       AlertService.ok(ERROR.alert_title, ERROR.negative_value)
       return
     }
@@ -55,68 +61,66 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     const product = ProductService.createOrUpdateProduct({
       id: data?.id || uuid.v4().toString(),
       item: trimmedItem,
-      qtt,
-      price,
-      collected,
+      qtt: formData.qtt,
+      price: formData.price,
+      collected: formData.collected,
     })
 
     if (data !== undefined) cartStore.edit(product)
     else cartStore.add(product)
 
-    setItem("")
-    setQtt("")
-    setPrice("")
-    setCollected(false)
-
+    reset()
     navigation.push("/")
   }
 
   useEffect(() => {
     if (data !== undefined) {
-      setItem(data.item)
-      setQtt(data.quantity)
-      setPrice(data.price)
-      setCollected(data.collected)
+      reset({
+        item: data.item,
+        qtt: data.quantity,
+        price: data.price,
+        collected: data.collected,
+      })
     }
-  }, [data])
+  }, [data, reset])
 
   return (
     <View className="my-5 gap-5">
       <CustomAlert ref={alertRef} />
 
       <CustomInput
+        control={control}
+        name="item"
         nameField={NameField.Item}
         placeholder={INPUTS.placeholder.item}
         selfRef={inputRef1}
         returnKeyType={"next"}
-        setItem={setItem}
-        item={item}
         onSubmit={() => inputRef2.current?.focus()}
       />
 
       <CustomInput
+        control={control}
+        name="qtt"
         nameField={NameField.Quantity}
         placeholder={INPUTS.placeholder.quantity}
         selfRef={inputRef2}
         returnKeyType={"next"}
         keyboardType={"number-pad"}
-        setItem={setQtt}
-        item={qtt}
         onSubmit={() => inputRef3.current?.focus()}
       />
 
       <CustomInput
+        control={control}
+        name="price"
         nameField={NameField.Price}
         placeholder={INPUTS.placeholder.price}
         selfRef={inputRef3}
         returnKeyType={"done"}
         keyboardType={"number-pad"}
-        setItem={setPrice}
-        item={price}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       />
 
-      <Button onPress={handleSubmit}>
+      <Button onPress={handleSubmit(onSubmit)}>
         <Button.Icon>{children}</Button.Icon>
         <Button.Text>{buttonTitle}</Button.Text>
       </Button>

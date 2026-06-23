@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.7.2 - 2026-06-23
+
+Refatoração interna dos formulários para `react-hook-form` e adaptação do `CustomInput` para encapsular o `Controller`, reduzindo boilerplate nos fluxos de criação e edição.
+
+### Refatoração
+
+- Formulários de item, lembrete, listas e calculadora migrados de `useState` manual para `useForm` com tipagem estrita por fluxo.
+- `CustomInput` passou a receber `control` e `name` diretamente, integrando o `Controller` internamente e eliminando a necessidade de envolver cada campo externamente.
+- Interfaces TypeScript criadas para cada conjunto de dados de formulário (`ProductFormData`, `ReminderFormData`, `CalculatorFormData`, `CreateListForm`, `EditListForm`).
+
+### Qualidade
+
+- Testes de componentes e formulários atualizados para lidar com o comportamento assíncrono do `react-hook-form` via `waitFor`.
+- 195 testes passando; cobertura global mantida acima de 80%.
+
+### Compatibilidade
+
+- Sem alteração no formato de dados persistidos ou no formato de compartilhamento/importação via WhatsApp.
+- Sem mudança funcional visível ao usuário.
+
 ## 1.7.1 - 2026-06-23
 
 Ajustes visuais nos botões do formulário de lembretes para melhorar legibilidade e simplificação dos rótulos de ação.

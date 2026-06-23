@@ -25,7 +25,7 @@ describe('Form branch coverage', () => {
     })
   })
 
-  it('não adiciona item quando nome está vazio', () => {
+  it('não adiciona item quando nome está vazio', async () => {
     const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
@@ -34,13 +34,16 @@ describe('Form branch coverage', () => {
 
     fireEvent.changeText(getByPlaceholderText('1'), '1')
     fireEvent.changeText(getByPlaceholderText('1,39'), '2')
-    fireEvent.press(getByText('Salvar'))
+
+    await waitFor(() => {
+      fireEvent.press(getByText('Salvar'))
+    })
 
     expect(useCartStore.getState().products).toHaveLength(1)
     expect(mockPush).not.toHaveBeenCalled()
   })
 
-  it('não adiciona item com valor negativo', () => {
+  it('não adiciona item com valor negativo', async () => {
     const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
@@ -50,13 +53,16 @@ describe('Form branch coverage', () => {
     fireEvent.changeText(getByPlaceholderText('Item'), 'Feijão')
     fireEvent.changeText(getByPlaceholderText('1'), '-1')
     fireEvent.changeText(getByPlaceholderText('1,39'), '2')
-    fireEvent.press(getByText('Salvar'))
+
+    await waitFor(() => {
+      fireEvent.press(getByText('Salvar'))
+    })
 
     expect(useCartStore.getState().products).toHaveLength(1)
     expect(mockPush).not.toHaveBeenCalled()
   })
 
-  it('não adiciona item duplicado', () => {
+  it('não adiciona item duplicado', async () => {
     const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
@@ -66,13 +72,16 @@ describe('Form branch coverage', () => {
     fireEvent.changeText(getByPlaceholderText('Item'), 'Arroz')
     fireEvent.changeText(getByPlaceholderText('1'), '2')
     fireEvent.changeText(getByPlaceholderText('1,39'), '3')
-    fireEvent.press(getByText('Salvar'))
+
+    await waitFor(() => {
+      fireEvent.press(getByText('Salvar'))
+    })
 
     expect(useCartStore.getState().products).toHaveLength(1)
     expect(mockPush).not.toHaveBeenCalled()
   })
 
-  it('adiciona item quando dados são válidos', () => {
+  it('adiciona item quando dados são válidos', async () => {
     const { getByPlaceholderText, getByText } = render(
       <Form buttonTitle="Adicionar">
         <Text>+</Text>
@@ -82,13 +91,17 @@ describe('Form branch coverage', () => {
     fireEvent.changeText(getByPlaceholderText('Item'), 'Feijao')
     fireEvent.changeText(getByPlaceholderText('1'), '2')
     fireEvent.changeText(getByPlaceholderText('1,39'), '8,90')
-    fireEvent.press(getByText('Adicionar'))
 
-    const products = useCartStore.getState().products
+    await waitFor(() => {
+      fireEvent.press(getByText('Adicionar'))
+    })
 
-    expect(products).toHaveLength(2)
-    expect(products.some((product) => product.item === 'Feijao')).toBe(true)
-    expect(mockPush).toHaveBeenCalledWith('/')
+    await waitFor(() => {
+      const products = useCartStore.getState().products
+      expect(products).toHaveLength(2)
+      expect(products.some((product) => product.item === 'Feijao')).toBe(true)
+      expect(mockPush).toHaveBeenCalledWith('/')
+    })
   })
 
   it('edita item quando data é fornecida', async () => {
@@ -113,12 +126,17 @@ describe('Form branch coverage', () => {
     fireEvent.changeText(getByPlaceholderText('Item'), 'Macarrao')
     fireEvent.changeText(getByPlaceholderText('1'), '3')
     fireEvent.changeText(getByPlaceholderText('1,39'), '7')
-    fireEvent.press(getByText('Editar'))
 
-    const updated = useCartStore.getState().products.find((product) => product.id === '1')
-    expect(updated?.item).toBe('Macarrao')
-    expect(updated?.quantity).toBe('3')
-    expect(updated?.price).toBe('7')
-    expect(mockPush).toHaveBeenCalledWith('/')
+    await waitFor(() => {
+      fireEvent.press(getByText('Editar'))
+    })
+
+    await waitFor(() => {
+      const updated = useCartStore.getState().products.find((product) => product.id === '1')
+      expect(updated?.item).toBe('Macarrao')
+      expect(updated?.quantity).toBe('3')
+      expect(updated?.price).toBe('7')
+      expect(mockPush).toHaveBeenCalledWith('/')
+    })
   })
 })

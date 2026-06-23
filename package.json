@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "homepage": "https://stephhoel.github.io/gastometro/",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
@@ -43,6 +43,7 @@
     "nativewind": "^4.2.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.80.0",
     "react-native": "0.85.3",
     "react-native-gesture-handler": "~2.31.1",
     "react-native-safe-area-context": "~5.7.0",
