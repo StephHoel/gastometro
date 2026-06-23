@@ -58,12 +58,12 @@ Esta pasta concentra a documentação principal do projeto.
 
 | Métrica                      | Valor                          |
 | ---------------------------- | ------------------------------ |
-| **Versão**                   | 1.7.1                          |
+| **Versão**                   | 1.7.2                          |
 | **Data**                     | 2026-06-23                     |
 | **Testes**                   | 195 passando                   |
 | **Cobertura**                | 92.58%                         |
-| **Mini-specs Implementadas** | 11                             |
+| **Mini-specs Implementadas** | 12                             |
 | **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
-| **Mini-specs Planejadas**    | 4                              |
+| **Mini-specs Planejadas**    | 3                              |
 
 Consulte `docs/specs/README.md` para o status detalhado de todas as mini-specs.

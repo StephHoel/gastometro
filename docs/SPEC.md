@@ -2,7 +2,7 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.7.1
+> **Versão do App:** 1.7.2
 > **Data:** 2026-06-23
 > **Cobertura de Testes:** 92.58%
 
@@ -53,7 +53,6 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- refatoração de formulários para react-hook-form;
 - contas a pagar;
 - service worker para funcionamento offline em web;
 - testes E2E para roteamento web SPA.
@@ -71,6 +70,7 @@ Use esta seção como verdade atual do repositório.
 - React Native `0.85`.
 - React `19`.
 - TypeScript com `strict: true`.
+- React Hook Form para gerenciamento de formulários.
 - Expo Router com rotas em `src/app`.
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
@@ -173,6 +173,7 @@ UI:
 
 - telas devem usar `Screen` ou `KeyboardScreen` para manter fundo e comportamento de teclado consistentes;
 - `Header` decide botões conforme a rota atual;
+- `CustomInput` concentra a integração padrão com `react-hook-form` para campos textuais reutilizáveis;
 - `CustomButton`, `CustomInput`, `Card`, `TextWhite`, `Divider`, `Row`, `TouchableIcons` e `ListSectionHeader` devem ser preferidos antes de criar novos componentes.
 
 ## 8. Diretrizes de Código
