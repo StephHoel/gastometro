@@ -34,7 +34,7 @@ Padronizar o gerenciamento de formulários usando `react-hook-form`, reduzindo b
 ### Instalação da dependência
 
 - `npm install react-hook-form` adicionado a `package.json`
-- Compatível com React 19 via Controller wrapper
+- Compatível com React 19
 
 ### Refatoração de Componentes
 
@@ -42,7 +42,7 @@ Padronizar o gerenciamento de formulários usando `react-hook-form`, reduzindo b
 
 - Removidas 4 chamadas `useState` (item, qtt, price, collected)
 - Adicionado `useForm<FormProductData>()` com `defaultValues` carregados da prop `data`
-- Cada input envolto com `Controller` para integrar com React Native TextInput
+- Inputs migrados para `CustomInput` com `control` + `name`, usando `Controller` internamente no componente reutilizável
 - `useEffect` agora utiliza `reset()` quando prop `data` muda
 - Validações preservadas: `ProductService.isDuplicateItem()`, `HasNegativeSignal`, valores vazios
 - Submissão preservada: `handleSubmit()` wrapper chamando `ProductService` e `useCartStore`
@@ -124,8 +124,8 @@ interface CalculatorFormData {
 
 ## Decisões Técnicas Registradas
 
-1. **Controller wrapper**: Usado padrão `Controller` do react-hook-form para integração com React Native TextInput, evitando adaptadores customizados.
-2. **Custom hooks não necessário**: CustomInput component funciona nativamente com `Controller.render()` via prop `onChange`.
+1. **Controller encapsulado no input**: `CustomInput` passou a integrar `Controller` internamente, reduzindo repetição de boilerplate nos formulários.
+2. **Custom hooks não necessário**: a composição `useForm` + `CustomInput` já atende o caso de uso sem abstrações extras.
 3. **Async state handling em testes**: React Hook Form em React Native requer `waitFor()` para que estado assíncrono seja atualizado antes de assertions.
 4. **Dois useForm em lists.tsx**: Necessário porque create e edit funcionam em paralelo na mesma tela (modos visuais diferentes).
 5. **Estado de UI separado**: `editingId` em useState é apropriado pois é UI local, não dado de formulário.

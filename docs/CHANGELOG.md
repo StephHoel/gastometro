@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.7.2 - 2026-06-23
+
+Implementação da mini-spec 16 com migração dos formulários para `react-hook-form`, simplificação da integração com inputs reutilizáveis e sincronização da documentação do projeto.
+
+### Funcionalidade
+
+- Migração dos fluxos de formulário de item, lembrete, listas e calculadora para `react-hook-form`.
+- Adaptação de `CustomInput` para integrar `Controller` internamente, removendo boilerplate repetido nos consumidores.
+- Preservadas as validações atuais de campos obrigatórios, valores negativos, duplicidade de item e formatações pt-BR de data, hora e números decimais.
+
+### Arquitetura e qualidade
+
+- Padronizado o gerenciamento de estado de formulário com `useForm` e tipagem estrita.
+- Atualizados testes de componentes e formulários para o comportamento assíncrono do `react-hook-form`.
+- Validações executadas na release: `npm run test`, `npm run check:ts` e `npm run check:expo`.
+
+### Documentação
+
+- Mini-spec 16 consolidada como concluída em `docs/specs/done/`.
+- `README.md`, `docs/README.md` e `docs/SPEC.md` sincronizados com a versão 1.7.2 e com a remoção da spec 16 da lista de funcionalidades planejadas.
+
+### Impacto
+
+- Sem alteração no formato de dados persistidos.
+- Sem alteração no formato de compartilhamento/importação via WhatsApp.
+- Sem mudança funcional visível além da manutenção e padronização interna dos formulários.
+
 ## 1.7.1 - 2026-06-23
 
 Ajustes visuais nos botões do formulário de lembretes para melhorar legibilidade e simplificação dos rótulos de ação.

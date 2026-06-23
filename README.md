@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.7.1-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.7.2-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-92.58%25-brightgreen)](docs/coverages/)
 
@@ -53,7 +53,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Refatoração de formulários para react-hook-form](docs/specs/planned/16-refatoracao-formularios-react-hook-form.md)
 - [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
 - [Service Worker para funcionamento offline em web](docs/specs/planned/13-service-worker-offline-web.md)
 - [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
@@ -63,6 +62,7 @@ Funcionalidades concluídas recentemente:
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
+- Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
