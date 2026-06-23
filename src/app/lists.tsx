@@ -23,6 +23,9 @@ import { LISTS } from '@/constants/text/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { Page } from '@/components/Page'
 import { SIZE } from '@/constants/size'
+import { useForm } from "react-hook-form"
+import { CreateListForm } from '@/interfaces/Form/CreateListForm'
+import { EditListForm } from '@/interfaces/Form/EditListForm'
 
 export default function Lists() {
   const cartStore = useCartStore()
@@ -31,18 +34,30 @@ export default function Lists() {
   const alertRef = useRef<CustomAlertRef>(null)
   useInitAlert(alertRef)
 
-  const [newListName, setNewListName] = useState("")
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editingName, setEditingName] = useState("")
+  const { handleSubmit: handleCreateSubmit, watch: watchCreate, reset: resetCreate, setValue: setCreateValue } = useForm<CreateListForm>({
+    defaultValues: {
+      newListName: "",
+    },
+  })
 
-  function handleCreateList() {
-    const trimmed = newListName.trim()
+  const { handleSubmit: handleEditSubmit, watch: watchEdit, reset: resetEdit, setValue: setEditValue } = useForm<EditListForm>({
+    defaultValues: {
+      editingName: "",
+    },
+  })
+
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const newListName = watchCreate("newListName")
+  const editingName = watchEdit("editingName")
+
+  function onCreateList(data: CreateListForm) {
+    const trimmed = data.newListName.trim()
     if (!trimmed) {
       AlertService.ok(ERROR.alert_title, ERROR.empty_list_name)
       return
     }
     cartStore.addList(trimmed)
-    setNewListName("")
+    resetCreate()
   }
 
   function handleSelectList(listId: string) {
@@ -52,23 +67,25 @@ export default function Lists() {
 
   function handleStartEdit(listId: string, currentName: string) {
     setEditingId(listId)
-    setEditingName(currentName)
+    setEditValue("editingName", currentName)
   }
 
-  function handleSaveEdit(listId: string) {
-    const trimmed = editingName.trim()
+  function onSaveEdit(data: EditListForm) {
+    const trimmed = data.editingName.trim()
     if (!trimmed) {
       AlertService.ok(ERROR.alert_title, ERROR.empty_list_name)
       return
     }
-    cartStore.renameList(listId, trimmed)
-    setEditingId(null)
-    setEditingName("")
+    if (editingId) {
+      cartStore.renameList(editingId, trimmed)
+      setEditingId(null)
+      resetEdit()
+    }
   }
 
   function handleCancelEdit() {
     setEditingId(null)
-    setEditingName("")
+    resetEdit()
   }
 
   function handleRemoveList(listId: string, listName: string) {
@@ -103,15 +120,15 @@ export default function Lists() {
           placeholder={INPUTS.placeholder.list_name}
           placeholderTextColor={COLORS.inactive}
           value={newListName}
-          onChangeText={setNewListName}
-          onSubmitEditing={handleCreateList}
+          onChangeText={(text) => setCreateValue("newListName", text)}
+          onSubmitEditing={handleCreateSubmit(onCreateList)}
           returnKeyType="done"
           maxLength={60}
         />
         <TouchableOpacity
           className="bg-lime-400 rounded-lg px-3 py-2 items-center justify-center"
           activeOpacity={0.7}
-          onPress={handleCreateList}
+          onPress={handleCreateSubmit(onCreateList)}
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
@@ -143,8 +160,8 @@ export default function Lists() {
                   <TextInput
                     className="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-base"
                     value={editingName}
-                    onChangeText={setEditingName}
-                    onSubmitEditing={() => handleSaveEdit(item.id)}
+                    onChangeText={(text) => setEditValue("editingName", text)}
+                    onSubmitEditing={() => handleEditSubmit(onSaveEdit)()}
                     returnKeyType="done"
                     autoFocus
                     maxLength={60}
@@ -170,7 +187,7 @@ export default function Lists() {
                   {isEditing ? (
                     <>
                       <TouchableOpacity
-                        onPress={() => handleSaveEdit(item.id)}
+                        onPress={handleEditSubmit(onSaveEdit)}
                         className="bg-lime-400 rounded px-2 py-1"
                         activeOpacity={0.7}
                       >
