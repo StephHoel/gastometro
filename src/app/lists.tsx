@@ -161,7 +161,7 @@ export default function Lists() {
                     className="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-base"
                     value={editingName}
                     onChangeText={(text) => setEditValue("editingName", text)}
-                    onSubmitEditing={() => handleEditSubmit(onSaveEdit)()}
+                    onSubmitEditing={handleEditSubmit(onSaveEdit)}
                     returnKeyType="done"
                     autoFocus
                     maxLength={60}
