@@ -18,7 +18,7 @@ import { CalculatorFormData } from '@/interfaces/FormData/CalculatorFormData'
 import { CALC } from '@/constants/text/calculator'
 
 export default function Calculator() {
-  const { control, handleSubmit, watch, reset } = useForm<CalculatorFormData>({
+  const { control, handleSubmit, reset } = useForm<CalculatorFormData>({
     defaultValues: {
       price: "",
       quantity: "",
