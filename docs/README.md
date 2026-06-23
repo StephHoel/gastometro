@@ -61,7 +61,7 @@ Esta pasta concentra a documentação principal do projeto.
 | **Versão**                   | 1.7.2                          |
 | **Data**                     | 2026-06-23                     |
 | **Testes**                   | 195 passando                   |
-| **Cobertura**                | 92.58%                         |
+| **Cobertura**                | 90.18%                         |
 | **Mini-specs Implementadas** | 12                             |
 | **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
 | **Mini-specs Planejadas**    | 3                              |
