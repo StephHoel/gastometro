@@ -21,8 +21,9 @@ Implementar um Service Worker que funcione com a build web do Gastômetro hosped
 ### Carregamento inicial (online ou offline)
 
 - O Service Worker é registrado ao iniciar a aplicação web.
-- Todos os assets da build são cacheados na primeira visita bem-sucedida.
-- Versão do cache é identificada pela versão do app em `package.json`.
+- A primeira visita online bem-sucedida é pré-condição para funcionamento offline completo posterior.
+- Todos os assets da build são cacheados na primeira visita online bem-sucedida.
+- Versão do cache é identificada pela versão do app, injetada por arquivo gerado durante o build web.
 
 ### Funcionamento offline
 
@@ -34,7 +35,8 @@ Implementar um Service Worker que funcione com a build web do Gastômetro hosped
 
 - O Service Worker verifica atualizações a cada carregamento da página (se online).
 - Após uma atualização de versão do app, o cache antigo é removido e um novo é criado.
-- O usuário não é interrompido durante a transição de versão.
+- Ativação da nova versão é imediata após instalação/ativação do novo Service Worker.
+- O usuário não é interrompido durante a transição de versão além de eventual recarregamento automático da página quando necessário.
 
 ### Compatibilidade com GitHub Pages
 
@@ -58,17 +60,21 @@ Implementar um Service Worker que funcione com a build web do Gastômetro hosped
 - Requisições POST/PUT/DELETE devem ser deixadas passar para rede (sem implementação de sincronização offline por enquanto).
 - Cache deve ser validado por versão, não apenas por tempo.
 - Recursos ausentes no cache devem tentar carregamento de rede e retornar erro 404 se offline e não cacheado.
+- Estratégia por tipo de recurso deve ser explícita:
+  - Navegação HTML/rotas SPA: network-first com fallback para shell offline cacheado.
+  - Assets estáticos versionados (JS/CSS/fontes/imagens): cache-first com fallback para rede.
+  - Requisições cross-origin não essenciais ao shell: não cachear por padrão.
 
 ## Critérios de aceite
 
 - [ ] Service Worker registrado com sucesso na inicialização web.
-- [ ] Assets principais (bundle JS, CSS, imagens) são cacheados após primeira visita online.
-- [ ] Página carrega completamente offline (sem erros de rede).
+- [ ] Assets principais (bundle JS, CSS, imagens) são cacheados após primeira visita online bem-sucedida.
+- [ ] Página carrega completamente offline após ao menos uma visita online bem-sucedida (sem erros de rede bloqueantes para o shell).
 - [ ] Lista de compras permanece acessível e editável offline.
 - [ ] Ao voltar online, app detecta atualizações e atualiza o cache se necessário.
 - [ ] Cache é limpado quando versão do app muda.
 - [ ] Funciona corretamente com rotas em subdiretório (`/gastometro`).
-- [ ] Compatível com Firefox, Chrome e Safari no navegador.
+- [ ] Compatível com Firefox, Chrome e Safari em versões que suportem os recursos web exigidos pelo app/site.
 
 ## Arquitetura proposta
 
@@ -87,16 +93,18 @@ src/
 #### 1. Service Worker (`public/sw.js`)
 
 - Definir nome do cache com versão: `cache-v${APP_VERSION}`.
+- Receber `APP_VERSION` de arquivo gerado no build (ex.: manifesto/versionamento web).
 - Listar todos os assets para pré-cache (arquivos estáticos conhecidos).
-- Implementar estratégia de cache: "cache first, fallback to network".
+- Implementar estratégia híbrida por tipo de recurso (network-first para navegação, cache-first para assets).
 - Limpar versões antigas do cache ao instalar nova versão.
+- Aplicar ativação imediata da nova versão (`skipWaiting` + `clients.claim`).
 - Servir página raiz (`/gastometro` ou `/gastometro/`) em caso de erro 404 (para SPA routing).
 
 #### 2. Service (`src/services/ServiceWorkerService.ts`)
 
 - Registrar o Service Worker ao montar a app.
 - Tratamento de erros silencioso (não quebrar se SW não suportado).
-- Detectar atualizações e opcionalmente notificar o usuário.
+- Detectar atualizações e acionar aplicação imediata da nova versão.
 
 #### 3. Integração com Expo
 
@@ -119,6 +127,14 @@ src/
 - Ao implementar, gerar ou atualizar testes unitários para `ServiceWorkerService` conforme cobertura existente.
 - Considerar criar docs/SW_OFFLINE.md após implementação para orientar usuários e desenvolvedores futuros.
 
+## Decisões refinadas (2026-06-23)
+
+- A primeira visita online bem-sucedida é obrigatória para habilitar modo offline completo.
+- Versionamento de cache será derivado de arquivo gerado no build.
+- Ativação de nova versão do Service Worker deve ser imediata.
+- Compatibilidade mínima de navegadores seguirá o mínimo necessário para os recursos exigidos pelo app/site.
+
 ## Registro de implementação
 
 - 2026-06-13: mini-spec criada em `planned/`.
+- 2026-06-23: decisões de implementação refinadas com critérios explícitos de pré-condição offline, versionamento e ativação imediata.
