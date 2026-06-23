@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Keyboard, View, type TextInput } from "react-native"
 import uuid from "react-native-uuid"
 import { useCartStore } from "@/stores/CartStore"
@@ -88,54 +88,36 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     <View className="my-5 gap-5">
       <CustomAlert ref={alertRef} />
 
-      <Controller
+      <CustomInput
         control={control}
         name="item"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Item}
-            placeholder={INPUTS.placeholder.item}
-            selfRef={inputRef1}
-            returnKeyType={"next"}
-            setItem={onChange}
-            item={value}
-            onSubmit={() => inputRef2.current?.focus()}
-          />
-        )}
+        nameField={NameField.Item}
+        placeholder={INPUTS.placeholder.item}
+        selfRef={inputRef1}
+        returnKeyType={"next"}
+        onSubmit={() => inputRef2.current?.focus()}
       />
 
-      <Controller
+      <CustomInput
         control={control}
         name="qtt"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Quantity}
-            placeholder={INPUTS.placeholder.quantity}
-            selfRef={inputRef2}
-            returnKeyType={"next"}
-            keyboardType={"number-pad"}
-            setItem={onChange}
-            item={value}
-            onSubmit={() => inputRef3.current?.focus()}
-          />
-        )}
+        nameField={NameField.Quantity}
+        placeholder={INPUTS.placeholder.quantity}
+        selfRef={inputRef2}
+        returnKeyType={"next"}
+        keyboardType={"number-pad"}
+        onSubmit={() => inputRef3.current?.focus()}
       />
 
-      <Controller
+      <CustomInput
         control={control}
         name="price"
-        render={({ field: { value, onChange } }) => (
-          <CustomInput
-            nameField={NameField.Price}
-            placeholder={INPUTS.placeholder.price}
-            selfRef={inputRef3}
-            returnKeyType={"done"}
-            keyboardType={"number-pad"}
-            setItem={onChange}
-            item={value}
-            onSubmit={handleSubmit(onSubmit)}
-          />
-        )}
+        nameField={NameField.Price}
+        placeholder={INPUTS.placeholder.price}
+        selfRef={inputRef3}
+        returnKeyType={"done"}
+        keyboardType={"number-pad"}
+        onSubmit={handleSubmit(onSubmit)}
       />
 
       <Button onPress={handleSubmit(onSubmit)}>
