@@ -10,8 +10,8 @@ export const REMINDERS = {
   },
   button: {
     create: 'Novo Lembrete',
-    update: 'Editar Lembrete',
-    remove: 'Remover Lembrete',
+    update: 'Editar',
+    remove: 'Remover',
   },
   empty_list: 'Nenhum lembrete para esta lista.',
   enable_button: 'Ativar',
