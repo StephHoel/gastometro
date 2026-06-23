@@ -6,7 +6,7 @@ Ajustes visuais nos botões do formulário de lembretes para melhorar legibilida
 
 ### Funcionalidade
 
-- Aumentado o tamanho do texto nos botões de ação do formulário de lembretes (`Salvar/Editar` e `Remover`) para melhorar a leitura.
+- Reduzindo o tamanho do texto nos botões de ação do formulário de lembretes (`Salvar/Editar` e `Remover`) para melhorar a leitura.
 - Simplificados os rótulos dos botões de edição e remoção de lembretes de `Editar Lembrete`/`Remover Lembrete` para `Editar`/`Remover`.
 
 ### Impacto
