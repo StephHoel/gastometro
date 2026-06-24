@@ -11,6 +11,13 @@ npm i || {
 }
 echo ""
 
+echo "${TAB1}🔍 Atualizando versão do Service Worker (public/sw-version.js)..."
+npm run sw:version || {
+	echo "${TAB2}❌ Falha ao atualizar public/sw-version.js via npm run sw:version."
+	exit 1
+}
+echo ""
+
 if [ -f "android/app/build.gradle" ]; then
 	sed -i.bak -E "s/versionName \"[0-9]+\.[0-9]+\.[0-9]+\"/versionName \"$new_version\"/" android/app/build.gradle
 	echo "$TAB2✔ versionName nativo atualizado em android/app/build.gradle"

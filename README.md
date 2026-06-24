@@ -54,7 +54,6 @@ Compatibilidade atual de plataforma:
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
-- [Service Worker para funcionamento offline em web](docs/specs/planned/13-service-worker-offline-web.md)
 - [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 
 Funcionalidades concluídas recentemente:
@@ -62,6 +61,7 @@ Funcionalidades concluídas recentemente:
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
+- Service Worker para funcionamento offline em web (mini-spec 13 em `docs/specs/done/`).
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
@@ -132,6 +132,7 @@ npm run web:serve
 
 - A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
 - O roteamento web é configurado via variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para funcionar corretamente no subdiretório do GitHub Pages.
+- A build web registra Service Worker em produção e gera cache versionado para funcionamento offline após o primeiro carregamento online bem-sucedido.
 - Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
 - APIs nativas sem suporte web possuem fallbacks:
   - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
@@ -150,7 +151,7 @@ npm run web:serve
 - Clipboard na web depende de `navigator.clipboard`, permissões do navegador e contexto compatível (`https` ou `localhost`).
 - Os dados da web ficam no storage local do navegador e podem ser perdidos ao limpar dados do site.
 - Não existe sincronização entre dados da web e do Android.
-- A versão web não possui PWA/service worker neste momento; o primeiro carregamento depende de internet.
+- O primeiro carregamento da versão web ainda depende de internet para preencher o cache offline.
 - O fallback de roteamento SPA no GitHub Pages depende de `404.html` + `sessionStorage`; com storage desabilitado, rotas profundas podem não ser restauradas.
 
 ## Qualidade e testes

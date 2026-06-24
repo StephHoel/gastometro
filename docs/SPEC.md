@@ -48,13 +48,13 @@ Público esperado:
 - Central de lembretes com filtros por status (ativos, desativados e vencidos).
 - Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento; ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
+- Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - contas a pagar;
-- service worker para funcionamento offline em web;
 - testes E2E para roteamento web SPA.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.

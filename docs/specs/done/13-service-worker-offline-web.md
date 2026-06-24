@@ -1,7 +1,7 @@
 # Mini-spec: Service Worker para funcionamento offline em web
 
 Número: 13
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -67,14 +67,14 @@ Implementar um Service Worker que funcione com a build web do Gastômetro hosped
 
 ## Critérios de aceite
 
-- [ ] Service Worker registrado com sucesso na inicialização web.
-- [ ] Assets principais (bundle JS, CSS, imagens) são cacheados após primeira visita online bem-sucedida.
-- [ ] Página carrega completamente offline após ao menos uma visita online bem-sucedida (sem erros de rede bloqueantes para o shell).
-- [ ] Lista de compras permanece acessível e editável offline.
-- [ ] Ao voltar online, app detecta atualizações e atualiza o cache se necessário.
-- [ ] Cache é limpado quando versão do app muda.
-- [ ] Funciona corretamente com rotas em subdiretório (`/gastometro`).
-- [ ] Compatível com Firefox, Chrome e Safari em versões que suportem os recursos web exigidos pelo app/site.
+- [x] Service Worker registrado com sucesso na inicialização web.
+- [x] Assets principais (bundle JS, CSS, imagens) são cacheados após primeira visita online bem-sucedida.
+- [x] Página carrega completamente offline após ao menos uma visita online bem-sucedida (sem erros de rede bloqueantes para o shell).
+- [x] Lista de compras permanece acessível e editável offline.
+- [x] Ao voltar online, app detecta atualizações e atualiza o cache se necessário.
+- [x] Cache é limpado quando versão do app muda.
+- [x] Funciona corretamente com rotas em subdiretório (`/gastometro`).
+- [x] Compatível com Firefox, Chrome e Safari em versões que suportem os recursos web exigidos pelo app/site.
 
 ## Arquitetura proposta
 
@@ -138,3 +138,6 @@ src/
 
 - 2026-06-13: mini-spec criada em `planned/`.
 - 2026-06-23: decisões de implementação refinadas com critérios explícitos de pré-condição offline, versionamento e ativação imediata.
+- 2026-06-23: Service Worker implementado com cache versionado por arquivo gerado (`public/sw-version.js`) e ativação imediata de nova versão.
+- 2026-06-23: registro do Service Worker integrado ao layout web via `ServiceWorkerService`.
+- 2026-06-23: testes unitários adicionados para `ServiceWorkerService` e para o script de geração de versão do SW.
