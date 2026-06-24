@@ -3,8 +3,8 @@ echo "$TAB1🔍 Atualizando docs/CHANGELOG.md..."
 
 # Respeita argumento vazio quando o segundo parâmetro é fornecido explicitamente.
 if [ "$CHANGELOG_ARG_PROVIDED" = "1" ]; then
-  changes=$(printf '%s' "$CHANGELOG_ARG" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-  if [ -z "$CHANGELOG_ARG" ]; then
+  changes=$(printf '%b' "$CHANGELOG_ARG" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  if [ -z "$changes" ]; then
     echo "${TAB2}Changelog vazio recebido via argumento."
   else
     echo "${TAB2}Changelog recebido via argumento."
@@ -33,7 +33,7 @@ if grep -q "^## $new_version" docs/CHANGELOG.md; then
     tmpfile=$(mktemp)
     awk -v version="$new_version" -v newchanges="$changes" '
       BEGIN { found = 0; inserted = 0 }
-      /^## '"$version"'/ { found = 1; print; next }
+      $0 ~ ("^## " version) { found = 1; print; next }
       found && !inserted && /^$/ {
         print ""
         print newchanges
