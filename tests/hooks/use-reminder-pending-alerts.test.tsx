@@ -158,4 +158,167 @@ describe('useReminderPendingAlerts', () => {
 
     jest.useRealTimers()
   })
+
+
+  it('pula lembrete inválido da fila e tenta o próximo', () => {
+    const reminders = [
+      makeReminder({ id: 'r-1', title: 'Leite' }),
+      makeReminder({ id: 'r-2', title: 'Arroz' }),
+    ]
+
+    const cartState = {
+      lists: [{ id: 'list-1', name: 'Mercado', products: [] }],
+    }
+    const reminderState = {
+      reminders,
+      getById: (id: string) => {
+        if (id === 'r-2') return null
+        return reminders.find((r) => r.id === id)
+      },
+    }
+
+    cartStoreMock.mockReturnValue(cartState)
+    cartStoreMock.getState.mockReturnValue(cartState)
+    reminderStoreMock.mockReturnValue({ reminders })
+    reminderStoreMock.getState.mockReturnValue(reminderState)
+
+    render(<HookHarness />)
+
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+    const params = alertShowMock.mock.calls[0][0] as { message: string }
+    expect(params.message).toContain('Leite')
+  })
+
+  it('limpa IDs obsoletos de shownRef quando reminders é atualizado', () => {
+    render(<HookHarness />)
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+
+    const emptyState = {
+      reminders: [],
+      getById: (_id: string) => null,
+    }
+    reminderStoreMock.mockReturnValue({ reminders: [] })
+    reminderStoreMock.getState.mockReturnValue(emptyState)
+
+    const { rerender } = render(<HookHarness />)
+    rerender(<HookHarness />)
+
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('agenda próxima verificação para lembrete futuro', () => {
+    jest.useFakeTimers()
+
+    const futureDate = new Date(Date.now() + 5000).toISOString()
+    const futureReminder = makeReminder({ id: 'r-future', datetimeISO: futureDate })
+
+    const cartState = {
+      lists: [{ id: 'list-1', name: 'Mercado', products: [] }],
+    }
+    const reminderState = {
+      reminders: [futureReminder],
+      getById: (id: string) => (id === 'r-future' ? futureReminder : null),
+    }
+
+    cartStoreMock.mockReturnValue(cartState)
+    cartStoreMock.getState.mockReturnValue(cartState)
+    reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
+    reminderStoreMock.getState.mockReturnValue(reminderState)
+
+    render(<HookHarness />)
+
+    expect(alertShowMock).not.toHaveBeenCalled()
+
+    act(() => {
+      jest.runAllTimers()
+    })
+
+    jest.useRealTimers()
+  })
+
+  it('cancela timeout de agendamento ao re-agendar via focus callback', () => {
+    jest.useFakeTimers()
+
+    const futureDate = new Date(Date.now() + 5000).toISOString()
+    const futureReminder = makeReminder({ id: 'r-future', datetimeISO: futureDate })
+
+    const cartState = { lists: [{ id: 'list-1', name: 'Mercado', products: [] }] }
+    const reminderState = {
+      reminders: [futureReminder],
+      getById: (id: string) => (id === 'r-future' ? futureReminder : null),
+    }
+
+    cartStoreMock.mockReturnValue(cartState)
+    cartStoreMock.getState.mockReturnValue(cartState)
+    reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
+    reminderStoreMock.getState.mockReturnValue(reminderState)
+
+    render(<HookHarness />)
+
+    act(() => {
+      focusCallback?.()
+    })
+
+    expect(alertShowMock).not.toHaveBeenCalled()
+
+    jest.useRealTimers()
+  })
+
+  it('cancela retryTimeout no focus callback quando há retry pendente', () => {
+    jest.useFakeTimers()
+
+    alertShowMock
+      .mockReturnValueOnce(false)
+      .mockReturnValue(true)
+
+    render(<HookHarness />)
+
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+
+    act(() => {
+      focusCallback?.()
+    })
+
+    jest.useRealTimers()
+  })
+
+  it('limpa timeouts ao desmontar o componente com lembrete futuro', () => {
+    jest.useFakeTimers()
+
+    const futureDate = new Date(Date.now() + 5000).toISOString()
+    const futureReminder = makeReminder({ id: 'r-future', datetimeISO: futureDate })
+
+    const cartState = { lists: [{ id: 'list-1', name: 'Mercado', products: [] }] }
+    const reminderState = {
+      reminders: [futureReminder],
+      getById: (id: string) => (id === 'r-future' ? futureReminder : null),
+    }
+
+    cartStoreMock.mockReturnValue(cartState)
+    cartStoreMock.getState.mockReturnValue(cartState)
+    reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
+    reminderStoreMock.getState.mockReturnValue(reminderState)
+
+    const { unmount } = render(<HookHarness />)
+
+    expect(() => unmount()).not.toThrow()
+
+    jest.useRealTimers()
+  })
+
+  it('limpa retryTimeout ao desmontar quando retry estava pendente', () => {
+    jest.useFakeTimers()
+
+    alertShowMock
+      .mockReturnValueOnce(false)
+      .mockReturnValue(true)
+
+    const { unmount } = render(<HookHarness />)
+
+    expect(alertShowMock).toHaveBeenCalledTimes(1)
+
+    expect(() => unmount()).not.toThrow()
+
+    jest.useRealTimers()
+  })
 })

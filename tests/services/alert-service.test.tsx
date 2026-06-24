@@ -245,4 +245,24 @@ describe('AlertService', () => {
     expect(consoleSpy).toHaveBeenCalledTimes(1)
     expect(okSpy).toHaveBeenCalledWith(ERROR.alert_title, ERROR.invalid_list_format)
   })
+
+  it('removeReminder deve exibir alerta com callback de remoção', () => {
+    const removeAction = jest.fn()
+
+    AlertService.removeReminder(removeAction)
+
+    expect(showAlert).toHaveBeenCalledTimes(1)
+
+    const payload = showAlert.mock.calls[0][0] as {
+      title: string
+      message: string
+      buttons: Array<{ text: string; action: () => void }>
+    }
+
+    expect(payload.buttons).toHaveLength(1)
+    expect(payload.buttons[0].text).toBeTruthy()
+
+    payload.buttons[0].action()
+    expect(removeAction).toHaveBeenCalledTimes(1)
+  })
 })
