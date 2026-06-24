@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.7.3 - 2026-06-24 (em preparação)
+
+Implementação da mini-spec 13 (Service Worker offline web), com cache versionado, fluxo de validação offline atualizado e ajustes de scripts para versionamento e testes locais.
+
+### Funcionalidade (Web)
+
+- Service Worker adicionado em `public/sw.js`, com estratégia híbrida de cache (`network-first` para navegação e `cache-first` para assets).
+- Registro do Service Worker integrado ao app em `src/services/ServiceWorkerService.ts` e inicialização web no layout.
+- Ativação imediata da nova versão de cache (`skipWaiting` + `clients.claim`) e limpeza de versões antigas.
+- Versão de cache derivada de arquivo gerado (`public/sw-version.js`) a partir da versão do app.
+
+### Scripts e versionamento
+
+- Novo script `npm run sw:version` para gerar/atualizar `public/sw-version.js`.
+- Build web passa a executar geração de versão do SW antes do export estático.
+- Fluxo `npm run new-version` passa a atualizar `sw-version` automaticamente e incluir `public/sw-version.js` no commit de release.
+- Adicionado `npm run web:test:offline` com launcher Node cross-platform para teste exploratório de SW em ambiente dev (`EXPO_PUBLIC_SW_DEV_ENABLED=1`).
+
+### Qualidade
+
+- Testes unitários adicionados para `ServiceWorkerService`.
+- Teste adicionado para o script `scripts/generate-sw-version.js`.
+- Ajuste de robustez no install do Service Worker para evitar falha global de cache quando algum asset não estiver disponível em ambiente dev.
+
+### Documentação
+
+- `README.md`, `docs/WEB_DEPLOY.md`, `docs/SPEC.md` e `docs/specs/README.md` sincronizados com o novo comportamento offline web.
+- Mini-spec 13 movida para `docs/specs/done/` com `Status: implementado` e registro de decisões finais.
+- Nova mini-spec planejada adicionada: `docs/specs/planned/17-comparacao-de-precos-entre-lugares.md`.
+
 ## 1.7.2 - 2026-06-23
 
 Refatoração interna dos formulários para `react-hook-form` e adaptação do `CustomInput` para encapsular o `Controller`, reduzindo boilerplate nos fluxos de criação e edição.
