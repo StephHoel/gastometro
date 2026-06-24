@@ -23,6 +23,7 @@
     "build:android": "eas build -p android --profile production",
     "build:local:eas": "eas build --platform android --local",
     "web": "expo start --web --dev-client --clear",
+    "web:test:offline": "node scripts/start-web-test-offline.js",
     "sw:version": "node scripts/generate-sw-version.js",
     "web:build": "npm run sw:version && expo export --platform web --clear",
     "web:serve": "npx http-server dist -p 3000 -c-1",

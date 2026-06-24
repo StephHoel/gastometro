@@ -4,6 +4,7 @@ import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
@@ -67,7 +68,10 @@ export default function Layout() {
   }, [pathname])
 
   useEffect(() => {
-    if (Platform.OS === 'web') return
+    if (Platform.OS === 'web') {
+      void ServiceWorkerService.register()
+      return
+    }
 
     setNotificationHandler({
       handleNotification: async () => ({

@@ -109,7 +109,20 @@ self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME)
     const shellUrls = getAppShellUrls()
-    await cache.addAll(shellUrls)
+
+    // Cache cada URL individualmente sem falhar o install inteiro
+    await Promise.allSettled(
+      shellUrls.map(async (url) => {
+        try {
+          const response = await fetch(url)
+          if (response.ok) {
+            await cache.put(url, response.clone())
+          }
+        } catch (_error) {
+          // URL indisponível; continua sem falhar o install
+        }
+      })
+    )
 
     await self.skipWaiting()
   })())
