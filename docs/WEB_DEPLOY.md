@@ -61,6 +61,14 @@ npm run web:build
 npm run web:serve
 ```
 
+### Teste offline no servidor de desenvolvimento (opcional)
+
+```bash
+npm run web:test:offline
+```
+
+Esse comando ativa a flag `EXPO_PUBLIC_SW_DEV_ENABLED=1`, permitindo registrar Service Worker em ambiente dev apenas para validação local de offline.
+
 **Testes recomendados:**
 
 - Tela principal (adicionar, editar, remover itens)
@@ -171,6 +179,7 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 ## Service Worker e Modo Offline
 
 - O Service Worker é registrado somente na versão web de produção.
+- Em desenvolvimento, o Service Worker permanece desativado por padrão e pode ser habilitado apenas para teste com `EXPO_PUBLIC_SW_DEV_ENABLED=1`.
 - A primeira visita online bem-sucedida é necessária para preencher o cache offline.
 - O cache é versionado por `public/sw-version.js` (gerado automaticamente com a versão do `package.json`).
 - A atualização de versão aplica ativação imediata (`skipWaiting` + `clients.claim`) e limpeza de caches antigos.

@@ -126,6 +126,9 @@ EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
 
 # Servir localmente para testar (requer http-server)
 npm run web:serve
+
+# Teste offline em modo dev (habilita SW apenas para teste)
+npm run web:test:offline
 ```
 
 **Notas sobre web:**
@@ -133,6 +136,7 @@ npm run web:serve
 - A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
 - O roteamento web é configurado via variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para funcionar corretamente no subdiretório do GitHub Pages.
 - A build web registra Service Worker em produção e gera cache versionado para funcionamento offline após o primeiro carregamento online bem-sucedido.
+- Para validar comportamento offline no servidor de desenvolvimento, use `npm run web:test:offline` (flag `EXPO_PUBLIC_SW_DEV_ENABLED=1`).
 - Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
 - APIs nativas sem suporte web possuem fallbacks:
   - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.

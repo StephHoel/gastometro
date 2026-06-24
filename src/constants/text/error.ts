@@ -45,6 +45,10 @@ export const ERROR = {
   clipboard_write_native_failure: 'Erro ao escrever no clipboard nativo:',
   clipboard_paste_failure: 'Falha ao colar lista do clipboard:',
 
+  // Service Worker (web)
+  service_worker_register_failure: 'Falha ao registrar Service Worker na web:',
+  service_worker_update_failure: 'Falha ao verificar atualização do Service Worker na web:',
+
   // Alerta
   alert_init_failure: 'Falha ao inicializar alerta customizado:',
 }
