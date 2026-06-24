@@ -3,8 +3,10 @@
 # Aceita argumentos opcionais para execução não-interativa:
 #   $1 — tipo de versão: 1=patch, 2=minor, 3=major
 #   $2 — texto do changelog (linha única ou multi-linha com \n literal)
-#   $3 — se deve realizar commit ou não
+#   $3 — se deve realizar commit: 'n' ou 'no' ou 'no-commit' para pular, caso contrário executa
 # Exemplo: npm run new-version -- 1 "Corrige bug na listagem" n
+# Exemplo: npm run new-version -- 1 "Corrige bug na listagem" no-commit
+# Exemplo: npm run new-version -- 1 "Corrige bug na listagem" no
 VERSION_TYPE_ARG="${1:-}"
 CHANGELOG_ARG="${2:-}"
 COMMIT_ARG="${3:-}"
