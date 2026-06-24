@@ -11,6 +11,12 @@ VERSION_TYPE_ARG="${1:-}"
 CHANGELOG_ARG="${2:-}"
 COMMIT_ARG="${3:-}"
 
+if [ $# -ge 2 ]; then
+	export CHANGELOG_ARG_PROVIDED="1"
+else
+	export CHANGELOG_ARG_PROVIDED="0"
+fi
+
 echo "🔍 Criando uma nova versão do aplicativo na branch atual..."
 
 . ./scripts/lib/00-utils.sh
