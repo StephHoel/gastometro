@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "homepage": "https://stephhoel.github.io/gastometro/",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
@@ -23,7 +23,9 @@
     "build:android": "eas build -p android --profile production",
     "build:local:eas": "eas build --platform android --local",
     "web": "expo start --web --dev-client --clear",
-    "web:build": "expo export --platform web --clear",
+    "web:test:offline": "node scripts/start-web-test-offline.js",
+    "sw:version": "node scripts/generate-sw-version.js",
+    "web:build": "npm run sw:version && expo export --platform web --clear",
     "web:serve": "npx http-server dist -p 3000 -c-1",
     "check:ts": "npx tsc --noEmit",
     "check:biome": "npx biome check .",

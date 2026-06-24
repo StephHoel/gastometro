@@ -213,6 +213,119 @@ describe('ReminderOrchestrator', () => {
     expect(cancelScheduled).toHaveBeenCalledWith('old-id')
     expect(scheduleReminder).toHaveBeenCalledTimes(1)
     expect(alertOk).not.toHaveBeenCalled()
+
     expect(useReminderStore.getState().getById('r1')?.notificationId).toBe('new-id')
   })
+
+})
+
+describe('ReminderOrchestrator - saveReminder edge cases', () => {
+  const ensurePermissionForScheduling = NotificationService.ensurePermissionForScheduling as jest.Mock
+  const cancelScheduled = NotificationService.cancelScheduled as jest.Mock
+  const scheduleReminder = NotificationService.scheduleReminder as jest.Mock
+  const getPermissionState = NotificationService.getPermissionState as jest.Mock
+  const alertOk = AlertService.ok as jest.Mock
+
+  function seedR(reminders: Array<Record<string, unknown>>) {
+    useReminderStore.setState({ reminders: reminders as never[] })
+  }
+
+  function makeR(id: string, overrides: Record<string, unknown> = {}) {
+    return {
+      id,
+      title: `Lembrete ${id}`,
+      datetimeISO: '2099-01-01T10:00:00.000Z',
+      enabled: false,
+      listId: 'list-1',
+      notificationId: undefined,
+      createdAt: '2099-01-01T09:00:00.000Z',
+      updatedAt: '2099-01-01T09:00:00.000Z',
+      ...overrides,
+    }
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    ensurePermissionForScheduling.mockReset()
+    cancelScheduled.mockReset()
+    scheduleReminder.mockReset()
+    alertOk.mockReset()
+    cancelScheduled.mockResolvedValue(undefined)
+    scheduleReminder.mockResolvedValue(undefined)
+    useReminderStore.setState({ reminders: [] })
+  })
+
+  it('retorna false quando listId é vazio', async () => {
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: '', title: 'T', dateValue: '2099-01-01', timeValue: '10:00', editingId: null }),
+    ).resolves.toBe(false)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+  })
+
+  it('retorna false quando datetime é inválido', async () => {
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: 'T', dateValue: '', timeValue: '', editingId: null }),
+    ).resolves.toBe(false)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+  })
+
+  it('edit retorna false quando validação falha (título vazio)', async () => {
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: '', dateValue: '2099-01-01', timeValue: '10:00', editingId: 'x' }),
+    ).resolves.toBe(false)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+  })
+
+  it('edit retorna false quando lembrete não encontrado', async () => {
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: 'T', dateValue: '2099-01-01', timeValue: '10:00', editingId: 'inexistente' }),
+    ).resolves.toBe(false)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+  })
+
+  it('edit retorna true com notificação limpa quando permissão negada', async () => {
+    seedR([makeR('r1', { enabled: true, notificationId: 'old' })])
+    ensurePermissionForScheduling.mockResolvedValueOnce(false)
+
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: 'T', dateValue: '2099-01-01', timeValue: '10:00', editingId: 'r1' }),
+    ).resolves.toBe(true)
+
+    expect(ensurePermissionForScheduling).toHaveBeenCalledTimes(1)
+    expect(useReminderStore.getState().getById('r1')?.notificationId).toBeUndefined()
+  })
+
+  it('edit para lembrete desativado reagenda sem checar permissão', async () => {
+    seedR([makeR('r1', { enabled: false })])
+
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: 'Novo titulo', dateValue: '2099-01-01', timeValue: '10:00', editingId: 'r1' }),
+    ).resolves.toBe(true)
+
+    expect(ensurePermissionForScheduling).not.toHaveBeenCalled()
+    expect(useReminderStore.getState().getById('r1')?.title).toBe('Novo titulo')
+  })
+
+  it('create retorna false quando validação falha', async () => {
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: '', dateValue: '2099-01-01', timeValue: '10:00', editingId: null }),
+    ).resolves.toBe(false)
+    expect(alertOk).toHaveBeenCalledTimes(1)
+  })
+
+  it('create agenda e retorna true quando permissão concedida', async () => {
+    ensurePermissionForScheduling.mockResolvedValueOnce(true)
+    getPermissionState.mockResolvedValueOnce('granted')
+    scheduleReminder.mockResolvedValueOnce('new-id')
+
+    await expect(
+      ReminderOrchestrator.saveReminder({ listId: 'list-1', title: 'Comprar pao', dateValue: '2099-01-01', timeValue: '10:00', editingId: null }),
+    ).resolves.toBe(true)
+
+    expect(ensurePermissionForScheduling).toHaveBeenCalledTimes(1)
+    expect(scheduleReminder).toHaveBeenCalledTimes(1)
+    expect(alertOk).not.toHaveBeenCalled()
+  })
+
+  void cancelScheduled
 })

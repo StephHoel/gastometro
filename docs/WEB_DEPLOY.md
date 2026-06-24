@@ -12,6 +12,8 @@ npm run web:build
 
 A build será gerada no diretório `dist/` e será totalmente estática, sem necessidade de backend.
 
+Durante esse processo, o script `npm run sw:version` gera automaticamente `public/sw-version.js` com base na versão atual de `package.json`, garantindo versionamento explícito do cache do Service Worker.
+
 ### Variáveis de Ambiente de Build
 
 O Expo Router necessita da variável `EXPO_PUBLIC_ROUTER_BASE` para configurar corretamente as rotas quando a aplicação é servida em um subdiretório do GitHub Pages.
@@ -21,6 +23,8 @@ Para GitHub Pages (subdiretório `/gastometro/`):
 ```bash
 EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
 ```
+
+Em Windows com Git Bash, pode ocorrer conversão automática de caminho para algo como `C:/Program Files/Git/gastometro`. Se isso acontecer, execute o build no PowerShell/CMD ou desative a conversão no shell antes do comando.
 
 Para testes locais (root path):
 
@@ -57,6 +61,20 @@ npm run web:build
 npm run web:serve
 ```
 
+### Teste offline no servidor de desenvolvimento (opcional)
+
+```bash
+npm run web:test:offline
+```
+
+Esse comando ativa a flag `EXPO_PUBLIC_SW_DEV_ENABLED=1`, permitindo registrar Service Worker em ambiente dev apenas para validação local de offline.
+
+Observações importantes:
+
+- O script é cross-platform (Windows/PowerShell/CMD/Git Bash e Unix) via `node scripts/start-web-test-offline.js`.
+- O servidor de desenvolvimento do Expo pode não expor todos os assets esperados pelo Service Worker (ex.: `sw.js`/`404.html`) e gerar aviso de update/cache.
+- Para validação final do comportamento offline, use sempre build estática (`npm run web:build` + `npm run web:serve`).
+
 **Testes recomendados:**
 
 - Tela principal (adicionar, editar, remover itens)
@@ -67,6 +85,7 @@ npm run web:serve
 - Importação de lista copiada
 - Fluxo de lembretes (lista por lista e central de lembretes)
 - Persistência de dados (recarregue a página)
+- Fluxo offline em navegador (carregar online uma vez, simular offline no DevTools e recarregar)
 
 ## Deploy Automático
 
@@ -82,10 +101,11 @@ Workflow: `.github/workflows/deploy-web.yml`
 4. Configura variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro`
 5. Gera build web com `expo export --platform web`
 6. Copia arquivo `404.html` para configurar SPA routing
-7. Injeta script de redirecionamento no `index.html`
-8. Cria arquivo `.nojekyll` para desabilitar Jekyll
-9. Faz upload dos artefatos para GitHub Pages
-10. Deployment automático no ambiente de GitHub Pages
+7. Copia arquivos do Service Worker (`sw.js` e `sw-version.js`) para o `dist/`
+8. Injeta script de redirecionamento no `index.html`
+9. Cria arquivo `.nojekyll` para desabilitar Jekyll
+10. Faz upload dos artefatos para GitHub Pages
+11. Deployment automático no ambiente de GitHub Pages
 
 ## SPA Routing no GitHub Pages
 
@@ -162,13 +182,25 @@ Os dados são persistidos localmente usando `localStorage` do navegador através
 
 **Nota:** Os dados web são independentes dos dados do Android. Não há sincronização entre plataformas.
 
+## Service Worker e Modo Offline
+
+- O Service Worker é registrado somente na versão web de produção.
+- Em desenvolvimento, o Service Worker permanece desativado por padrão e pode ser habilitado apenas para teste com `EXPO_PUBLIC_SW_DEV_ENABLED=1`.
+- Em ambiente dev, avisos de update/cache do Service Worker podem ocorrer por limitações do servidor de desenvolvimento e não necessariamente indicam problema na build de produção.
+- A primeira visita online bem-sucedida é necessária para preencher o cache offline.
+- O cache é versionado por `public/sw-version.js` (gerado automaticamente com a versão do `package.json`).
+- A atualização de versão aplica ativação imediata (`skipWaiting` + `clients.claim`) e limpeza de caches antigos.
+- O comportamento de cache usa estratégia híbrida:
+  - navegação/rotas SPA: `network-first` com fallback para shell cacheado;
+  - assets estáticos versionados: `cache-first` com fallback para rede.
+
 ## Limitações Conhecidas
 
 1. **APIs Nativas:** Recursos como notificações, sensores, câmera não funcionam em web.
    - Observação: a funcionalidade de lembretes permanece disponível na web com fallback in-app e persistência local, porém sem agendamento de notificação do sistema.
 2. **Geolocalização:** Não implementado em web.
 3. **Sincronização:** Web e Android mantêm dados separados.
-4. **Offline-first:** A versão web requer internet para atualizar componentes da Expo, mas pode funcionar offline após o carregamento inicial.
+4. **Offline-first:** A versão web requer primeira visita online para preencher cache e pode funcionar offline depois disso.
 5. **WhatsApp na web:** O compartilhamento abre `wa.me`/WhatsApp Web; não há deep link nativo equivalente ao Android.
 6. **Clipboard e segurança:** `navigator.clipboard` exige ambiente seguro (`https`/`localhost`) e permissões do navegador.
 7. **Persistência local web:** Limpeza de dados do navegador pode remover o estado persistido da aplicação.
@@ -205,7 +237,7 @@ Se `npm run web:build` falhar:
 
 ## Atualizações Futuras
 
-- [ ] PWA (Progressive Web App) com service worker
+- [ ] Melhorias avançadas de PWA (ex.: fallback offline customizado por rota e métricas de cache)
 - [ ] Sincronização entre web e Android via backend
 - [ ] Tema claro/escuro persistente na web
 - [ ] Analytics e tracking de uso

@@ -1,8 +1,8 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.7.2-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.7.3-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-90.18%25-brightgreen)](docs/coverages/)
+[![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -54,7 +54,6 @@ Compatibilidade atual de plataforma:
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
 - [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
-- [Service Worker para funcionamento offline em web](docs/specs/planned/13-service-worker-offline-web.md)
 - [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 
 Funcionalidades concluídas recentemente:
@@ -62,6 +61,7 @@ Funcionalidades concluídas recentemente:
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
+- Service Worker para funcionamento offline em web (mini-spec 13 em `docs/specs/done/`).
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
@@ -126,12 +126,18 @@ EXPO_PUBLIC_ROUTER_BASE=/gastometro npm run web:build
 
 # Servir localmente para testar (requer http-server)
 npm run web:serve
+
+# Teste offline em modo dev (habilita SW apenas para teste)
+npm run web:test:offline
 ```
 
 **Notas sobre web:**
 
 - A build web é gerada em `dist/` e é totalmente estática, sem necessidade de backend.
 - O roteamento web é configurado via variável de ambiente `EXPO_PUBLIC_ROUTER_BASE=/gastometro` para funcionar corretamente no subdiretório do GitHub Pages.
+- A build web registra Service Worker em produção e gera cache versionado para funcionamento offline após o primeiro carregamento online bem-sucedido.
+- Para validação final de offline, priorize `npm run web:build` + `npm run web:serve` (ambiente estático equivalente ao deploy).
+- `npm run web:test:offline` habilita tentativa de registro de Service Worker no servidor de desenvolvimento para depuração rápida, mas pode apresentar limitações de assets/escopo do próprio ambiente dev.
 - Não usar `public/index.html` customizado neste projeto, pois isso pode impedir a injeção dos scripts do Expo e causar tela em branco no `npm run web`.
 - APIs nativas sem suporte web possuem fallbacks:
   - **Clipboard:** usa a Clipboard API do navegador na web e fallback seguro em caso de erro.
@@ -150,7 +156,7 @@ npm run web:serve
 - Clipboard na web depende de `navigator.clipboard`, permissões do navegador e contexto compatível (`https` ou `localhost`).
 - Os dados da web ficam no storage local do navegador e podem ser perdidos ao limpar dados do site.
 - Não existe sincronização entre dados da web e do Android.
-- A versão web não possui PWA/service worker neste momento; o primeiro carregamento depende de internet.
+- O primeiro carregamento da versão web ainda depende de internet para preencher o cache offline.
 - O fallback de roteamento SPA no GitHub Pages depende de `404.html` + `sessionStorage`; com storage desabilitado, rotas profundas podem não ser restauradas.
 
 ## Qualidade e testes
@@ -242,9 +248,11 @@ Regras atuais:
 Fluxo de criação de versão:
 
 - Interativo: `npm run new-version`
-- Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>"`
+- Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`
 - Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual)
 - Exemplo: `npm run new-version -- 1 "Ajustes de documentação e scripts de release"`
+- Exemplo sem commit/push automático: `npm run new-version -- 1 "Ajustes de documentação e scripts de release" no-commit`
+- Quando o terceiro argumento for `n`, `no` ou `no-commit`, o script atualiza os arquivos de versão/changelog sem criar commit nem executar push.
 - Branch de release: criar uma branch nova para versionamento **apenas se** o fluxo for iniciado na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - Se o fluxo já estiver sendo executado em uma branch de trabalho/release, reutilizar a branch atual e não criar outra.
 

@@ -2,9 +2,9 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.7.2
-> **Data:** 2026-06-23
-> **Cobertura de Testes:** 90.18%
+> **Versão do App:** 1.7.3
+> **Data:** 2026-06-24
+> **Cobertura de Testes:** 90.08%
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -48,14 +48,15 @@ Público esperado:
 - Central de lembretes com filtros por status (ativos, desativados e vencidos).
 - Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento; ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
+- Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - contas a pagar;
-- service worker para funcionamento offline em web;
 - testes E2E para roteamento web SPA.
+- comparação de preços entre lugares.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
@@ -340,8 +341,9 @@ Regras de versionamento:
 Fluxo de criação de versão (script oficial):
 
 - interativo: `npm run new-version`;
-- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>"`;
+- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`;
 - tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
+- quando o terceiro argumento for `n`, `no` ou `no-commit`, o fluxo atualiza arquivos de versão/changelog sem criar commit/push automático.
 - branch de release: criar branch nova para versionamento **somente se** o fluxo iniciar na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - se já estiver em branch de trabalho/release, reaproveitar a branch atual e não criar outra.
 

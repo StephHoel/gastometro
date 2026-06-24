@@ -132,6 +132,26 @@ describe('Header and List branch coverage', () => {
     expect(queryByText('Add')).toBeNull()
   })
 
+  it('Header index: Notification com activeListId navega para reminders/[listId]', () => {
+    const { getByText } = render(<Header activeListId="list-1" />)
+
+    fireEvent.press(getByText('Notification'))
+
+    expect(mockPush).toHaveBeenCalledWith('/reminders/list-1')
+  })
+
+  it('Header reminders/[listId]/edit/[reminderId]: renderiza Back com rota de lista', () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'reminders/[listId]/edit/[reminderId]' })
+
+    const { getByText, queryByText } = render(<Header />)
+
+    expect(getByText('Back')).toBeTruthy()
+    expect(queryByText('Share')).toBeNull()
+
+    fireEvent.press(getByText('Back'))
+    expect(mockPush).toHaveBeenCalledWith('/reminders/')
+  })
+
   it('List: alterna collected, navega para edição e aciona remoção', () => {
     const cartStore: StateProps = {
       lists: [{ id: 'list-1', name: 'Test', products: mockProductsState }],

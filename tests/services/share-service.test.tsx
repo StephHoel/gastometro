@@ -95,6 +95,21 @@ describe('ShareService', () => {
     expect(openURLSpy.mock.calls[0][0]).toContain('https://wa.me/?text=')
   })
 
+  it('shareOnWhatsapp no web deve alertar quando link falhar', async () => {
+    Object.defineProperty(Platform, 'OS', { value: 'web', configurable: true, writable: true })
+    jest.spyOn(Linking, 'openURL').mockRejectedValue(new Error('link indisponível'))
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => undefined)
+
+    await ShareService.shareOnWhatsapp(makeState())
+
+    expect(consoleSpy).toHaveBeenCalledTimes(1)
+    expect(alertSpy).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+    )
+  })
+
   it('shareOnWhatsapp deve alertar quando deep link e fallback falharem', async () => {
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockRejectedValue(new Error('sem handler'))
     const alertSpy = jest.spyOn(Alert, 'alert')

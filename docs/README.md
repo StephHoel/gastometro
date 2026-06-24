@@ -54,15 +54,20 @@ Esta pasta concentra a documentação principal do projeto.
 3. Verifique se `package.json`, `app.config.js` e `build.gradle` foram atualizados.
 4. Confirme que testes passam: `npm run test` e cobertura está ≥80%.
 
+Observação:
+
+- O fluxo não-interativo aceita `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`.
+- Quando usado `n`, `no` ou `no-commit`, o script atualiza versão/changelog sem commit e sem push.
+
 ## Status Atual
 
 | Métrica                      | Valor                          |
 | ---------------------------- | ------------------------------ |
-| **Versão**                   | 1.7.2                          |
-| **Data**                     | 2026-06-23                     |
+| **Versão**                   | 1.7.3                          |
+| **Data**                     | 2026-06-24                     |
 | **Testes**                   | 195 passando                   |
-| **Cobertura**                | 90.18%                         |
-| **Mini-specs Implementadas** | 12                             |
+| **Cobertura**                | 90.08%                         |
+| **Mini-specs Implementadas** | 13                             |
 | **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
 | **Mini-specs Planejadas**    | 3                              |
 

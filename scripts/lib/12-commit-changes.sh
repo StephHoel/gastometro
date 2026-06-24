@@ -6,7 +6,7 @@ if [ ! -f "package-lock.json" ]; then
   exit 1
 fi
 
-git add package.json package-lock.json app.config.js docs/CHANGELOG.md
+git add package.json package-lock.json app.config.js docs/CHANGELOG.md public/sw-version.js docs/SPEC.md README.md
 
 if [ -f "android/app/build.gradle" ]; then
   git add android/app/build.gradle

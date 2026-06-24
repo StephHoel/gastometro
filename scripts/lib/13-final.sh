@@ -1,6 +1,6 @@
 # Finalizando commitando ou não
 
-if [ "$COMMIT_ARG" != 'n' ]; then
+if [ "$COMMIT_ARG" != 'n' ] && [ "$COMMIT_ARG" != 'no' ] && [ "$COMMIT_ARG" != 'no-commit' ]; then
   . ./scripts/lib/12-commit-changes.sh
 
   echo "✔ Versão atualizada para $new_version"
