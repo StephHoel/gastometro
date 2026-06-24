@@ -66,7 +66,7 @@ Observação:
 | **Versão**                   | 1.7.3                          |
 | **Data**                     | 2026-06-24                     |
 | **Testes**                   | 195 passando                   |
-| **Cobertura**                | 90.18%                         |
+| **Cobertura**                | 90.08%                         |
 | **Mini-specs Implementadas** | 13                             |
 | **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
 | **Mini-specs Planejadas**    | 3                              |
