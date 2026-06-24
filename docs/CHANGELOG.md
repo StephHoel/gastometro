@@ -17,16 +17,21 @@ Implementação da mini-spec 13 (Service Worker offline web), com cache versiona
 - Build web passa a executar geração de versão do SW antes do export estático.
 - Fluxo `npm run new-version` passa a atualizar `sw-version` automaticamente e incluir `public/sw-version.js` no commit de release.
 - Adicionado `npm run web:test:offline` com launcher Node cross-platform para teste exploratório de SW em ambiente dev (`EXPO_PUBLIC_SW_DEV_ENABLED=1`).
+- Fluxo não-interativo de versionamento atualizado para aceitar terceiro argumento opcional (`n`, `no` ou `no-commit`) para executar atualização de versão/changelog sem commit e sem push automático.
 
 ### Qualidade
 
 - Testes unitários adicionados para `ServiceWorkerService`.
 - Teste adicionado para o script `scripts/generate-sw-version.js`.
 - Ajuste de robustez no install do Service Worker para evitar falha global de cache quando algum asset não estiver disponível em ambiente dev.
+- `scripts/test-coverage-csv.sh` evoluído para preservar o código de saída do Jest, melhorar tratamento de erro e desacoplar a atualização de documentação de cobertura.
+- Novo script `scripts/update-coverage-docs.js` para atualizar automaticamente os indicadores de cobertura em `README.md`, `docs/README.md` e `docs/SPEC.md` com base no CSV gerado.
+- Novos snapshots de cobertura adicionados em `docs/coverages/` para o ciclo atual de validação da branch.
 
 ### Documentação
 
 - `README.md`, `docs/WEB_DEPLOY.md`, `docs/SPEC.md` e `docs/specs/README.md` sincronizados com o novo comportamento offline web.
+- `README.md`, `docs/README.md` e `docs/SPEC.md` atualizados com a sintaxe completa do modo não-interativo de `npm run new-version`, incluindo opção sem commit.
 - Mini-spec 13 movida para `docs/specs/done/` com `Status: implementado` e registro de decisões finais.
 - Nova mini-spec planejada adicionada: `docs/specs/planned/17-comparacao-de-precos-entre-lugares.md`.
 
