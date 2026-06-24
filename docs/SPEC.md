@@ -56,6 +56,7 @@ Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda p
 
 - contas a pagar;
 - testes E2E para roteamento web SPA.
+- comparação de preços entre lugares.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
