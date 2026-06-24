@@ -18,9 +18,9 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
-| **Implementadas** | 12 | Mini-spec 16 (refatoração react-hook-form) |
+| **Implementadas** | 13 | Mini-spec 13 (service worker offline web) |
 | **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 3 | Em prioridade de execução |
+| **Planejadas** | 2 | Em prioridade de execução |
 | **Total** | 16 | - |
 
 ## Status das mini-specs
@@ -39,6 +39,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Múltiplas listas](./done/09-multiplas-listas.md)
 - [Notificações e lembretes](./done/10-notificacoes-lembretes.md)
 - [Refatoração de formulários para react-hook-form](./done/16-refatoracao-formularios-react-hook-form.md)
+- [Service Worker para funcionamento offline em web](./done/13-service-worker-offline-web.md)
 
 ### Ativas/Em andamento
 
@@ -47,5 +48,4 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Planejadas (ordem de prioridade)
 
 1. [Contas a pagar](./planned/11-contas-a-pagar.md)
-2. [Service Worker para funcionamento offline em web](./planned/13-service-worker-offline-web.md)
-3. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
+2. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
