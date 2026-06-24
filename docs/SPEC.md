@@ -4,7 +4,7 @@
 >
 > **Versão do App:** 1.7.3
 > **Data:** 2026-06-24
-> **Cobertura de Testes:** 90.18%
+> **Cobertura de Testes:** 90.08%
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
