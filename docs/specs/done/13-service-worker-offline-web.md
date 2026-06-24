@@ -122,7 +122,8 @@ src/
 ## Observações para IA
 
 - O Service Worker é um padrão PWA e deve seguir boas práticas da comunidade.
-- Testar localmente com `npm run web` e validar funcionamento offline com DevTools.
+- Para validação final de offline, testar localmente com `npm run web:build` + `npm run web:serve` e validar no DevTools.
+- `npm run web:test:offline` pode ser usado como teste exploratório rápido em ambiente dev com a flag `EXPO_PUBLIC_SW_DEV_ENABLED=1`.
 - Certificar compatibilidade com o build web gerado por Expo e o prefixo `/gastometro` do GitHub Pages.
 - Ao implementar, gerar ou atualizar testes unitários para `ServiceWorkerService` conforme cobertura existente.
 - Considerar criar docs/SW_OFFLINE.md após implementação para orientar usuários e desenvolvedores futuros.
@@ -141,3 +142,4 @@ src/
 - 2026-06-23: Service Worker implementado com cache versionado por arquivo gerado (`public/sw-version.js`) e ativação imediata de nova versão.
 - 2026-06-23: registro do Service Worker integrado ao layout web via `ServiceWorkerService`.
 - 2026-06-23: testes unitários adicionados para `ServiceWorkerService` e para o script de geração de versão do SW.
+- 2026-06-24: documentação ajustada para diferenciar teste exploratório em dev (`web:test:offline`) da validação final em build estática (`web:build` + `web:serve`).
