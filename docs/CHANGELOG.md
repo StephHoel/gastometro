@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.7.3 - 2026-06-24 (em preparação)
+## 1.7.3 - 2026-06-24
 
 Implementação da mini-spec 13 (Service Worker offline web), com cache versionado, fluxo de validação offline atualizado e ajustes de scripts para versionamento e testes locais.
 
