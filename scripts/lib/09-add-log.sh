@@ -1,12 +1,14 @@
 # Adição ao CHANGELOG
 echo "$TAB1🔍 Atualizando docs/CHANGELOG.md..."
 
-# Remove espaços nas pontas para evitar entradas vazias como " "
-trimmed_changelog=$(printf '%s' "$CHANGELOG_ARG" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-
-if [ -n "$trimmed_changelog" ]; then
-  changes="$trimmed_changelog"
-  echo "${TAB2}Changelog recebido via argumento."
+# Respeita argumento vazio quando o segundo parâmetro é fornecido explicitamente.
+if [ "$CHANGELOG_ARG_PROVIDED" = "1" ]; then
+  changes=$(printf '%s' "$CHANGELOG_ARG" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  if [ -z "$CHANGELOG_ARG" ]; then
+    echo "${TAB2}Changelog vazio recebido via argumento."
+  else
+    echo "${TAB2}Changelog recebido via argumento."
+  fi
 else
   printf '%s\n' "${TAB2}Descreva as mudanças na nova versão (pressione Enter em uma linha vazia para finalizar):"
   changes=""
