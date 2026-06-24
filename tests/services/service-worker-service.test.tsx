@@ -39,9 +39,14 @@ function loadServiceWorkerService(options: {
     ? { postMessage: jest.fn<void, [unknown]>() }
     : null
 
-  const installing = {
-    state: 'installing' as const,
+  const installing: {
+    state: 'installing' | 'installed'
+    addEventListener: jest.Mock<void, ['statechange', () => void]>
+    postMessage: jest.Mock<void, [unknown]>
+  } = {
+    state: 'installing',
     addEventListener: jest.fn<void, ['statechange', () => void]>(),
+    postMessage: jest.fn<void, [unknown]>(),
   }
 
   const registration: ServiceWorkerRegistrationMock = {
@@ -250,5 +255,101 @@ describe('ServiceWorkerService', () => {
       scope: '/',
       scriptUrl: '/sw.js',
     })
+  })
+
+  it('registra quando isSecureContext é false mas hostname é localhost', async () => {
+    const { ServiceWorkerService, registerMock } = loadServiceWorkerService({
+      platform: 'web',
+      secureContext: false,
+    })
+
+    const result = await ServiceWorkerService.register()
+
+    expect(result).toBe(true)
+    expect(registerMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('dispara reload quando evento controllerchange ocorre', async () => {
+    const { ServiceWorkerService, serviceWorkerContainer, reloadMock } = loadServiceWorkerService({
+      platform: 'web',
+    })
+
+    await ServiceWorkerService.register()
+
+    const controllerchangeCall = (serviceWorkerContainer.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'controllerchange') as [string, () => void] | undefined
+
+    expect(controllerchangeCall).toBeDefined()
+    controllerchangeCall![1]()
+
+    expect(reloadMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('posta SKIP_WAITING quando updatefound dispara com worker em estado installed e controller ativo', async () => {
+    const { ServiceWorkerService, registration } = loadServiceWorkerService({
+      platform: 'web',
+      withController: true,
+    })
+
+    await ServiceWorkerService.register()
+
+    const updatefoundCall = (registration.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'updatefound') as [string, () => void] | undefined
+
+    expect(updatefoundCall).toBeDefined()
+    updatefoundCall![1]()
+
+    const statechangeCall = (registration.installing?.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'statechange') as [string, () => void] | undefined
+
+    expect(statechangeCall).toBeDefined()
+
+    if (registration.installing) {
+      (registration.installing as { state: string }).state = 'installed'
+    }
+    statechangeCall![1]()
+
+    expect((registration.installing as { postMessage: jest.Mock }).postMessage)
+      .toHaveBeenCalledWith({ type: 'SKIP_WAITING' })
+  })
+
+  it('não posta SKIP_WAITING quando statechange chega em installed mas sem controller', async () => {
+    const { ServiceWorkerService, registration } = loadServiceWorkerService({
+      platform: 'web',
+      withController: false,
+    })
+
+    await ServiceWorkerService.register()
+
+    const updatefoundCall = (registration.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'updatefound') as [string, () => void] | undefined
+
+    updatefoundCall?.[1]()
+
+    const statechangeCall = (registration.installing?.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'statechange') as [string, () => void] | undefined
+
+    if (registration.installing) {
+      (registration.installing as { state: string }).state = 'installed'
+    }
+    statechangeCall?.[1]()
+
+    expect((registration.installing as { postMessage: jest.Mock }).postMessage)
+      .not.toHaveBeenCalled()
+  })
+
+  it('updatefound com installing nulo não causa erro', async () => {
+    const { ServiceWorkerService, registration } = loadServiceWorkerService({
+      platform: 'web',
+    })
+
+    await ServiceWorkerService.register()
+
+    registration.installing = null
+
+    const updatefoundCall = (registration.addEventListener as jest.Mock).mock.calls
+      .find((call: unknown[]) => call[0] === 'updatefound') as [string, () => void] | undefined
+
+    expect(() => updatefoundCall?.[1]()).not.toThrow()
   })
 })

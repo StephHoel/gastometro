@@ -66,6 +66,19 @@ describe('useCartStore - Multiple Lists', () => {
     unsubscribe()
   })
 
+  it('não deve trocar lista quando ID não existe', () => {
+    const store = useCartStore.getState()
+    const initialActiveId = store.activeListId
+    const listener = jest.fn()
+    const unsubscribe = useCartStore.subscribe(listener)
+
+    store.setActiveList('id-que-nao-existe')
+
+    expect(useCartStore.getState().activeListId).toBe(initialActiveId)
+    expect(listener).not.toHaveBeenCalled()
+    unsubscribe()
+  })
+
   it('deve adicionar item à lista ativa', () => {
     const store = useCartStore.getState()
     store.addList('Segunda')
