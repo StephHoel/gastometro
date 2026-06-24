@@ -3,6 +3,7 @@ type ServiceWorkerRegistrationMock = {
   installing: {
     state: 'installing' | 'installed'
     addEventListener: jest.Mock<void, ['statechange', () => void]>
+    postMessage: jest.Mock<void, [unknown]>
   } | null
   addEventListener: jest.Mock<void, ['updatefound', () => void]>
   update: jest.Mock<Promise<void>, []>
@@ -309,8 +310,12 @@ describe('ServiceWorkerService', () => {
     }
     statechangeCall![1]()
 
-    expect((registration.installing as { postMessage: jest.Mock }).postMessage)
-      .toHaveBeenCalledWith({ type: 'SKIP_WAITING' })
+    expect(registration.installing).not.toBeNull()
+    if (!registration.installing) {
+      return
+    }
+
+    expect(registration.installing.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' })
   })
 
   it('não posta SKIP_WAITING quando statechange chega em installed mas sem controller', async () => {
@@ -334,8 +339,12 @@ describe('ServiceWorkerService', () => {
     }
     statechangeCall?.[1]()
 
-    expect((registration.installing as { postMessage: jest.Mock }).postMessage)
-      .not.toHaveBeenCalled()
+    expect(registration.installing).not.toBeNull()
+    if (!registration.installing) {
+      return
+    }
+
+    expect(registration.installing.postMessage).not.toHaveBeenCalled()
   })
 
   it('updatefound com installing nulo não causa erro', async () => {
