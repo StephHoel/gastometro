@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.7.2-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.7.3-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-90.18%25-brightgreen)](docs/coverages/)
 
