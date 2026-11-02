@@ -14,7 +14,7 @@ rm -rf node_modules android .gradle .expo .expo-shared
 echo ""
 
 echo "📦 Reinstalando dependências..."
-npm install --loglevel=error
+npm install --loglevel=error --legacy-peer-deps
 echo "✅ Dependências instaladas"
 echo ""
 
