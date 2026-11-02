@@ -58,3 +58,27 @@ datetime;user;host;action;branch;result;detail
 2026-06-14 16:05:27;Steph Hoel;HOEL;delete;fix/new-version-finalization-adjustments;deleted;gone via -D
 2026-06-14 16:05:28;Steph Hoel;HOEL;summary;-;ok;deleted=7 skipped=0 failed=0 dry_run=0 include_merged=0 mode=force default=main
 2026-06-14 16:05:34;Steph Hoel;HOEL;scan;-;ok;nenhuma candidata (include_merged=0)
+2026-06-24 18:43:54;Steph Hoel;HOEL;delete;chore/clear-branches-hardening;dry-run;candidata (gone)
+2026-06-24 18:43:54;Steph Hoel;HOEL;delete;docs/pr-template-copilot-instructions;dry-run;candidata (gone)
+2026-06-24 18:43:55;Steph Hoel;HOEL;delete;feat/09-multiplas-listas;dry-run;candidata (gone)
+2026-06-24 18:43:56;Steph Hoel;HOEL;delete;feat/spec-10-notificacoes-lembretes;dry-run;candidata (gone)
+2026-06-24 18:43:56;Steph Hoel;HOEL;delete;feat/spec13-service-worker-offline-web;dry-run;candidata (gone)
+2026-06-24 18:43:57;Steph Hoel;HOEL;delete;feat/spec16-refactor-formularios;dry-run;candidata (gone)
+2026-06-24 18:43:58;Steph Hoel;HOEL;delete;fix/edit-reminder-buttons;dry-run;candidata (gone)
+2026-06-24 18:43:59;Steph Hoel;HOEL;summary;-;ok;deleted=0 skipped=7 failed=0 dry_run=1 include_merged=0 mode=safe default=main
+2026-06-24 18:44:25;Steph Hoel;HOEL;delete;chore/clear-branches-hardening;failed;gone via -d
+2026-06-24 18:44:25;Steph Hoel;HOEL;delete;docs/pr-template-copilot-instructions;failed;gone via -d
+2026-06-24 18:44:26;Steph Hoel;HOEL;delete;feat/09-multiplas-listas;failed;gone via -d
+2026-06-24 18:44:27;Steph Hoel;HOEL;delete;feat/spec-10-notificacoes-lembretes;failed;gone via -d
+2026-06-24 18:44:27;Steph Hoel;HOEL;delete;feat/spec13-service-worker-offline-web;failed;gone via -d
+2026-06-24 18:44:28;Steph Hoel;HOEL;delete;feat/spec16-refactor-formularios;failed;gone via -d
+2026-06-24 18:44:29;Steph Hoel;HOEL;delete;fix/edit-reminder-buttons;failed;gone via -d
+2026-06-24 18:44:30;Steph Hoel;HOEL;summary;-;ok;deleted=0 skipped=0 failed=7 dry_run=0 include_merged=0 mode=safe default=main
+2026-06-24 18:44:58;Steph Hoel;HOEL;delete;chore/clear-branches-hardening;deleted;gone via -D
+2026-06-24 18:44:58;Steph Hoel;HOEL;delete;docs/pr-template-copilot-instructions;deleted;gone via -D
+2026-06-24 18:44:59;Steph Hoel;HOEL;delete;feat/09-multiplas-listas;deleted;gone via -D
+2026-06-24 18:45:00;Steph Hoel;HOEL;delete;feat/spec-10-notificacoes-lembretes;deleted;gone via -D
+2026-06-24 18:45:00;Steph Hoel;HOEL;delete;feat/spec13-service-worker-offline-web;deleted;gone via -D
+2026-06-24 18:45:01;Steph Hoel;HOEL;delete;feat/spec16-refactor-formularios;deleted;gone via -D
+2026-06-24 18:45:02;Steph Hoel;HOEL;delete;fix/edit-reminder-buttons;deleted;gone via -D
+2026-06-24 18:45:03;Steph Hoel;HOEL;summary;-;ok;deleted=7 skipped=0 failed=0 dry_run=0 include_merged=0 mode=force default=main
