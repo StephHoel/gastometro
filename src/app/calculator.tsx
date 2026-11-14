@@ -6,7 +6,7 @@ import { AlertService } from "@/services/AlertService"
 import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
 import React, { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Keyboard, ScrollView, TextInput, View } from "react-native"
+import { Keyboard, ScrollView, View, type TextInputInstance } from "react-native"
 import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
@@ -27,8 +27,8 @@ export default function Calculator() {
 
   const [answer, answerState] = useState<number | null>(null)
 
-  const inputRef1 = useRef<TextInput>(null)
-  const inputRef2 = useRef<TextInput>(null)
+  const inputRef1 = useRef<TextInputInstance | null>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
 
   function onCalculate(formData: CalculatorFormData): void {
     Keyboard.dismiss()
@@ -72,7 +72,7 @@ export default function Calculator() {
             selfRef={inputRef2}
             placeholder={CALC.placeholder.quantity}
             keyboardType="number-pad"
-            onSubmit={handleSubmit(onCalculate)}
+            onSubmit={() => handleSubmit(onCalculate)()}
             returnKeyType={"done"}
           />
 
@@ -82,7 +82,7 @@ export default function Calculator() {
               <Button.Text className="text-2xl">{CALC.button.clear}</Button.Text>
             </Button>
 
-            <Button onPress={handleSubmit(onCalculate)} className="flex-1 border text-xl ml-2">
+            <Button onPress={() => handleSubmit(onCalculate)()} className="flex-1 border text-xl ml-2">
               <Button.Icon><CalculatorIcon size={SIZE.iconCalculator} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">{CALC.button.submit}</Button.Text>
             </Button>

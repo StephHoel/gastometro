@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { Keyboard, View, type TextInput } from "react-native"
+import { Keyboard, View, type TextInputInstance } from "react-native"
 import uuid from "react-native-uuid"
 import { useCartStore } from "@/stores/CartStore"
 import { CustomButton as Button } from "@/components/Button"
@@ -31,9 +31,9 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const cartStore = useCartStore()
   const navigation = useRouter()
 
-  const inputRef1 = useRef<TextInput | null>(null)
-  const inputRef2 = useRef<TextInput | null>(null)
-  const inputRef3 = useRef<TextInput | null>(null)
+  const inputRef1 = useRef<TextInputInstance | null>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
+  const inputRef3 = useRef<TextInputInstance | null>(null)
   const alertRef = useRef<CustomAlertRef>(null)
 
   useInitAlert(alertRef)
@@ -117,10 +117,10 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         selfRef={inputRef3}
         returnKeyType={"done"}
         keyboardType={"number-pad"}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={() => handleSubmit(onSubmit)()}
       />
 
-      <Button onPress={handleSubmit(onSubmit)}>
+      <Button onPress={() => handleSubmit(onSubmit)()}>
         <Button.Icon>{children}</Button.Icon>
         <Button.Text>{buttonTitle}</Button.Text>
       </Button>

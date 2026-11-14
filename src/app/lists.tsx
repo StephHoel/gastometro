@@ -121,14 +121,14 @@ export default function Lists() {
           placeholderTextColor={COLORS.inactive}
           value={newListName}
           onChangeText={(text) => setCreateValue("newListName", text)}
-          onSubmitEditing={handleCreateSubmit(onCreateList)}
+          onSubmitEditing={() => handleCreateSubmit(onCreateList)()}
           returnKeyType="done"
           maxLength={60}
         />
         <TouchableOpacity
           className="bg-lime-400 rounded-lg px-3 py-2 items-center justify-center"
           activeOpacity={0.7}
-          onPress={handleCreateSubmit(onCreateList)}
+          onPress={() => handleCreateSubmit(onCreateList)()}
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
@@ -161,7 +161,7 @@ export default function Lists() {
                     className="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-base"
                     value={editingName}
                     onChangeText={(text) => setEditValue("editingName", text)}
-                    onSubmitEditing={handleEditSubmit(onSaveEdit)}
+                    onSubmitEditing={() => handleEditSubmit(onSaveEdit)()}
                     returnKeyType="done"
                     autoFocus
                     maxLength={60}
@@ -187,7 +187,7 @@ export default function Lists() {
                   {isEditing ? (
                     <>
                       <TouchableOpacity
-                        onPress={handleEditSubmit(onSaveEdit)}
+                        onPress={() => handleEditSubmit(onSaveEdit)()}
                         className="bg-lime-400 rounded px-2 py-1"
                         activeOpacity={0.7}
                       >
