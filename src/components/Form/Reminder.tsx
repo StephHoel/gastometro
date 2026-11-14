@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { View, type TextInput } from 'react-native'
+import { View, type TextInputInstance } from 'react-native'
 import { REMINDERS } from '@/constants/text/reminders'
 import { makeDefaultDateTime, toDateInputValue } from '@/utils/functions/DateFunctions'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
@@ -21,9 +21,9 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   const reminderStore = useReminderStore()
   const router = useRouter()
 
-  const inputRef1 = useRef<TextInput | null>(null)
-  const inputRef2 = useRef<TextInput | null>(null)
-  const inputRef3 = useRef<TextInput | null>(null)
+  const inputRef1 = useRef<TextInputInstance | null>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
+  const inputRef3 = useRef<TextInputInstance | null>(null)
 
   const defaultDateTime = makeDefaultDateTime()
   const reminder = reminderStore.getById(reminderId ?? '')
@@ -103,7 +103,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
         maxLength={5}
         selfRef={inputRef3}
         returnKeyType={"next"}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={() => handleSubmit(onSubmit)()}
       />
 
       <Row>
@@ -116,7 +116,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
           </Button>
         )}
 
-        <Button onPress={handleSubmit(onSubmit)} className='flex-1'>
+        <Button onPress={() => handleSubmit(onSubmit)()} className='flex-1'>
           <Button.Icon>{iconButton}</Button.Icon>
           <Button.Text className='text-2xl'>{textButton}</Button.Text>
         </Button>

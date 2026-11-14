@@ -14,9 +14,9 @@ import { INPUTS } from '@/constants/text/inputs'
 import { SIZE } from '@/constants/size'
 
 export default function Edit() {
-  const { id } = useLocalSearchParams()
+  const { id } = useLocalSearchParams<{ id: string }>()
   const cartStore = useCartStore()
-  const prod = cartStore.get(id.toString())
+  const prod = cartStore.get(id)
 
   return (
     <KeyboardScreen>
