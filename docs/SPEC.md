@@ -55,8 +55,13 @@ Público esperado:
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - contas a pagar;
-- testes E2E para roteamento web SPA.
-- comparação de preços entre lugares.
+- testes E2E para roteamento web SPA;
+- comparação de preços entre lugares;
+- sincronização eficiente de lembretes;
+- integridade e migração de dados locais;
+- backup e restauração local;
+- acessibilidade e usabilidade assistiva;
+- consistência e validação da documentação técnica.
 
 As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
 
