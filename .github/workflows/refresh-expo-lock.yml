@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - name: Install current dependencies
+        run: npm ci --legacy-peer-deps
       - name: Align packages with Expo SDK
         run: npx expo install --fix
       - name: Refresh npm lockfile
