@@ -75,7 +75,7 @@
     "react-native-css-interop": "0.2.7"
   },
   "engines": {
-    "node": ">=24 <25",
+    "node": ">25 <=26",
     "npm": ">=11 <12"
   },
   "expo": {
@@ -91,6 +91,7 @@
   },
   "private": true,
   "allowScripts": {
-    "msgpackr-extract@3.0.4": true
+    "msgpackr-extract@3.0.4": true,
+    "@parcel/watcher@2.6.0": true
   }
 }
