@@ -7,7 +7,7 @@ export interface CustomInputProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>
   name: FieldPath<TFieldValues>
   nameField: NameField
-  selfRef: RefObject<TextInput | null>
+  selfRef: RefObject<React.ElementRef<typeof TextInput> | null>
   placeholder: string
   maxLength?: number
   onSubmit: () => void

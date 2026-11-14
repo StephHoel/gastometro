@@ -27,7 +27,7 @@ export default function Calculator() {
 
   const [answer, answerState] = useState<number | null>(null)
 
-  const inputRef1 = useRef<TextInput>(null)
+  const inputRef1 = useRef<React.ElementRef<typeof TextInput> | null>(null)
   const inputRef2 = useRef<TextInput>(null)
 
   function onCalculate(formData: CalculatorFormData): void {
@@ -72,7 +72,7 @@ export default function Calculator() {
             selfRef={inputRef2}
             placeholder={CALC.placeholder.quantity}
             keyboardType="number-pad"
-            onSubmit={handleSubmit(onCalculate)}
+            onSubmit={() => handleSubmit(onCalculate)()}
             returnKeyType={"done"}
           />
 

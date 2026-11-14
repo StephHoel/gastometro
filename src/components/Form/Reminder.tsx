@@ -21,7 +21,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   const reminderStore = useReminderStore()
   const router = useRouter()
 
-  const inputRef1 = useRef<TextInput | null>(null)
+  const inputRef1 = useRef<React.ElementRef<typeof TextInput> | null>(null)
   const inputRef2 = useRef<TextInput | null>(null)
   const inputRef3 = useRef<TextInput | null>(null)
 
@@ -103,7 +103,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
         maxLength={5}
         selfRef={inputRef3}
         returnKeyType={"next"}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={() => handleSubmit(onSubmit)()}
       />
 
       <Row>

@@ -31,7 +31,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const cartStore = useCartStore()
   const navigation = useRouter()
 
-  const inputRef1 = useRef<TextInput | null>(null)
+  const inputRef1 = useRef<React.ElementRef<typeof TextInput> | null>(null)
   const inputRef2 = useRef<TextInput | null>(null)
   const inputRef3 = useRef<TextInput | null>(null)
   const alertRef = useRef<CustomAlertRef>(null)
@@ -117,7 +117,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         selfRef={inputRef3}
         returnKeyType={"done"}
         keyboardType={"number-pad"}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={() => handleSubmit(onSubmit)()}
       />
 
       <Button onPress={handleSubmit(onSubmit)}>
