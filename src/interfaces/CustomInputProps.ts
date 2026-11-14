@@ -1,5 +1,5 @@
 import { NameField } from '@/enums/NameField'
-import type { RefObject } from 'react'
+import type { ElementRef, RefObject } from 'react'
 import type { TextInput } from "react-native"
 import type { Control, FieldPath, FieldValues } from 'react-hook-form'
 
@@ -7,7 +7,7 @@ export interface CustomInputProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>
   name: FieldPath<TFieldValues>
   nameField: NameField
-  selfRef: RefObject<React.ElementRef<typeof TextInput> | null>
+  selfRef: RefObject<ElementRef<typeof TextInput> | null>
   placeholder: string
   maxLength?: number
   onSubmit: () => void
