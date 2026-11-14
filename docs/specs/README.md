@@ -20,8 +20,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 | ------ | ---------- | -------------------- |
 | **Implementadas** | 13 | Mini-spec 13 (service worker offline web) |
 | **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 3 | Em prioridade de execução |
-| **Total** | 17 | - |
+| **Planejadas** | 8 | Em prioridade de execução |
+| **Total** | 22 | - |
 
 ## Status das mini-specs
 
@@ -50,3 +50,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 1. [Contas a pagar](./planned/11-contas-a-pagar.md)
 2. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
 3. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
+4. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
+5. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+6. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+7. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+8. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
