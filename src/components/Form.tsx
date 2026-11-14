@@ -32,8 +32,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const navigation = useRouter()
 
   const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInput | null>(null)
-  const inputRef3 = useRef<TextInput | null>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
+  const inputRef3 = useRef<TextInputInstance | null>(null)
   const alertRef = useRef<CustomAlertRef>(null)
 
   useInitAlert(alertRef)

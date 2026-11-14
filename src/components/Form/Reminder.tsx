@@ -22,8 +22,8 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   const router = useRouter()
 
   const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInput | null>(null)
-  const inputRef3 = useRef<TextInput | null>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
+  const inputRef3 = useRef<TextInputInstance | null>(null)
 
   const defaultDateTime = makeDefaultDateTime()
   const reminder = reminderStore.getById(reminderId ?? '')

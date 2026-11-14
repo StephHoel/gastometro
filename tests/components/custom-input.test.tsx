@@ -45,7 +45,7 @@ function renderCustomInput({
         name="value"
         nameField={nameField}
         placeholder={placeholder}
-        selfRef={createRef<TextInput | null>()}
+        selfRef={createRef<TextInputInstance | null>()}
         returnKeyType={returnKeyType}
         onSubmit={jest.fn()}
         keyboardType={keyboardType}

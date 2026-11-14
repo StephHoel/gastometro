@@ -6,7 +6,7 @@ import { AlertService } from "@/services/AlertService"
 import { Divide, HasNegativeSignal, SetCurrency } from "@/utils/functions/MathFunctions"
 import React, { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Keyboard, ScrollView, TextInput, View, type TextInputInstance } from "react-native"
+import { Keyboard, ScrollView, View, type TextInputInstance } from "react-native"
 import { Card } from '@/components/Card'
 import { KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
@@ -28,7 +28,7 @@ export default function Calculator() {
   const [answer, answerState] = useState<number | null>(null)
 
   const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInput>(null)
+  const inputRef2 = useRef<TextInputInstance | null>(null)
 
   function onCalculate(formData: CalculatorFormData): void {
     Keyboard.dismiss()
