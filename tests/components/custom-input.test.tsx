@@ -1,6 +1,6 @@
 import React, { createRef, useEffect } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import type { TextInput } from 'react-native'
+import type { TextInputInstance } from 'react-native'
 import { CustomInput } from '@/components/CustomInput'
 import { NameField } from '@/enums/NameField'
 import { useForm } from 'react-hook-form'
