@@ -55,6 +55,12 @@ As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/s
 
 - [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
+- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
+- [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
+- [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
 
 Funcionalidades concluídas recentemente:
 
