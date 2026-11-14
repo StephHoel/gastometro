@@ -71,7 +71,8 @@
     "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3",
     "react-native-reanimated": "~4.7.1",
-    "react-native-worklets": "0.13.0"
+    "react-native-worklets": "0.13.0",
+    "react-native-css-interop": "0.2.7"
   },
   "engines": {
     "node": ">=24 <25",
