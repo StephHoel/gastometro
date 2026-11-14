@@ -22,10 +22,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Install current dependencies
-        run: npm ci --legacy-peer-deps
       - name: Configure npm peer dependency resolution
         run: npm config set legacy-peer-deps true
+      - name: Install current dependencies and synchronize lockfile
+        run: npm install
       - name: Align packages with Expo SDK
         run: npx expo install --fix
       - name: Refresh npm lockfile
