@@ -47,8 +47,8 @@ describe('FormReminder', () => {
     alertRemoveMock.mockImplementation((cb: () => void) => cb())
   })
 
-  it('renderiza os campos de título, data e hora', () => {
-    const { getByPlaceholderText } = render(
+  it('renderiza os campos de título, data e hora', async () => {
+    const { getByPlaceholderText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -61,8 +61,8 @@ describe('FormReminder', () => {
     expect(getByPlaceholderText(REMINDERS.placeholder.time)).toBeTruthy()
   })
 
-  it('renderiza botão de submit com o texto correto', () => {
-    const { getByText } = render(
+  it('renderiza botão de submit com o texto correto', async () => {
+    const { getByText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Novo Lembrete"
@@ -73,8 +73,8 @@ describe('FormReminder', () => {
     expect(getByText('Novo Lembrete')).toBeTruthy()
   })
 
-  it('não exibe botão de remover quando includeDeleteButton não é passado', () => {
-    const { queryByText } = render(
+  it('não exibe botão de remover quando includeDeleteButton não é passado', async () => {
+    const { queryByText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -85,8 +85,8 @@ describe('FormReminder', () => {
     expect(queryByText(REMINDERS.button.remove)).toBeNull()
   })
 
-  it('exibe botão de remover quando includeDeleteButton é true', () => {
-    const { getByText } = render(
+  it('exibe botão de remover quando includeDeleteButton é true', async () => {
+    const { getByText } = await render(
       <FormReminder
         listId="list-1"
         reminderId="rem-1"
@@ -102,7 +102,7 @@ describe('FormReminder', () => {
   it('chama saveReminder ao submeter o formulário', async () => {
     saveReminderMock.mockResolvedValueOnce(true)
 
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -110,12 +110,12 @@ describe('FormReminder', () => {
       />,
     )
 
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Comprar leite')
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.date), '2099-01-01')
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.time), '10:00')
+    await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Comprar leite')
+    await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.date), '2099-01-01')
+    await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.time), '10:00')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(saveReminderMock).toHaveBeenCalledTimes(1)
@@ -127,7 +127,7 @@ describe('FormReminder', () => {
   it('redireciona após salvar com sucesso', async () => {
     saveReminderMock.mockResolvedValueOnce(true)
 
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -135,10 +135,10 @@ describe('FormReminder', () => {
       />,
     )
 
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
+    await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(pushMock).toHaveBeenCalledWith('/reminders/list-1')
@@ -147,7 +147,7 @@ describe('FormReminder', () => {
   it('não redireciona quando saveReminder retorna false', async () => {
     saveReminderMock.mockResolvedValueOnce(false)
 
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -155,10 +155,10 @@ describe('FormReminder', () => {
       />,
     )
 
-    fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
+    await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(pushMock).not.toHaveBeenCalled()
@@ -167,7 +167,7 @@ describe('FormReminder', () => {
   it('botão de remover aciona AlertService.removeReminder', async () => {
     removeReminderMock.mockResolvedValueOnce(undefined)
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <FormReminder
         listId="list-1"
         reminderId="rem-1"
@@ -178,14 +178,14 @@ describe('FormReminder', () => {
     )
 
     await waitFor(() => {
-      fireEvent.press(getByText(REMINDERS.button.remove))
+      await fireEvent.press(getByText(REMINDERS.button.remove))
     })
 
     expect(alertRemoveMock).toHaveBeenCalledTimes(1)
     expect(removeReminderMock).toHaveBeenCalledWith('rem-1')
   })
 
-  it('preenche formulário com dados do lembrete existente via useEffect', () => {
+  it('preenche formulário com dados do lembrete existente via useEffect', async () => {
     useReminderStore.setState({
       reminders: [
         {
@@ -200,7 +200,7 @@ describe('FormReminder', () => {
       ],
     })
 
-    const { getByDisplayValue } = render(
+    const { getByDisplayValue } = await render(
       <FormReminder
         listId="list-1"
         reminderId="rem-1"

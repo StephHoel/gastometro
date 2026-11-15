@@ -60,31 +60,31 @@ describe('List and ListItem interactions', () => {
     jest.clearAllMocks()
   })
 
-  it('List deve renderizar seções e permitir toggle, edição e remoção', () => {
+  it('List deve renderizar seções e permitir toggle, edição e remoção', async () => {
     const store = makeStore()
-    const { getByText, getAllByTestId, getAllByText } = render(<List cartStore={store} />)
+    const { getByText, getAllByTestId, getAllByText } = await render(<List cartStore={store} />)
 
     expect(getByText('Não coletados')).toBeTruthy()
     expect(getByText('Coletados')).toBeTruthy()
 
-    fireEvent.press(getAllByText('unchecked')[0])
+    await fireEvent.press(getAllByText('unchecked')[0])
     expect(store.edit).toHaveBeenCalled()
 
-    fireEvent.press(getByText(/2x Arroz/))
+    await fireEvent.press(getByText(/2x Arroz/))
     expect(mockPush).toHaveBeenCalledWith('/list/edit/1')
 
-    fireEvent.press(getAllByTestId('delete-item')[0])
+    await fireEvent.press(getAllByTestId('delete-item')[0])
     expect(mockRemoveAlert).toHaveBeenCalled()
   })
 
-  it('ListItem deve renderizar Divider apenas quando não for último item e disparar callbacks', () => {
+  it('ListItem deve renderizar Divider apenas quando não for último item e disparar callbacks', async () => {
     const onDelete = jest.fn()
     const onToggle = jest.fn()
     const onEdit = jest.fn()
 
     const product = { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false }
 
-    const { getByTestId, getByText, queryByTestId, rerender } = render(
+    const { getByTestId, getByText, queryByTestId, rerender } = await render(
       <ListItem
         product={product}
         index={0}
@@ -97,15 +97,15 @@ describe('List and ListItem interactions', () => {
 
     expect(getByTestId('list-divider')).toBeTruthy()
 
-    fireEvent.press(getByTestId('delete-item'))
-    fireEvent.press(getByText('unchecked'))
-    fireEvent.press(getByText(/2x Arroz/))
+    await fireEvent.press(getByTestId('delete-item'))
+    await fireEvent.press(getByText('unchecked'))
+    await fireEvent.press(getByText(/2x Arroz/))
 
     expect(onDelete).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onEdit).toHaveBeenCalledTimes(1)
 
-    rerender(
+    await rerender(
       <ListItem
         product={{ ...product, collected: true }}
         index={1}
@@ -119,20 +119,20 @@ describe('List and ListItem interactions', () => {
     expect(queryByTestId('list-divider')).toBeNull()
   })
 
-  it('List deve ocultar cabeçalhos quando as listas estão vazias', () => {
+  it('List deve ocultar cabeçalhos quando as listas estão vazias', async () => {
     const store = makeStore()
     store.products = []
 
-    const { queryByText } = render(<List cartStore={store} />)
+    const { queryByText } = await render(<List cartStore={store} />)
 
     expect(queryByText('Não coletados')).toBeNull()
     expect(queryByText('Coletados')).toBeNull()
   })
 
-  it('ListItem deve renderizar texto riscado quando coletado', () => {
+  it('ListItem deve renderizar texto riscado quando coletado', async () => {
     const product = { id: '9', item: 'Leite', quantity: '1', price: '6', collected: true }
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <ListItem
         product={product}
         index={0}
@@ -146,10 +146,10 @@ describe('List and ListItem interactions', () => {
     expect(getByText(/1x Leite/)).toBeTruthy()
   })
 
-  it('ListItem deve renderizar texto normal quando não coletado', () => {
+  it('ListItem deve renderizar texto normal quando não coletado', async () => {
     const product = { id: '10', item: 'Ovos', quantity: '12', price: '15', collected: false }
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <ListItem
         product={product}
         index={0}

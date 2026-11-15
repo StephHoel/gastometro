@@ -26,17 +26,17 @@ describe('Form branch coverage', () => {
   })
 
   it('não adiciona item quando nome está vazio', async () => {
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
       </Form>,
     )
 
-    fireEvent.changeText(getByPlaceholderText('1'), '1')
-    fireEvent.changeText(getByPlaceholderText('1,39'), '2')
+    await fireEvent.changeText(getByPlaceholderText('1'), '1')
+    await fireEvent.changeText(getByPlaceholderText('1,39'), '2')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(useCartStore.getState().products).toHaveLength(1)
@@ -44,18 +44,18 @@ describe('Form branch coverage', () => {
   })
 
   it('não adiciona item com valor negativo', async () => {
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
       </Form>,
     )
 
-    fireEvent.changeText(getByPlaceholderText('Item'), 'Feijão')
-    fireEvent.changeText(getByPlaceholderText('1'), '-1')
-    fireEvent.changeText(getByPlaceholderText('1,39'), '2')
+    await fireEvent.changeText(getByPlaceholderText('Item'), 'Feijão')
+    await fireEvent.changeText(getByPlaceholderText('1'), '-1')
+    await fireEvent.changeText(getByPlaceholderText('1,39'), '2')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(useCartStore.getState().products).toHaveLength(1)
@@ -63,18 +63,18 @@ describe('Form branch coverage', () => {
   })
 
   it('não adiciona item duplicado', async () => {
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Salvar">
         <Text>+</Text>
       </Form>,
     )
 
-    fireEvent.changeText(getByPlaceholderText('Item'), 'Arroz')
-    fireEvent.changeText(getByPlaceholderText('1'), '2')
-    fireEvent.changeText(getByPlaceholderText('1,39'), '3')
+    await fireEvent.changeText(getByPlaceholderText('Item'), 'Arroz')
+    await fireEvent.changeText(getByPlaceholderText('1'), '2')
+    await fireEvent.changeText(getByPlaceholderText('1,39'), '3')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Salvar'))
+      await fireEvent.press(getByText('Salvar'))
     })
 
     expect(useCartStore.getState().products).toHaveLength(1)
@@ -82,18 +82,18 @@ describe('Form branch coverage', () => {
   })
 
   it('adiciona item quando dados são válidos', async () => {
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Adicionar">
         <Text>+</Text>
       </Form>,
     )
 
-    fireEvent.changeText(getByPlaceholderText('Item'), 'Feijao')
-    fireEvent.changeText(getByPlaceholderText('1'), '2')
-    fireEvent.changeText(getByPlaceholderText('1,39'), '8,90')
+    await fireEvent.changeText(getByPlaceholderText('Item'), 'Feijao')
+    await fireEvent.changeText(getByPlaceholderText('1'), '2')
+    await fireEvent.changeText(getByPlaceholderText('1,39'), '8,90')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Adicionar'))
+      await fireEvent.press(getByText('Adicionar'))
     })
 
     await waitFor(() => {
@@ -113,7 +113,7 @@ describe('Form branch coverage', () => {
       collected: false,
     }
 
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText } = await render(
       <Form data={data} buttonTitle="Editar">
         <Text>*</Text>
       </Form>,
@@ -123,12 +123,12 @@ describe('Form branch coverage', () => {
       expect(getByPlaceholderText('Item').props.value).toBe('Arroz')
     })
 
-    fireEvent.changeText(getByPlaceholderText('Item'), 'Macarrao')
-    fireEvent.changeText(getByPlaceholderText('1'), '3')
-    fireEvent.changeText(getByPlaceholderText('1,39'), '7')
+    await fireEvent.changeText(getByPlaceholderText('Item'), 'Macarrao')
+    await fireEvent.changeText(getByPlaceholderText('1'), '3')
+    await fireEvent.changeText(getByPlaceholderText('1,39'), '7')
 
     await waitFor(() => {
-      fireEvent.press(getByText('Editar'))
+      await fireEvent.press(getByText('Editar'))
     })
 
     await waitFor(() => {

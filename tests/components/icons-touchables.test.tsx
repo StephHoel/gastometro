@@ -31,8 +31,8 @@ import {
 import { Add, Back, Delete, Share } from '@/components/TouchableIcons'
 
 describe('Icons and TouchableIcons', () => {
-  it('deve renderizar os ícones base sem quebrar', () => {
-    expect(() => render(
+  it('deve renderizar os ícones base sem quebrar', async () => {
+    expect(() => await render(
       <>
         <AddIcon />
         <BackIcon />
@@ -48,8 +48,8 @@ describe('Icons and TouchableIcons', () => {
     )).not.toThrow()
   })
 
-  it('deve renderizar os botões de ícone sem quebrar', () => {
-    const { toJSON } = render(
+  it('deve renderizar os botões de ícone sem quebrar', async () => {
+    const { toJSON } = await render(
       <>
         <Add action={jest.fn()} />
         <Back action={jest.fn()} />

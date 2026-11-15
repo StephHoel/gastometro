@@ -27,7 +27,7 @@ describe('useInitAlert', () => {
     })
   })
 
-  it('deve inicializar AlertService quando ref.current existir', () => {
+  it('deve inicializar AlertService quando ref.current existir', async () => {
     const initSpy = jest.spyOn(AlertService, 'init').mockImplementation(() => undefined)
     const ref = createRef<CustomAlertRef | null>()
     ref.current = {
@@ -35,13 +35,13 @@ describe('useInitAlert', () => {
       hideAlert: jest.fn(),
     }
 
-    render(createElement(Harness, { refValue: ref }))
+    await render(createElement(Harness, { refValue: ref }))
 
     expect(initSpy).toHaveBeenCalledTimes(1)
     expect(initSpy).toHaveBeenCalledWith(ref.current)
   })
 
-  it('deve reinicializar AlertService ao focar a tela novamente', () => {
+  it('deve reinicializar AlertService ao focar a tela novamente', async () => {
     const initSpy = jest.spyOn(AlertService, 'init').mockImplementation(() => undefined)
     const ref = createRef<CustomAlertRef | null>()
     ref.current = {
@@ -49,7 +49,7 @@ describe('useInitAlert', () => {
       hideAlert: jest.fn(),
     }
 
-    render(createElement(Harness, { refValue: ref }))
+    await render(createElement(Harness, { refValue: ref }))
 
     expect(focusCallback).toBeDefined()
 
@@ -59,10 +59,10 @@ describe('useInitAlert', () => {
     expect(initSpy).toHaveBeenLastCalledWith(ref.current)
   })
 
-  it('não deve inicializar quando ref for nulo', () => {
+  it('não deve inicializar quando ref for nulo', async () => {
     const initSpy = jest.spyOn(AlertService, 'init').mockImplementation(() => undefined)
 
-    render(createElement(Harness, { refValue: null }))
+    await render(createElement(Harness, { refValue: null }))
 
     expect(initSpy).not.toHaveBeenCalled()
   })
