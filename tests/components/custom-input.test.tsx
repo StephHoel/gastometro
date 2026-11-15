@@ -75,14 +75,14 @@ describe('CustomInput', () => {
   })
 
   it('deve manter texto livre quando campo for Item', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Item,
       placeholder: 'Item',
       returnKeyType: 'next',
     })
 
     const input = getByPlaceholderText('Item')
-    fireEvent.changeText(input, 'Arroz integral')
+    await fireEvent.changeText(input, 'Arroz integral')
 
     expect(onValueChange).toHaveBeenLastCalledWith('Arroz integral')
   })
@@ -112,7 +112,7 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1')
-    fireEvent(input, 'focus')
+    await fireEvent(input, 'focus')
 
     expect(onValueChange).toHaveBeenCalledTimes(1)
     expect(onValueChange).toHaveBeenLastCalledWith('2')
