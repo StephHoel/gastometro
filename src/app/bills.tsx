@@ -1,31 +1,42 @@
+import { Card } from '@/components/Card'
+import { CustomButton as Button } from '@/components/Button'
+import { CheckboxIcon, EditIcon, TrashIcon } from '@/components/Icons'
 import { Page } from '@/components/Page'
+import { Row } from '@/components/Row'
 import { TextWhite } from '@/components/TextWhite'
 import { COLORS } from '@/constants/color'
+import { SIZE } from '@/constants/size'
+import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 import type { BillProps } from '@/interfaces/BillProps'
+import { AlertService } from '@/services/AlertService'
 import { formatBillAmount, isBillOverdue, validateBill } from '@/services/BillService'
 import { useBillStore } from '@/stores/BillStore'
 import { ParseToFloat, SetCurrency } from '@/utils/functions/MathFunctions'
-import React, { useState } from 'react'
-import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { CustomButton as Button } from "@/components/Button"
-import { Delete } from '@/components/TouchableIcons'
-import { SIZE } from '@/constants/size'
-import { CheckboxIcon } from '@/components/Icons'
-import { AlertService } from '@/services/AlertService'
+import React, { useRef, useState } from 'react'
+import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
+import { useInitAlert } from '@/hooks/useInitAlert'
 
 export default function Bills() {
+  const alertRef = useRef<CustomAlertRef>(null)
+  useInitAlert(alertRef)
+
   const bills = useBillStore((state) => state.bills)
   const addBill = useBillStore((state) => state.addBill)
   const updateBill = useBillStore((state) => state.updateBill)
   const setPaid = useBillStore((state) => state.setPaid)
   const removeBill = useBillStore((state) => state.removeBill)
+
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
   const [dueDate, setDueDate] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
 
-  const pendingTotal = bills.filter((bill) => !bill.paid).reduce((total, bill) => total + ParseToFloat(bill.amount), 0)
-  const paidTotal = bills.filter((bill) => bill.paid).reduce((total, bill) => total + ParseToFloat(bill.amount), 0)
+  const pendingTotal = bills
+    .filter((bill) => !bill.paid)
+    .reduce((total, bill) => total + ParseToFloat(bill.amount), 0)
+  const paidTotal = bills
+    .filter((bill) => bill.paid)
+    .reduce((total, bill) => total + ParseToFloat(bill.amount), 0)
 
   function resetForm() {
     setTitle('')
@@ -37,13 +48,19 @@ export default function Bills() {
   function saveBill() {
     const error = validateBill(title, amount, dueDate)
     if (error) {
-      Alert.alert('Conta inválida', error)
+      AlertService.ok('Conta inválida', error)
       return
     }
 
-    const payload = { title: title.trim(), amount: ParseToFloat(amount).toString(), dueDate: dueDate || undefined }
+    const payload = {
+      title: title.trim(),
+      amount: ParseToFloat(amount).toString(),
+      dueDate: dueDate || undefined,
+    }
+
     if (editingId) updateBill(editingId, payload)
     else addBill(payload)
+
     resetForm()
   }
 
@@ -55,120 +72,198 @@ export default function Bills() {
   }
 
   function confirmRemove(bill: BillProps) {
-    Alert.alert('Remover conta', `Deseja remover "${bill.title}"?`, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Remover', style: 'destructive', onPress: () => removeBill(bill.id) },
-    ])
+    alertRef.current?.showAlert({
+      title: 'Remover conta',
+      message: `Deseja remover "${bill.title}"?`,
+      buttons: [
+        {
+          text: 'Remover',
+          action: () => removeBill(bill.id),
+        },
+      ],
+    })
+  }
+
+  function renderInput(
+    label: string,
+    placeholder: string,
+    value: string,
+    onChangeText: (value: string) => void,
+    accessibilityLabel: string,
+    keyboardType: 'default' | 'decimal-pad' = 'default',
+    maxLength?: number,
+  ) {
+    return (
+      <View className="gap-1">
+        <TextWhite className="text-sm text-slate-300">{label}</TextWhite>
+        <Card className="px-3 py-1">
+          <TextInput
+            className="py-2 text-base text-white outline-none"
+            placeholder={placeholder}
+            placeholderTextColor={COLORS.inactive}
+            value={value}
+            onChangeText={onChangeText}
+            accessibilityLabel={accessibilityLabel}
+            keyboardType={keyboardType}
+            maxLength={maxLength}
+          />
+        </Card>
+      </View>
+    )
   }
 
   return (
-    <Page>
-      <ScrollView className="flex-1" keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 32 }}>
-        <View className="flex-row justify-around px-3 py-4">
-          <View className="items-center">
-            <TextWhite className="text-slate-400 text-sm">Pendente</TextWhite>
-            <TextWhite className="text-lime-400 font-bold">{SetCurrency(pendingTotal)}</TextWhite>
-          </View>
-          <View className="items-center">
-            <TextWhite className="text-slate-400 text-sm">Pago</TextWhite>
-            <TextWhite className="text-white font-bold">{SetCurrency(paidTotal)}</TextWhite>
-          </View>
+    <Page alertRef={alertRef}>
+      <ScrollView
+        className="flex-1"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
+        <View className="px-4 pt-4">
+          <Row className="gap-3">
+            <Card className="flex-1 p-3">
+              <TextWhite className="text-xs text-slate-400">Total pendente</TextWhite>
+              <TextWhite className="mt-1 text-lg font-bold text-lime-400">
+                {SetCurrency(pendingTotal)}
+              </TextWhite>
+            </Card>
+            <Card className="flex-1 p-3">
+              <TextWhite className="text-xs text-slate-400">Total pago</TextWhite>
+              <TextWhite className="mt-1 text-lg font-bold">
+                {SetCurrency(paidTotal)}
+              </TextWhite>
+            </Card>
+          </Row>
         </View>
 
-        <View className="mx-4 mb-5 rounded-xl bg-slate-800 p-4 gap-3">
-          <TextWhite className="font-bold">{editingId ? 'Editar conta' : 'Nova conta'}</TextWhite>
-          <TextInput
-            className="rounded-lg bg-slate-700 px-3 py-3 text-white"
-            placeholder="Nome da conta"
-            placeholderTextColor={COLORS.inactive}
-            value={title}
-            onChangeText={setTitle}
-            maxLength={100}
-            accessibilityLabel="Nome da conta"
-          />
-          <TextInput
-            className="rounded-lg bg-slate-700 px-3 py-3 text-white"
-            placeholder="Valor (ex.: 125,90)"
-            placeholderTextColor={COLORS.inactive}
-            value={amount}
-            onChangeText={(value) => setAmount(value.replace(/[^0-9.,-]/g, ''))}
-            keyboardType="decimal-pad"
-            accessibilityLabel="Valor da conta"
-          />
-          <TextInput
-            className="rounded-lg bg-slate-700 px-3 py-3 text-white"
-            placeholder="Vencimento (AAAA-MM-DD, opcional)"
-            placeholderTextColor={COLORS.inactive}
-            value={dueDate}
-            onChangeText={(value) => setDueDate(value.replace(/[^0-9-]/g, '').slice(0, 10))}
-            maxLength={10}
-            accessibilityLabel="Data de vencimento"
-          />
+        <View className="px-4 pt-5 gap-3">
+          <TextWhite className="text-lg font-bold">
+            {editingId ? 'Editar conta' : 'Nova conta'}
+          </TextWhite>
 
-          <View className="flex-1 flex-row justify-between">
-            {editingId && (
-              <Button
-                type="Normal"
-                className="border flex-1 rounded-md text-sm"
-                onPress={resetForm}
-              >
-                <Button.Text className="text-2xl">
-                  Cancelar edição
-                </Button.Text>
-              </Button>
-            )}
+          {renderInput(
+            'Nome da conta',
+            'Ex.: Energia elétrica',
+            title,
+            setTitle,
+            'Nome da conta',
+            'default',
+            100,
+          )}
+          {renderInput(
+            'Valor',
+            'Ex.: 125,90',
+            amount,
+            (value) => setAmount(value.replace(/[^0-9.,-]/g, '')),
+            'Valor da conta',
+            'decimal-pad',
+          )}
+          {renderInput(
+            'Vencimento (opcional)',
+            'AAAA-MM-DD',
+            dueDate,
+            (value) => setDueDate(value.replace(/[^0-9-]/g, '').slice(0, 10)),
+            'Data de vencimento',
+            'default',
+            10,
+          )}
 
-            <Button
-              onPress={saveBill}
-              className="border flex-1 rounded-md text-sm"
-            >
-              <Button.Text className="text-2xl">
-                {editingId ? 'Salvar alterações' : 'Adicionar conta'}
-              </Button.Text>
+          <Button onPress={saveBill} className="mx-0 mt-1">
+            <Button.Text className="text-xl">
+              {editingId ? 'Salvar alterações' : 'Adicionar conta'}
+            </Button.Text>
+          </Button>
+
+          {editingId && (
+            <Button type="Normal" onPress={resetForm} className="mx-0">
+              <Button.Text className="text-xl">Cancelar edição</Button.Text>
             </Button>
-          </View>
+          )}
         </View>
 
-        <TextWhite className="px-4 pb-2 text-lg font-bold">Suas contas</TextWhite>
-        {bills.length === 0 ? (
-          <TextWhite className="px-4 py-6 text-center text-slate-400">Nenhuma conta cadastrada.</TextWhite>
-        ) : bills.map((bill) => {
-          const overdue = isBillOverdue(bill)
-          return (
-            <View key={bill.id} className={`mx-4 mb-3 rounded-xl border p-3 ${overdue ? 'border-red-500 bg-red-950/30' : 'border-slate-700 bg-slate-800'}`}>
-              <View className="flex-row items-start justify-between gap-2 items-center">
-                <Delete action={() => AlertService.remove(() => confirmRemove(bill))} size={SIZE.iconActions} />
+        <View className="px-4 pt-6">
+          <Row className="items-center justify-between mb-3">
+            <TextWhite className="text-lg font-bold">Suas contas</TextWhite>
+            <TextWhite className="text-xs text-slate-400">
+              {bills.length} {bills.length === 1 ? 'conta' : 'contas'}
+            </TextWhite>
+          </Row>
 
-                <TouchableOpacity
-                  onPress={() => setPaid(bill.id, !bill.paid)}
-                  className="flex-row items-center space-x-2"
-                  accessibilityState={{ checked: bill.paid }}
+          {bills.length === 0 ? (
+            <Card className="p-5 items-center">
+              <TextWhite className="text-center text-slate-400">
+                Nenhuma conta cadastrada.
+              </TextWhite>
+            </Card>
+          ) : (
+            bills.map((bill) => {
+              const overdue = isBillOverdue(bill)
+              const secondaryTextClass = bill.paid
+                ? 'text-slate-500 line-through'
+                : 'text-slate-300'
+
+              return (
+                <Card
+                  key={bill.id}
+                  className={`mb-3 p-3 ${overdue ? 'border-red-400' : ''}`}
                 >
-                  <CheckboxIcon checked={bill.paid} />
-                </TouchableOpacity>
+                  <Row className="items-start gap-3">
+                    <TouchableOpacity
+                      onPress={() => setPaid(bill.id, !bill.paid)}
+                      accessibilityRole="checkbox"
+                      accessibilityLabel={bill.paid ? 'Marcar como pendente' : 'Marcar como paga'}
+                      accessibilityState={{ checked: bill.paid }}
+                      className="pt-1"
+                    >
+                      <CheckboxIcon checked={bill.paid} size={SIZE.iconActions} />
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => editBill(bill)} className="flex-1">
+                    <TouchableOpacity
+                      onPress={() => editBill(bill)}
+                      className="flex-1 gap-1"
+                      accessibilityRole="button"
+                      accessibilityLabel={`Editar conta ${bill.title}`}
+                    >
+                      <TextWhite className={`font-bold ${bill.paid ? 'text-slate-500 line-through' : ''}`}>
+                        {bill.title}
+                      </TextWhite>
+                      <TextWhite className={`text-sm ${secondaryTextClass}`}>
+                        {formatBillAmount(bill.amount)}
+                        {bill.paid ? ' · Paga' : ''}
+                      </TextWhite>
+                      {bill.dueDate && (
+                        <TextWhite className={`text-xs ${overdue ? 'text-red-300' : secondaryTextClass}`}>
+                          Vencimento: {bill.dueDate.split('-').reverse().join('/')}
+                          {overdue ? ' · Vencida' : ''}
+                        </TextWhite>
+                      )}
+                    </TouchableOpacity>
 
-                  <View className="flex-1">
-                    <Text className={`pl-2 mr-14 text-xl ${bill.paid ? 'line-through text-gray-600' : 'text-white'}`}>
-                      {bill.title}
-                    </Text>
-
-                    <Text className={`pl-2 mr-14 text-xs ${bill.paid ? 'line-through text-gray-600' : 'text-white'}`}>
-                      {formatBillAmount(bill.amount)} {bill.paid && "· Paga"}
-                    </Text>
-
-                    {bill.dueDate &&
-                      <Text className={`pl-2 mr-14 text-xs ${bill.paid ? 'line-through text-gray-600' : (overdue ? 'text-red-300' : 'text-white')}`}>
-                        Vencimento: {bill.dueDate.split('-').reverse().join('/')}{overdue ? ' · Vencida' : ''}
-                      </Text>}
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )
-        })}
+                    <Row className="items-center gap-3 pt-1">
+                      <TouchableOpacity
+                        onPress={() => editBill(bill)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Editar ${bill.title}`}
+                        hitSlop={8}
+                      >
+                        <EditIcon size={SIZE.iconActions} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => confirmRemove(bill)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Remover ${bill.title}`}
+                        hitSlop={8}
+                      >
+                        <TrashIcon size={SIZE.iconActions} />
+                      </TouchableOpacity>
+                    </Row>
+                  </Row>
+                </Card>
+              )
+            })
+          )}
+        </View>
       </ScrollView>
-    </Page >
+    </Page>
   )
 }
