@@ -127,7 +127,7 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1')
-    fireEvent.changeText(input, '9,87654')
+    await fireEvent.changeText(input, '9,87654')
 
     expect(onValueChange).toHaveBeenLastCalledWith('9.876')
   })
@@ -141,7 +141,7 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('yyyy-MM-dd')
-    fireEvent.changeText(input, '2026030a5')
+    await fireEvent.changeText(input, '2026030a5')
 
     expect(onValueChange).toHaveBeenLastCalledWith('2026-03-05')
   })
@@ -155,7 +155,7 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('HH:mm')
-    fireEvent.changeText(input, '12h3:4')
+    await fireEvent.changeText(input, '12h3:4')
 
     expect(onValueChange).toHaveBeenLastCalledWith('12:34')
   })
