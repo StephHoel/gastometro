@@ -6,8 +6,12 @@ import { formatBillAmount, isBillOverdue, validateBill } from '@/services/BillSe
 import { useBillStore } from '@/stores/BillStore'
 import { ParseToFloat, SetCurrency } from '@/utils/functions/MathFunctions'
 import React, { useState } from 'react'
-import { Alert, ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { CustomButton as Button } from "@/components/Button"
+import { Delete } from '@/components/TouchableIcons'
+import { SIZE } from '@/constants/size'
+import { CheckboxIcon } from '@/components/Icons'
+import { AlertService } from '@/services/AlertService'
 
 export default function Bills() {
   const bills = useBillStore((state) => state.bills)
@@ -101,19 +105,28 @@ export default function Bills() {
             accessibilityLabel="Data de vencimento"
           />
 
-          <Button
-            onPress={saveBill}
-            className="border rounded-md text-sm"
-          >
-            <Button.Text className="text-2xl">
-              {editingId ? 'Salvar alterações' : 'Adicionar conta'}</Button.Text>
-          </Button>
+          <View className="flex-1 flex-row justify-between">
+            {editingId && (
+              <Button
+                type="Normal"
+                className="border flex-1 rounded-md text-sm"
+                onPress={resetForm}
+              >
+                <Button.Text className="text-2xl">
+                  Cancelar edição
+                </Button.Text>
+              </Button>
+            )}
 
-          {editingId && (
-            <TouchableOpacity className="items-center py-2" onPress={resetForm}>
-              <TextWhite className="text-slate-300">Cancelar edição</TextWhite>
-            </TouchableOpacity>
-          )}
+            <Button
+              onPress={saveBill}
+              className="border flex-1 rounded-md text-sm"
+            >
+              <Button.Text className="text-2xl">
+                {editingId ? 'Salvar alterações' : 'Adicionar conta'}
+              </Button.Text>
+            </Button>
+          </View>
         </View>
 
         <TextWhite className="px-4 pb-2 text-lg font-bold">Suas contas</TextWhite>
@@ -123,41 +136,34 @@ export default function Bills() {
           const overdue = isBillOverdue(bill)
           return (
             <View key={bill.id} className={`mx-4 mb-3 rounded-xl border p-3 ${overdue ? 'border-red-500 bg-red-950/30' : 'border-slate-700 bg-slate-800'}`}>
-              <View className="flex-row items-start justify-between gap-2">
-                <View className="flex-1">
-                  <TextWhite className={bill.paid ? 'text-slate-400 line-through font-semibold' : 'font-semibold'}>{bill.title}</TextWhite>
-                  <TextWhite className="mt-1 text-slate-300">{formatBillAmount(bill.amount)}</TextWhite>
-                  {bill.dueDate && <TextWhite className={`mt-1 text-xs ${overdue ? 'text-red-300' : 'text-slate-400'}`}>Vencimento: {bill.dueDate.split('-').reverse().join('/')}{overdue ? ' · Vencida' : ''}</TextWhite>}
-                  {bill.paid && <TextWhite className="mt-1 text-xs text-lime-400">Paga</TextWhite>}
-                </View>
+              <View className="flex-row items-start justify-between gap-2 items-center">
+                <Delete action={() => AlertService.remove(() => confirmRemove(bill))} size={SIZE.iconActions} />
 
-                <View className="gap-1 flex flex-row">
-                  <Button
-                    type={bill.paid ? 'Normal' : 'Success'}
-                    onPress={() => setPaid(bill.id, !bill.paid)}
-                    className="rounded-md m-0 p-0"
-                  >
-                    <Button.Text className="text-xs m-0 p-1">
-                      {bill.paid ? 'Reabrir' : 'Marcar como paga'}
-                    </Button.Text>
-                  </Button>
+                <TouchableOpacity
+                  onPress={() => setPaid(bill.id, !bill.paid)}
+                  className="flex-row items-center space-x-2"
+                  accessibilityState={{ checked: bill.paid }}
+                >
+                  <CheckboxIcon checked={bill.paid} />
+                </TouchableOpacity>
 
-                  <Button
-                    onPress={() => editBill(bill)}
-                    accessibilityLabel={`Editar ${bill.title}`}
-                    className="rounded-md m-0 p-0"
-                  >
-                    <Button.Text className="text-xs m-0 p-1">Editar</Button.Text>
-                  </Button>
+                <TouchableOpacity onPress={() => editBill(bill)} className="flex-1">
 
-                  <Button
-                    onPress={() => confirmRemove(bill)}
-                    accessibilityLabel={`Remover ${bill.title}`}
-                    className="rounded-md m-0 p-0"
-                  >
-                    <Button.Text className="text-xs m-0 p-1">Remover</Button.Text>
-                  </Button>
-                </View>
+                  <View className="flex-1">
+                    <Text className={`pl-2 mr-14 text-xl ${bill.paid ? 'line-through text-gray-600' : 'text-white'}`}>
+                      {bill.title}
+                    </Text>
+
+                    <Text className={`pl-2 mr-14 text-xs ${bill.paid ? 'line-through text-gray-600' : 'text-white'}`}>
+                      {formatBillAmount(bill.amount)} {bill.paid && "· Paga"}
+                    </Text>
+
+                    {bill.dueDate &&
+                      <Text className={`pl-2 mr-14 text-xs ${bill.paid ? 'line-through text-gray-600' : (overdue ? 'text-red-300' : 'text-white')}`}>
+                        Vencimento: {bill.dueDate.split('-').reverse().join('/')}{overdue ? ' · Vencida' : ''}
+                      </Text>}
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
           )
