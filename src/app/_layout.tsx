@@ -161,7 +161,6 @@ export default function Layout() {
         <Tabs.Screen
           name="index"
           options={{
-            // href: null,
             title: "Início",
             tabBarIcon: ({ color, size }) => (
               <HomeIcon size={size} color={color as string} />
@@ -173,7 +172,6 @@ export default function Layout() {
         <Tabs.Screen
           name="lists"
           options={{
-            // href: null,
             title: "Listas",
             tabBarIcon: ({ color, size }) => (
               <ListIcon size={size} color={color as string} />
@@ -187,7 +185,7 @@ export default function Layout() {
           options={{
             title: "Contas",
             tabBarIcon: ({ color, size }) => (
-              <Text style={{ color, fontSize: size, fontWeight: "bold" }}>R$</Text>
+              <Text style={{ color, fontSize: size-4, fontWeight: "bold" }}>R$</Text>
             ),
             headerTitle: "Contas a pagar",
           }}
@@ -196,7 +194,6 @@ export default function Layout() {
         <Tabs.Screen
           name="calculator"
           options={{
-            // href: null,
             title: "Calculadora",
             tabBarIcon: ({ color, size }) => (
               <CalculatorIcon size={size} color={color as string} />

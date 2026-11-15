@@ -7,6 +7,7 @@ import { useBillStore } from '@/stores/BillStore'
 import { ParseToFloat, SetCurrency } from '@/utils/functions/MathFunctions'
 import React, { useState } from 'react'
 import { Alert, ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
+import { CustomButton as Button } from "@/components/Button"
 
 export default function Bills() {
   const bills = useBillStore((state) => state.bills)
@@ -99,9 +100,15 @@ export default function Bills() {
             maxLength={10}
             accessibilityLabel="Data de vencimento"
           />
-          <TouchableOpacity className="h-11 items-center justify-center rounded-lg bg-lime-400" onPress={saveBill} accessibilityRole="button">
-            <TextWhite className="font-bold text-slate-900">{editingId ? 'Salvar alterações' : 'Adicionar conta'}</TextWhite>
-          </TouchableOpacity>
+
+          <Button
+            onPress={saveBill}
+            className="border rounded-md text-sm"
+          >
+            <Button.Text className="text-2xl">
+              {editingId ? 'Salvar alterações' : 'Adicionar conta'}</Button.Text>
+          </Button>
+
           {editingId && (
             <TouchableOpacity className="items-center py-2" onPress={resetForm}>
               <TextWhite className="text-slate-300">Cancelar edição</TextWhite>
@@ -123,24 +130,39 @@ export default function Bills() {
                   {bill.dueDate && <TextWhite className={`mt-1 text-xs ${overdue ? 'text-red-300' : 'text-slate-400'}`}>Vencimento: {bill.dueDate.split('-').reverse().join('/')}{overdue ? ' · Vencida' : ''}</TextWhite>}
                   {bill.paid && <TextWhite className="mt-1 text-xs text-lime-400">Paga</TextWhite>}
                 </View>
-                <View className="gap-2">
-                  <TouchableOpacity onPress={() => setPaid(bill.id, !bill.paid)} className="rounded-md bg-lime-400 px-3 py-2">
-                    <TextWhite className="text-xs font-bold text-slate-900">{bill.paid ? 'Reabrir' : 'Marcar paga'}</TextWhite>
-                  </TouchableOpacity>
-                  <View className="flex-row justify-end gap-3">
-                    <TouchableOpacity onPress={() => editBill(bill)} accessibilityLabel={`Editar ${bill.title}`}>
-                      <TextWhite className="text-xs text-sky-300">Editar</TextWhite>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => confirmRemove(bill)} accessibilityLabel={`Remover ${bill.title}`}>
-                      <TextWhite className="text-xs text-red-300">Remover</TextWhite>
-                    </TouchableOpacity>
-                  </View>
+
+                <View className="gap-1 flex flex-row">
+                  <Button
+                    type={bill.paid ? 'Normal' : 'Success'}
+                    onPress={() => setPaid(bill.id, !bill.paid)}
+                    className="rounded-md m-0 p-0"
+                  >
+                    <Button.Text className="text-xs m-0 p-1">
+                      {bill.paid ? 'Reabrir' : 'Marcar como paga'}
+                    </Button.Text>
+                  </Button>
+
+                  <Button
+                    onPress={() => editBill(bill)}
+                    accessibilityLabel={`Editar ${bill.title}`}
+                    className="rounded-md m-0 p-0"
+                  >
+                    <Button.Text className="text-xs m-0 p-1">Editar</Button.Text>
+                  </Button>
+
+                  <Button
+                    onPress={() => confirmRemove(bill)}
+                    accessibilityLabel={`Remover ${bill.title}`}
+                    className="rounded-md m-0 p-0"
+                  >
+                    <Button.Text className="text-xs m-0 p-1">Remover</Button.Text>
+                  </Button>
                 </View>
               </View>
             </View>
           )
         })}
       </ScrollView>
-    </Page>
+    </Page >
   )
 }
