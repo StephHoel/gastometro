@@ -89,7 +89,7 @@ describe('Header and List branch coverage', () => {
     const { getByText } = await render(<Header />)
 
     await fireEvent.press(getByText('Delete'))
-    fireEvent.press(getByText('Share'))
+    await fireEvent.press(getByText('Share'))
     fireEvent.press(getByText('Add'))
 
     expect(mockRemove).toHaveBeenCalled()
@@ -113,7 +113,7 @@ describe('Header and List branch coverage', () => {
   it('Header default: renderiza back e navega para /', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'list/edit/[id]' })
 
-    const { getByText, queryByText } = render(<Header />)
+    const { getByText, queryByText } = await render(<Header />)
 
     fireEvent.press(getByText('Back'))
 
