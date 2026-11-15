@@ -17,7 +17,7 @@ interface RenderCustomInputParams {
   keyboardType?: 'default' | 'number-pad'
 }
 
-function renderCustomInput({
+async function renderCustomInput({
   nameField,
   placeholder,
   returnKeyType,
@@ -54,14 +54,14 @@ function renderCustomInput({
   }
 
   return {
-    ...render(<TestComponent />),
+    ...await render(<TestComponent />),
     onValueChange,
   }
 }
 
 describe('CustomInput', () => {
   it('deve normalizar decimais quando campo for Preço', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
       returnKeyType: 'done',
@@ -75,7 +75,7 @@ describe('CustomInput', () => {
   })
 
   it('deve manter texto livre quando campo for Item', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Item,
       placeholder: 'Item',
       returnKeyType: 'next',
@@ -88,7 +88,7 @@ describe('CustomInput', () => {
   })
 
   it('deve limpar zero automático no foco', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
       returnKeyType: 'done',
@@ -103,7 +103,7 @@ describe('CustomInput', () => {
   })
 
   it('não deve limpar valor no foco quando não for zero', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
       returnKeyType: 'next',
@@ -119,7 +119,7 @@ describe('CustomInput', () => {
   })
 
   it('deve limitar decimais para Quantidade em 3 casas', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
       returnKeyType: 'done',
@@ -133,7 +133,7 @@ describe('CustomInput', () => {
   })
 
   it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Date,
       placeholder: 'yyyy-MM-dd',
       returnKeyType: 'done',
@@ -147,7 +147,7 @@ describe('CustomInput', () => {
   })
 
   it('deve formatar Hora no padrão HH:mm com dois-pontos automático', async () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Time,
       placeholder: 'HH:mm',
       returnKeyType: 'done',

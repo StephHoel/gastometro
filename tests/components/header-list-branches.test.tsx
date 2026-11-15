@@ -1,5 +1,4 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Header } from '@/components/Header'
 import { List } from '@/components/List'
@@ -169,9 +168,9 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { getAllByText, UNSAFE_getAllByType } = await render(<List cartStore={cartStore} />)
+    const { getAllByText, getAllByRole } = await render(<List cartStore={cartStore} />)
 
-    const touchables = UNSAFE_getAllByType(TouchableOpacity)
+    const touchables = getAllByRole('checkbox')
     await fireEvent.press(touchables[0])
     await fireEvent.press(touchables[1])
     await fireEvent.press(getAllByText('Delete')[0])
