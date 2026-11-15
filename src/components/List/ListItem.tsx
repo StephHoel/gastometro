@@ -17,6 +17,8 @@ export function ListItem({ product, index, totalCount, onDelete, onToggle, onEdi
         <TouchableOpacity
           onPress={onToggle}
           className="flex-row items-center space-x-2"
+          accessibilityRole="checkbox"
+          accessibilityLabel={`Marcar ${product.item} como coletado`}
           accessibilityState={{ checked: product.collected }}
         >
           <CheckboxIcon checked={product.collected} />
