@@ -90,7 +90,7 @@ describe('Header and List branch coverage', () => {
 
     await fireEvent.press(getByText('Delete'))
     await fireEvent.press(getByText('Share'))
-    fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByText('Add'))
 
     expect(mockRemove).toHaveBeenCalled()
     expect(mockShare).toHaveBeenCalled()
@@ -103,7 +103,7 @@ describe('Header and List branch coverage', () => {
 
     const { getByText, queryByText } = await render(<Header />)
 
-    fireEvent.press(getByText('Share'))
+    await fireEvent.press(getByText('Share'))
 
     expect(queryByText('Delete')).toBeNull()
     expect(mockPaste).toHaveBeenCalled()
@@ -115,7 +115,7 @@ describe('Header and List branch coverage', () => {
 
     const { getByText, queryByText } = await render(<Header />)
 
-    fireEvent.press(getByText('Back'))
+    await fireEvent.press(getByText('Back'))
 
     expect(mockPush).toHaveBeenCalledWith('/')
     expect(queryByText('Add')).toBeNull()
@@ -134,7 +134,7 @@ describe('Header and List branch coverage', () => {
   it('Header index: Notification com activeListId navega para reminders/[listId]', async () => {
     const { getByText } = await render(<Header activeListId="list-1" />)
 
-    fireEvent.press(getByText('Notification'))
+    await fireEvent.press(getByText('Notification'))
 
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1')
   })
@@ -142,12 +142,12 @@ describe('Header and List branch coverage', () => {
   it('Header reminders/[listId]/edit/[reminderId]: renderiza Back com rota de lista', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'reminders/[listId]/edit/[reminderId]' })
 
-    const { getByText, queryByText } = render(<Header />)
+    const { getByText, queryByText } = await render(<Header />)
 
     expect(getByText('Back')).toBeTruthy()
     expect(queryByText('Share')).toBeNull()
 
-    fireEvent.press(getByText('Back'))
+    await fireEvent.press(getByText('Back'))
     expect(mockPush).toHaveBeenCalledWith('/reminders/')
   })
 
@@ -171,9 +171,9 @@ describe('Header and List branch coverage', () => {
     const { getAllByText, getAllByRole } = await render(<List cartStore={cartStore} />)
 
     const touchables = getAllByRole('checkbox')
-    fireEvent.press(touchables[0])
-    fireEvent.press(touchables[1])
-    fireEvent.press(getAllByText('Delete')[0])
+    await fireEvent.press(touchables[0])
+    await fireEvent.press(touchables[1])
+    await fireEvent.press(getAllByText('Delete')[0])
 
     expect(mockEdit).toHaveBeenCalled()
     expect(mockPush).toHaveBeenCalledWith('/list/edit/1')
