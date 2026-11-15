@@ -48,10 +48,10 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-2. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
-3. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
-4. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-5. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-6. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-7. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-8. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
+2. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
+3. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
+4. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+5. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+6. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+7. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
