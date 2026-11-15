@@ -12,8 +12,8 @@ export function isValidBillDueDate(value: string): boolean {
 export function validateBill(title: string, amount: string, dueDate: string): string | null {
   if (!title.trim()) return 'Informe o nome da conta.'
   if (!amount.trim()) return 'Informe o valor da conta.'
-  if (amount.includes('-') || !/^(?:\d+(?:[.,]\d{1,2})?|\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?)$/.test(amount.trim()) || !Number.isFinite(ParseToFloat(amount)) || ParseToFloat(amount) < 0)
-    return 'Informe um valor válido, sem números negativos.'
+  if (amount.includes('-') || !/^(?:\d+(?:[.,]\d{1,2})?|\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?)$/.test(amount.trim()) || !Number.isFinite(ParseToFloat(amount)) || ParseToFloat(amount) <= 0)
+    return 'Informe um valor válido, maior que zero.'
   if (!isValidBillDueDate(dueDate)) return 'Informe uma data de vencimento válida (AAAA-MM-DD).'
   return null
 }
