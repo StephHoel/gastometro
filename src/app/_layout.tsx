@@ -7,7 +7,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
@@ -161,7 +161,6 @@ export default function Layout() {
         <Tabs.Screen
           name="index"
           options={{
-            // href: null,
             title: "Início",
             tabBarIcon: ({ color, size }) => (
               <HomeIcon size={size} color={color as string} />
@@ -173,7 +172,6 @@ export default function Layout() {
         <Tabs.Screen
           name="lists"
           options={{
-            // href: null,
             title: "Listas",
             tabBarIcon: ({ color, size }) => (
               <ListIcon size={size} color={color as string} />
@@ -183,9 +181,19 @@ export default function Layout() {
         />
 
         <Tabs.Screen
+          name="bills"
+          options={{
+            title: "Contas",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size-4, fontWeight: "bold" }}>R$</Text>
+            ),
+            headerTitle: "Contas a pagar",
+          }}
+        />
+
+        <Tabs.Screen
           name="calculator"
           options={{
-            // href: null,
             title: "Calculadora",
             tabBarIcon: ({ color, size }) => (
               <CalculatorIcon size={size} color={color as string} />
