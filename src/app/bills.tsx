@@ -1,6 +1,6 @@
 import { Card } from '@/components/Card'
 import { CustomButton as Button } from '@/components/Button'
-import { CheckboxIcon, EditIcon, TrashIcon } from '@/components/Icons'
+import { CheckboxIcon, TrashIcon } from '@/components/Icons'
 import { Page } from '@/components/Page'
 import { Row } from '@/components/Row'
 import { TextWhite } from '@/components/TextWhite'
@@ -96,7 +96,7 @@ export default function Bills() {
     return (
       <View className="gap-1">
         <TextWhite className="text-sm text-slate-300">{label}</TextWhite>
-        <Card className="px-3 py-1">
+        <Card className="px-3 py-1 border-slate-900">
           <TextInput
             className="py-2 text-base text-white outline-none"
             placeholder={placeholder}
@@ -121,13 +121,14 @@ export default function Bills() {
       >
         <View className="px-4 pt-4">
           <Row className="gap-3">
-            <Card className="flex-1 p-3">
+            <Card className="flex-1 p-3 border-0 items-center justify-center">
               <TextWhite className="text-xs text-slate-400">Total pendente</TextWhite>
               <TextWhite className="mt-1 text-lg font-bold text-lime-400">
                 {SetCurrency(pendingTotal)}
               </TextWhite>
             </Card>
-            <Card className="flex-1 p-3">
+            
+            <Card className="flex-1 p-3 border-0 items-center justify-center">
               <TextWhite className="text-xs text-slate-400">Total pago</TextWhite>
               <TextWhite className="mt-1 text-lg font-bold">
                 {SetCurrency(paidTotal)}
@@ -135,12 +136,15 @@ export default function Bills() {
             </Card>
           </Row>
         </View>
+        
+        <View className="border-b border-slate-700 w-[95%] mx-auto"/>
 
         <View className="px-4 pt-5 gap-3">
-          <TextWhite className="text-lg font-bold">
+          <TextWhite className="text-2xl font-bold">
             {editingId ? 'Editar conta' : 'Nova conta'}
           </TextWhite>
 
+          <Card className="p-4 gap-2 border-0 bg-slate-800">
           {renderInput(
             'Nome da conta',
             'Ex.: Energia elétrica',
@@ -167,18 +171,21 @@ export default function Bills() {
             'default',
             10,
           )}
+          </Card>
 
-          <Button onPress={saveBill} className="mx-0 mt-1">
-            <Button.Text className="text-xl">
-              {editingId ? 'Salvar alterações' : 'Adicionar conta'}
-            </Button.Text>
-          </Button>
+          <View className="flex-1 flex-row gap-2">
+            {editingId && (
+              <Button type="Normal" onPress={resetForm} className="mx-0 flex-1">
+                <Button.Text className="text-xl">Cancelar edição</Button.Text>
+              </Button>
+            )}
 
-          {editingId && (
-            <Button type="Normal" onPress={resetForm} className="mx-0">
-              <Button.Text className="text-xl">Cancelar edição</Button.Text>
+            <Button onPress={saveBill} className="mx-0 flex-1">
+              <Button.Text className="text-xl">
+                {editingId ? 'Salvar alterações' : 'Adicionar conta'}
+              </Button.Text>
             </Button>
-          )}
+          </View>
         </View>
 
         <View className="px-4 pt-6">
@@ -205,9 +212,18 @@ export default function Bills() {
               return (
                 <Card
                   key={bill.id}
-                  className={`mb-3 p-3 ${overdue ? 'border-red-400' : ''}`}
+                  className={`mb-3 p-3 ${overdue ? 'border-red-600 bg-red-950/30' : ''}`}
                 >
-                  <Row className="items-start gap-3">
+                  <Row className="gap-2 items-center">
+                    <TouchableOpacity
+                      onPress={() => confirmRemove(bill)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Remover ${bill.title}`}
+                      hitSlop={8}
+                    >
+                      <TrashIcon size={SIZE.iconActions} />
+                    </TouchableOpacity>
+
                     <TouchableOpacity
                       onPress={() => setPaid(bill.id, !bill.paid)}
                       accessibilityRole="checkbox"
@@ -232,31 +248,12 @@ export default function Bills() {
                         {bill.paid ? ' · Paga' : ''}
                       </TextWhite>
                       {bill.dueDate && (
-                        <TextWhite className={`text-xs ${overdue ? 'text-red-300' : secondaryTextClass}`}>
+                        <TextWhite className={`text-xs ${overdue ? 'text-red-400' : secondaryTextClass}`}>
                           Vencimento: {bill.dueDate.split('-').reverse().join('/')}
                           {overdue ? ' · Vencida' : ''}
                         </TextWhite>
                       )}
                     </TouchableOpacity>
-
-                    <Row className="items-center gap-3 pt-1">
-                      <TouchableOpacity
-                        onPress={() => editBill(bill)}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Editar ${bill.title}`}
-                        hitSlop={8}
-                      >
-                        <EditIcon size={SIZE.iconActions} />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => confirmRemove(bill)}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Remover ${bill.title}`}
-                        hitSlop={8}
-                      >
-                        <TrashIcon size={SIZE.iconActions} />
-                      </TouchableOpacity>
-                    </Row>
                   </Row>
                 </Card>
               )
