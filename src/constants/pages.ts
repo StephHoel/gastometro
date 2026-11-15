@@ -2,6 +2,7 @@ export const titlePages = {
   "index": 'Gastômetro',
   "calculator": "Calculadora",
   "lists": "Listas",
+  "bills": "Contas a pagar",
   "list/add": 'Novo Item',
   "list/edit/[id]": 'Editar Item',
   "reminders/index": 'Central de Lembretes',

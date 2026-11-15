@@ -36,7 +36,7 @@ export default function Bills() {
       return
     }
 
-    const payload = { title: title.trim(), amount: ParseToFloat(amount).toString(), ...(dueDate ? { dueDate } : {}) }
+    const payload = { title: title.trim(), amount: ParseToFloat(amount).toString(), dueDate: dueDate || undefined }
     if (editingId) updateBill(editingId, payload)
     else addBill(payload)
     resetForm()
