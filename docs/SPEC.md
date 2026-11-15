@@ -2,8 +2,8 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.8.0
-> **Data:** 2026-06-24
+> **Versão do App:** 1.8.1
+> **Data:** 2026-11-15
 > **Cobertura de Testes:** 90.08%
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.

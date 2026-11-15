@@ -67,23 +67,23 @@ describe('Header and List', () => {
       ; (useCartStore as unknown as jest.Mock).mockReturnValue(makeStore())
   })
 
-  it('Header em index deve renderizar ações principais', () => {
-    const { getByText } = render(<Header />)
+  it('Header em index deve renderizar ações principais', async () => {
+    const { getByText } = await render(<Header />)
 
     expect(getByText('Gastômetro')).toBeTruthy()
   })
 
-  it('Header em calculator não deve renderizar ações extras', () => {
+  it('Header em calculator não deve renderizar ações extras', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'calculator' })
 
-    const { queryByText } = render(<Header />)
+    const { queryByText } = await render(<Header />)
 
     expect(queryByText('Add')).toBeNull()
   })
 
-  it('List deve ordenar e alternar collected', () => {
+  it('List deve ordenar e alternar collected', async () => {
     const store = makeStore()
-    const { getByText } = render(<List cartStore={store} />)
+    const { getByText } = await render(<List cartStore={store} />)
 
     expect(getByText(/2x Arroz/)).toBeTruthy()
   })

@@ -74,8 +74,8 @@ describe('Home screen', () => {
     })
   })
 
-  it('renderiza totais e lista com dados do store', () => {
-    const { getByText, getByTestId } = render(<Home />)
+  it('renderiza totais e lista com dados do store', async () => {
+    const { getByText, getByTestId } = await render(<Home />)
 
     expect(getByText('Header')).toBeTruthy()
     expect(getByText(/Total Geral:/)).toBeTruthy()

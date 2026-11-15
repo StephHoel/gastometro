@@ -1,5 +1,3 @@
-import '@testing-library/jest-native/extend-expect'
-
 import './mocks/uuid'
 import './mocks/async-storage'
 import './mocks/expo-router'

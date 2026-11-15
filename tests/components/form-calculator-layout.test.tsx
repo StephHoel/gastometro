@@ -26,8 +26,8 @@ describe('Form, Calculator and routes', () => {
     })
   })
 
-  it('Form deve renderizar com campos principais', () => {
-    const { getByPlaceholderText, getByText } = render(
+  it('Form deve renderizar com campos principais', async () => {
+    const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Adicionar Item">
         <Text>+</Text>
       </Form>,
@@ -39,18 +39,18 @@ describe('Form, Calculator and routes', () => {
     expect(getByText('Adicionar Item')).toBeTruthy()
   })
 
-  it('Add route deve renderizar', () => {
-    const { toJSON } = render(<Add />)
+  it('Add route deve renderizar', async () => {
+    const { toJSON } = await render(<Add />)
     expect(toJSON()).toBeTruthy()
   })
 
-  it('Edit route deve renderizar', () => {
-    const { toJSON } = render(<Edit />)
+  it('Edit route deve renderizar', async () => {
+    const { toJSON } = await render(<Edit />)
     expect(toJSON()).toBeTruthy()
   })
 
-  it('Home route deve renderizar', () => {
-    const { toJSON } = render(<Home />)
+  it('Home route deve renderizar', async () => {
+    const { toJSON } = await render(<Home />)
     expect(toJSON()).toBeTruthy()
   })
 })

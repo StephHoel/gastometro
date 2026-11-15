@@ -1,5 +1,4 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import { Header } from '@/components/Header'
 import { List } from '@/components/List'
@@ -87,11 +86,11 @@ describe('Header and List branch coverage', () => {
   })
 
   it('Header index: executa remove e share quando há produtos', async () => {
-    const { getByText } = render(<Header />)
+    const { getByText } = await render(<Header />)
 
-    fireEvent.press(getByText('Delete'))
-    fireEvent.press(getByText('Share'))
-    fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByText('Delete'))
+    await fireEvent.press(getByText('Share'))
+    await fireEvent.press(getByText('Add'))
 
     expect(mockRemove).toHaveBeenCalled()
     expect(mockShare).toHaveBeenCalled()
@@ -102,57 +101,57 @@ describe('Header and List branch coverage', () => {
   it('Header index: usa paste quando lista está vazia', async () => {
     mockProductsState = []
 
-    const { getByText, queryByText } = render(<Header />)
+    const { getByText, queryByText } = await render(<Header />)
 
-    fireEvent.press(getByText('Share'))
+    await fireEvent.press(getByText('Share'))
 
     expect(queryByText('Delete')).toBeNull()
     expect(mockPaste).toHaveBeenCalled()
     expect(mockShare).not.toHaveBeenCalled()
   })
 
-  it('Header default: renderiza back e navega para /', () => {
+  it('Header default: renderiza back e navega para /', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'list/edit/[id]' })
 
-    const { getByText, queryByText } = render(<Header />)
+    const { getByText, queryByText } = await render(<Header />)
 
-    fireEvent.press(getByText('Back'))
+    await fireEvent.press(getByText('Back'))
 
     expect(mockPush).toHaveBeenCalledWith('/')
     expect(queryByText('Add')).toBeNull()
   })
 
-  it('Header calculator: não renderiza ações', () => {
+  it('Header calculator: não renderiza ações', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'calculator' })
 
-    const { queryByText } = render(<Header />)
+    const { queryByText } = await render(<Header />)
 
     expect(queryByText('Back')).toBeNull()
     expect(queryByText('Share')).toBeNull()
     expect(queryByText('Add')).toBeNull()
   })
 
-  it('Header index: Notification com activeListId navega para reminders/[listId]', () => {
-    const { getByText } = render(<Header activeListId="list-1" />)
+  it('Header index: Notification com activeListId navega para reminders/[listId]', async () => {
+    const { getByText } = await render(<Header activeListId="list-1" />)
 
-    fireEvent.press(getByText('Notification'))
+    await fireEvent.press(getByText('Notification'))
 
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1')
   })
 
-  it('Header reminders/[listId]/edit/[reminderId]: renderiza Back com rota de lista', () => {
+  it('Header reminders/[listId]/edit/[reminderId]: renderiza Back com rota de lista', async () => {
     ; (useRoute as jest.Mock).mockReturnValue({ name: 'reminders/[listId]/edit/[reminderId]' })
 
-    const { getByText, queryByText } = render(<Header />)
+    const { getByText, queryByText } = await render(<Header />)
 
     expect(getByText('Back')).toBeTruthy()
     expect(queryByText('Share')).toBeNull()
 
-    fireEvent.press(getByText('Back'))
+    await fireEvent.press(getByText('Back'))
     expect(mockPush).toHaveBeenCalledWith('/reminders/')
   })
 
-  it('List: alterna collected, navega para edição e aciona remoção', () => {
+  it('List: alterna collected, navega para edição e aciona remoção', async () => {
     const cartStore: StateProps = {
       lists: [{ id: 'list-1', name: 'Test', products: mockProductsState }],
       activeListId: 'list-1',
@@ -169,19 +168,20 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { getAllByText, UNSAFE_getAllByType } = render(<List cartStore={cartStore} />)
+    const { getAllByText, getAllByRole, getByText } = await render(<List cartStore={cartStore} />)
 
-    const touchables = UNSAFE_getAllByType(TouchableOpacity)
-    fireEvent.press(touchables[0])
-    fireEvent.press(touchables[1])
-    fireEvent.press(getAllByText('Delete')[0])
+    const touchables = getAllByRole('checkbox')
+    await fireEvent.press(touchables[0])
+    await fireEvent.press(touchables[1])
+    await fireEvent.press(getByText(/2x Arroz/))
+    await fireEvent.press(getAllByText('Delete')[0])
 
     expect(mockEdit).toHaveBeenCalled()
     expect(mockPush).toHaveBeenCalledWith('/list/edit/1')
     expect(mockRemove).toHaveBeenCalled()
   })
 
-  it('List: mostra não coletados antes e exibe cabeçalhos de seção', () => {
+  it('List: mostra não coletados antes e exibe cabeçalhos de seção', async () => {
     const cartStore: StateProps = {
       lists: [{
         id: 'list-1',
@@ -208,7 +208,7 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { toJSON, getByText } = render(<List cartStore={cartStore} />)
+    const { toJSON, getByText } = await render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
     const arrozIndex = serializedTree.indexOf('2x Arroz')
     const feijaoIndex = serializedTree.indexOf('1x Feijão')
@@ -219,7 +219,7 @@ describe('Header and List branch coverage', () => {
     expect(getByText('Coletados')).toBeTruthy()
   })
 
-  it('List: quando todos estão coletados mostra apenas a seção coletados', () => {
+  it('List: quando todos estão coletados mostra apenas a seção coletados', async () => {
     const cartStore: StateProps = {
       lists: [{
         id: 'list-1',
@@ -244,7 +244,7 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { queryByText, toJSON } = render(<List cartStore={cartStore} />)
+    const { queryByText, toJSON } = await render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
 
     expect(serializedTree.indexOf('1x Feijão')).toBeGreaterThan(-1)

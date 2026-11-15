@@ -139,12 +139,12 @@ describe('Lists screen', () => {
   })
 
   it('cria lista quando nome é válido', async () => {
-    const { getByPlaceholderText, getByText } = render(<Lists />)
+    const { getByPlaceholderText, getByText } = await render(<Lists />)
 
-    fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
+    await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
 
-    await waitFor(() => {
-      fireEvent.press(getByText('AddIcon'))
+    await waitFor(async () => {
+      await fireEvent.press(getByText('AddIcon'))
     })
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
@@ -152,10 +152,10 @@ describe('Lists screen', () => {
   })
 
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
-    const { getByText } = render(<Lists />)
+    const { getByText } = await render(<Lists />)
 
-    await waitFor(() => {
-      fireEvent.press(getByText('AddIcon'))
+    await waitFor(async () => {
+      await fireEvent.press(getByText('AddIcon'))
     })
 
     await waitFor(() => {
@@ -164,23 +164,23 @@ describe('Lists screen', () => {
     expect(mockStore.addList).not.toHaveBeenCalled()
   })
 
-  it('seleciona lista e navega para home', () => {
-    const { getByText } = render(<Lists />)
+  it('seleciona lista e navega para home', async () => {
+    const { getByText } = await render(<Lists />)
 
-    fireEvent.press(getByText('Lista 2'))
+    await fireEvent.press(getByText('Lista 2'))
 
     expect(mockStore.setActiveList).toHaveBeenCalledWith('list-2')
     expect(mockPush).toHaveBeenCalledWith('/')
   })
 
   it('renomeia lista no modo edição', async () => {
-    const { getAllByText, getByDisplayValue, getByText } = render(<Lists />)
+    const { getAllByText, getByDisplayValue, getByText } = await render(<Lists />)
 
-    fireEvent.press(getAllByText('EditIcon')[0])
-    fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
+    await fireEvent.press(getAllByText('EditIcon')[0])
+    await fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
 
-    await waitFor(() => {
-      fireEvent.press(getByText(LISTS.rename_save))
+    await waitFor(async () => {
+      await fireEvent.press(getByText(LISTS.rename_save))
     })
 
     await waitFor(() => {
@@ -188,30 +188,30 @@ describe('Lists screen', () => {
     })
   })
 
-  it('cancela edição da lista', () => {
-    const { getAllByText, getByText, queryByText } = render(<Lists />)
+  it('cancela edição da lista', async () => {
+    const { getAllByText, getByText, queryByText } = await render(<Lists />)
 
-    fireEvent.press(getAllByText('EditIcon')[0])
-    fireEvent.press(getByText(LISTS.rename_cancel))
+    await fireEvent.press(getAllByText('EditIcon')[0])
+    await fireEvent.press(getByText(LISTS.rename_cancel))
 
     expect(queryByText(LISTS.rename_save)).toBeNull()
     expect(mockStore.renameList).not.toHaveBeenCalled()
   })
 
-  it('mostra erro ao remover última lista', () => {
+  it('mostra erro ao remover última lista', async () => {
     mockStore.lists = [{ id: 'list-1', name: 'Lista 1', products: [] }]
 
-    const { getByText } = render(<Lists />)
-    fireEvent.press(getByText('TrashIcon'))
+    const { getByText } = await render(<Lists />)
+    await fireEvent.press(getByText('TrashIcon'))
 
     expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.cannot_remove_last_list)
     expect(mockShowAlert).not.toHaveBeenCalled()
   })
 
   it('abre confirmação e remove lista quando há mais de uma', async () => {
-    const { getAllByText } = render(<Lists />)
+    const { getAllByText } = await render(<Lists />)
 
-    fireEvent.press(getAllByText('TrashIcon')[1])
+    await fireEvent.press(getAllByText('TrashIcon')[1])
 
     expect(mockShowAlert).toHaveBeenCalledTimes(1)
 
@@ -225,12 +225,12 @@ describe('Lists screen', () => {
     expect(mockStore.removeList).toHaveBeenCalledWith('list-2')
   })
 
-  it('mostra impacto de lembretes ao remover lista', () => {
+  it('mostra impacto de lembretes ao remover lista', async () => {
     mockGetByListId.mockReturnValue([{ id: 'r-1' }])
 
-    const { getAllByText } = render(<Lists />)
+    const { getAllByText } = await render(<Lists />)
 
-    fireEvent.press(getAllByText('TrashIcon')[1])
+    await fireEvent.press(getAllByText('TrashIcon')[1])
 
     const payload = mockShowAlert.mock.calls[0][0] as {
       message: string
