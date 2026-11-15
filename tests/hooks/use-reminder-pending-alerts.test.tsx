@@ -301,7 +301,7 @@ describe('useReminderPendingAlerts', () => {
 
     const { unmount } = await render(<HookHarness />)
 
-    expect(() => await unmount()).not.toThrow()
+    await expect(async () => await unmount()).not.toThrow()
 
     jest.useRealTimers()
   })
@@ -317,7 +317,7 @@ describe('useReminderPendingAlerts', () => {
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
-    expect(() => await unmount()).not.toThrow()
+    expect(async () => await unmount()).not.toThrow()
 
     jest.useRealTimers()
   })

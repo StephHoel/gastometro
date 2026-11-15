@@ -143,7 +143,7 @@ describe('Lists screen', () => {
 
     await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('AddIcon'))
     })
 
@@ -154,7 +154,7 @@ describe('Lists screen', () => {
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = await render(<Lists />)
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('AddIcon'))
     })
 
@@ -179,7 +179,7 @@ describe('Lists screen', () => {
     await fireEvent.press(getAllByText('EditIcon')[0])
     await fireEvent.changeText(getByDisplayValue('Lista 1'), 'Lista Mercado')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText(LISTS.rename_save))
     })
 

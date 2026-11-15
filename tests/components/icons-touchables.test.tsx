@@ -32,7 +32,7 @@ import { Add, Back, Delete, Share } from '@/components/TouchableIcons'
 
 describe('Icons and TouchableIcons', () => {
   it('deve renderizar os ícones base sem quebrar', async () => {
-    expect(() => await render(
+    expect(async () => await render(
       <>
         <AddIcon />
         <BackIcon />

@@ -35,7 +35,7 @@ describe('Form branch coverage', () => {
     await fireEvent.changeText(getByPlaceholderText('1'), '1')
     await fireEvent.changeText(getByPlaceholderText('1,39'), '2')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -54,7 +54,7 @@ describe('Form branch coverage', () => {
     await fireEvent.changeText(getByPlaceholderText('1'), '-1')
     await fireEvent.changeText(getByPlaceholderText('1,39'), '2')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -73,7 +73,7 @@ describe('Form branch coverage', () => {
     await fireEvent.changeText(getByPlaceholderText('1'), '2')
     await fireEvent.changeText(getByPlaceholderText('1,39'), '3')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -92,7 +92,7 @@ describe('Form branch coverage', () => {
     await fireEvent.changeText(getByPlaceholderText('1'), '2')
     await fireEvent.changeText(getByPlaceholderText('1,39'), '8,90')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Adicionar'))
     })
 
@@ -127,7 +127,7 @@ describe('Form branch coverage', () => {
     await fireEvent.changeText(getByPlaceholderText('1'), '3')
     await fireEvent.changeText(getByPlaceholderText('1,39'), '7')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Editar'))
     })
 

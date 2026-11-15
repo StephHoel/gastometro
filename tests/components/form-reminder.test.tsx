@@ -114,7 +114,7 @@ describe('FormReminder', () => {
     await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.date), '2099-01-01')
     await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.time), '10:00')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -137,7 +137,7 @@ describe('FormReminder', () => {
 
     await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -157,7 +157,7 @@ describe('FormReminder', () => {
 
     await fireEvent.changeText(getByPlaceholderText(REMINDERS.placeholder.title), 'Título')
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText('Salvar'))
     })
 
@@ -177,7 +177,7 @@ describe('FormReminder', () => {
       />,
     )
 
-    await waitFor(() => {
+    await waitFor(async () => {
       await fireEvent.press(getByText(REMINDERS.button.remove))
     })
 
