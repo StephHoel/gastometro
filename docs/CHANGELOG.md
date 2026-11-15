@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.8.0 - 2026-11-15
+
+Implementação da mini-spec 11: nova seção integrada de contas a pagar, com persistência local independente.
+
+### Funcionalidade
+
+- Adicionada aba Contas ao app, com cadastro, edição, exclusão e marcação de contas como pagas.
+- Exibidos totais de contas pendentes e pagas, além de destaque visual para contas vencidas.
+- Adicionada validação de título, valor e data de vencimento, com formatação monetária pt-BR.
+
+### Persistência e qualidade
+
+- Criado `BillProps` e `useBillStore` com armazenamento isolado na chave `gastometro-bills`, sem alterar os dados das listas de compras.
+- Adicionados testes para validações, formatação, vencimentos e operações do store.
+
+### Documentação
+
+- Mini-spec 11 movida para `docs/specs/done/` e documentação do produto atualizada.
+
 ## 1.7.3 - 2026-06-24
 
 Implementação da mini-spec 13 (Service Worker offline web), com cache versionado, fluxo de validação offline atualizado e ajustes de scripts para versionamento e testes locais.

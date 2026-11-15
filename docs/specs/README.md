@@ -18,9 +18,9 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
-| **Implementadas** | 13 | Mini-spec 13 (service worker offline web) |
+| **Implementadas** | 14 | Mini-spec 11 (contas a pagar) |
 | **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 8 | Em prioridade de execução |
+| **Planejadas** | 7 | Em prioridade de execução |
 | **Total** | 22 | - |
 
 ## Status das mini-specs
@@ -40,6 +40,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Notificações e lembretes](./done/10-notificacoes-lembretes.md)
 - [Refatoração de formulários para react-hook-form](./done/16-refatoracao-formularios-react-hook-form.md)
 - [Service Worker para funcionamento offline em web](./done/13-service-worker-offline-web.md)
+- [Contas a pagar](./done/11-contas-a-pagar.md)
 
 ### Ativas/Em andamento
 
@@ -47,7 +48,6 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [Contas a pagar](./planned/11-contas-a-pagar.md)
 2. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
 3. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
 4. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)

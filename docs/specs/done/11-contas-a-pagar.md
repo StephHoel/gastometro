@@ -1,7 +1,7 @@
 # Mini-spec: Contas a pagar
 
 Número: 11
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -20,8 +20,7 @@ Adicionar uma área offline-first para registrar contas a pagar sem misturar ess
 
 ## Telas afetadas
 
-- Nova rota/tela de contas a pagar.
-- Navegação ou atalho a partir da tela principal.
+- Nova rota `src/app/bills.tsx`, integrada como aba Contas no app shell.
 - Componentes compartilhados de formulário, lista, alerta e moeda.
 
 ## Dados e persistência
@@ -30,15 +29,15 @@ Modelo inicial sugerido:
 
 ```ts
 interface BillProps {
-    id: string
-    title: string
-    amount: string
-    dueDate?: string
-    paid: boolean
+  id: string
+  title: string
+  amount: string
+  dueDate?: string
+  paid: boolean
 }
 ```
 
-- Persistir localmente.
+- Persistir localmente em chave isolada `gastometro-bills`, via Zustand persist + AsyncStorage.
 - Não misturar `BillProps` com `ProductProps`.
 - Usar regras pt-BR para moeda.
 
@@ -46,7 +45,7 @@ interface BillProps {
 
 - Título vazio deve ser bloqueado.
 - Valor vazio não deve ser aceito.
-- Valores negativos não devem ser aceitos.
+- Valores negativos não devem ser aceitos. Valor zero é permitido.
 - Data inválida não deve ser aceita.
 
 ## Critérios de aceite
@@ -54,6 +53,7 @@ interface BillProps {
 - Criar, editar, remover e marcar conta como paga.
 - Exibir totais de contas pagas e pendentes.
 - Persistir dados após reiniciar o app.
+- Manter contas em estado e armazenamento separados de listas e produtos.
 - Manter lista de compras funcionando sem regressão.
 
 ## Fora de escopo
@@ -63,7 +63,9 @@ interface BillProps {
 - Boletos, Pix ou leitura automática.
 - Backend/login.
 
-## Observações para IA
+## Decisões de implementação
 
-- Confirmar se esta feature deve ficar no mesmo app shell ou em uma seção separada antes de implementar.
-- Evitar reaproveitar componentes de produto quando isso acoplar domínios diferentes.
+- A funcionalidade integra o app shell existente como uma nova aba chamada Contas.
+- O domínio possui interface, store e chave de persistência próprios (`gastometro-bills`).
+- A data é informada no formato `AAAA-MM-DD`; é opcional e validada como data real.
+- A tela permite reabrir uma conta paga, além de marcar como paga.

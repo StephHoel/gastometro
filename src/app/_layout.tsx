@@ -7,7 +7,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
@@ -179,6 +179,17 @@ export default function Layout() {
               <ListIcon size={size} color={color as string} />
             ),
             headerTitle: "Listas",
+          }}
+        />
+
+        <Tabs.Screen
+          name="bills"
+          options={{
+            title: "Contas",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size, fontWeight: "bold" }}>R$</Text>
+            ),
+            headerTitle: "Contas a pagar",
           }}
         />
 
