@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.8.1 - 2026-11-15
+
 ## 1.8.0 - 2026-11-15
 
 Implementação da mini-spec 11: nova seção integrada de contas a pagar, com persistência local independente.
