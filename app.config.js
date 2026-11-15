@@ -28,7 +28,14 @@ export default {
       }
     },
     plugins: [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          asyncRoutes: {
+            web: false
+          }
+        }
+      ],
       "expo-notifications",
       [
         "expo-build-properties",
