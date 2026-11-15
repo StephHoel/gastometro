@@ -168,11 +168,12 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { getAllByText, getAllByRole } = await render(<List cartStore={cartStore} />)
+    const { getAllByText, getAllByRole, getByText } = await render(<List cartStore={cartStore} />)
 
     const touchables = getAllByRole('checkbox')
     await fireEvent.press(touchables[0])
     await fireEvent.press(touchables[1])
+    await fireEvent.press(getByText('2x Arroz'))
     await fireEvent.press(getAllByText('Delete')[0])
 
     expect(mockEdit).toHaveBeenCalled()
