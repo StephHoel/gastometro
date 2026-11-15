@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.7.5",
+  "version": "1.8.0",
   "homepage": "https://stephhoel.github.io/gastometro/",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
@@ -76,7 +76,7 @@
   },
   "engines": {
     "node": ">25 <=26",
-    "npm": ">=11 <12"
+    "npm": ">=11 <=12"
   },
   "expo": {
     "autolinking": {

@@ -2,7 +2,7 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.7.3
+> **Versão do App:** 1.8.0
 > **Data:** 2026-06-24
 > **Cobertura de Testes:** 90.08%
 
@@ -49,12 +49,12 @@ Público esperado:
 - Integração com notificações locais no Expo quando a plataforma suporta permissão/agendamento; ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
+- CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- contas a pagar;
 - testes E2E para roteamento web SPA;
 - comparação de preços entre lugares;
 - sincronização eficiente de lembretes;
@@ -132,6 +132,20 @@ Regras de produto:
 - o app permanece offline-first por tempo indeterminado.
 - todos os comportamentos existentes devem ser preservados, exceto quando uma feature aprovada alterar explicitamente esse comportamento.
 
+### Conta a Pagar
+
+```ts
+interface BillProps {
+  id: string
+  title: string
+  amount: string
+  dueDate?: string
+  paid: boolean
+}
+```
+
+Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceita zero e não aceita negativos; vencimento é opcional e deve ser uma data ISO válida; contas não pagas com vencimento anterior ao dia atual são destacadas como vencidas.
+
 ### Lembrete Local
 
 ```ts
@@ -165,8 +179,8 @@ Estado:
 - `useCartStore` é o store global.
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual é `gastometro`.
-- `useReminderStore` mantém lembretes com persistência dedicada.
-- A chave de storage de lembretes é `gastometro-reminders`.
+- `useReminderStore` mantém lembretes com persistência dedicada (`gastometro-reminders`).
+- `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 
 Manipulação da lista:
 

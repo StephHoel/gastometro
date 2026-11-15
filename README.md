@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.7.3-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.8.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
@@ -28,6 +28,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Inclui uma calculadora de mercado para calcular preço por unidade.
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
+- Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
 
 ## Stack
 
@@ -53,7 +54,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Contas a pagar](docs/specs/planned/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
@@ -63,6 +63,8 @@ As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/s
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
 
 Funcionalidades concluídas recentemente:
+
+- Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
