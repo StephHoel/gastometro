@@ -17,7 +17,7 @@ interface RenderCustomInputParams {
   keyboardType?: 'default' | 'number-pad'
 }
 
-function renderCustomInput({
+async function renderCustomInput({
   nameField,
   placeholder,
   returnKeyType,
@@ -54,14 +54,14 @@ function renderCustomInput({
   }
 
   return {
-    ...render(<TestComponent />),
+    ...await render(<TestComponent />),
     onValueChange,
   }
 }
 
 describe('CustomInput', () => {
-  it('deve normalizar decimais quando campo for Preço', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve normalizar decimais quando campo for Preço', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
       returnKeyType: 'done',
@@ -69,12 +69,12 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1,39')
-    fireEvent.changeText(input, '12,3456')
+    await fireEvent.changeText(input, '12,3456')
 
     expect(onValueChange).toHaveBeenLastCalledWith('12.34')
   })
 
-  it('deve manter texto livre quando campo for Item', () => {
+  it('deve manter texto livre quando campo for Item', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Item,
       placeholder: 'Item',
@@ -87,7 +87,7 @@ describe('CustomInput', () => {
     expect(onValueChange).toHaveBeenLastCalledWith('Arroz integral')
   })
 
-  it('deve limpar zero automático no foco', () => {
+  it('deve limpar zero automático no foco', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
@@ -97,12 +97,12 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1,39')
-    fireEvent(input, 'focus')
+    await fireEvent(input, 'focus')
 
     expect(onValueChange).toHaveBeenLastCalledWith('')
   })
 
-  it('não deve limpar valor no foco quando não for zero', () => {
+  it('não deve limpar valor no foco quando não for zero', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
@@ -118,7 +118,7 @@ describe('CustomInput', () => {
     expect(onValueChange).toHaveBeenLastCalledWith('2')
   })
 
-  it('deve limitar decimais para Quantidade em 3 casas', () => {
+  it('deve limitar decimais para Quantidade em 3 casas', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
@@ -132,7 +132,7 @@ describe('CustomInput', () => {
     expect(onValueChange).toHaveBeenLastCalledWith('9.876')
   })
 
-  it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', () => {
+  it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Date,
       placeholder: 'yyyy-MM-dd',
@@ -146,7 +146,7 @@ describe('CustomInput', () => {
     expect(onValueChange).toHaveBeenLastCalledWith('2026-03-05')
   })
 
-  it('deve formatar Hora no padrão HH:mm com dois-pontos automático', () => {
+  it('deve formatar Hora no padrão HH:mm com dois-pontos automático', async () => {
     const { getByPlaceholderText, onValueChange } = renderCustomInput({
       nameField: NameField.Time,
       placeholder: 'HH:mm',
