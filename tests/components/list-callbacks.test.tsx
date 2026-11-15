@@ -49,10 +49,10 @@ describe('List callbacks coverage', () => {
     })
   })
 
-  it('deve executar callbacks criados para itens coletados e não coletados', () => {
+  it('deve executar callbacks criados para itens coletados e não coletados', async () => {
     const store = makeStore()
 
-    render(<List cartStore={store} />)
+    await render(<List cartStore={store} />)
 
     expect(mockListItem).toHaveBeenCalledTimes(2)
 

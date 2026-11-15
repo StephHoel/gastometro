@@ -88,14 +88,14 @@ describe('useReminderPendingAlerts', () => {
     applyStores([makeReminder()])
   })
 
-  it('exibe alerta para lembrete vencido com ações de desativar e remover', () => {
-    render(<HookHarness />)
+  it('exibe alerta para lembrete vencido com ações de desativar e remover', async () => {
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
     const params = alertShowMock.mock.calls[0][0]
 
-    act(() => {
+    await act(() => {
       params.buttons[0].action()
       params.buttons[1].action()
     })
@@ -104,19 +104,19 @@ describe('useReminderPendingAlerts', () => {
     expect(removeReminderMock).toHaveBeenCalledWith('r-1')
   })
 
-  it('enfileira alertas e mostra o próximo ao fechar o atual', () => {
+  it('enfileira alertas e mostra o próximo ao fechar o atual', async () => {
     applyStores([
       makeReminder({ id: 'r-1', title: 'Leite' }),
       makeReminder({ id: 'r-2', title: 'Arroz' }),
     ])
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
     const firstParams = alertShowMock.mock.calls[0][0]
 
-    act(() => {
+    await act(() => {
       firstParams.onClose()
     })
 
@@ -125,32 +125,32 @@ describe('useReminderPendingAlerts', () => {
     expect(secondParams.message).toContain('Arroz')
   })
 
-  it('reexibe alerta ao focar Home novamente', () => {
-    render(<HookHarness />)
+  it('reexibe alerta ao focar Home novamente', async () => {
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
     expect(focusCallback).toBeDefined()
 
-    act(() => {
+    await act(() => {
       focusCallback?.()
     })
 
     expect(alertShowMock).toHaveBeenCalledTimes(2)
   })
 
-  it('tenta novamente quando AlertService ainda não está pronto no primeiro flush', () => {
+  it('tenta novamente quando AlertService ainda não está pronto no primeiro flush', async () => {
     jest.useFakeTimers()
 
     alertShowMock
       .mockReturnValueOnce(false)
       .mockReturnValue(true)
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
-    act(() => {
+    await act(() => {
       jest.runOnlyPendingTimers()
     })
 
@@ -160,7 +160,7 @@ describe('useReminderPendingAlerts', () => {
   })
 
 
-  it('pula lembrete inválido da fila e tenta o próximo', () => {
+  it('pula lembrete inválido da fila e tenta o próximo', async () => {
     const reminders = [
       makeReminder({ id: 'r-1', title: 'Leite' }),
       makeReminder({ id: 'r-2', title: 'Arroz' }),
@@ -182,15 +182,15 @@ describe('useReminderPendingAlerts', () => {
     reminderStoreMock.mockReturnValue({ reminders })
     reminderStoreMock.getState.mockReturnValue(reminderState)
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
     const params = alertShowMock.mock.calls[0][0] as { message: string }
     expect(params.message).toContain('Leite')
   })
 
-  it('limpa IDs obsoletos de shownRef quando reminders é atualizado', () => {
-    render(<HookHarness />)
+  it('limpa IDs obsoletos de shownRef quando reminders é atualizado', async () => {
+    await render(<HookHarness />)
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
     const emptyState = {
@@ -200,13 +200,13 @@ describe('useReminderPendingAlerts', () => {
     reminderStoreMock.mockReturnValue({ reminders: [] })
     reminderStoreMock.getState.mockReturnValue(emptyState)
 
-    const { rerender } = render(<HookHarness />)
-    rerender(<HookHarness />)
+    const { rerender } = await render(<HookHarness />)
+    await rerender(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
   })
 
-  it('agenda próxima verificação para lembrete futuro', () => {
+  it('agenda próxima verificação para lembrete futuro', async () => {
     jest.useFakeTimers()
 
     const futureDate = new Date(Date.now() + 5000).toISOString()
@@ -225,18 +225,18 @@ describe('useReminderPendingAlerts', () => {
     reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
     reminderStoreMock.getState.mockReturnValue(reminderState)
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
     expect(alertShowMock).not.toHaveBeenCalled()
 
-    act(() => {
+    await act(() => {
       jest.runAllTimers()
     })
 
     jest.useRealTimers()
   })
 
-  it('cancela timeout de agendamento ao re-agendar via focus callback', () => {
+  it('cancela timeout de agendamento ao re-agendar via focus callback', async () => {
     jest.useFakeTimers()
 
     const futureDate = new Date(Date.now() + 5000).toISOString()
@@ -253,9 +253,9 @@ describe('useReminderPendingAlerts', () => {
     reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
     reminderStoreMock.getState.mockReturnValue(reminderState)
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
-    act(() => {
+    await act(() => {
       focusCallback?.()
     })
 
@@ -264,25 +264,25 @@ describe('useReminderPendingAlerts', () => {
     jest.useRealTimers()
   })
 
-  it('cancela retryTimeout no focus callback quando há retry pendente', () => {
+  it('cancela retryTimeout no focus callback quando há retry pendente', async () => {
     jest.useFakeTimers()
 
     alertShowMock
       .mockReturnValueOnce(false)
       .mockReturnValue(true)
 
-    render(<HookHarness />)
+    await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
-    act(() => {
+    await act(() => {
       focusCallback?.()
     })
 
     jest.useRealTimers()
   })
 
-  it('limpa timeouts ao desmontar o componente com lembrete futuro', () => {
+  it('limpa timeouts ao desmontar o componente com lembrete futuro', async () => {
     jest.useFakeTimers()
 
     const futureDate = new Date(Date.now() + 5000).toISOString()
@@ -299,25 +299,25 @@ describe('useReminderPendingAlerts', () => {
     reminderStoreMock.mockReturnValue({ reminders: [futureReminder] })
     reminderStoreMock.getState.mockReturnValue(reminderState)
 
-    const { unmount } = render(<HookHarness />)
+    const { unmount } = await render(<HookHarness />)
 
-    expect(() => unmount()).not.toThrow()
+    await expect(async () => await unmount()).not.toThrow()
 
     jest.useRealTimers()
   })
 
-  it('limpa retryTimeout ao desmontar quando retry estava pendente', () => {
+  it('limpa retryTimeout ao desmontar quando retry estava pendente', async () => {
     jest.useFakeTimers()
 
     alertShowMock
       .mockReturnValueOnce(false)
       .mockReturnValue(true)
 
-    const { unmount } = render(<HookHarness />)
+    const { unmount } = await render(<HookHarness />)
 
     expect(alertShowMock).toHaveBeenCalledTimes(1)
 
-    expect(() => unmount()).not.toThrow()
+    expect(async () => await unmount()).not.toThrow()
 
     jest.useRealTimers()
   })

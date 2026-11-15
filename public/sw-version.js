@@ -1,1 +1,1 @@
-self.__APP_VERSION__ = '1.7.3'
+self.__APP_VERSION__ = '1.8.1'

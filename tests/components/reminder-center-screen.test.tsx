@@ -55,36 +55,36 @@ describe('ReminderCenter screen', () => {
     ])
   })
 
-  it('exibe vazio quando não há lembretes para o filtro', () => {
+  it('exibe vazio quando não há lembretes para o filtro', async () => {
     mockReminderStore = createReminderStoreMock([])
 
-    const { getByText } = render(<ReminderCenter />)
+    const { getByText } = await render(<ReminderCenter />)
 
     expect(getByText(REMINDERS.center_empty)).toBeTruthy()
   })
 
-  it('aplica filtros enabled, disabled e overdue', () => {
-    const { getByText, queryByText } = render(<ReminderCenter />)
+  it('aplica filtros enabled, disabled e overdue', async () => {
+    const { getByText, queryByText } = await render(<ReminderCenter />)
 
-    fireEvent.press(getByText(REMINDERS.filter_label.enabled))
+    await fireEvent.press(getByText(REMINDERS.filter_label.enabled))
     expect(getByText('Ativo')).toBeTruthy()
     expect(queryByText('Desativado')).toBeNull()
 
-    fireEvent.press(getByText(REMINDERS.filter_label.disabled))
+    await fireEvent.press(getByText(REMINDERS.filter_label.disabled))
     expect(getByText('Desativado')).toBeTruthy()
     expect(queryByText('Ativo')).toBeNull()
 
-    fireEvent.press(getByText(REMINDERS.filter_label.overdue))
+    await fireEvent.press(getByText(REMINDERS.filter_label.overdue))
     expect(getByText('Vencido')).toBeTruthy()
     expect(queryByText('Ativo')).toBeNull()
   })
 
-  it('mostra fallback para lista removida e navega para lista de lembretes', () => {
-    const { getAllByText, getByText } = render(<ReminderCenter />)
+  it('mostra fallback para lista removida e navega para lista de lembretes', async () => {
+    const { getAllByText, getByText } = await render(<ReminderCenter />)
 
     expect(getByText(REMINDERS.in_list(REMINDERS.unknown_list))).toBeTruthy()
 
-    fireEvent.press(getAllByText(REMINDERS.open_list_button)[0])
+    await fireEvent.press(getAllByText(REMINDERS.open_list_button)[0])
     expect(mockPush).toHaveBeenCalledWith('./list-1')
   })
 })

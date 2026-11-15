@@ -10,8 +10,8 @@ import { Screen, KeyboardScreen } from '@/components/Screen'
 import { TextWhite } from '@/components/TextWhite'
 
 describe('Basic components', () => {
-  it('CustomButton deve renderizar filhos', () => {
-    const { getByText } = render(
+  it('CustomButton deve renderizar filhos', async () => {
+    const { getByText } = await render(
       <CustomButton>
         <Text>Enviar</Text>
       </CustomButton>
@@ -20,8 +20,8 @@ describe('Basic components', () => {
     expect(getByText('Enviar')).toBeTruthy()
   })
 
-  it('CustomButton deve aplicar variações de tipo e subcomponentes', () => {
-    const { getByText, rerender } = render(
+  it('CustomButton deve aplicar variações de tipo e subcomponentes', async () => {
+    const { getByText, rerender } = await render(
       <CustomButton type="Fail">
         <CustomButton.Icon>
           <Text>!</Text>
@@ -33,7 +33,7 @@ describe('Basic components', () => {
     expect(getByText('Excluir')).toBeTruthy()
     expect(getByText('!')).toBeTruthy()
 
-    rerender(
+    await rerender(
       <CustomButton type="Normal">
         <CustomButton.Text className="text-sm">Neutro</CustomButton.Text>
       </CustomButton>
@@ -42,13 +42,13 @@ describe('Basic components', () => {
     expect(getByText('Neutro')).toBeTruthy()
   })
 
-  it('Divider deve aceitar className adicional', () => {
-    const { toJSON } = render(<Divider className="border-red-500" />)
+  it('Divider deve aceitar className adicional', async () => {
+    const { toJSON } = await render(<Divider className="border-red-500" />)
     expect(toJSON()).toBeTruthy()
   })
 
-  it('Card, Divider e TextWhite devem funcionar com className padrão', () => {
-    const { getByText, toJSON } = render(
+  it('Card, Divider e TextWhite devem funcionar com className padrão', async () => {
+    const { getByText, toJSON } = await render(
       <Card>
         <TextWhite>texto</TextWhite>
         <Divider />
@@ -59,13 +59,13 @@ describe('Basic components', () => {
     expect(toJSON()).toBeTruthy()
   })
 
-  it('Loading deve renderizar sem quebrar', () => {
-    const { toJSON } = render(<Loading />)
+  it('Loading deve renderizar sem quebrar', async () => {
+    const { toJSON } = await render(<Loading />)
     expect(toJSON()).toBeTruthy()
   })
 
-  it('Row e Screen devem renderizar children', () => {
-    const { getByText } = render(
+  it('Row e Screen devem renderizar children', async () => {
+    const { getByText } = await render(
       <Screen>
         <Row>
           <Text>conteudo</Text>
@@ -76,8 +76,8 @@ describe('Basic components', () => {
     expect(getByText('conteudo')).toBeTruthy()
   })
 
-  it('KeyboardScreen deve renderizar children', () => {
-    const { getByText } = render(
+  it('KeyboardScreen deve renderizar children', async () => {
+    const { getByText } = await render(
       <KeyboardScreen>
         <Text>conteudo</Text>
       </KeyboardScreen>

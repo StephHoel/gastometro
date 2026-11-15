@@ -17,7 +17,7 @@ interface RenderCustomInputParams {
   keyboardType?: 'default' | 'number-pad'
 }
 
-function renderCustomInput({
+async function renderCustomInput({
   nameField,
   placeholder,
   returnKeyType,
@@ -54,14 +54,14 @@ function renderCustomInput({
   }
 
   return {
-    ...render(<TestComponent />),
+    ...await render(<TestComponent />),
     onValueChange,
   }
 }
 
 describe('CustomInput', () => {
-  it('deve normalizar decimais quando campo for Preço', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve normalizar decimais quando campo for Preço', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
       returnKeyType: 'done',
@@ -69,26 +69,26 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1,39')
-    fireEvent.changeText(input, '12,3456')
+    await fireEvent.changeText(input, '12,3456')
 
     expect(onValueChange).toHaveBeenLastCalledWith('12.34')
   })
 
-  it('deve manter texto livre quando campo for Item', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve manter texto livre quando campo for Item', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Item,
       placeholder: 'Item',
       returnKeyType: 'next',
     })
 
     const input = getByPlaceholderText('Item')
-    fireEvent.changeText(input, 'Arroz integral')
+    await fireEvent.changeText(input, 'Arroz integral')
 
     expect(onValueChange).toHaveBeenLastCalledWith('Arroz integral')
   })
 
-  it('deve limpar zero automático no foco', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve limpar zero automático no foco', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,
       placeholder: '1,39',
       returnKeyType: 'done',
@@ -97,13 +97,13 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1,39')
-    fireEvent(input, 'focus')
+    await fireEvent(input, 'focus')
 
     expect(onValueChange).toHaveBeenLastCalledWith('')
   })
 
-  it('não deve limpar valor no foco quando não for zero', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('não deve limpar valor no foco quando não for zero', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
       returnKeyType: 'next',
@@ -112,14 +112,14 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1')
-    fireEvent(input, 'focus')
+    await fireEvent(input, 'focus')
 
     expect(onValueChange).toHaveBeenCalledTimes(1)
     expect(onValueChange).toHaveBeenLastCalledWith('2')
   })
 
-  it('deve limitar decimais para Quantidade em 3 casas', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve limitar decimais para Quantidade em 3 casas', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Quantity,
       placeholder: '1',
       returnKeyType: 'done',
@@ -127,13 +127,13 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('1')
-    fireEvent.changeText(input, '9,87654')
+    await fireEvent.changeText(input, '9,87654')
 
     expect(onValueChange).toHaveBeenLastCalledWith('9.876')
   })
 
-  it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve formatar Data no padrão yyyy-MM-dd com separadores automáticos', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Date,
       placeholder: 'yyyy-MM-dd',
       returnKeyType: 'done',
@@ -141,13 +141,13 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('yyyy-MM-dd')
-    fireEvent.changeText(input, '2026030a5')
+    await fireEvent.changeText(input, '2026030a5')
 
     expect(onValueChange).toHaveBeenLastCalledWith('2026-03-05')
   })
 
-  it('deve formatar Hora no padrão HH:mm com dois-pontos automático', () => {
-    const { getByPlaceholderText, onValueChange } = renderCustomInput({
+  it('deve formatar Hora no padrão HH:mm com dois-pontos automático', async () => {
+    const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Time,
       placeholder: 'HH:mm',
       returnKeyType: 'done',
@@ -155,7 +155,7 @@ describe('CustomInput', () => {
     })
 
     const input = getByPlaceholderText('HH:mm')
-    fireEvent.changeText(input, '12h3:4')
+    await fireEvent.changeText(input, '12h3:4')
 
     expect(onValueChange).toHaveBeenLastCalledWith('12:34')
   })

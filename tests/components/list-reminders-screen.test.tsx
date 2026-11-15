@@ -114,33 +114,33 @@ describe('ListReminders screen', () => {
       ; (ReminderService.getStatus as jest.Mock).mockReturnValue('Ativo')
   })
 
-  it('renderiza fallback quando lista nao existe e volta para listas', () => {
+  it('renderiza fallback quando lista nao existe e volta para listas', async () => {
     setListIdParam('list-inexistente')
 
-    const { getByText } = render(<ListReminders />)
+    const { getByText } = await render(<ListReminders />)
 
     expect(getByText(REMINDERS.invalid_list)).toBeTruthy()
-    fireEvent.press(getByText(REMINDERS.back_to_lists))
+    await fireEvent.press(getByText(REMINDERS.back_to_lists))
     expect(mockPush).toHaveBeenCalledWith('/lists')
   })
 
-  it('renderiza lembretes da lista e navega para novo lembrete', () => {
-    const { getByText } = render(<ListReminders />)
+  it('renderiza lembretes da lista e navega para novo lembrete', async () => {
+    const { getByText } = await render(<ListReminders />)
 
     expect(getByText('Pao')).toBeTruthy()
     expect(getByText('Leite')).toBeTruthy()
 
-    fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByText('Add'))
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1/new')
   })
 
   it('navega para edicao ao clicar em edit e remove ao confirmar no alert', async () => {
-    const { getAllByText } = render(<ListReminders />)
+    const { getAllByText } = await render(<ListReminders />)
 
-    fireEvent.press(getAllByText('Pao')[0])
+    await fireEvent.press(getAllByText('Pao')[0])
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1/edit/r2')
 
-    fireEvent.press(getAllByText('Delete')[0])
+    await fireEvent.press(getAllByText('Delete')[0])
 
     expect(capturedAlertCallback).toBeTruthy()
     if (capturedAlertCallback) {
