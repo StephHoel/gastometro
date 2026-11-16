@@ -19,8 +19,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
 | **Implementadas** | 14 | Mini-spec 11 (contas a pagar) |
-| **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 7 | Em prioridade de execução |
+| **Ativas** | 7 | Mini-spec 21 (acessibilidade e usabilidade assistiva) |
+| **Planejadas** | 1 | Em prioridade de execução |
 | **Total** | 22 | - |
 
 ## Status das mini-specs
@@ -45,13 +45,13 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [Testes E2E para roteamento web SPA](./active/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](./active/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](./active/18-sincronizacao-eficiente-de-lembretes.md)
+- [Integridade e migração de dados locais](./active/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](./active/20-backup-e-restauracao-local.md)
+- [Acessibilidade e usabilidade assistiva](./active/21-acessibilidade-e-usabilidade-assistiva.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
-2. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
-3. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-4. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-5. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-6. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-7. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)

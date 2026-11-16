@@ -1,7 +1,7 @@
 # Mini-spec: Comparação de preços entre lugares
 
 Número: 17
-Status: planejado
+Status: ativa
 
 ## Problema
 
@@ -79,6 +79,7 @@ interface PriceComparisonEntryProps {
 
 ## Observações para IA
 
-- Confirmar com o usuário se a comparação é por item avulso ou se haverá visão consolidada por cesta de compras completa.
+- A decisão confirmada é oferecer comparação individual por item e visão consolidada da cesta completa.
+- Lugares sem preço para todos os itens da cesta devem ser identificados como incompletos; preços ausentes nunca equivalem a zero.
 - Priorizar modelagem desacoplada em `src/interfaces`, `src/stores` e `src/services`.
 - Garantir cobertura de testes para regras de cálculo de menor preço e diferença percentual.

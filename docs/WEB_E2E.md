@@ -1,0 +1,55 @@
+# Testes E2E do roteamento web
+
+A suíte E2E valida o comportamento da versão web estática no mesmo subdiretório usado pelo GitHub Pages (/gastometro/). Os testes usam Chromium controlado pelo Playwright e um servidor HTTP local que reproduz a resolução de arquivos estáticos e o fallback por 404.html.
+
+## Requisitos
+
+- Node.js 24 e npm 11, conforme a configuração do projeto.
+- Conexão com a internet na primeira execução para obter temporariamente o Playwright e instalar o Chromium.
+- Dependências do projeto instaladas com npm install.
+
+## Preparação do navegador
+
+Execute uma vez:
+
+```bash
+npx --yes --package=playwright@1.56.1 playwright install chromium
+```
+
+O Playwright é obtido temporariamente pelo npx, sem adicionar dependência de desenvolvimento nem alterar o lockfile do aplicativo.
+
+## Executar
+
+```bash
+npm run test:e2e:web
+```
+
+O comando:
+
+1. Gera a build estática com EXPO_PUBLIC_ROUTER_BASE=/gastometro.
+2. Copia os arquivos de fallback e Service Worker usados no deploy.
+3. Injeta o script de restauração de rota no index.html.
+4. Inicia um servidor HTTP local sob o caminho /gastometro/.
+5. Executa os cenários em Chromium três vezes, criando um contexto limpo para cada execução.
+
+## Cenários cobertos
+
+- A raiz carrega a tela inicial e define o título esperado.
+- A rota /calculator abre diretamente, sem navegação prévia.
+- Atualizar a página em /calculator preserva a tela e a URL.
+- Navegar pela interface e usar voltar/avançar do navegador mantém o histórico.
+- Uma rota inexistente passa pelo 404.html e preserva o caminho solicitado durante a restauração SPA.
+
+Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada repetição usa um novo contexto de navegador, isolando cookies e sessionStorage.
+
+## Diagnóstico
+
+A execução falha quando a build não é gerada, o servidor local não inicia, o Chromium não pode ser iniciado, a aplicação produz erro JavaScript ou algum critério de URL/tela não é atendido. O terminal identifica o cenário que falhou.
+
+Se o navegador ainda não estiver instalado, repita a preparação do Chromium. Para depuração visual, altere temporariamente headless: true para headless: false no script scripts/test-web-routing-e2e.cjs.
+
+## Limitações
+
+- A suíte cobre o roteamento web estático e o fallback SPA; não substitui testes E2E Android/iOS.
+- O servidor local simula o comportamento de arquivos estáticos do GitHub Pages, mas não valida a infraestrutura externa do GitHub.
+- O escopo não inclui carga, desempenho ou validação funcional completa das telas.

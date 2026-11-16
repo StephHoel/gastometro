@@ -3,6 +3,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { useReminderStore } from '@/stores/ReminderStore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {
@@ -16,6 +17,7 @@ jest.mock('@/services/NotificationService', () => ({
     cancelScheduled: jest.fn(),
     scheduleReminder: jest.fn(),
     getPermissionState: jest.fn(),
+    getScheduledReminderNotifications: jest.fn(async () => []),
   },
 }))
 
@@ -42,6 +44,7 @@ describe('ReminderOrchestrator', () => {
   const cancelScheduled = NotificationService.cancelScheduled as jest.Mock
   const scheduleReminder = NotificationService.scheduleReminder as jest.Mock
   const getPermissionState = NotificationService.getPermissionState as jest.Mock
+  const getScheduledReminderNotifications = NotificationService.getScheduledReminderNotifications as jest.Mock
   const alertOk = AlertService.ok as jest.Mock
 
   beforeEach(() => {
@@ -65,6 +68,7 @@ describe('ReminderOrchestrator', () => {
   it('enableReminder agenda quando há permissão', async () => {
     seedReminders([makeReminder('r1', { notificationId: 'old' })])
     ensurePermissionForScheduling.mockResolvedValueOnce(true)
+    getPermissionState.mockResolvedValueOnce('granted')
     scheduleReminder.mockResolvedValueOnce('new-id')
 
     await expect(ReminderOrchestrator.enableReminder('r1')).resolves.toBe(ReminderState.Enable)
@@ -160,6 +164,40 @@ describe('ReminderOrchestrator', () => {
     expect(useReminderStore.getState().getById('r5')?.notificationId).toBe('new5')
   })
 
+  it('preserva notificações válidas sem cancelar ou reagendar', async () => {
+    seedReminders([makeReminder('r-valid', { enabled: true, notificationId: 'native-1' })])
+    getPermissionState.mockResolvedValueOnce('granted')
+    getScheduledReminderNotifications.mockResolvedValueOnce([{
+      notificationId: 'native-1',
+      reminderId: 'r-valid',
+      listId: 'list-1',
+      title: 'Lembrete r-valid',
+      datetimeISO: '2099-01-01T10:00:00.000Z',
+    }])
+
+    await ReminderOrchestrator.syncWithPermissions()
+
+    expect(cancelScheduled).not.toHaveBeenCalled()
+    expect(scheduleReminder).not.toHaveBeenCalled()
+    expect(useReminderStore.getState().getById('r-valid')?.notificationId).toBe('native-1')
+  })
+
+  it('reconcilia notificações perdidas e remove agendamentos duplicados', async () => {
+    seedReminders([makeReminder('r-lost', { enabled: true, notificationId: 'old-id' })])
+    getPermissionState.mockResolvedValueOnce('granted')
+    getScheduledReminderNotifications.mockResolvedValueOnce([
+      { notificationId: 'duplicate-1', reminderId: 'r-lost', listId: 'list-1', title: 'Lembrete r-lost', datetimeISO: '2099-01-01T10:00:00.000Z' },
+      { notificationId: 'duplicate-2', reminderId: 'r-lost', listId: 'list-1', title: 'Lembrete r-lost', datetimeISO: '2099-01-01T10:00:00.000Z' },
+    ])
+
+    await ReminderOrchestrator.syncWithPermissions()
+
+    expect(cancelScheduled).toHaveBeenCalledWith('duplicate-2')
+    expect(cancelScheduled).not.toHaveBeenCalledWith('duplicate-1')
+    expect(scheduleReminder).not.toHaveBeenCalled()
+    expect(useReminderStore.getState().getById('r-lost')?.notificationId).toBe('duplicate-1')
+  })
+
   it('cleanupOrphans remove lembretes de listas inválidas', async () => {
     seedReminders([
       makeReminder('r1', { listId: 'list-1', notificationId: 'n1' }),
@@ -171,6 +209,36 @@ describe('ReminderOrchestrator', () => {
     expect(cancelScheduled).toHaveBeenCalledWith('n1')
     expect(useReminderStore.getState().getById('r1')).toBeUndefined()
     expect(useReminderStore.getState().getById('r2')).toBeDefined()
+  })
+
+  it('preserva e cancela notificação de lembrete órfão sem ID persistido', async () => {
+    seedReminders([makeReminder('orphan', { notificationId: undefined, listId: 'removed-list' })])
+    getScheduledReminderNotifications.mockResolvedValueOnce([{
+      notificationId: 'native-orphan',
+      reminderId: 'orphan',
+      listId: 'removed-list',
+      title: 'Lembrete orphan',
+      datetimeISO: '2099-01-01T10:00:00.000Z',
+    }])
+
+    await ReminderOrchestrator.cleanupOrphans([])
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('orphan'),
+    )
+    expect(cancelScheduled).toHaveBeenCalledWith('native-orphan')
+    expect(useReminderStore.getState().getById('orphan')).toBeUndefined()
+  })
+
+  it('mantém lembretes órfãos quando não consegue preservar uma cópia', async () => {
+    seedReminders([makeReminder('orphan-2', { notificationId: 'native-2', listId: 'removed-list' })])
+    ;(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('storage indisponível'))
+
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
+
+    expect(useReminderStore.getState().getById('orphan-2')).toBeDefined()
+    expect(cancelScheduled).not.toHaveBeenCalled()
   })
 
   it('saveReminder solicita permissão ao criar e alerta quando negada', async () => {
