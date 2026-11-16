@@ -32,6 +32,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Compara preços de produtos entre mercados, identifica todos os lugares empatados nas melhores e piores ofertas e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 - Valida e migra dados locais do carrinho e dos lembretes, preservando cópias de recuperação antes de reparos e informando o usuário sobre ocorrências.
+- Exporta listas, produtos e lembretes em backup JSON e permite restaurar por substituição ou mesclagem com resolução explícita de conflitos.
 
 ## Stack
 
@@ -52,6 +53,10 @@ Compatibilidade atual de plataforma:
 - Android mínimo: API 29 (Android 10).
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
+
+## Em implementação (aguardando validação dos PRs)
+
+- [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
 
 ## Funcionalidades planejadas
 
