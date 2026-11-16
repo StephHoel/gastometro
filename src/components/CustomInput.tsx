@@ -48,7 +48,7 @@ export function CustomInput<TFieldValues extends FieldValues>({
 
             <TextInput
               className={"text-white flex-1 py-2 mr-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"}
-              placeholderTextColor={colors.slate[400]}
+              placeholderTextColor={colors.slate[300]}
               placeholder={placeholder}
               accessibilityLabel={String(nameField)}
               accessibilityHint={placeholder}
