@@ -7,7 +7,7 @@ export function ListSectionHeader({ label, count }: ListSectionHeaderProps) {
   return (
     <View className="px-4 pt-4 pb-2">
       <View className="flex-row items-center justify-between rounded-2xl border border-slate-700 bg-slate-800/90 px-4 py-2">
-        <TextWhite className="text-sm font-bold uppercase tracking-[1.5px]">
+        <TextWhite accessibilityRole="header" className="text-sm font-bold uppercase tracking-[1.5px]">
           {label}
         </TextWhite>
 
