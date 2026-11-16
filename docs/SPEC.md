@@ -51,6 +51,7 @@ Público esperado:
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
+- Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
 
 ## 3. Funcionalidades Planejadas
 
@@ -183,6 +184,7 @@ Estado:
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual é `gastometro`.
 - `useReminderStore` mantém lembretes com persistência dedicada (`gastometro-reminders`).
+- O bootstrap de lembretes depende da hidratação, dos campos relevantes dos lembretes e dos IDs das listas; mudanças em produtos não disparam sincronização.
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 - `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
 
