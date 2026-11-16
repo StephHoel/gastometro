@@ -122,27 +122,13 @@ export const ReminderOrchestrator = {
   },
 
   async enableReminder(reminderId: string): Promise<ReminderState> {
-    const reminderStore = useReminderStore.getState()
-    const reminder = reminderStore.getById(reminderId)
+    const reminder = useReminderStore.getState().getById(reminderId)
     if (!reminder) return ReminderState.NotFound
 
-    reminderStore.setEnabled(reminderId, true)
-
+    useReminderStore.getState().setEnabled(reminderId, true)
     const allowed = await NotificationService.ensurePermissionForScheduling()
-    if (!allowed) {
-      reminderStore.setReminderNotification(reminderId, undefined)
-      return ReminderState.NoPermission
-    }
-
-    await NotificationService.cancelScheduled(reminder.notificationId)
-    const scheduledId = await NotificationService.scheduleReminder({
-      ...reminder,
-      enabled: true,
-      notificationId: undefined,
-    })
-
-    reminderStore.setReminderNotification(reminderId, scheduledId ?? undefined)
-    return ReminderState.Enable
+    await this.syncWithPermissions()
+    return allowed ? ReminderState.Enable : ReminderState.NoPermission
   },
 
   async disableReminder(reminderId: string): Promise<void> {
@@ -176,25 +162,8 @@ export const ReminderOrchestrator = {
   },
 
   async rescheduleReminder(reminderId: string): Promise<void> {
-    const reminderStore = useReminderStore.getState()
-    const reminder = reminderStore.getById(reminderId)
-    if (!reminder) return
-
-    await NotificationService.cancelScheduled(reminder.notificationId)
-
-    if (!reminder.enabled) {
-      reminderStore.setReminderNotification(reminderId, undefined)
-      return
-    }
-
-    const permission = await NotificationService.getPermissionState()
-    if (permission !== 'granted') {
-      reminderStore.setReminderNotification(reminderId, undefined)
-      return
-    }
-
-    const scheduledId = await NotificationService.scheduleReminder(reminder)
-    reminderStore.setReminderNotification(reminderId, scheduledId ?? undefined)
+    if (!useReminderStore.getState().getById(reminderId)) return
+    await this.syncWithPermissions()
   },
 
   syncWithPermissions: runReminderSync,
@@ -252,12 +221,12 @@ export const ReminderOrchestrator = {
       if (updated.enabled) {
         const allowed = await this.ensurePermissionOnSave()
         if (!allowed) {
-          reminderStore.setReminderNotification(editingId, undefined)
+          await this.syncWithPermissions()
           return true
         }
       }
 
-      await this.rescheduleReminder(editingId)
+      await this.syncWithPermissions()
       return true
     }
 
@@ -281,12 +250,12 @@ export const ReminderOrchestrator = {
     if (created.enabled) {
       const allowed = await this.ensurePermissionOnSave()
       if (!allowed) {
-        reminderStore.setReminderNotification(created.id, undefined)
+        await this.syncWithPermissions()
         return true
       }
     }
 
-    await this.rescheduleReminder(created.id)
+    await this.syncWithPermissions()
     return true
   },
 }
