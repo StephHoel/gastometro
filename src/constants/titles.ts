@@ -3,5 +3,6 @@ export const TITLES: Record<string, string> = {
   "/calculator": "Calculadora",
   "/lists": "Listas",
   "/bills": "Contas a pagar",
+  "/price-comparison": "Comparação de preços",
   "/reminders": "Central de Lembretes",
 }

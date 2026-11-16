@@ -6,13 +6,16 @@ import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform, Text } from 'react-native'
+import { useReminderStore } from '@/stores/ReminderStore'
+import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { AppState, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 
 export default function Layout() {
   const pathname = usePathname()
@@ -20,6 +23,12 @@ export default function Layout() {
   const lists = useCartStore((state) => state.lists)
   const activeListId = useCartStore((state) => state.activeListId)
   const setActiveList = useCartStore((state) => state.setActiveList)
+  const reminders = useReminderStore((state) => state.reminders)
+  const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const [cartHydrated, setCartHydrated] = useState(useCartStore.persist.hasHydrated())
+  const [recoveryNotice, setRecoveryNotice] = useState(PersistenceRecoveryService.getMessage())
+  const listIdsKey = getListIdsSignature(lists)
+  const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
 
   const handleNotificationResponse = useCallback(
@@ -62,6 +71,21 @@ export default function Layout() {
     [activeListId, lists, pathname, router, setActiveList],
   )
 
+  const handleNotificationResponseRef = useRef<(response: NotificationResponse) => Promise<void>>(async () => undefined)
+  handleNotificationResponseRef.current = handleNotificationResponse
+
+  useEffect(() => PersistenceRecoveryService.subscribe(setRecoveryNotice), [])
+
+  useEffect(() => {
+    const unsubscribe = useCartStore.persist.onFinishHydration(() => setCartHydrated(true))
+    return unsubscribe
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
+    return unsubscribe
+  }, [])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
@@ -93,7 +117,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (Platform.OS === 'web') return
+    if (Platform.OS === 'web' || !cartHydrated) return
 
     let isMounted = true
 
@@ -102,7 +126,7 @@ export default function Layout() {
         const lastResponse = await getLastNotificationResponseAsync()
         if (!isMounted || !lastResponse) return
 
-        await handleNotificationResponse(lastResponse)
+        await handleNotificationResponseRef.current(lastResponse)
         await clearLastNotificationResponseAsync()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
@@ -114,25 +138,26 @@ export default function Layout() {
     void bootstrapNotificationOpen()
 
     const subscription = addNotificationResponseReceivedListener((response) => {
-      void handleNotificationResponse(response)
+      void handleNotificationResponseRef.current(response)
     })
 
     return () => {
       isMounted = false
       subscription.remove()
     }
-  }, [handleNotificationResponse])
+  }, [cartHydrated])
 
   useEffect(() => {
+    if (!remindersHydrated || !cartHydrated) return
+
     let isMounted = true
 
     async function bootstrapReminders() {
       try {
-        const listIds = lists.map((list) => list.id)
-        await ReminderOrchestrator.cleanupOrphans(listIds)
+        const listIds = listIdsKey ? listIdsKey.split('|') : []
+        const cleanupCompleted = await ReminderOrchestrator.cleanupOrphans(listIds)
+        if (!isMounted || !cleanupCompleted) return
         await ReminderOrchestrator.syncWithPermissions()
-
-        if (!isMounted) return
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       }
@@ -143,10 +168,30 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [lists])
+  }, [listIdsKey, remindersSignature, remindersHydrated, cartHydrated])
+
+  useEffect(() => {
+    if (!remindersHydrated || !cartHydrated || Platform.OS === 'web') return
+
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        void ReminderOrchestrator.syncWithPermissions()
+      }
+    })
+
+    return () => subscription.remove()
+  }, [remindersHydrated, cartHydrated])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
+      {recoveryNotice && (
+        <View className="bg-amber-900 px-4 py-3 gap-2">
+          <Text className="text-white text-sm">{recoveryNotice}</Text>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Fechar aviso de recuperação" onPress={() => PersistenceRecoveryService.dismiss()}>
+            <Text className="text-amber-200 font-bold text-right">Fechar aviso</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -188,6 +233,17 @@ export default function Layout() {
               <Text style={{ color, fontSize: size-4, fontWeight: "bold" }}>R$</Text>
             ),
             headerTitle: "Contas a pagar",
+          }}
+        />
+
+        <Tabs.Screen
+          name="price-comparison"
+          options={{
+            title: "Preços",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size - 4, fontWeight: "bold" }}>$</Text>
+            ),
+            headerTitle: "Comparação de preços",
           }}
         />
 

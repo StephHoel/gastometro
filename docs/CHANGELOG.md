@@ -1,3 +1,65 @@
+## 1.10.0 - 2026-11-16
+
+Implementação da mini-spec 19: integridade e migração de dados locais.
+
+### Persistência
+
+- Versionados os schemas persistidos de carrinho e lembretes para a versão 2.
+- Adicionada validação de estruturas, campos obrigatórios, datas, IDs duplicados e consistência entre lista ativa, listas e espelho de produtos.
+- Dados legados do carrinho são migrados para uma lista compatível; lembretes válidos mantêm seus identificadores e referências.
+- Registros inválidos isolados são reparados ou descartados de forma controlada, preservando os registros válidos.
+- Antes de aplicar reparos, o conteúdo anterior é copiado para `gastometro-recovery-cart` ou `gastometro-recovery-reminders`.
+- Estruturas irrecuperáveis e versões futuras geram erro explícito, preservam o conteúdo original e não são tratadas como estado válido.
+
+### Recuperação para o usuário
+
+- Adicionado aviso persistente na interface para informar quando dados locais foram reparados ou não puderam ser validados.
+- O usuário pode dispensar o aviso sem apagar a cópia de recuperação.
+- Mantidas as chaves originais `gastometro` e `gastometro-reminders`.
+
+### Testes
+
+- Adicionados testes de migração legada, recuperação parcial, IDs duplicados, listas ativas inconsistentes, lembretes malformados e versões desconhecidas.
+
+## 1.9.1 - 2026-11-16
+
+Implementação da mini-spec 18: sincronização eficiente e idempotente de lembretes.
+
+### Sincronização
+
+- O bootstrap aguarda a hidratação do store de lembretes e observa somente os campos relevantes dos lembretes e os IDs das listas.
+- Alterações em produtos ou nomes de listas deixam de disparar a reconciliação de notificações.
+- A reconciliação consulta os agendamentos nativos, preserva notificações válidas, recupera IDs persistidos perdidos, remove duplicidades e recria apenas agendamentos ausentes ou divergentes.
+- Sincronizações sobrepostas são serializadas; retomada do app solicita uma nova reconciliação.
+- Listeners de resposta a notificações passam a ser registrados uma vez por montagem e removidos no cleanup.
+- Remoções e limpeza de órfãos cancelam todos os agendamentos encontrados para o lembrete.
+
+### Qualidade e compatibilidade
+
+- Adicionados testes para consulta de agendamentos, preservação de notificações válidas, recuperação de agendamentos e deduplicação.
+- Mantida a chave `gastometro-reminders` e o contrato persistido de `ReminderProps`.
+- A web continua sem agendamento nativo.
+
+## 1.9.0 - 2026-11-16
+
+Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
+
+### Funcionalidade
+
+- Adicionada tela de comparação de preços com cadastro, edição e remoção de lugares e itens.
+- Incluída comparação individual com destaque da menor oferta, maior preço e diferença absoluta/percentual.
+- Incluída comparação da cesta completa, com indicação de cesta incompleta quando faltar preço em qualquer item do lugar.
+- Resultados podem ser ordenados por preço ou nome do lugar.
+
+### Persistência e qualidade
+
+- Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
+- Adicionados testes de serviço e store para validação, cálculo, ordenação e integridade de preços ausentes.
+
+### Documentação
+
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
+
 # Changelog
 
 ## 1.8.1 - 2026-11-15

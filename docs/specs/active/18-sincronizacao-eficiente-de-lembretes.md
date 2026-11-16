@@ -1,7 +1,7 @@
 # Mini-spec: Sincronização eficiente de lembretes
 
 Número: 18
-Status: planejado
+Status: ativa
 
 ## Problema
 
