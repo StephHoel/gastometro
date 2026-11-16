@@ -59,6 +59,6 @@ describe('ListItem accessibility', () => {
       />,
     )
 
-    expect(getByRole('checkbox', { name: 'Desmarcar Arroz como coletado' })).toHaveAccessibilityState({ checked: true })
+    expect(getByRole('checkbox', { name: 'Desmarcar Arroz como coletado' }).props.accessibilityState).toEqual({ checked: true })
   })
 })
