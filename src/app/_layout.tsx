@@ -258,6 +258,7 @@ export default function Layout() {
           }}
         />
 
+        <Tabs.Screen name="backup" options={{ title: "Dados", tabBarButton: () => null }} />
         <Tabs.Screen name="list/add" options={{ href: null }} />
         <Tabs.Screen name="list/edit/[id]" options={{ href: null }} />
         <Tabs.Screen name="reminders/index" options={{ href: null }} />
