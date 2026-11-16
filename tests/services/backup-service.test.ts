@@ -40,6 +40,7 @@ describe('BackupService', () => {
       product('p2', 'Feijão'),
     ])], [reminder('r1', 'Comprar leite')]), '1.10.0')
 
+    expect(envelope.payload.reminders[0]).not.toHaveProperty('notificationId')
     const result = BackupService.parse(BackupService.stringify(envelope))
 
     expect(result.envelope.version).toBe(1)
