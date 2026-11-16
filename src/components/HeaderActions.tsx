@@ -6,6 +6,7 @@ import { AlertService } from "@/services/AlertService"
 import { useCartStore } from "@/stores/CartStore"
 import { useRouter } from "expo-router"
 import React from "react"
+import { Text, TouchableOpacity } from "react-native"
 
 export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
   const cartStore = useCartStore()
@@ -29,6 +30,10 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
     return (
       <>
         <Notification action={notificationActions} />
+
+        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Abrir backup e restauração" onPress={() => router.push("/backup")} className="px-2 py-1">
+          <Text className="text-lime-400 font-semibold">Backup</Text>
+        </TouchableOpacity>
 
         {cartStore.products.length > 0 && (
           <Delete
