@@ -57,12 +57,12 @@ Compatibilidade atual de plataforma:
 - [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/active/18-sincronizacao-eficiente-de-lembretes.md)
+- [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
 
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
