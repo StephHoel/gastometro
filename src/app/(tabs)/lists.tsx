@@ -119,7 +119,7 @@ export default function Lists() {
       {/* Criar nova lista */}
       <Row className="mx-4 mt-4 gap-2">
         <TextInput
-          className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2 text-base"
+          className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
           placeholder={INPUTS.placeholder.list_name}
           accessibilityLabel="Nome da nova lista"
           accessibilityHint="Digite um nome para criar uma lista de compras"
