@@ -52,12 +52,12 @@ Público esperado:
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 - Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
+- Validação e migração versionada dos stores locais, com preservação de cópia anterior antes de reparos e aviso recuperável para o usuário.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- sincronização eficiente de lembretes;
 - integridade e migração de dados locais;
 - backup e restauração local;
 - acessibilidade e usabilidade assistiva;
@@ -187,6 +187,7 @@ Estado:
 - O bootstrap de lembretes depende da hidratação, dos campos relevantes dos lembretes e dos IDs das listas; mudanças em produtos não disparam sincronização.
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 - `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
+- `CartStore` e `ReminderStore` validam os dados hidratados e mantêm cópias de recuperação nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` quando encontram estruturas que precisam de reparo.
 
 Manipulação da lista:
 
