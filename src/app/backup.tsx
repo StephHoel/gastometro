@@ -118,7 +118,7 @@ export default function BackupScreen() {
 
   function prepareMerge() {
     if (!preview) return
-    const result = BackupService.merge(localPayload, preview.envelope.payload)
+    const result = BackupService.merge(getLocalPayload(), preview.envelope.payload)
     setPendingMerge(preview.envelope.payload)
     setConflicts(result.conflicts)
     setChoices(Object.fromEntries(result.conflicts.map((conflict) => [conflict.id, 'local'])))
