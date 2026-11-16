@@ -25,6 +25,7 @@ export default function Layout() {
   const setActiveList = useCartStore((state) => state.setActiveList)
   const reminders = useReminderStore((state) => state.reminders)
   const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const [cartHydrated, setCartHydrated] = useState(useCartStore.persist.hasHydrated())
   const [recoveryNotice, setRecoveryNotice] = useState(PersistenceRecoveryService.getMessage())
   const listIdsKey = getListIdsSignature(lists)
   const remindersSignature = getReminderSyncSignature(reminders)
@@ -74,6 +75,11 @@ export default function Layout() {
   handleNotificationResponseRef.current = handleNotificationResponse
 
   useEffect(() => PersistenceRecoveryService.subscribe(setRecoveryNotice), [])
+
+  useEffect(() => {
+    const unsubscribe = useCartStore.persist.onFinishHydration(() => setCartHydrated(true))
+    return unsubscribe
+  }, [])
 
   useEffect(() => {
     const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
@@ -142,7 +148,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (!remindersHydrated) return
+    if (!remindersHydrated || !cartHydrated) return
 
     let isMounted = true
 
@@ -162,10 +168,10 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [listIdsKey, remindersSignature, remindersHydrated])
+  }, [listIdsKey, remindersSignature, remindersHydrated, cartHydrated])
 
   useEffect(() => {
-    if (!remindersHydrated || Platform.OS === 'web') return
+    if (!remindersHydrated || !cartHydrated || Platform.OS === 'web') return
 
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
@@ -174,7 +180,7 @@ export default function Layout() {
     })
 
     return () => subscription.remove()
-  }, [remindersHydrated])
+  }, [remindersHydrated, cartHydrated])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
