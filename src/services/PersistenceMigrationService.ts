@@ -189,18 +189,19 @@ export function normalizeReminderPersistedState(
       return
     }
 
-    if (usedIds.has(rawReminder.id)) {
+    const normalizedId = rawReminder.id.trim()
+    if (usedIds.has(normalizedId)) {
       discarded += 1
       repaired = true
       return
     }
-    usedIds.add(rawReminder.id)
+    usedIds.add(normalizedId)
 
     const datetimeISO = new Date(rawReminder.datetimeISO).toISOString()
     const createdAt = isValidDate(rawReminder.createdAt) ? new Date(rawReminder.createdAt).toISOString() : datetimeISO
     const updatedAt = isValidDate(rawReminder.updatedAt) ? new Date(rawReminder.updatedAt).toISOString() : createdAt
     const enabled = typeof rawReminder.enabled === 'boolean' ? rawReminder.enabled : true
-    const id = rawReminder.id.trim()
+    const id = normalizedId
     const title = rawReminder.title.trim()
     const listId = rawReminder.listId.trim()
     const itemId = isNonEmptyString(rawReminder.itemId) ? rawReminder.itemId.trim() : undefined
