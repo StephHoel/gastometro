@@ -1,6 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Platform, ScrollView, Share, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import * as Clipboard from 'expo-clipboard'
+import * as DocumentPicker from 'expo-document-picker'
+import * as FileSystem from 'expo-file-system/legacy'
 import { Page } from '@/components/Page'
 import { TextWhite } from '@/components/TextWhite'
 import { BackupService, type BackupConflict, type BackupPayload, type ConflictChoices } from '@/services/BackupService'
@@ -19,14 +21,14 @@ export default function BackupScreen() {
   const [pendingMerge, setPendingMerge] = useState<BackupPayload | null>(null)
   const [message, setMessage] = useState('')
 
-  const localPayload = useMemo<BackupPayload>(() => {
+  function getLocalPayload(): BackupPayload {
     const cart = useCartStore.getState()
     const reminders = useReminderStore.getState()
     return {
       cart: { lists: cart.lists, activeListId: cart.activeListId, products: cart.products },
       reminders: reminders.reminders,
     }
-  }, [])
+  }
 
   async function exportBackup() {
     try {
@@ -46,6 +48,25 @@ export default function BackupScreen() {
       setMessage('O conteúdo do backup foi preparado para compartilhamento. Salve-o em um local seguro.')
     } catch {
       setMessage('Não foi possível gerar ou compartilhar o backup. Tente novamente.')
+    }
+  }
+
+  async function selectBackupFile() {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/json', 'text/json', 'application/octet-stream'],
+        copyToCacheDirectory: true,
+        multiple: false,
+      })
+      if (result.canceled || !result.assets?.[0]) return
+      const asset = result.assets[0]
+      const raw = await FileSystem.readAsStringAsync(asset.uri, { encoding: FileSystem.EncodingType.UTF8 })
+      setRawBackup(raw)
+      setPreview(null)
+      setConflicts([])
+      setMessage('Arquivo selecionado. Valide o conteúdo para visualizar os dados antes da restauração.')
+    } catch {
+      setMessage('Não foi possível ler o arquivo selecionado. Verifique se ele está acessível e tente novamente.')
     }
   }
 
@@ -115,7 +136,7 @@ export default function BackupScreen() {
       setMessage('Escolha uma opção para cada conflito antes de concluir a mesclagem.')
       return
     }
-    void applyPayload(BackupService.resolveConflicts(localPayload, pendingMerge, choices))
+    void applyPayload(BackupService.resolveConflicts(getLocalPayload(), pendingMerge, choices))
   }
 
   function renderConflict(conflict: BackupConflict) {
@@ -158,13 +179,16 @@ export default function BackupScreen() {
 
         <View className="h-px bg-slate-600 my-2" />
         <TextWhite className="text-lg font-bold">Restaurar backup</TextWhite>
-        <TextWhite>Cole abaixo o conteúdo de um arquivo JSON exportado pelo Gastômetro. Os dados locais só serão alterados depois da validação e da confirmação.</TextWhite>
+        <TextWhite>Selecione um arquivo JSON exportado pelo Gastômetro. Os dados locais só serão alterados depois da validação e da confirmação.</TextWhite>
+        <TouchableOpacity accessibilityRole="button" className={secondaryClass} onPress={() => void selectBackupFile()}>
+          <Text className="text-white font-bold">Selecionar arquivo JSON</Text>
+        </TouchableOpacity>
         <TextInput
           accessibilityLabel="Conteúdo JSON do backup"
           multiline
           value={rawBackup}
           onChangeText={setRawBackup}
-          placeholder="Cole aqui o conteúdo do backup..."
+          placeholder="O conteúdo do arquivo selecionado aparecerá aqui..."
           placeholderTextColor="#94A3B8"
           className="min-h-40 rounded-lg border border-slate-500 bg-slate-800 p-3 text-white"
           textAlignVertical="top"
