@@ -28,7 +28,7 @@ export function Header({ activeListId }: { activeListId?: string }) {
       <View className="pt-4 px-3 flex-row justify-between">
         <View className="flex-1" />
 
-        <TextWhite className="text-2xl font-heading flex-1 text-center">
+        <TextWhite accessibilityRole="header" className="text-2xl font-heading flex-1 text-center">
           {titlePages[route.name as keyof typeof titlePages]}
         </TextWhite>
 
