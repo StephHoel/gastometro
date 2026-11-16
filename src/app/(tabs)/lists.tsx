@@ -10,7 +10,6 @@ import { useRouter } from "expo-router"
 import React, { useRef, useState } from "react"
 import {
   FlatList,
-  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
