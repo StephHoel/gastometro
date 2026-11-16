@@ -6,6 +6,7 @@ import { normalizeCartPersistedState, normalizeReminderPersistedState } from '@/
 
 const BACKUP_FORMAT = 'gastometro-backup'
 const BACKUP_VERSION = 1
+const MAX_BACKUP_SIZE = 10 * 1024 * 1024
 
 export interface BackupPayload {
   cart: {
@@ -63,7 +64,10 @@ export const BackupService = {
       version: BACKUP_VERSION,
       exportedAt: new Date().toISOString(),
       appVersion,
-      payload,
+      payload: {
+        cart: payload.cart,
+        reminders: payload.reminders.map(({ notificationId: _notificationId, ...reminder }) => reminder),
+      },
     }
   },
 
@@ -72,6 +76,10 @@ export const BackupService = {
   },
 
   parse(raw: string): { envelope: BackupEnvelope; summary: BackupSummary } {
+    if (raw.length > MAX_BACKUP_SIZE) {
+      throw new Error('O arquivo de backup excede o limite de 10 MB.')
+    }
+
     let parsed: unknown
     try {
       parsed = JSON.parse(raw)
@@ -104,8 +112,8 @@ export const BackupService = {
       }
     }
 
-    if (cartResult.discarded > 0 || reminderResult.discarded > 0) {
-      throw new Error('O backup contém registros inválidos. Nenhum dado local foi alterado.')
+    if (cartResult.repaired || reminderResult.repaired || cartResult.discarded > 0 || reminderResult.discarded > 0) {
+      throw new Error('O backup contém registros inválidos ou identificadores duplicados. Nenhum dado local foi alterado.')
     }
 
     const exportedAt = typeof parsed.exportedAt === 'string' && !Number.isNaN(new Date(parsed.exportedAt).getTime())
