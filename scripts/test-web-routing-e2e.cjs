@@ -113,19 +113,12 @@ async function waitForServer() {
 }
 
 function loadPlaywright() {
-  const executableName = process.platform === "win32" ? "playwright.cmd" : "playwright"
-  const binary = process.env.PATH.split(delimiter)
-    .map(directory => path.join(directory, executableName))
+  const packageEntry = process.env.PATH.split(delimiter)
+    .map(directory => path.resolve(directory, "..", "playwright", "index.js"))
     .find(candidate => fs.existsSync(candidate))
 
-  if (!binary) {
+  if (!packageEntry) {
     throw new Error("Playwright não foi encontrado. Execute o comando pelo script npm.")
-  }
-
-  const realBinary = fs.realpathSync(binary)
-  const packageEntry = path.join(path.dirname(realBinary), "index.js")
-  if (!fs.existsSync(packageEntry)) {
-    throw new Error("Não foi possível localizar a API do Playwright no pacote temporário.")
   }
   return require(packageEntry)
 }
