@@ -41,7 +41,7 @@ export function Header({ activeListId }: { activeListId?: string }) {
 
       <Divider className="border-white pt-3 mx-2" />
 
-      {route.name === "index" && <Add action={() => router.push(ROUTES.List.Add)} />}
+      {route.name === "index" && <Add action={() => router.push(ROUTES.List.Add)} accessibilityLabel="Adicionar item à lista" />}
     </>
   )
 }
