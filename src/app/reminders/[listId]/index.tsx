@@ -32,9 +32,11 @@ export default function ListReminders() {
     <Page alertRef={alertRef}>
       {!list && (
         <View className="px-4 py-6 gap-4">
-          <TextWhite className='text-center'>{REMINDERS.invalid_list}</TextWhite>
+          <TextWhite accessibilityLiveRegion="assertive" className='text-center'>{REMINDERS.invalid_list}</TextWhite>
           <TouchableOpacity
-            className="bg-lime-400 rounded-lg px-3 py-2 self-start"
+            className="min-h-11 bg-lime-400 rounded-lg px-3 py-2 self-start justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+            accessibilityRole="button"
+            accessibilityLabel="Voltar para as listas"
             onPress={() => router.push(ROUTES.List.Index)}
           >
             <TextWhite className="text-black">{REMINDERS.back_to_lists}</TextWhite>
@@ -43,7 +45,7 @@ export default function ListReminders() {
       )}
 
       {list && (<>
-        <TextWhite className="py-2 text-lg font-bold text-center">{REMINDERS.list_title(list.name)}</TextWhite>
+        <TextWhite accessibilityRole="header" className="py-2 text-lg font-bold text-center">{REMINDERS.list_title(list.name)}</TextWhite>
 
         <FlatList
           data={reminders}
@@ -55,7 +57,7 @@ export default function ListReminders() {
           renderItem={({ item }) => <ReminderItem item={item} alertRef={alertRef} />}
         />
 
-        <Add action={() => router.push(ROUTES.Reminder.New(listId))} />
+        <Add action={() => router.push(ROUTES.Reminder.New(listId))} accessibilityLabel={"Adicionar lembrete para " + list.name} />
       </>)}
     </Page>
   )
