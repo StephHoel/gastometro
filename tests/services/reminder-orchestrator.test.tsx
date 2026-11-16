@@ -231,6 +231,16 @@ describe('ReminderOrchestrator', () => {
     expect(useReminderStore.getState().getById('orphan')).toBeUndefined()
   })
 
+  it('mantém lembretes órfãos quando não consegue preservar uma cópia', async () => {
+    seedReminders([makeReminder('orphan-2', { notificationId: 'native-2', listId: 'removed-list' })])
+    ;(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('storage indisponível'))
+
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
+
+    expect(useReminderStore.getState().getById('orphan-2')).toBeDefined()
+    expect(cancelScheduled).not.toHaveBeenCalled()
+  })
+
   it('saveReminder solicita permissão ao criar e alerta quando negada', async () => {
     ensurePermissionForScheduling.mockResolvedValueOnce(false)
 
