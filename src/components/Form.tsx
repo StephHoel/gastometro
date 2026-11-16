@@ -120,7 +120,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         onSubmit={() => handleSubmit(onSubmit)()}
       />
 
-      <Button onPress={() => handleSubmit(onSubmit)()}>
+      <Button onPress={() => handleSubmit(onSubmit)()} accessibilityLabel={data ? "Salvar alterações do produto " + data.item : "Adicionar produto à lista"}>
         <Button.Icon>{children}</Button.Icon>
         <Button.Text>{buttonTitle}</Button.Text>
       </Button>
