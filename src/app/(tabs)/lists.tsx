@@ -1,6 +1,5 @@
 import type { CustomAlertRef } from "@/interfaces/CustomAlertRef"
 import { TextWhite } from "@/components/TextWhite"
-import { COLORS } from "@/constants/color"
 import { AlertService } from "@/services/AlertService"
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { useCartStore } from "@/stores/CartStore"
