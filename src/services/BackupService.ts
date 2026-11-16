@@ -102,9 +102,6 @@ export const BackupService = {
       if (!list) {
         throw new Error('O backup contém um lembrete vinculado a uma lista inexistente. Nenhum dado local foi alterado.')
       }
-      if (reminder.itemId && !list.products.some((product) => product.id === reminder.itemId)) {
-        throw new Error('O backup contém um lembrete vinculado a um produto inexistente. Nenhum dado local foi alterado.')
-      }
     }
 
     if (cartResult.discarded > 0 || reminderResult.discarded > 0) {
@@ -143,15 +140,16 @@ export const BackupService = {
     const ignored = { lists: 0, products: 0, reminders: 0 }
 
     for (const backupList of backup.cart.lists) {
-      const localList = lists.find((list) => list.id === backupList.id)
+      let localList = lists.find((list) => list.id === backupList.id)
       if (!localList) {
-        lists.push({ ...backupList, products: [...backupList.products] })
+        localList = { ...backupList, products: [] }
+        lists.push(localList)
         merged.lists += 1
-        merged.products += backupList.products.length
-        continue
+      } else if (localList.name === backupList.name) {
+        ignored.lists += 1
       }
 
-      if (localList.name !== backupList.name) {
+      if (localList.name !== backupList.name && local.cart.lists.some((list) => list.id === backupList.id)) {
         conflicts.push({
           id: 'lista:' + backupList.id,
           type: 'lista',
@@ -221,10 +219,10 @@ export const BackupService = {
     const reminders = [...local.reminders]
 
     for (const backupList of backup.cart.lists) {
-      const localList = lists.find((list) => list.id === backupList.id)
+      let localList = lists.find((list) => list.id === backupList.id)
       if (!localList) {
-        lists.push({ ...backupList, products: [...backupList.products] })
-        continue
+        localList = { ...backupList, products: [] }
+        lists.push(localList)
       }
 
       if (choices['lista:' + backupList.id] === 'backup') {
