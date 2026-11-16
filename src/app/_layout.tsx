@@ -7,6 +7,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
+import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AppState, Platform, Text } from 'react-native'
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
@@ -23,11 +24,8 @@ export default function Layout() {
   const setActiveList = useCartStore((state) => state.setActiveList)
   const reminders = useReminderStore((state) => state.reminders)
   const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
-  const listIdsKey = lists.map((list) => list.id).sort().join('|')
-  const remindersSignature = reminders
-    .map((reminder) => [reminder.id, reminder.title, reminder.datetimeISO, reminder.enabled, reminder.listId].join('::'))
-    .sort()
-    .join('|')
+  const listIdsKey = getListIdsSignature(lists)
+  const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
 
   const handleNotificationResponse = useCallback(
