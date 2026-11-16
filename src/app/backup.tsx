@@ -1,0 +1,207 @@
+import React, { useMemo, useState } from 'react'
+import { Alert, Platform, ScrollView, Share, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import * as Clipboard from 'expo-clipboard'
+import { Page } from '@/components/Page'
+import { TextWhite } from '@/components/TextWhite'
+import { BackupService, type BackupConflict, type BackupPayload, type ConflictChoices } from '@/services/BackupService'
+import { useCartStore } from '@/stores/CartStore'
+import { useReminderStore } from '@/stores/ReminderStore'
+import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+
+const buttonClass = 'rounded-lg px-4 py-3 items-center bg-lime-400'
+const secondaryClass = 'rounded-lg px-4 py-3 items-center border border-slate-500'
+
+export default function BackupScreen() {
+  const [rawBackup, setRawBackup] = useState('')
+  const [preview, setPreview] = useState<ReturnType<typeof BackupService.parse> | null>(null)
+  const [conflicts, setConflicts] = useState<BackupConflict[]>([])
+  const [choices, setChoices] = useState<ConflictChoices>({})
+  const [pendingMerge, setPendingMerge] = useState<BackupPayload | null>(null)
+  const [message, setMessage] = useState('')
+
+  const localPayload = useMemo<BackupPayload>(() => {
+    const cart = useCartStore.getState()
+    const reminders = useReminderStore.getState()
+    return {
+      cart: { lists: cart.lists, activeListId: cart.activeListId, products: cart.products },
+      reminders: reminders.reminders,
+    }
+  }, [])
+
+  async function exportBackup() {
+    try {
+      const cart = useCartStore.getState()
+      const reminders = useReminderStore.getState()
+      const envelope = BackupService.createEnvelope({
+        cart: { lists: cart.lists, activeListId: cart.activeListId, products: cart.products },
+        reminders: reminders.reminders.map(({ notificationId: _notificationId, ...reminder }) => reminder),
+      }, '1.10.0')
+      const json = BackupService.stringify(envelope)
+      if (Platform.OS === 'web') {
+        await Clipboard.setStringAsync(json)
+        setMessage('Backup gerado e copiado. Salve o conteúdo em um arquivo .json para mantê-lo seguro.')
+        return
+      }
+      await Share.share({ title: 'Backup do Gastômetro', message: json })
+      setMessage('O conteúdo do backup foi preparado para compartilhamento. Salve-o em um local seguro.')
+    } catch {
+      setMessage('Não foi possível gerar ou compartilhar o backup. Tente novamente.')
+    }
+  }
+
+  function previewBackup() {
+    try {
+      const parsed = BackupService.parse(rawBackup)
+      setPreview(parsed)
+      setConflicts([])
+      setChoices({})
+      setPendingMerge(null)
+      setMessage('Backup validado. Confira o resumo e escolha como deseja restaurar.')
+    } catch (error) {
+      setPreview(null)
+      setMessage(error instanceof Error ? error.message : 'Não foi possível ler o backup.')
+    }
+  }
+
+  async function applyPayload(payload: BackupPayload) {
+    try {
+      await BackupService.preserveCurrentData()
+      useCartStore.setState({
+        lists: payload.cart.lists,
+        activeListId: payload.cart.activeListId,
+        products: payload.cart.products,
+      })
+      useReminderStore.setState({ reminders: payload.reminders.map((reminder) => ({ ...reminder })) })
+      await ReminderOrchestrator.syncWithPermissions()
+      setMessage('Restauração concluída. Listas, produtos e lembretes foram atualizados.')
+      setPreview(null)
+      setConflicts([])
+      setPendingMerge(null)
+      setRawBackup('')
+    } catch {
+      setMessage('A restauração não foi concluída. Uma cópia dos dados locais anteriores foi preservada para recuperação.')
+    }
+  }
+
+  function confirmReplace() {
+    if (!preview) return
+    Alert.alert(
+      'Substituir dados locais?',
+      'Todas as listas, produtos e lembretes atuais serão substituídos pelos dados do backup. Uma cópia dos dados atuais será preservada antes da operação.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Substituir', style: 'destructive', onPress: () => void applyPayload(preview.envelope.payload) },
+      ],
+    )
+  }
+
+  function prepareMerge() {
+    if (!preview) return
+    const result = BackupService.merge(localPayload, preview.envelope.payload)
+    setPendingMerge(preview.envelope.payload)
+    setConflicts(result.conflicts)
+    setChoices(Object.fromEntries(result.conflicts.map((conflict) => [conflict.id, 'local'])))
+    if (result.conflicts.length === 0) {
+      void applyPayload(result.payload)
+      return
+    }
+    setMessage('Há conflitos entre os dados locais e o backup. Escolha qual versão manter em cada conflito.')
+  }
+
+  function finishMerge() {
+    if (!pendingMerge) return
+    const unresolved = conflicts.filter((conflict) => !choices[conflict.id])
+    if (unresolved.length > 0) {
+      setMessage('Escolha uma opção para cada conflito antes de concluir a mesclagem.')
+      return
+    }
+    void applyPayload(BackupService.resolveConflicts(localPayload, pendingMerge, choices))
+  }
+
+  function renderConflict(conflict: BackupConflict) {
+    return (
+      <View key={conflict.id} className="rounded-lg border border-slate-600 p-3 gap-2">
+        <Text className="text-white font-bold">{conflict.type.toUpperCase()}: {conflict.description}</Text>
+        <Text className="text-slate-300 text-sm">Dados locais: {conflict.localValue}</Text>
+        <Text className="text-slate-300 text-sm">Dados do backup: {conflict.backupValue}</Text>
+        <View className="flex-row gap-2">
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityState={{ selected: choices[conflict.id] === 'local' }}
+            className={choices[conflict.id] === 'local' ? buttonClass : secondaryClass}
+            onPress={() => setChoices((current) => ({ ...current, [conflict.id]: 'local' }))}
+          >
+            <Text className="text-slate-900 font-bold">Manter local</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityState={{ selected: choices[conflict.id] === 'backup' }}
+            className={choices[conflict.id] === 'backup' ? buttonClass : secondaryClass}
+            onPress={() => setChoices((current) => ({ ...current, [conflict.id]: 'backup' }))}
+          >
+            <Text className="text-slate-900 font-bold">Usar backup</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+
+  return (
+    <Page>
+      <ScrollView contentContainerClassName="px-4 pb-8 gap-4">
+        <TextWhite className="text-xl font-bold">Backup e restauração</TextWhite>
+        <TextWhite>Exporte listas, produtos e lembretes para um arquivo JSON. O backup fica sob sua responsabilidade: guarde uma cópia em local seguro.</TextWhite>
+
+        <TouchableOpacity accessibilityRole="button" className={buttonClass} onPress={() => void exportBackup()}>
+          <Text className="text-slate-900 font-bold">Gerar backup</Text>
+        </TouchableOpacity>
+
+        <View className="h-px bg-slate-600 my-2" />
+        <TextWhite className="text-lg font-bold">Restaurar backup</TextWhite>
+        <TextWhite>Cole abaixo o conteúdo de um arquivo JSON exportado pelo Gastômetro. Os dados locais só serão alterados depois da validação e da confirmação.</TextWhite>
+        <TextInput
+          accessibilityLabel="Conteúdo JSON do backup"
+          multiline
+          value={rawBackup}
+          onChangeText={setRawBackup}
+          placeholder="Cole aqui o conteúdo do backup..."
+          placeholderTextColor="#94A3B8"
+          className="min-h-40 rounded-lg border border-slate-500 bg-slate-800 p-3 text-white"
+          textAlignVertical="top"
+        />
+        <TouchableOpacity accessibilityRole="button" className={secondaryClass} onPress={previewBackup}>
+          <Text className="text-white font-bold">Validar e visualizar</Text>
+        </TouchableOpacity>
+
+        {preview && (
+          <View className="rounded-lg border border-slate-600 p-3 gap-2">
+            <TextWhite className="font-bold">Resumo do backup</TextWhite>
+            <TextWhite>Exportado em: {new Date(preview.summary.exportedAt).toLocaleString('pt-BR')}</TextWhite>
+            <TextWhite>Listas: {preview.summary.lists}</TextWhite>
+            <TextWhite>Produtos: {preview.summary.products}</TextWhite>
+            <TextWhite>Lembretes: {preview.summary.reminders}</TextWhite>
+            <TouchableOpacity accessibilityRole="button" className={buttonClass} onPress={confirmReplace}>
+              <Text className="text-slate-900 font-bold">Substituir dados locais</Text>
+            </TouchableOpacity>
+            <TouchableOpacity accessibilityRole="button" className={secondaryClass} onPress={prepareMerge}>
+              <Text className="text-white font-bold">Mesclar com dados locais</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {conflicts.length > 0 && (
+          <View className="gap-3">
+            <TextWhite className="text-lg font-bold">Conflitos encontrados ({conflicts.length})</TextWhite>
+            <TextWhite>Para cada registro com o mesmo identificador e conteúdo diferente, escolha qual versão será mantida. Registros idênticos não são duplicados.</TextWhite>
+            {conflicts.map(renderConflict)}
+            <TouchableOpacity accessibilityRole="button" className={buttonClass} onPress={finishMerge}>
+              <Text className="text-slate-900 font-bold">Concluir mesclagem</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {message ? <TextWhite accessibilityLiveRegion="polite">{message}</TextWhite> : null}
+      </ScrollView>
+    </Page>
+  )
+}
