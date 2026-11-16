@@ -37,11 +37,9 @@ export default function PriceComparison() {
   const [sortBy, setSortBy] = useState<'price' | 'name'>('price')
 
   const basket = useMemo(() => compareBasket(entries, places, sortBy), [entries, places, sortBy])
-  const bestBasketPlaceId = basket.filter((place) => place.complete && place.total !== null).reduce<string | null>((best, place) => {
-    if (best === null) return place.placeId
-    const bestPlace = basket.find((candidate) => candidate.placeId === best)
-    return bestPlace?.total !== null && bestPlace?.total !== undefined && place.total !== null && place.total < bestPlace.total ? place.placeId : best
-  }, null)
+  const bestBasketPlaceId = basket
+    .filter((place) => place.complete && place.total !== null)
+    .sort((a, b) => (a.total ?? Infinity) - (b.total ?? Infinity))[0]?.placeId ?? null
 
   function resetPlaceForm() {
     setPlaceName('')
