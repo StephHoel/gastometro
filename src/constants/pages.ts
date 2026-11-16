@@ -4,6 +4,7 @@ export const titlePages = {
   "lists": "Listas",
   "bills": "Contas a pagar",
   "price-comparison": "Comparação de preços",
+  "backup": "Backup e restauração",
   "list/add": 'Novo Item',
   "list/edit/[id]": 'Editar Item',
   "reminders/index": 'Central de Lembretes',
