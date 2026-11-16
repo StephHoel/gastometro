@@ -32,6 +32,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 - Exporta listas, produtos e lembretes em backup JSON e permite restaurar por substituição ou mesclagem com resolução explícita de conflitos.
+- Inclui rótulos e estados acessíveis nos principais controles, foco visível na web e verificação automatizada de contraste WCAG AA.
 
 ## Stack
 
@@ -60,6 +61,7 @@ Compatibilidade atual de plataforma:
 - [Sincronização eficiente de lembretes](docs/specs/active/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
+- [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-e-usabilidade-assistiva.md)
 
 ## Funcionalidades planejadas
 
@@ -82,6 +84,8 @@ Funcionalidades concluídas recentemente:
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
 - Service Worker para funcionamento offline em web (mini-spec 13 em `docs/specs/done/`).
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
+
+Consulte também o [guia de acessibilidade](docs/ACCESSIBILITY.md) para os critérios e a validação manual.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
