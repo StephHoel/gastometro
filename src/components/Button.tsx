@@ -7,7 +7,7 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
 
   switch (type) {
     case "Success":
-      typeColor = "bg-lime-400"
+      typeColor = "bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
       break
     case "Fail":
       typeColor = "bg-red-600"
