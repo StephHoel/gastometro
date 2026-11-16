@@ -148,7 +148,7 @@ export default function BackupScreen() {
     setConflicts(result.conflicts)
     setChoices({})
     if (result.conflicts.length === 0) {
-      void applyPayload(result.payload, 'Mesclados: ' + result.merged.lists + ' listas, ' + result.merged.products + ' produtos e ' + result.merged.reminders + ' lembretes. Já existentes e idênticos ignorados: ' + result.ignored.lists + ' listas, ' + result.ignored.lists + ' listas, ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.')
+      void applyPayload(result.payload, 'Mesclados: ' + result.merged.lists + ' listas, ' + result.merged.products + ' produtos e ' + result.merged.reminders + ' lembretes. Já existentes e idênticos ignorados: ' + result.ignored.lists + ' listas, ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.')
       return
     }
     setMessage('Há conflitos entre os dados locais e o backup. Escolha qual versão manter em cada conflito.')
@@ -166,7 +166,7 @@ export default function BackupScreen() {
     const chosenFromBackup = conflicts.filter((conflict) => choices[conflict.id] === 'backup')
     const keptLocal = conflicts.filter((conflict) => choices[conflict.id] === 'local')
     const count = (items: BackupConflict[], type: BackupConflict['type']) => items.filter((item) => item.type === type).length
-    const summary = 'Mesclados: ' + (result.merged.lists + count(chosenFromBackup, 'lista')) + ' listas, ' + (result.merged.products + count(chosenFromBackup, 'produto')) + ' produtos e ' + (result.merged.reminders + count(chosenFromBackup, 'lembrete')) + ' lembretes. Mantidos locais nos conflitos: ' + count(keptLocal, 'lista') + ' listas, ' + count(keptLocal, 'produto') + ' produtos e ' + count(keptLocal, 'lembrete') + ' lembretes. Registros idênticos ignorados: ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.'
+    const summary = 'Mesclados: ' + (result.merged.lists + count(chosenFromBackup, 'lista')) + ' listas, ' + (result.merged.products + count(chosenFromBackup, 'produto')) + ' produtos e ' + (result.merged.reminders + count(chosenFromBackup, 'lembrete')) + ' lembretes. Mantidos locais nos conflitos: ' + count(keptLocal, 'lista') + ' listas, ' + count(keptLocal, 'produto') + ' produtos e ' + count(keptLocal, 'lembrete') + ' lembretes. Registros idênticos ignorados: ' + result.ignored.lists + ' listas, ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.'
     void applyPayload(BackupService.resolveConflicts(current, pendingMerge, choices), summary)
   }
 
