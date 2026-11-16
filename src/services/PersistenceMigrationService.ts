@@ -205,7 +205,7 @@ export function normalizeReminderPersistedState(
     const title = rawReminder.title.trim()
     const listId = rawReminder.listId.trim()
     const itemId = isNonEmptyString(rawReminder.itemId) ? rawReminder.itemId.trim() : undefined
-    const notificationId = isNonEmptyString(rawReminder.notificationId) ? rawReminder.notificationId : undefined
+    const notificationId = isNonEmptyString(rawReminder.notificationId) ? rawReminder.notificationId.trim() : undefined
 
     if (
       datetimeISO !== rawReminder.datetimeISO ||
@@ -215,8 +215,8 @@ export function normalizeReminderPersistedState(
       id !== rawReminder.id ||
       title !== rawReminder.title ||
       listId !== rawReminder.listId ||
-      (rawReminder.itemId !== undefined && itemId === undefined) ||
-      (rawReminder.notificationId !== undefined && notificationId === undefined)
+      (rawReminder.itemId !== undefined && (itemId === undefined || itemId !== rawReminder.itemId)) ||
+      (rawReminder.notificationId !== undefined && (notificationId === undefined || notificationId !== rawReminder.notificationId))
     ) {
       repaired = true
     }
