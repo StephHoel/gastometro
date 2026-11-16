@@ -19,8 +19,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
 | **Implementadas** | 14 | Mini-spec 11 (contas a pagar) |
-| **Ativas** | 6 | Mini-spec 20 (backup e restauração local) |
-| **Planejadas** | 2 | Em prioridade de execução |
+| **Ativas** | 7 | Mini-spec 21 (acessibilidade e usabilidade assistiva) |
+| **Planejadas** | 1 | Em prioridade de execução |
 | **Total** | 22 | - |
 
 ## Status das mini-specs
@@ -50,8 +50,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Sincronização eficiente de lembretes](./active/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](./active/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](./active/20-backup-e-restauracao-local.md)
+- [Acessibilidade e usabilidade assistiva](./active/21-acessibilidade-e-usabilidade-assistiva.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-2. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
