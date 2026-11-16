@@ -56,7 +56,6 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- testes E2E para roteamento web SPA;
 - sincronização eficiente de lembretes;
 - integridade e migração de dados locais;
 - backup e restauração local;
