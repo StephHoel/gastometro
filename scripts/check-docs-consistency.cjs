@@ -44,6 +44,9 @@ const react = pkg.dependencies.react
 
 assertEqual('package-lock.json version', lock.version, version)
 assertEqual('package-lock.json packages[""] version', lock.packages?.['']?.version, version)
+assertEqual('package-lock.json Expo', lock.packages?.['node_modules/expo']?.version, expoVersion)
+assertEqual('package-lock.json React Native', lock.packages?.['node_modules/react-native']?.version, reactNative)
+assertEqual('package-lock.json React', lock.packages?.['node_modules/react']?.version, react)
 
 const appVersion = appConfig.match(/version:\s*['"]([^'"]+)['"]/)
 assertEqual('app.config.js version', appVersion?.[1] ?? '(não encontrada)', version)
