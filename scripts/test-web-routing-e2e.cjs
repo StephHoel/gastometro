@@ -66,10 +66,17 @@ function startStaticServer() {
     }
 
     try {
-      if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
-        target = path.join(target, "index.html")
+      const candidates = [target]
+      if (!path.extname(target)) {
+        candidates.push(target + ".html", path.join(target, "index.html"))
       }
-      if (fs.existsSync(target) && fs.statSync(target).isFile()) {
+      target = candidates.find(candidate =>
+        candidate.startsWith(DIST + path.sep) &&
+        fs.existsSync(candidate) &&
+        fs.statSync(candidate).isFile()
+      )
+
+      if (target) {
         response.writeHead(200, { "content-type": mimeType(target) })
         fs.createReadStream(target).pipe(response)
         return
