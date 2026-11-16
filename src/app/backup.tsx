@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Alert, Platform, ScrollView, Share, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import * as Clipboard from 'expo-clipboard'
+import { Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import * as Sharing from 'expo-sharing'
 import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system/legacy'
 import { Page } from '@/components/Page'
@@ -39,13 +39,22 @@ export default function BackupScreen() {
         reminders: reminders.reminders.map(({ notificationId: _notificationId, ...reminder }) => reminder),
       }, '1.10.0')
       const json = BackupService.stringify(envelope)
+      const fileName = 'gastometro-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json'
       if (Platform.OS === 'web') {
-        await Clipboard.setStringAsync(json)
-        setMessage('Backup gerado e copiado. Salve o conteúdo em um arquivo .json para mantê-lo seguro.')
+        const blob = new Blob([json], { type: 'application/json;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        const anchor = document.createElement('a')
+        anchor.href = url
+        anchor.download = fileName
+        anchor.click()
+        URL.revokeObjectURL(url)
+        setMessage('Arquivo de backup gerado. Guarde-o em um local seguro.')
         return
       }
-      await Share.share({ title: 'Backup do Gastômetro', message: json })
-      setMessage('O conteúdo do backup foi preparado para compartilhamento. Salve-o em um local seguro.')
+      const uri = (FileSystem.cacheDirectory ?? '') + fileName
+      await FileSystem.writeAsStringAsync(uri, json, { encoding: FileSystem.EncodingType.UTF8 })
+      await Sharing.shareAsync(uri, { mimeType: 'application/json', dialogTitle: 'Salvar backup do Gastômetro', UTI: 'public.json' })
+      setMessage('Arquivo de backup preparado para compartilhamento. Guarde-o em um local seguro.')
     } catch {
       setMessage('Não foi possível gerar ou compartilhar o backup. Tente novamente.')
     }
@@ -60,7 +69,9 @@ export default function BackupScreen() {
       })
       if (result.canceled || !result.assets?.[0]) return
       const asset = result.assets[0]
-      const raw = await FileSystem.readAsStringAsync(asset.uri, { encoding: FileSystem.EncodingType.UTF8 })
+      const raw = Platform.OS === 'web' && asset.file
+        ? await asset.file.text()
+        : await FileSystem.readAsStringAsync(asset.uri, { encoding: FileSystem.EncodingType.UTF8 })
       setRawBackup(raw)
       setPreview(null)
       setConflicts([])
