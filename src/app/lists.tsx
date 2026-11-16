@@ -10,7 +10,6 @@ import { useRouter } from "expo-router"
 import React, { useRef, useState } from "react"
 import {
   FlatList,
-  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -132,7 +131,7 @@ export default function Lists() {
           activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel="Criar lista"
-          onPress={() => handleCreateSubmit(onCreateList)()
+          onPress={() => handleCreateSubmit(onCreateList)()}
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
