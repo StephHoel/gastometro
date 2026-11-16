@@ -124,6 +124,7 @@ npm run build:local
 npm run build:local:eas
 npm run check:ts
 npm run check:biome
+npm run check:docs
 npm run check:expo
 npm run check:docs
 npm run check:a11y:contrast
