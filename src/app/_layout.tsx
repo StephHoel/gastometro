@@ -155,8 +155,8 @@ export default function Layout() {
     async function bootstrapReminders() {
       try {
         const listIds = listIdsKey ? listIdsKey.split('|') : []
-        await ReminderOrchestrator.cleanupOrphans(listIds)
-        if (!isMounted) return
+        const cleanupCompleted = await ReminderOrchestrator.cleanupOrphans(listIds)
+        if (!isMounted || !cleanupCompleted) return
         await ReminderOrchestrator.syncWithPermissions()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
