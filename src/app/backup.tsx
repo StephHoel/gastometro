@@ -95,7 +95,7 @@ export default function BackupScreen() {
     }
   }
 
-  async function applyPayload(payload: BackupPayload) {
+  async function applyPayload(payload: BackupPayload, resultSummary: string) {
     try {
       await BackupService.preserveCurrentData()
       useCartStore.setState({
@@ -104,14 +104,18 @@ export default function BackupScreen() {
         products: payload.cart.products,
       })
       useReminderStore.setState({ reminders: payload.reminders.map((reminder) => ({ ...reminder })) })
-      await ReminderOrchestrator.syncWithPermissions()
-      setMessage('Restauração concluída. Listas, produtos e lembretes foram atualizados.')
+      setMessage('Restauração concluída. ' + resultSummary)
+      try {
+        await ReminderOrchestrator.syncWithPermissions()
+      } catch {
+        setMessage('Os dados foram restaurados, mas não foi possível reconciliar as notificações. Verifique as permissões de notificação.')
+      }
       setPreview(null)
       setConflicts([])
       setPendingMerge(null)
       setRawBackup('')
     } catch {
-      setMessage('A restauração não foi concluída. Uma cópia dos dados locais anteriores foi preservada para recuperação.')
+      setMessage('Não foi possível preservar os dados locais antes da restauração. Nenhum dado foi substituído.')
     }
   }
 
@@ -122,7 +126,7 @@ export default function BackupScreen() {
       'Todas as listas, produtos e lembretes atuais serão substituídos pelos dados do backup. Uma cópia dos dados atuais será preservada antes da operação.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Substituir', style: 'destructive', onPress: () => void applyPayload(preview.envelope.payload) },
+        { text: 'Substituir', style: 'destructive', onPress: () => void applyPayload(preview.envelope.payload, 'Restaurados: ' + preview.summary.lists + ' listas, ' + preview.summary.products + ' produtos e ' + preview.summary.reminders + ' lembretes.') },
       ],
     )
   }
@@ -132,9 +136,9 @@ export default function BackupScreen() {
     const result = BackupService.merge(getLocalPayload(), preview.envelope.payload)
     setPendingMerge(preview.envelope.payload)
     setConflicts(result.conflicts)
-    setChoices(Object.fromEntries(result.conflicts.map((conflict) => [conflict.id, 'local'])))
+    setChoices({})
     if (result.conflicts.length === 0) {
-      void applyPayload(result.payload)
+      void applyPayload(result.payload, 'Mesclados: ' + result.merged.lists + ' listas, ' + result.merged.products + ' produtos e ' + result.merged.reminders + ' lembretes. Já existentes e idênticos ignorados: ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.')
       return
     }
     setMessage('Há conflitos entre os dados locais e o backup. Escolha qual versão manter em cada conflito.')
@@ -147,7 +151,13 @@ export default function BackupScreen() {
       setMessage('Escolha uma opção para cada conflito antes de concluir a mesclagem.')
       return
     }
-    void applyPayload(BackupService.resolveConflicts(getLocalPayload(), pendingMerge, choices))
+    const current = getLocalPayload()
+    const result = BackupService.merge(current, pendingMerge)
+    const chosenFromBackup = conflicts.filter((conflict) => choices[conflict.id] === 'backup')
+    const keptLocal = conflicts.filter((conflict) => choices[conflict.id] === 'local')
+    const count = (items: BackupConflict[], type: BackupConflict['type']) => items.filter((item) => item.type === type).length
+    const summary = 'Mesclados: ' + (result.merged.lists + count(chosenFromBackup, 'lista')) + ' listas, ' + (result.merged.products + count(chosenFromBackup, 'produto')) + ' produtos e ' + (result.merged.reminders + count(chosenFromBackup, 'lembrete')) + ' lembretes. Mantidos locais nos conflitos: ' + count(keptLocal, 'lista') + ' listas, ' + count(keptLocal, 'produto') + ' produtos e ' + count(keptLocal, 'lembrete') + ' lembretes. Registros idênticos ignorados: ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.'
+    void applyPayload(BackupService.resolveConflicts(current, pendingMerge, choices), summary)
   }
 
   function renderConflict(conflict: BackupConflict) {
