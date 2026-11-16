@@ -232,7 +232,7 @@ export default function PriceComparison() {
                       <TextWhite className="text-red-400 text-sm">Remover</TextWhite>
                     </TouchableOpacity>
                   </Row>
-                  {result.options.map((option, index) => (
+                  {result.options.map((option) => (
                     <Row key={option.placeId} className="justify-between gap-2">
                       <TextWhite className={option.placeId === result.lowest?.placeId ? 'text-lime-400 font-semibold' : 'text-slate-300'}>
                         {option.placeName}{option.placeId === result.lowest?.placeId ? ' · Melhor preço' : ''}
@@ -254,7 +254,7 @@ export default function PriceComparison() {
             <TextWhite className="text-sm text-slate-400">O total só é calculado quando há preço para todos os itens naquele lugar. Preços ausentes não viram R$ 0,00.</TextWhite>
             {basket.length === 0 || entries.length === 0 ? (
               <Card className="p-4"><TextWhite className="text-slate-400">Adicione itens e preços para comparar a cesta.</TextWhite></Card>
-            ) : basket.map((place, index) => (
+            ) : basket.map((place) => (
               <Card key={place.placeId} className="p-3 border-slate-700 bg-slate-800">
                 <Row className="justify-between items-center gap-2">
                   <View className="flex-1">
