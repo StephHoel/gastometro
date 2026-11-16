@@ -36,7 +36,7 @@ async function preserveCartData(value: unknown): Promise<boolean> {
     await AsyncStorage.setItem(CART_RECOVERY_KEY, JSON.stringify(value))
     return true
   } catch (error) {
-    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados carrinho. Evite limpar os dados do aplicativo e procure suporte.')
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados do carrinho. Evite limpar os dados do aplicativo e procure suporte.')
     console.error('Falha ao preservar dados do carrinho:', error)
     return false
   }
@@ -183,8 +183,9 @@ export const useCartStore = create(
           }
           return { ...currentState, ...result.data }
         } catch (error) {
-          void preserveCartData(persistedState)
-          PersistenceRecoveryService.report('Os dados locais da lista não puderam ser validados. O estado inicial foi mantido e uma cópia do conteúdo anterior foi preservada para recuperação.')
+          void preserveCartData(persistedState).then((preserved) => {
+            PersistenceRecoveryService.report(preserved ? 'Os dados locais da lista não puderam ser validados. O estado inicial foi mantido e uma cópia do conteúdo anterior foi preservada para recuperação.' : 'Os dados locais da lista não puderam ser validados e a cópia de recuperação falhou. Evite limpar os dados do aplicativo.')
+          })
           console.error('Falha ao hidratar o carrinho:', error)
           return currentState
         }
