@@ -31,6 +31,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
 - Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
+- Exporta listas, produtos e lembretes em backup JSON e permite restaurar por substituição ou mesclagem com resolução explícita de conflitos.
 
 ## Stack
 
@@ -58,6 +59,7 @@ Compatibilidade atual de plataforma:
 - [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/active/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
 
 ## Funcionalidades planejadas
 
