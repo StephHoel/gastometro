@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { normalizeReminderPersistedState } from '@/services/PersistenceMigrationService'
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 
 function updateReminder(
   reminders: ReminderProps[],
@@ -12,6 +14,37 @@ function updateReminder(
   updater: (reminder: ReminderProps) => ReminderProps,
 ) {
   return reminders.map((reminder) => (reminder.id === reminderId ? updater(reminder) : reminder))
+}
+
+const REMINDER_RECOVERY_KEY = 'gastometro-recovery-reminders'
+
+async function preserveReminderData(value: unknown): Promise<void> {
+  try {
+    await AsyncStorage.setItem(REMINDER_RECOVERY_KEY, JSON.stringify(value))
+  } catch (error) {
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
+    console.error('Falha ao preservar dados dos lembretes:', error)
+  }
+}
+
+function getReminderRecoveryMessage(discarded: number): string {
+  const details = discarded > 0 ? ' Registros inválidos ignorados: ' + discarded + '.' : ''
+  return 'Os dados locais dos lembretes foram ajustados para manter a integridade.' + details + ' Uma cópia anterior foi preservada em ' + REMINDER_RECOVERY_KEY + '.'
+}
+
+async function migrateReminderState(persistedState: unknown, version: number): Promise<ReminderStateProps> {
+  try {
+    const result = normalizeReminderPersistedState(persistedState, version)
+    if (result.repaired) {
+      await preserveReminderData(persistedState)
+      PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
+    }
+    return result.data as ReminderStateProps
+  } catch (error) {
+    await preserveReminderData(persistedState)
+    PersistenceRecoveryService.report('Não foi possível validar os dados locais dos lembretes. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.')
+    throw error
+  }
 }
 
 export const useReminderStore = create(
@@ -89,7 +122,23 @@ export const useReminderStore = create(
     {
       name: 'gastometro-reminders',
       storage: createJSONStorage(() => AsyncStorage),
-      version: 1,
+      version: 2,
+      migrate: migrateReminderState,
+      merge: (persistedState, currentState) => {
+        try {
+          const result = normalizeReminderPersistedState(persistedState, 2)
+          if (result.repaired) {
+            void preserveReminderData(persistedState)
+            PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
+          }
+          return { ...currentState, ...result.data }
+        } catch (error) {
+          void preserveReminderData(persistedState)
+          PersistenceRecoveryService.report('Os dados locais dos lembretes não puderam ser validados. A coleção inicial foi mantida e uma cópia do conteúdo anterior foi preservada para recuperação.')
+          console.error('Falha ao hidratar os lembretes:', error)
+          return currentState
+        }
+      },
     },
   ),
 )
