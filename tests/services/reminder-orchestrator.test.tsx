@@ -67,6 +67,7 @@ describe('ReminderOrchestrator', () => {
   it('enableReminder agenda quando há permissão', async () => {
     seedReminders([makeReminder('r1', { notificationId: 'old' })])
     ensurePermissionForScheduling.mockResolvedValueOnce(true)
+    getPermissionState.mockResolvedValueOnce('granted')
     scheduleReminder.mockResolvedValueOnce('new-id')
 
     await expect(ReminderOrchestrator.enableReminder('r1')).resolves.toBe(ReminderState.Enable)
