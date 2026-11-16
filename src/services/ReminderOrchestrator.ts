@@ -170,18 +170,18 @@ export const ReminderOrchestrator = {
 
   syncWithPermissions: runReminderSync,
 
-  async cleanupOrphans(validListIds: string[]): Promise<void> {
+  async cleanupOrphans(validListIds: string[]): Promise<boolean> {
     const validIds = new Set(validListIds)
     const reminders = useReminderStore.getState().reminders
     const orphans = reminders.filter((reminder) => !validIds.has(reminder.listId))
-    if (orphans.length === 0) return
+    if (orphans.length === 0) return true
 
     try {
       await AsyncStorage.setItem('gastometro-recovery-reminders-orphans', JSON.stringify(orphans))
     } catch (error) {
       PersistenceRecoveryService.report('Foram encontrados lembretes sem uma lista correspondente, mas não foi possível criar uma cópia de recuperação. Os lembretes foram mantidos para evitar perda de dados.')
       console.error('Falha ao preservar lembretes órfãos:', error)
-      return
+      return false
     }
 
     for (const reminder of orphans) {
@@ -192,6 +192,7 @@ export const ReminderOrchestrator = {
     PersistenceRecoveryService.report(
       orphans.length + ' lembrete(s) sem uma lista correspondente foram removidos da coleção ativa. Uma cópia foi preservada em gastometro-recovery-reminders-orphans.',
     )
+    return true
   },
 
   async saveReminder(payload: {
