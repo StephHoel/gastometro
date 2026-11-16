@@ -9,12 +9,13 @@ import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
 import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { AppState, Platform, Text } from 'react-native'
+import { AppState, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 
 export default function Layout() {
   const pathname = usePathname()
@@ -24,6 +25,7 @@ export default function Layout() {
   const setActiveList = useCartStore((state) => state.setActiveList)
   const reminders = useReminderStore((state) => state.reminders)
   const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const [recoveryNotice, setRecoveryNotice] = useState(PersistenceRecoveryService.getMessage())
   const listIdsKey = getListIdsSignature(lists)
   const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
@@ -70,6 +72,8 @@ export default function Layout() {
 
   const handleNotificationResponseRef = useRef<(response: NotificationResponse) => Promise<void>>(async () => undefined)
   handleNotificationResponseRef.current = handleNotificationResponse
+
+  useEffect(() => PersistenceRecoveryService.subscribe(setRecoveryNotice), [])
 
   useEffect(() => {
     const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
@@ -174,6 +178,14 @@ export default function Layout() {
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
+      {recoveryNotice && (
+        <View className="bg-amber-900 px-4 py-3 gap-2">
+          <Text className="text-white text-sm">{recoveryNotice}</Text>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Fechar aviso de recuperação" onPress={() => PersistenceRecoveryService.dismiss()}>
+            <Text className="text-amber-200 font-bold text-right">Fechar aviso</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <Tabs
         screenOptions={{
           headerShown: false,
