@@ -57,8 +57,10 @@ async function migrateCartState(persistedState: unknown, version: number): Promi
     }
     return result.data as StateProps
   } catch (error) {
-    await preserveCartData(persistedState)
-    PersistenceRecoveryService.report('Não foi possível validar os dados locais da lista. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.')
+    const preserved = await preserveCartData(persistedState)
+    PersistenceRecoveryService.report(preserved
+      ? 'Não foi possível validar os dados locais da lista. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
+      : 'Não foi possível validar nem criar uma cópia dos dados locais da lista. Evite limpar os dados do aplicativo e procure suporte.')
     throw error
   }
 }
