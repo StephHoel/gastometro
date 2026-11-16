@@ -48,7 +48,7 @@ export default function BackupScreen() {
         anchor.href = url
         anchor.download = fileName
         anchor.click()
-        URL.revokeObjectURL(url)
+        setTimeout(() => URL.revokeObjectURL(url), 1000)
         setMessage('Arquivo de backup gerado. Guarde-o em um local seguro.')
         return
       }
@@ -255,7 +255,7 @@ export default function BackupScreen() {
           </View>
         )}
 
-        {message ? <TextWhite accessibilityLiveRegion="polite">{message}</TextWhite> : null}
+        {message ? <TextWhite>{message}</TextWhite> : null}
       </ScrollView>
     </Page>
   )
