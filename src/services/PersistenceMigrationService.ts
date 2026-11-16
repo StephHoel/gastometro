@@ -53,7 +53,7 @@ function parseProduct(value: unknown): ProductProps | null {
       : '0'
 
   return {
-    id: value.id,
+    id: value.id.trim(),
     item: value.item.trim(),
     quantity,
     price,
@@ -118,8 +118,13 @@ export function normalizeCartPersistedState(
         product.id = uniqueProductId
         repaired = true
       }
-      if (isRecord(rawProduct) && rawProduct.collected !== product.collected) repaired = true
-      if (isRecord(rawProduct) && (rawProduct.quantity === undefined || rawProduct.price === undefined)) repaired = true
+      if (isRecord(rawProduct) && (
+        rawProduct.id !== product.id ||
+        rawProduct.item !== product.item ||
+        rawProduct.collected !== product.collected ||
+        typeof rawProduct.quantity !== 'string' ||
+        typeof rawProduct.price !== 'string'
+      )) repaired = true
       products.push(product)
     })
 
@@ -195,19 +200,34 @@ export function normalizeReminderPersistedState(
     const createdAt = isValidDate(rawReminder.createdAt) ? new Date(rawReminder.createdAt).toISOString() : datetimeISO
     const updatedAt = isValidDate(rawReminder.updatedAt) ? new Date(rawReminder.updatedAt).toISOString() : createdAt
     const enabled = typeof rawReminder.enabled === 'boolean' ? rawReminder.enabled : true
+    const id = rawReminder.id.trim()
+    const title = rawReminder.title.trim()
+    const listId = rawReminder.listId.trim()
+    const itemId = isNonEmptyString(rawReminder.itemId) ? rawReminder.itemId.trim() : undefined
+    const notificationId = isNonEmptyString(rawReminder.notificationId) ? rawReminder.notificationId : undefined
 
-    if (datetimeISO !== rawReminder.datetimeISO || createdAt !== rawReminder.createdAt || updatedAt !== rawReminder.updatedAt || enabled !== rawReminder.enabled) {
+    if (
+      datetimeISO !== rawReminder.datetimeISO ||
+      createdAt !== rawReminder.createdAt ||
+      updatedAt !== rawReminder.updatedAt ||
+      enabled !== rawReminder.enabled ||
+      id !== rawReminder.id ||
+      title !== rawReminder.title ||
+      listId !== rawReminder.listId ||
+      (rawReminder.itemId !== undefined && itemId === undefined) ||
+      (rawReminder.notificationId !== undefined && notificationId === undefined)
+    ) {
       repaired = true
     }
 
     reminders.push({
-      id: rawReminder.id.trim(),
-      title: rawReminder.title.trim(),
+      id,
+      title,
       datetimeISO,
       enabled,
-      listId: rawReminder.listId.trim(),
-      ...(isNonEmptyString(rawReminder.itemId) ? { itemId: rawReminder.itemId } : {}),
-      ...(isNonEmptyString(rawReminder.notificationId) ? { notificationId: rawReminder.notificationId } : {}),
+      listId,
+      ...(itemId ? { itemId } : {}),
+      ...(notificationId ? { notificationId } : {}),
       createdAt,
       updatedAt,
     })
