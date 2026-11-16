@@ -3,6 +3,7 @@ import { Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } 
 import * as Sharing from 'expo-sharing'
 import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system/legacy'
+import Constants from 'expo-constants'
 import { Page } from '@/components/Page'
 import { TextWhite } from '@/components/TextWhite'
 import { BackupService, type BackupConflict, type BackupPayload, type ConflictChoices } from '@/services/BackupService'
@@ -37,7 +38,7 @@ export default function BackupScreen() {
       const envelope = BackupService.createEnvelope({
         cart: { lists: cart.lists, activeListId: cart.activeListId, products: cart.products },
         reminders: reminders.reminders.map(({ notificationId: _notificationId, ...reminder }) => reminder),
-      }, '1.10.0')
+      }, Constants.expoConfig?.version ?? 'desconhecida')
       const json = BackupService.stringify(envelope)
       const fileName = 'gastometro-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json'
       if (Platform.OS === 'web') {
@@ -51,7 +52,8 @@ export default function BackupScreen() {
         setMessage('Arquivo de backup gerado. Guarde-o em um local seguro.')
         return
       }
-      const uri = (FileSystem.cacheDirectory ?? '') + fileName
+      if (!FileSystem.cacheDirectory) throw new Error('Diretório temporário indisponível.')
+      const uri = FileSystem.cacheDirectory + fileName
       await FileSystem.writeAsStringAsync(uri, json, { encoding: FileSystem.EncodingType.UTF8 })
       await Sharing.shareAsync(uri, { mimeType: 'application/json', dialogTitle: 'Salvar backup do Gastômetro', UTI: 'public.json' })
       setMessage('Arquivo de backup preparado para compartilhamento. Guarde-o em um local seguro.')
@@ -138,7 +140,7 @@ export default function BackupScreen() {
     setConflicts(result.conflicts)
     setChoices({})
     if (result.conflicts.length === 0) {
-      void applyPayload(result.payload, 'Mesclados: ' + result.merged.lists + ' listas, ' + result.merged.products + ' produtos e ' + result.merged.reminders + ' lembretes. Já existentes e idênticos ignorados: ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.')
+      void applyPayload(result.payload, 'Mesclados: ' + result.merged.lists + ' listas, ' + result.merged.products + ' produtos e ' + result.merged.reminders + ' lembretes. Já existentes e idênticos ignorados: ' + result.ignored.lists + ' listas, ' + result.ignored.lists + ' listas, ' + result.ignored.products + ' produtos e ' + result.ignored.reminders + ' lembretes.')
       return
     }
     setMessage('Há conflitos entre os dados locais e o backup. Escolha qual versão manter em cada conflito.')
