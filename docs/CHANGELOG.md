@@ -1,3 +1,22 @@
+## 1.9.1 - 2026-11-16
+
+Implementação da mini-spec 18: sincronização eficiente e idempotente de lembretes.
+
+### Sincronização
+
+- O bootstrap aguarda a hidratação do store de lembretes e observa somente os campos relevantes dos lembretes e os IDs das listas.
+- Alterações em produtos ou nomes de listas deixam de disparar a reconciliação de notificações.
+- A reconciliação consulta os agendamentos nativos, preserva notificações válidas, recupera IDs persistidos perdidos, remove duplicidades e recria apenas agendamentos ausentes ou divergentes.
+- Sincronizações sobrepostas são serializadas; retomada do app solicita uma nova reconciliação.
+- Listeners de resposta a notificações passam a ser registrados uma vez por montagem e removidos no cleanup.
+- Remoções e limpeza de órfãos cancelam todos os agendamentos encontrados para o lembrete.
+
+### Qualidade e compatibilidade
+
+- Adicionados testes para consulta de agendamentos, preservação de notificações válidas, recuperação de agendamentos e deduplicação.
+- Mantida a chave `gastometro-reminders` e o contrato persistido de `ReminderProps`.
+- A web continua sem agendamento nativo.
+
 ## 1.9.0 - 2026-11-16
 
 Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
