@@ -11,6 +11,23 @@ import { fromDateAndTime } from '@/utils/functions/DateFunctions'
 let reminderSyncPromise: Promise<void> | null = null
 let reminderSyncRequested = false
 
+async function cancelReminderNotifications(reminder: {
+  id: string
+  notificationId?: string
+}): Promise<void> {
+  const scheduled = await NotificationService.getScheduledReminderNotifications()
+  if (reminder.notificationId) {
+    await NotificationService.cancelScheduled(reminder.notificationId)
+  }
+  if (scheduled) {
+    for (const notification of scheduled) {
+      if (notification.reminderId === reminder.id && notification.notificationId !== reminder.notificationId) {
+        await NotificationService.cancelScheduled(notification.notificationId)
+      }
+    }
+  }
+}
+
 async function reconcileReminderSchedules(): Promise<void> {
   const permission = await NotificationService.getPermissionState()
   if (permission === PermissionState.Unavailable) return
@@ -143,7 +160,7 @@ export const ReminderOrchestrator = {
     const reminder = reminderStore.getById(reminderId)
     if (!reminder) return
 
-    await NotificationService.cancelScheduled(reminder.notificationId)
+    await cancelReminderNotifications(reminder)
     reminderStore.removeReminder(reminderId)
   },
 
@@ -152,7 +169,7 @@ export const ReminderOrchestrator = {
     const reminders = reminderStore.getByListId(listId)
 
     for (const reminder of reminders) {
-      await NotificationService.cancelScheduled(reminder.notificationId)
+      await cancelReminderNotifications(reminder)
     }
 
     reminderStore.removeByListId(listId)
@@ -188,7 +205,7 @@ export const ReminderOrchestrator = {
 
     for (const reminder of reminderStore.reminders) {
       if (!validIds.has(reminder.listId)) {
-        await NotificationService.cancelScheduled(reminder.notificationId)
+        await cancelReminderNotifications(reminder)
         reminderStore.removeReminder(reminder.id)
       }
     }
