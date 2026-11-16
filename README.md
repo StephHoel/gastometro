@@ -1,8 +1,6 @@
 # Gastômetro
 
 [![Release](https://img.shields.io/badge/Release-v1.12.0-blue)](docs/CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -36,15 +34,15 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 
 ## Stack
 
-- Expo 56.
-- React Native 0.85.
-- React 19.
-- TypeScript com modo estrito.
+- Expo SDK 58 (`expo ~58.0.25`).
+- React Native 0.88.1.
+- React 19.3.0.
+- TypeScript ~6.0.3 com modo estrito.
 - Expo Router para rotas.
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
 - AsyncStorage para persistência local.
-- Node 24 conforme `.nvmrc`.
+- Node 24 conforme `.nvmrc` e npm 11.
 
 O foco atual da plataforma é Android. A versão web compatível com GitHub Pages já está disponível com limitações documentadas.
 
@@ -62,14 +60,13 @@ Compatibilidade atual de plataforma:
 - [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-e-usabilidade-assistiva.md)
+- [Consistência e validação da documentação técnica](docs/specs/active/22-consistencia-documentacao-tecnica.md)
 
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
-- [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
-- [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
+Atualmente não há mini-specs planejadas. Consulte o índice de [mini-specs](docs/specs/README.md) para acompanhar as que estão em andamento.
 
 ### Comparação de preços
 
@@ -128,6 +125,8 @@ npm run build:local:eas
 npm run check:ts
 npm run check:biome
 npm run check:expo
+npm run check:docs
+npm run check:a11y:contrast
 npm run deps:audit
 ```
 
