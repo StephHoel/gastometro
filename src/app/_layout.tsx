@@ -208,6 +208,17 @@ export default function Layout() {
         />
 
         <Tabs.Screen
+          name="price-comparison"
+          options={{
+            title: "Preços",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size - 4, fontWeight: "bold" }}>$</Text>
+            ),
+            headerTitle: "Comparação de preços",
+          }}
+        />
+
+        <Tabs.Screen
           name="calculator"
           options={{
             title: "Calculadora",
