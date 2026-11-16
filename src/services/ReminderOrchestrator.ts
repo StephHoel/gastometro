@@ -7,6 +7,8 @@ import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
 import { fromDateAndTime } from '@/utils/functions/DateFunctions'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 
 let reminderSyncPromise: Promise<void> | null = null
 let reminderSyncRequested = false
@@ -170,14 +172,26 @@ export const ReminderOrchestrator = {
 
   async cleanupOrphans(validListIds: string[]): Promise<void> {
     const validIds = new Set(validListIds)
-    const reminderStore = useReminderStore.getState()
+    const reminders = useReminderStore.getState().reminders
+    const orphans = reminders.filter((reminder) => !validIds.has(reminder.listId))
+    if (orphans.length === 0) return
 
-    for (const reminder of reminderStore.reminders) {
-      if (!validIds.has(reminder.listId)) {
-        await cancelReminderNotifications(reminder)
-        reminderStore.removeReminder(reminder.id)
-      }
+    try {
+      await AsyncStorage.setItem('gastometro-recovery-reminders-orphans', JSON.stringify(orphans))
+    } catch (error) {
+      PersistenceRecoveryService.report('Foram encontrados lembretes sem uma lista correspondente, mas não foi possível criar uma cópia de recuperação. Os lembretes foram mantidos para evitar perda de dados.')
+      console.error('Falha ao preservar lembretes órfãos:', error)
+      return
     }
+
+    for (const reminder of orphans) {
+      await cancelReminderNotifications(reminder)
+      useReminderStore.getState().removeReminder(reminder.id)
+    }
+
+    PersistenceRecoveryService.report(
+      orphans.length + ' lembrete(s) sem uma lista correspondente foram removidos da coleção ativa. Uma cópia foi preservada em gastometro-recovery-reminders-orphans.',
+    )
   },
 
   async saveReminder(payload: {
