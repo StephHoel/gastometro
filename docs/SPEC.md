@@ -50,13 +50,13 @@ Público esperado:
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
+- Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
 - testes E2E para roteamento web SPA;
-- comparação de preços entre lugares;
 - sincronização eficiente de lembretes;
 - integridade e migração de dados locais;
 - backup e restauração local;
@@ -146,6 +146,10 @@ interface BillProps {
 
 Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceita zero e não aceita negativos; vencimento é opcional e deve ser uma data ISO válida; contas não pagas com vencimento anterior ao dia atual são destacadas como vencidas.
 
+### Comparação de preços
+
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada. A comparação individual destaca menor e maior preço, diferença absoluta e percentual. A comparação da cesta só calcula total para lugares que tenham preço em todos os itens; ausência de preço nunca é interpretada como zero.
+
 ### Lembrete Local
 
 ```ts
@@ -181,6 +185,7 @@ Estado:
 - A chave de storage atual é `gastometro`.
 - `useReminderStore` mantém lembretes com persistência dedicada (`gastometro-reminders`).
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
+- `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
 
 Manipulação da lista:
 
