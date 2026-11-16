@@ -76,8 +76,8 @@ export function compareEntryPrices(
     .filter((option): option is PriceOption => option !== null)
     .sort((a, b) => sortBy === 'name' ? a.placeName.localeCompare(b.placeName, 'pt-BR') : a.price - b.price || a.placeName.localeCompare(b.placeName, 'pt-BR'))
 
-  const lowest = options[0] ?? null
-  const highest = options[options.length - 1] ?? null
+  const lowest = options.reduce<PriceOption | null>((current, option) => !current || option.price < current.price ? option : current, null)
+  const highest = options.reduce<PriceOption | null>((current, option) => !current || option.price > current.price ? option : current, null)
   const difference = lowest && highest ? highest.price - lowest.price : null
   const differencePercent =
     difference !== null && highest && highest.price > 0
