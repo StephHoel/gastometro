@@ -37,6 +37,11 @@ export default function PriceComparison() {
   const [sortBy, setSortBy] = useState<'price' | 'name'>('price')
 
   const basket = useMemo(() => compareBasket(entries, places, sortBy), [entries, places, sortBy])
+  const bestBasketPlaceId = basket.filter((place) => place.complete && place.total !== null).reduce<string | null>((best, place) => {
+    if (best === null) return place.placeId
+    const bestPlace = basket.find((candidate) => candidate.placeId === best)
+    return bestPlace?.total !== null && bestPlace?.total !== undefined && place.total !== null && place.total < bestPlace.total ? place.placeId : best
+  }, null)
 
   function resetPlaceForm() {
     setPlaceName('')
@@ -229,10 +234,10 @@ export default function PriceComparison() {
                   </Row>
                   {result.options.map((option, index) => (
                     <Row key={option.placeId} className="justify-between gap-2">
-                      <TextWhite className={index === 0 ? 'text-lime-400 font-semibold' : 'text-slate-300'}>
-                        {option.placeName}{index === 0 ? ' · Melhor preço' : ''}
+                      <TextWhite className={option.placeId === result.lowest?.placeId ? 'text-lime-400 font-semibold' : 'text-slate-300'}>
+                        {option.placeName}{option.placeId === result.lowest?.placeId ? ' · Melhor preço' : ''}
                       </TextWhite>
-                      <TextWhite className={index === 0 ? 'text-lime-400 font-semibold' : ''}>{SetCurrency(option.price)}</TextWhite>
+                      <TextWhite className={option.placeId === result.lowest?.placeId ? 'text-lime-400 font-semibold' : ''}>{SetCurrency(option.price)}</TextWhite>
                     </Row>
                   ))}
                   <View className="border-t border-slate-700 pt-2 gap-1">
@@ -253,12 +258,12 @@ export default function PriceComparison() {
               <Card key={place.placeId} className="p-3 border-slate-700 bg-slate-800">
                 <Row className="justify-between items-center gap-2">
                   <View className="flex-1">
-                    <TextWhite className={place.complete && index === 0 ? 'font-bold text-lime-400' : 'font-semibold'}>
-                      {place.placeName}{place.complete && index === 0 ? ' · Menor total' : ''}
+                    <TextWhite className={place.complete && place.placeId === bestBasketPlaceId ? 'font-bold text-lime-400' : 'font-semibold'}>
+                      {place.placeName}{place.complete && place.placeId === bestBasketPlaceId ? ' · Menor total' : ''}
                     </TextWhite>
                     <TextWhite className="text-xs text-slate-400">{place.complete ? 'Cesta completa' : 'Preço faltando para um ou mais itens'}</TextWhite>
                   </View>
-                  <TextWhite className={place.complete && index === 0 ? 'font-bold text-lime-400' : ''}>
+                  <TextWhite className={place.complete && place.placeId === bestBasketPlaceId ? 'font-bold text-lime-400' : ''}>
                     {place.complete && place.total !== null ? SetCurrency(place.total) : 'Incompleta'}
                   </TextWhite>
                 </Row>
