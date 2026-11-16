@@ -75,7 +75,7 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
                 accessibilityLabel={button.text}
                 className={`min-h-11 p-2 mb-2 rounded items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400 
                   ${button.text === INPUTS.buttons.cancel
-                    ? "bg-red-500"
+                    ? "bg-red-600"
                     : "bg-slate-400"}
                   `}
                 onPress={() => {
