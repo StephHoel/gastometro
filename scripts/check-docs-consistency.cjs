@@ -20,6 +20,7 @@ function assertIncludes(file, content, expected) {
 
 function countMiniSpecs(status) {
   const directory = path.join(root, 'docs', 'specs', status)
+  if (!fs.existsSync(directory)) return 0
   return fs.readdirSync(directory, { withFileTypes: true })
     .filter((entry) => entry.isFile() && /^\d{2}-.*\.md$/i.test(entry.name))
     .length
