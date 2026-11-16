@@ -44,8 +44,10 @@ async function migrateReminderState(persistedState: unknown, version: number): P
     }
     return result.data as ReminderStateProps
   } catch (error) {
-    await preserveReminderData(persistedState)
-    PersistenceRecoveryService.report('Não foi possível validar os dados locais dos lembretes. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.')
+    const preserved = await preserveReminderData(persistedState)
+    PersistenceRecoveryService.report(preserved
+      ? 'Não foi possível validar os dados locais dos lembretes. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
+      : 'Não foi possível validar nem criar uma cópia dos dados locais dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
     throw error
   }
 }
