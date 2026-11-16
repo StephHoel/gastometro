@@ -34,6 +34,7 @@
     "deps:audit": "npm audit --omit=dev",
     "check:deps": "npx expo install --check",
     "test:e2e:web": "npx --yes --package=playwright@1.56.1 --package=tsx -- tsx scripts/test-web-routing-e2e.ts",
+    "check:a11y:contrast": "node scripts/check-accessibility-contrast.cjs",
     "delete": "git branch --list \"feat/spec*\" | xargs -r git branch -D",
     "exclusive-committs": "git log --reverse --oneline origin/main..origin/[nome da branch]",
     "push-in-other-branch": "git push origin [branch auxiliar]:[branch de trabalho] --force-with-lease"
