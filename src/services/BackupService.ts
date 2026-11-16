@@ -57,6 +57,12 @@ function sameValue(left: unknown, right: unknown): boolean {
   return JSON.stringify(left) === JSON.stringify(right)
 }
 
+function sameReminderData(left: ReminderProps, right: ReminderProps): boolean {
+  const { notificationId: _localNotificationId, ...localData } = left
+  const { notificationId: _backupNotificationId, ...backupData } = right
+  return sameValue(localData, backupData)
+}
+
 export const BackupService = {
   createEnvelope(payload: BackupPayload, appVersion: string): BackupEnvelope {
     return {
@@ -192,15 +198,15 @@ export const BackupService = {
       if (!existing) {
         reminders.push(backupReminder)
         merged.reminders += 1
-      } else if (sameValue(existing, backupReminder)) {
+      } else if (sameReminderData(existing, backupReminder)) {
         ignored.reminders += 1
       } else {
         conflicts.push({
           id: 'lembrete:' + backupReminder.id,
           type: 'lembrete',
           description: 'O lembrete "' + backupReminder.title + '" já existe com informações diferentes.',
-          localValue: existing.title + ' | ' + existing.datetimeISO,
-          backupValue: backupReminder.title + ' | ' + backupReminder.datetimeISO,
+          localValue: existing.title + ' | ' + existing.datetimeISO + ' | ativo: ' + existing.enabled + ' | lista: ' + existing.listId + ' | item: ' + (existing.itemId ?? 'não vinculado'),
+          backupValue: backupReminder.title + ' | ' + backupReminder.datetimeISO + ' | ativo: ' + backupReminder.enabled + ' | lista: ' + backupReminder.listId + ' | item: ' + (backupReminder.itemId ?? 'não vinculado'),
         })
       }
     }
