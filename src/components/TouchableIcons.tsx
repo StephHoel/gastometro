@@ -31,7 +31,7 @@ export function Add({ action, size = 35, accessibilityLabel = 'Adicionar item à
       action={action}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
-      wrapperClass="absolute bottom-6 right-6 z-50 min-w-14 min-h-14"
+      wrapperClass="absolute bottom-6 right-6 z-50 min-w-14 min-h-14 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
       containerClass="bg-lime-400 rounded-full w-14 h-14 items-center justify-center"
     >
       <AddIcon size={size} color={COLORS.black} />
