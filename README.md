@@ -158,6 +158,10 @@ npm run web:test:offline
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
 
+### Testes E2E do roteamento web
+
+A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
+
 ### Limitações web conhecidas
 
 - Compartilhamento via WhatsApp na web usa `wa.me`/WhatsApp Web, sem deep link nativo equivalente ao Android.
