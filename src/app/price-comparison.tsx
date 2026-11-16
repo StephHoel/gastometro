@@ -124,7 +124,7 @@ export default function PriceComparison() {
           <Card className="p-4 gap-3 border-0 bg-slate-800">
             <TextWhite className="text-lg font-bold">{editingPlaceId ? 'Editar lugar' : 'Cadastrar lugar'}</TextWhite>
             <TextInput
-              className="rounded-lg bg-slate-700 px-3 py-3 text-white"
+              className="rounded-lg bg-slate-700 px-3 py-3 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
               placeholder="Nome do mercado ou loja"
               placeholderTextColor="#CBD5E1"
               accessibilityLabel="Nome do lugar"
@@ -133,7 +133,7 @@ export default function PriceComparison() {
               maxLength={60}
             />
             <TextInput
-              className="rounded-lg bg-slate-700 px-3 py-3 text-white"
+              className="rounded-lg bg-slate-700 px-3 py-3 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
               placeholder="Observação (opcional)"
               placeholderTextColor={COLORS.inactive}
               accessibilityLabel="Observação do lugar"
@@ -166,7 +166,7 @@ export default function PriceComparison() {
           <Card className="p-4 gap-3 border-0 bg-slate-800">
             <TextWhite className="text-lg font-bold">{editingEntryId ? 'Editar item comparado' : 'Adicionar item para comparar'}</TextWhite>
             <TextInput
-              className="rounded-lg bg-slate-700 px-3 py-3 text-white"
+              className="rounded-lg bg-slate-700 px-3 py-3 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
               placeholder="Nome do produto"
               placeholderTextColor={COLORS.inactive}
               accessibilityLabel="Nome do item"
@@ -175,7 +175,7 @@ export default function PriceComparison() {
               maxLength={80}
             />
             <TextInput
-              className="rounded-lg bg-slate-700 px-3 py-3 text-white"
+              className="rounded-lg bg-slate-700 px-3 py-3 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
               placeholder="Referência de quantidade (opcional, ex.: 1 kg)"
               placeholderTextColor={COLORS.inactive}
               accessibilityLabel="Quantidade de referência"
@@ -189,7 +189,7 @@ export default function PriceComparison() {
               <View key={place.id} className="gap-1">
                 <TextWhite className="text-sm text-slate-300">{place.name}</TextWhite>
                 <TextInput
-                  className="rounded-lg bg-slate-700 px-3 py-3 text-white"
+                  className="rounded-lg bg-slate-700 px-3 py-3 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                   placeholder="Preço (ex.: 12,50)"
                   placeholderTextColor={COLORS.inactive}
                   accessibilityLabel={'Preço em ' + place.name}
