@@ -63,6 +63,7 @@ export function validateComparisonEntry(
 export function compareEntryPrices(
   entry: PriceComparisonEntryProps,
   places: PriceComparisonPlaceProps[],
+  sortBy: 'price' | 'name' = 'price',
 ): EntryComparison {
   const options = entry.pricesByPlace
     .map((item) => {
@@ -73,7 +74,7 @@ export function compareEntryPrices(
         : null
     })
     .filter((option): option is PriceOption => option !== null)
-    .sort((a, b) => a.price - b.price || a.placeName.localeCompare(b.placeName, 'pt-BR'))
+    .sort((a, b) => sortBy === 'name' ? a.placeName.localeCompare(b.placeName, 'pt-BR') : a.price - b.price || a.placeName.localeCompare(b.placeName, 'pt-BR'))
 
   const lowest = options[0] ?? null
   const highest = options[options.length - 1] ?? null
@@ -89,6 +90,7 @@ export function compareEntryPrices(
 export function compareBasket(
   entries: PriceComparisonEntryProps[],
   places: PriceComparisonPlaceProps[],
+  sortBy: 'price' | 'name' = 'price',
 ): BasketPlaceTotal[] {
   return places.map((place) => {
     let total = 0
@@ -103,7 +105,7 @@ export function compareBasket(
     return { placeId: place.id, placeName: place.name, total, complete: entries.length > 0 }
   }).sort((a, b) => {
     if (a.complete !== b.complete) return a.complete ? -1 : 1
-    if (!a.complete || a.total === null || b.total === null) return a.placeName.localeCompare(b.placeName, 'pt-BR')
+    if (sortBy === 'name' || !a.complete || a.total === null || b.total === null) return a.placeName.localeCompare(b.placeName, 'pt-BR')
     return a.total - b.total || a.placeName.localeCompare(b.placeName, 'pt-BR')
   })
 }
