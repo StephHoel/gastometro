@@ -23,7 +23,7 @@ async function preserveReminderData(value: unknown): Promise<boolean> {
     await AsyncStorage.setItem(REMINDER_RECOVERY_KEY, JSON.stringify(value))
     return true
   } catch (error) {
-    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados lembretes. Evite limpar os dados do aplicativo e procure suporte.')
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
     console.error('Falha ao preservar dados do lembretes:', error)
     return false
   }
@@ -141,8 +141,9 @@ export const useReminderStore = create(
           }
           return { ...currentState, ...result.data }
         } catch (error) {
-          void preserveReminderData(persistedState)
-          PersistenceRecoveryService.report('Os dados locais dos lembretes não puderam ser validados. A coleção inicial foi mantida e uma cópia do conteúdo anterior foi preservada para recuperação.')
+          void preserveReminderData(persistedState).then((preserved) => {
+            PersistenceRecoveryService.report(preserved ? 'Os dados locais dos lembretes não puderam ser validados. A coleção inicial foi mantida e uma cópia do conteúdo anterior foi preservada para recuperação.' : 'Os dados locais dos lembretes não puderam ser validados e a cópia de recuperação falhou. Evite limpar os dados do aplicativo.')
+          })
           console.error('Falha ao hidratar os lembretes:', error)
           return currentState
         }
