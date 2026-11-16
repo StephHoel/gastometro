@@ -45,6 +45,7 @@ const checks = [
   ['Texto em lista selecionada', palette.white, palette.slate600],
   ['Placeholder em campo', palette.slate300, palette.slate700],
   ['Texto secundário em cartão', palette.slate300, palette.slate800],
+  ['Texto muted em cartão', palette.slate400, palette.slate800],
   ['Ação lime no fundo', palette.active, palette.background],
   ['Texto preto em botão lime', palette.black, palette.active],
   ['Texto branco em botão de cancelar', palette.white, palette.red600],
