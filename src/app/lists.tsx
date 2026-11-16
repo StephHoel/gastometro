@@ -118,6 +118,8 @@ export default function Lists() {
         <TextInput
           className="flex-1 bg-slate-700 text-white rounded-lg px-3 py-2 text-base"
           placeholder={INPUTS.placeholder.list_name}
+          accessibilityLabel="Nome da nova lista"
+          accessibilityHint="Digite um nome para criar uma lista de compras"
           placeholderTextColor={COLORS.inactive}
           value={newListName}
           onChangeText={(text) => setCreateValue("newListName", text)}
@@ -126,9 +128,11 @@ export default function Lists() {
           maxLength={60}
         />
         <TouchableOpacity
-          className="bg-lime-400 rounded-lg px-3 py-2 items-center justify-center"
+          className="min-w-11 min-h-11 bg-lime-400 rounded-lg px-3 py-2 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
           activeOpacity={0.7}
-          onPress={() => handleCreateSubmit(onCreateList)()}
+          accessibilityRole="button"
+          accessibilityLabel="Criar lista"
+          onPress={() => handleCreateSubmit(onCreateList)()
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
@@ -149,16 +153,13 @@ export default function Lists() {
           const isEditing = editingId === item.id
 
           return (
-            <Pressable
-              onPress={() => {
-                if (!isEditing) handleSelectList(item.id)
-              }}
-              className={`mx-4 mb-3 rounded-lg p-3 ${isActive ? "bg-slate-600" : "bg-slate-800"}`}
-            >
+            <View className={`mx-4 mb-3 min-h-14 rounded-lg p-3 ${isActive ? "bg-slate-600" : "bg-slate-800"}`}>
               <Row className="justify-between items-center gap-2">
                 {isEditing ? (
                   <TextInput
-                    className="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-base"
+                    className="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                    accessibilityLabel={`Nome da lista ${item.name}`}
+                    accessibilityHint="Edite o nome e salve as alterações"
                     value={editingName}
                     onChangeText={(text) => setEditValue("editingName", text)}
                     onSubmitEditing={() => handleEditSubmit(onSaveEdit)()}
@@ -167,7 +168,13 @@ export default function Lists() {
                     maxLength={60}
                   />
                 ) : (
-                  <View className="flex-1">
+                  <TouchableOpacity
+                    onPress={() => handleSelectList(item.id)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Selecionar lista ${item.name}`}
+                    accessibilityState={{ selected: isActive }}
+                    className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                  >
                     <TextWhite className="text-base font-semibold">
                       {item.name}
                       {isActive && (
@@ -180,7 +187,7 @@ export default function Lists() {
                       {item.products.length}{" "}
                       {item.products.length === 1 ? "item" : "itens"}
                     </TextWhite>
-                  </View>
+                  </TouchableOpacity>
                 )}
 
                 <Row className="gap-3 items-center">
@@ -188,8 +195,10 @@ export default function Lists() {
                     <>
                       <TouchableOpacity
                         onPress={() => handleEditSubmit(onSaveEdit)()}
-                        className="bg-lime-400 rounded px-2 py-1"
+                        className="min-w-11 min-h-11 bg-lime-400 rounded px-3 py-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                         activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Salvar nome da lista ${item.name}`}
                       >
                         <Text className="text-black font-bold text-xs">
                           {LISTS.rename_save}
@@ -197,8 +206,10 @@ export default function Lists() {
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={handleCancelEdit}
-                        className="bg-slate-500 rounded px-2 py-1"
+                        className="min-w-11 min-h-11 bg-slate-500 rounded px-3 py-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                         activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Cancelar edição da lista ${item.name}`}
                       >
                         <Text className="text-white text-xs">
                           {LISTS.rename_cancel}
@@ -211,6 +222,9 @@ export default function Lists() {
                         onPress={() => router.push(`../reminders/${item.id}`)}
                         activeOpacity={0.7}
                         hitSlop={8}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Abrir lembretes da lista ${item.name}`}
+                        className="min-w-11 min-h-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                       >
                         <NotificationIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
@@ -218,6 +232,9 @@ export default function Lists() {
                         onPress={() => handleStartEdit(item.id, item.name)}
                         activeOpacity={0.7}
                         hitSlop={8}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Renomear lista ${item.name}`}
+                        className="min-w-11 min-h-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                       >
                         <EditIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
@@ -225,6 +242,9 @@ export default function Lists() {
                         onPress={() => handleRemoveList(item.id, item.name)}
                         activeOpacity={0.7}
                         hitSlop={8}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Remover lista ${item.name}`}
+                        className="min-w-11 min-h-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                       >
                         <TrashIcon size={SIZE.iconActions} />
                       </TouchableOpacity>
@@ -232,7 +252,7 @@ export default function Lists() {
                   )}
                 </Row>
               </Row>
-            </Pressable>
+            </View>
           )
         }}
       />
