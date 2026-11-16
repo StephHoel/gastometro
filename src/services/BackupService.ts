@@ -96,6 +96,17 @@ export const BackupService = {
       reminders: reminderResult.data.reminders,
     }
 
+    const listsById = new Map(payload.cart.lists.map((list) => [list.id, list]))
+    for (const reminder of payload.reminders) {
+      const list = listsById.get(reminder.listId)
+      if (!list) {
+        throw new Error('O backup contém um lembrete vinculado a uma lista inexistente. Nenhum dado local foi alterado.')
+      }
+      if (reminder.itemId && !list.products.some((product) => product.id === reminder.itemId)) {
+        throw new Error('O backup contém um lembrete vinculado a um produto inexistente. Nenhum dado local foi alterado.')
+      }
+    }
+
     if (cartResult.discarded > 0 || reminderResult.discarded > 0) {
       throw new Error('O backup contém registros inválidos. Nenhum dado local foi alterado.')
     }
@@ -151,19 +162,20 @@ export const BackupService = {
       }
 
       for (const backupProduct of backupList.products) {
-        const existing = lists.flatMap((list) => list.products).find((product) => product.id === backupProduct.id)
+        const existingList = lists.find((list) => list.products.some((product) => product.id === backupProduct.id))
+        const existing = existingList?.products.find((product) => product.id === backupProduct.id)
         if (!existing) {
           localList.products.push(backupProduct)
           merged.products += 1
-        } else if (sameValue(existing, backupProduct)) {
+        } else if (sameValue(existing, backupProduct) && existingList?.id === backupList.id) {
           ignored.products += 1
         } else {
           conflicts.push({
             id: 'produto:' + backupProduct.id,
             type: 'produto',
-            description: 'O produto "' + backupProduct.item + '" já existe com informações diferentes.',
-            localValue: existing.item + ' | ' + existing.quantity + ' | ' + existing.price,
-            backupValue: backupProduct.item + ' | ' + backupProduct.quantity + ' | ' + backupProduct.price,
+            description: 'O produto "' + backupProduct.item + '" já existe com informações diferentes ou está associado a outra lista.',
+            localValue: existing.item + ' | ' + existing.quantity + ' | ' + existing.price + ' | lista: ' + (existingList?.name ?? 'desconhecida'),
+            backupValue: backupProduct.item + ' | ' + backupProduct.quantity + ' | ' + backupProduct.price + ' | lista: ' + backupList.name,
           })
         }
       }
@@ -220,14 +232,14 @@ export const BackupService = {
       }
 
       for (const backupProduct of backupList.products) {
-        const existingLocation = lists.find((list) => list.products.some((product) => product.id === backupProduct.id))
-        const existing = existingLocation?.products.find((product) => product.id === backupProduct.id)
+        const existing = lists.flatMap((list) => list.products).find((product) => product.id === backupProduct.id)
         if (!existing) {
           localList.products.push(backupProduct)
-        } else if (choices['produto:' + backupProduct.id] === 'backup' && existingLocation) {
-          existingLocation.products = existingLocation.products.map((product) =>
-            product.id === backupProduct.id ? backupProduct : product,
-          )
+        } else if (choices['produto:' + backupProduct.id] === 'backup') {
+          for (const list of lists) {
+            list.products = list.products.filter((product) => product.id !== backupProduct.id)
+          }
+          localList.products.push(backupProduct)
         }
       }
     }
