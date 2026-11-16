@@ -39,7 +39,7 @@ describe('BackupService', () => {
     const envelope = BackupService.createEnvelope(payload([list('l1', 'Compras', [
       product('p1', 'Arroz'),
       product('p2', 'Feijão'),
-    ])], [reminder('r1', 'Comprar leite')]), '1.10.0')
+    ])], [reminder('r1', 'Comprar leite', 'l1', 'native-notification-1')]), '1.10.0')
 
     expect(envelope.payload.reminders[0]).not.toHaveProperty('notificationId')
     const result = BackupService.parse(BackupService.stringify(envelope))
