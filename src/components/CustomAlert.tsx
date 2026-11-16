@@ -53,25 +53,29 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
       animationType="fade"
       visible={isVisible}
       onRequestClose={internalHideAlert}
+      accessibilityViewIsModal
     >
       <Pressable
+        accessible={false}
         className="flex-1 justify-center items-center bg-black/30"
         onPress={internalHideAlert}
       >
-        <Pressable className="p-5 bg-slate-700 rounded-lg items-center" style={{ width: alertWidth }}>
-          <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
+        <Pressable accessible={false} className="p-5 bg-slate-700 rounded-lg items-center" style={{ width: alertWidth }}>
+          <TextWhite accessibilityRole="header" className="text-xl font-bold mb-3">{title}</TextWhite>
 
           {!!message && (
-            <TextWhite className="text-base mb-5 text-center">{message}</TextWhite>
+            <TextWhite accessibilityLiveRegion="assertive" className="text-base mb-5 text-center">{message}</TextWhite>
           )}
 
           <View className="w-full flex-col px-4">
             {buttons.map((button, index) => (
               <TouchableOpacity
                 key={index}
-                className={`p-2 mb-2 rounded items-center 
+                accessibilityRole="button"
+                accessibilityLabel={button.text}
+                className={`min-h-11 p-2 mb-2 rounded items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400 
                   ${button.text === INPUTS.buttons.cancel
-                    ? "bg-red-500"
+                    ? "bg-red-600"
                     : "bg-slate-400"}
                   `}
                 onPress={() => {

@@ -2,7 +2,7 @@ import { PermissionState } from '@/enums/PermissionState'
 import type { ReminderProps } from '@/interfaces/ReminderProps'
 import { NotificationService } from '@/services/NotificationService'
 import { IsWeb } from '@/utils/platform'
-import { cancelScheduledNotificationAsync, dismissAllNotificationsAsync, getPermissionsAsync, PermissionStatus, requestPermissionsAsync, scheduleNotificationAsync } from 'expo-notifications'
+import { cancelScheduledNotificationAsync, dismissAllNotificationsAsync, getAllScheduledNotificationsAsync, getPermissionsAsync, PermissionStatus, requestPermissionsAsync, scheduleNotificationAsync } from 'expo-notifications'
 
 jest.mock('@/utils/platform', () => ({
   IsWeb: jest.fn(),
@@ -28,6 +28,7 @@ describe('NotificationService', () => {
   const scheduleNotificationAsyncMock = scheduleNotificationAsync as jest.Mock
   const cancelScheduledNotificationAsyncMock = cancelScheduledNotificationAsync as jest.Mock
   const dismissAllNotificationsAsyncMock = dismissAllNotificationsAsync as jest.Mock
+  const getAllScheduledNotificationsAsyncMock = getAllScheduledNotificationsAsync as jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -74,6 +75,35 @@ describe('NotificationService', () => {
     getPermissionsAsyncMock.mockRejectedValueOnce(new Error('sem acesso'))
 
     await expect(NotificationService.ensurePermissionForScheduling()).resolves.toBe(false)
+  })
+
+  it('consulta os agendamentos nativos e extrai os dados dos lembretes', async () => {
+    getAllScheduledNotificationsAsyncMock.mockResolvedValueOnce([{
+      identifier: 'native-1',
+      content: {
+        title: 'Comprar leite',
+        data: { reminderId: 'rem-1', listId: 'list-1' },
+      },
+      trigger: { date: new Date('2099-01-01T12:00:00.000Z') },
+    }])
+
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toEqual([{
+      notificationId: 'native-1',
+      reminderId: 'rem-1',
+      listId: 'list-1',
+      title: 'Comprar leite',
+      datetimeISO: '2099-01-01T12:00:00.000Z',
+    }])
+  })
+
+  it('não consulta agendamentos no web e sinaliza falha na consulta nativa', async () => {
+    mockedIsWeb.mockReturnValue(true)
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toEqual([])
+    expect(getAllScheduledNotificationsAsyncMock).not.toHaveBeenCalled()
+
+    mockedIsWeb.mockReturnValue(false)
+    getAllScheduledNotificationsAsyncMock.mockRejectedValueOnce(new Error('falha'))
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toBeNull()
   })
 
   it('scheduleReminder retorna null para web, data inválida ou passada', async () => {

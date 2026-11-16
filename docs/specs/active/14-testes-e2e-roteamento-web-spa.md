@@ -1,7 +1,7 @@
 # Mini-spec: Testes E2E para roteamento web SPA
 
 Número: 14
-Status: planejado
+Status: ativa
 
 ## Problema
 

@@ -1,16 +1,16 @@
 # Mini-spec: Consistência e validação da documentação técnica
 
 Número: 22
-Status: planejado
+Status: ativa
 
 ## Problema
 
 Há divergências entre a documentação e os arquivos que definem a configuração real do projeto. Exemplos encontrados na `main` analisada:
 
-- `README.md` e `docs/SPEC.md` descrevem Expo 56 e React Native 0.85, enquanto `package.json` declara Expo 57 e React Native 0.86.3.
-- O badge de release do README informa v1.7.3, enquanto `package.json` declara v1.7.4.
-- O badge de quantidade de testes e alguns resumos da documentação não possuem uma fonte automatizada e podem ficar desatualizados.
-- A mini-spec ativa de testes ainda cita compatibilidade com Expo 56.
+- `README.md` e `docs/SPEC.md` descrevem Expo 56 e React Native 0.85, enquanto `package.json` declara Expo SDK 58 e React Native 0.88.1.
+- O badge de release deve acompanhar `package.json` e `app.config.js`; a versão já está alinhada na implementação desta mini-spec.
+- Os badges de quantidade de testes (195) e percentual de cobertura (90.08%) no README não possuem fonte automatizada e podem ficar desatualizados.
+- A mini-spec ativa de testes ainda cita compatibilidade com Expo 56 e mantém um resumo de testes de junho de 2026 descrito como o mais recente.
 
 Essas divergências dificultam decisões técnicas, onboarding e diagnóstico de compatibilidade.
 
@@ -74,3 +74,14 @@ Estabelecer uma fonte de verdade para metadados técnicos e um processo leve par
 - Corrigir a documentação para refletir a configuração real, não fazer downgrade de dependências para coincidir com textos desatualizados.
 - Diferenciar informação atual de registros históricos em changelog e relatórios datados.
 - Manter o conteúdo em pt-BR.
+
+
+## Decisões de implementação
+
+- `package.json` é a fonte das versões declaradas de dependências; `package-lock.json` registra as versões resolvidas para instalação reproduzível.
+- `package.json` e `app.config.js` devem manter a mesma versão do aplicativo. O badge do README e o primeiro título de versão do changelog devem acompanhar essa versão.
+- `.nvmrc` é a fonte da versão recomendada do Node.js; o campo `engines` em `package.json` define a faixa compatível.
+- README e `docs/SPEC.md` mantêm resumos úteis da stack, mas suas versões são verificadas automaticamente contra as fontes de configuração.
+- Contagens e percentuais voláteis não são exibidos em badges estáticos. Relatórios de cobertura são gerados por `npm run test:coverage` e `npm run test:coverage:csv`; números históricos só permanecem quando têm data e são identificados como históricos.
+- O comando `npm run check:docs` verifica versão, stack, badges, changelog e contagem de mini-specs. A verificação é executada no workflow Expo Doctor em pull requests.
+- Referências históricas em changelog não são reescritas; divergências em documentos operacionais atuais devem ser corrigidas.

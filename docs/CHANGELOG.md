@@ -1,3 +1,117 @@
+## 1.13.0 - 2026-11-16
+
+Implementação da mini-spec 22: consistência e validação da documentação técnica.
+
+### Documentação e fontes de verdade
+
+- README e guia principal atualizados para Expo SDK 58, React Native 0.88.1, React 19.3.0 e Node 24, alinhados à configuração efetiva.
+- Removidos badges estáticos de quantidade de testes e percentual de cobertura, que não tinham atualização automatizada.
+- Atualizadas referências de stack na mini-spec de testes e identificados explicitamente os números de execução antigos como históricos.
+- Corrigidos os links de mini-specs ativas e planejadas; o índice passa a ser a fonte única para status e contagens.
+
+### Automação
+
+- Adicionado `npm run check:docs` para validar versão, stack, changelog, badges e contagem de mini-specs.
+- A verificação documental é executada no workflow Expo Doctor em pull requests.
+
+## 1.12.0 - 2026-11-16
+
+Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
+
+### Acessibilidade
+
+- Adicionados papéis, nomes acessíveis, dicas e estados aos controles reutilizáveis e às principais ações de listas, produtos, lembretes e comparação.
+- Checkboxes de coleta anunciam o produto e seu estado marcado/desmarcado.
+- Ampliadas as áreas de toque principais para pelo menos 44 × 44 pontos e adicionados indicadores de foco visível na web.
+- Alertas e mensagens de validação passam a expor semântica e anúncios para tecnologias assistivas.
+- Ajustados textos e placeholders para manter contraste AA nas combinações verificadas.
+
+### Qualidade e documentação
+
+- Adicionado comando `npm run check:a11y:contrast` e execução da verificação WCAG AA no workflow de pull requests.
+- Adicionados testes de acessibilidade para ações e estado dos itens da lista.
+- Documentado o roteiro de validação manual com TalkBack, teclado, leitor de tela e ampliação. A execução manual permanece pendente.
+
+## 1.11.0 - 2026-11-16
+
+Implementação da mini-spec 20: backup e restauração local.
+
+### Funcionalidade
+
+- Adicionada exportação de listas, produtos e lembretes em arquivo JSON versionado, com download na web e compartilhamento no Android.
+- Adicionada importação por seletor de arquivos, validação e pré-visualização do conteúdo antes da restauração.
+- Disponibilizadas as estratégias de substituição integral e mesclagem com dados locais.
+- Conflitos de listas, produtos e lembretes exibem os valores locais e os valores do backup; cada conflito exige escolha explícita.
+- IDs de notificações nativas são excluídos do backup e os agendamentos são reconciliados após a restauração.
+- Dados locais anteriores são preservados antes da operação de restauração.
+
+### Qualidade e documentação
+
+- Adicionados testes para envelope, validação, referências, mesclagem e resolução de conflitos.
+- Documentadas as decisões de formato, limite de tamanho e política de conflitos na mini-spec 20.
+
+## 1.10.0 - 2026-11-16
+
+Implementação da mini-spec 19: integridade e migração de dados locais.
+
+### Persistência
+
+- Versionados os schemas persistidos de carrinho e lembretes para a versão 2.
+- Adicionada validação de estruturas, campos obrigatórios, datas, IDs duplicados e consistência entre lista ativa, listas e espelho de produtos.
+- Dados legados do carrinho são migrados para uma lista compatível; lembretes válidos mantêm seus identificadores e referências.
+- Registros inválidos isolados são reparados ou descartados de forma controlada, preservando os registros válidos.
+- Antes de aplicar reparos, o conteúdo anterior é copiado para `gastometro-recovery-cart` ou `gastometro-recovery-reminders`.
+- Estruturas irrecuperáveis e versões futuras geram erro explícito, preservam o conteúdo original e não são tratadas como estado válido.
+
+### Recuperação para o usuário
+
+- Adicionado aviso persistente na interface para informar quando dados locais foram reparados ou não puderam ser validados.
+- O usuário pode dispensar o aviso sem apagar a cópia de recuperação.
+- Mantidas as chaves originais `gastometro` e `gastometro-reminders`.
+
+### Testes
+
+- Adicionados testes de migração legada, recuperação parcial, IDs duplicados, listas ativas inconsistentes, lembretes malformados e versões desconhecidas.
+
+## 1.9.1 - 2026-11-16
+
+Implementação da mini-spec 18: sincronização eficiente e idempotente de lembretes.
+
+### Sincronização
+
+- O bootstrap aguarda a hidratação do store de lembretes e observa somente os campos relevantes dos lembretes e os IDs das listas.
+- Alterações em produtos ou nomes de listas deixam de disparar a reconciliação de notificações.
+- A reconciliação consulta os agendamentos nativos, preserva notificações válidas, recupera IDs persistidos perdidos, remove duplicidades e recria apenas agendamentos ausentes ou divergentes.
+- Sincronizações sobrepostas são serializadas; retomada do app solicita uma nova reconciliação.
+- Listeners de resposta a notificações passam a ser registrados uma vez por montagem e removidos no cleanup.
+- Remoções e limpeza de órfãos cancelam todos os agendamentos encontrados para o lembrete.
+
+### Qualidade e compatibilidade
+
+- Adicionados testes para consulta de agendamentos, preservação de notificações válidas, recuperação de agendamentos e deduplicação.
+- Mantida a chave `gastometro-reminders` e o contrato persistido de `ReminderProps`.
+- A web continua sem agendamento nativo.
+
+## 1.9.0 - 2026-11-16
+
+Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
+
+### Funcionalidade
+
+- Adicionada tela de comparação de preços com cadastro, edição e remoção de lugares e itens.
+- Incluída comparação individual com destaque da menor oferta, maior preço e diferença absoluta/percentual.
+- Incluída comparação da cesta completa, com indicação de cesta incompleta quando faltar preço em qualquer item do lugar.
+- Resultados podem ser ordenados por preço ou nome do lugar.
+
+### Persistência e qualidade
+
+- Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
+- Adicionados testes de serviço e store para validação, cálculo, ordenação e integridade de preços ausentes.
+
+### Documentação
+
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
+
 # Changelog
 
 ## 1.8.1 - 2026-11-15

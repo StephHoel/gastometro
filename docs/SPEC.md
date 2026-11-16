@@ -2,9 +2,9 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.8.1
-> **Data:** 2026-11-15
-> **Cobertura de Testes:** 90.08%
+> **Versão do App:** 1.13.0
+> **Data:** 2026-11-16
+> **Cobertura de Testes:** consulte os relatórios gerados por `npm run test:coverage` e `npm run test:coverage:csv`; percentuais não são mantidos manualmente neste guia.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -50,34 +50,31 @@ Público esperado:
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
+- Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
+- Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
+- Validação e migração versionada dos stores locais, com preservação de cópia anterior antes de reparos e aviso recuperável para o usuário.
+- Backup local versionado com exportação JSON, restauração por substituição ou mesclagem e resolução explícita de conflitos.
+- Controles principais com semântica acessível, rótulos contextuais, foco visível na web e verificação automatizada de contraste WCAG AA.
 
-## 3. Funcionalidades Planejadas
+## 3. Roadmap e status das mini-specs
 
-Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
+O arquivo [`docs/specs/README.md`](specs/README.md) é a fonte de verdade para status, contagens e prioridade das mini-specs. Não replique essas listas em outros documentos.
 
-- testes E2E para roteamento web SPA;
-- comparação de preços entre lugares;
-- sincronização eficiente de lembretes;
-- integridade e migração de dados locais;
-- backup e restauração local;
-- acessibilidade e usabilidade assistiva;
-- consistência e validação da documentação técnica.
+Na revisão desta versão, as mini-specs 05, 14 e 17 a 22 estão em andamento e aguardam evolução/validação. Não há mini-specs planejadas restantes. Uma mini-spec só deve ser considerada concluída após implementação, validação e atualização do status no índice.
 
-As mini-specs ficam em `docs/specs/` e são organizadas por status em `planned/`, `active/` e `done/`. Consulte a mini-spec correspondente antes da implementação.
-
-Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequena especificação contendo comportamento esperado, telas afetadas, persistência e critérios de aceite.
+Antes de implementar uma nova funcionalidade, consulte o índice e a mini-spec correspondente. Se não houver especificação, proponha uma pequena especificação contendo comportamento esperado, telas afetadas, persistência e critérios de aceite.
 
 ## 4. Stack Real do Projeto
 
 Use esta seção como verdade atual do repositório.
 
-- Node 24 conforme `.nvmrc`.
-- Expo `~56`.
-- React Native `0.85`.
-- React `19`.
-- TypeScript com `strict: true`.
+- Node 24 conforme `.nvmrc` (npm 11).
+- Expo SDK 58 (`expo ~58.0.25`).
+- React Native `0.88.1`.
+- React `19.3.0`.
+- TypeScript `~6.0.3` com `strict: true`.
 - React Hook Form para gerenciamento de formulários.
-- Expo Router com rotas em `src/app`.
+- Expo Router `~58.0.31` com rotas em `src/app`.
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
 - AsyncStorage para persistência local.
@@ -146,6 +143,10 @@ interface BillProps {
 
 Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceita zero e não aceita negativos; vencimento é opcional e deve ser uma data ISO válida; contas não pagas com vencimento anterior ao dia atual são destacadas como vencidas.
 
+### Comparação de preços
+
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada. A comparação individual destaca menor e maior preço, diferença absoluta e percentual. A comparação da cesta só calcula total para lugares que tenham preço em todos os itens; ausência de preço nunca é interpretada como zero.
+
 ### Lembrete Local
 
 ```ts
@@ -180,7 +181,12 @@ Estado:
 - Persistência usa `persist` do Zustand com `AsyncStorage`.
 - A chave de storage atual é `gastometro`.
 - `useReminderStore` mantém lembretes com persistência dedicada (`gastometro-reminders`).
+- O bootstrap de lembretes depende da hidratação, dos campos relevantes dos lembretes e dos IDs das listas; mudanças em produtos não disparam sincronização.
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
+- `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
+- `BackupService` gera e valida envelopes JSON versionados, compara dados locais com backups, apresenta conflitos para decisão explícita e preserva o estado anterior antes da restauração.
+- Componentes reutilizáveis de texto, botões e ações de ícone expõem propriedades semânticas; a verificação de contraste é executada por script no workflow de pull requests.
+- `CartStore` e `ReminderStore` validam os dados hidratados e mantêm cópias de recuperação nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` quando encontram estruturas que precisam de reparo.
 
 Manipulação da lista:
 
@@ -301,6 +307,7 @@ npm run test:coverage:csv
 npm run check:ts
 npm run check:biome
 npm run check:expo
+npm run check:docs
 npm run deps:audit
 npm run verify:version-bump
 npm run new-version

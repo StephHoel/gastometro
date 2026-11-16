@@ -63,11 +63,10 @@ Manter e evoluir a suíte de testes automatizados compatível com Expo/React Nat
 - Exportação da tabela de cobertura para CSV em `docs/coverages/`, com nome no formato `YYYY-MM-DD_HH-MM.csv`.
 - O Jest trava abaixo de 80% de cobertura global do código runtime.
 
-### Resumo de cobertura mais recente (Jest)
+### Registro histórico de cobertura (Jest)
 
-- Execução de referência em 2026-06-04 com `npm run test:coverage -- --runInBand`.
-- 19 suítes passadas, 62 testes passados.
-- Consulte o relatório CSV versionado mais recente em `docs/coverages/` para validar os percentuais vigentes, não nesta mini-spec.
+- Registro histórico de execução em 2026-06-04 com `npm run test:coverage -- --runInBand`: 19 suítes e 62 testes passaram naquela execução.
+- Esses números não representam a contagem atual. Consulte o relatório CSV versionado mais recente em `docs/coverages/` para percentuais e resultados atuais.
 
 ## Fora de escopo
 
@@ -78,6 +77,6 @@ Manter e evoluir a suíte de testes automatizados compatível com Expo/React Nat
 ## Observações para IA
 
 - Avaliar `jest-expo` e `@testing-library/react-native` antes de adicionar dependências.
-- Verificar compatibilidade com Expo 56.
+- Verificar compatibilidade com Expo SDK 58.
 - Se adicionar dependências de teste, seguir política de versionamento e rodar verificações aplicáveis.
 - Priorizar novos testes em componentes com menor cobertura atual (`Button`, `Form`, `Header`, `List`) e fluxos de integração de tela.

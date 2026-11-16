@@ -20,8 +20,9 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
 
   return (
     <TouchableOpacity
-      className={`${className} h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
+      className={`${className} h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400`}
       activeOpacity={0.7}
+      accessibilityRole="button"
       {...rest}
     >
       {children}

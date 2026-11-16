@@ -5,11 +5,11 @@ Você é o revisor técnico deste projeto. Leia `docs/SPEC.md` antes de sugerir 
 Resumo rápido:
 
 - Projeto mobile Expo/React Native com TypeScript estrito.
-- Foco atual em Android; web futura deve ser compatível com GitHub Pages.
+- Foco principal em Android; a versão web estática compatível com GitHub Pages também é suportada, com limitações documentadas.
 - Rotas em `src/app` via Expo Router.
 - UI com NativeWind/Tailwind e componentes em `src/components`.
 - Estado global em Zustand com persistência local via AsyncStorage.
-- Domínio principal: lista de compras, total em BRL, compartilhamento/importação via WhatsApp e calculadora de preço por unidade.
+- Domínio: listas de compras, contas a pagar, comparação de preços, lembretes, backup/restauração e calculadora, com moeda BRL e compartilhamento/importação via WhatsApp.
 - Use imports internos com alias `@/`.
 - Evite `any`.
 - Crie e mantenha interfaces TypeScript em `src/interfaces/`.

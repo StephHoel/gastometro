@@ -1,8 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.8.1-blue)](docs/CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
+[![Release](https://img.shields.io/badge/Release-v1.13.0-blue)](docs/CHANGELOG.md)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -29,18 +27,22 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
+- Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
+- Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
+- Exporta listas, produtos e lembretes em backup JSON e permite restaurar por substituição ou mesclagem com resolução explícita de conflitos.
+- Inclui rótulos e estados acessíveis nos principais controles, foco visível na web e verificação automatizada de contraste WCAG AA.
 
 ## Stack
 
-- Expo 56.
-- React Native 0.85.
-- React 19.
-- TypeScript com modo estrito.
+- Expo SDK 58 (`expo ~58.0.25`).
+- React Native 0.88.1.
+- React 19.3.0.
+- TypeScript ~6.0.3 com modo estrito.
 - Expo Router para rotas.
 - NativeWind/Tailwind para estilos.
 - Zustand para estado global.
 - AsyncStorage para persistência local.
-- Node 24 conforme `.nvmrc`.
+- Node 24 conforme `.nvmrc` e npm 11.
 
 O foco atual da plataforma é Android. A versão web compatível com GitHub Pages já está disponível com limitações documentadas.
 
@@ -50,17 +52,25 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs):
+
+- [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](docs/specs/active/18-sincronizacao-eficiente-de-lembretes.md)
+- [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
+- [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-e-usabilidade-assistiva.md)
+- [Consistência e validação da documentação técnica](docs/specs/active/22-consistencia-documentacao-tecnica.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
-- [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
-- [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
-- [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
-- [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
-- [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
+Atualmente não há mini-specs planejadas. Consulte o índice de [mini-specs](docs/specs/README.md) para acompanhar as que estão em andamento.
+
+### Comparação de preços
+
+A nova área permite cadastrar mercados, comparar preços por produto e ordenar os resultados por preço ou nome. A visão de cesta completa soma apenas lugares com preço informado para todos os itens; preços ausentes são exibidos como cesta incompleta, nunca como valor zero.
 
 Funcionalidades concluídas recentemente:
 
@@ -71,6 +81,8 @@ Funcionalidades concluídas recentemente:
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
 - Service Worker para funcionamento offline em web (mini-spec 13 em `docs/specs/done/`).
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
+
+Consulte também o [guia de acessibilidade](docs/ACCESSIBILITY.md) para os critérios e a validação manual.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
@@ -112,7 +124,10 @@ npm run build:local
 npm run build:local:eas
 npm run check:ts
 npm run check:biome
+npm run check:docs
 npm run check:expo
+npm run check:docs
+npm run check:a11y:contrast
 npm run deps:audit
 ```
 
@@ -157,6 +172,10 @@ npm run web:test:offline
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
+
+### Testes E2E do roteamento web
+
+A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
 
 ### Limitações web conhecidas
 

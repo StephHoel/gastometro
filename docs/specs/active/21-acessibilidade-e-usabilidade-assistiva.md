@@ -1,7 +1,7 @@
 # Mini-spec: Acessibilidade e usabilidade assistiva
 
 Número: 21
-Status: planejado
+Status: ativa
 
 ## Problema
 
@@ -68,8 +68,14 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - Tradução para novos idiomas.
 - Recursos de acessibilidade que dependam de serviço externo.
 
-## Observações para IA
+## Decisões de implementação
 
-- Auditar primeiro os componentes reutilizáveis para corrigir vários fluxos em conjunto.
-- Usar APIs de acessibilidade do React Native e atributos equivalentes da plataforma web, validando o resultado em runtime.
-- Não considerar a presença de `accessibilityLabel` isoladamente como prova de acessibilidade; validar a experiência real.
+- Os componentes reutilizáveis de texto, botões e botões de ícone expõem papéis, rótulos, dicas e estados de acessibilidade.
+- Ações icon-only informam o contexto do item ou da lista; checkboxes anunciam o nome do produto e seu estado de coleta.
+- Os alvos de toque principais usam dimensão mínima de 44 × 44 pontos; botões textuais usam altura mínima de 48 pontos.
+- Controles navegáveis por teclado exibem indicador de foco com contorno lime.
+- Mensagens de validação e alertas usam regiões vivas; diálogos declaram contexto modal e botões identificáveis.
+- A ampliação de texto permanece habilitada pelo comportamento padrão do React Native, sem limitar o fator de escala.
+- A verificação de contraste usa a fórmula de luminância relativa da WCAG e pode ser executada por `npm run check:a11y:contrast`; o workflow Expo Doctor executa essa verificação em pull requests.
+- Nenhuma preferência de acessibilidade é persistida pelo app.
+- A verificação manual com TalkBack e leitor de tela/navegação por teclado em navegador permanece pendente e deve ser concluída durante a validação do PR.
