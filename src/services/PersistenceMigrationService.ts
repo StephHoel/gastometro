@@ -41,12 +41,16 @@ function uniqueId(base: string, used: Set<string>): string {
 function parseProduct(value: unknown): ProductProps | null {
   if (!isRecord(value) || !isNonEmptyString(value.id) || !isNonEmptyString(value.item)) return null
 
-  const quantity = typeof value.quantity === 'string' || typeof value.quantity === 'number'
-    ? String(value.quantity)
-    : '0'
-  const price = typeof value.price === 'string' || typeof value.price === 'number'
-    ? String(value.price)
-    : '0'
+  const quantity = typeof value.quantity === 'string'
+    ? value.quantity
+    : typeof value.quantity === 'number' && Number.isFinite(value.quantity)
+      ? String(value.quantity)
+      : '0'
+  const price = typeof value.price === 'string'
+    ? value.price
+    : typeof value.price === 'number' && Number.isFinite(value.price)
+      ? String(value.price)
+      : '0'
 
   return {
     id: value.id,
@@ -70,7 +74,7 @@ export function normalizeCartPersistedState(
   let discarded = 0
   let rawLists: unknown[]
 
-  if (Array.isArray(value.lists)) {
+  if (Array.isArray(value.lists) && (value.lists.length > 0 || !Array.isArray(value.products) || value.products.length === 0)) {
     rawLists = value.lists
   } else if (Array.isArray(value.products)) {
     rawLists = [{ id: 'lista-legada-1', name: 'Lista 1', products: value.products }]
