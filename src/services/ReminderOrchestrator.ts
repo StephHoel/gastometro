@@ -55,11 +55,11 @@ async function reconcileReminderSchedules(): Promise<void> {
 
     const expectedDate = new Date(reminder.datetimeISO)
     const expectedISO = Number.isNaN(expectedDate.getTime()) ? null : expectedDate.toISOString()
-    const matching = matches.find((item) =>
+    const matching = expectedISO ? matches.find((item) =>
       item.title === reminder.title &&
       item.listId === reminder.listId &&
       item.datetimeISO === expectedISO
-    )
+    ) : undefined
 
     if (matching) {
       for (const duplicate of matches) {
