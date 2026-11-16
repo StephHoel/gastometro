@@ -1,7 +1,7 @@
 # Mini-spec: Backup e restauração local
 
 Número: 20
-Status: planejado
+Status: ativa
 
 ## Problema
 
@@ -66,8 +66,14 @@ Permitir que o usuário exporte seus dados para um arquivo local e restaure esse
 - Backup automático em segundo plano.
 - Criptografia com senha na primeira versão, salvo decisão de produto específica.
 
-## Observações para IA
+## Decisões de implementação
 
-- Definir com o usuário se a primeira versão deve oferecer somente substituição ou também mesclagem; não inferir uma política de conflito.
-- Considerar o limite de armazenamento e a experiência de seleção de arquivos no Android e nos navegadores.
-- Não prometer proteção contra perda do arquivo exportado: o usuário é responsável por armazená-lo em local seguro.
+- A restauração oferece duas estratégias: substituir integralmente os dados locais ou mesclar o backup com os dados existentes.
+- A mesclagem foi aprovada pelo usuário com resolução explícita de conflitos: cada conflito apresenta os valores locais e os valores do backup, e o usuário escolhe qual versão manter.
+- Registros com o mesmo identificador e conteúdo idêntico são ignorados na mesclagem; identificadores duplicados ou estruturas inconsistentes dentro do próprio backup fazem o arquivo ser rejeitado.
+- O backup usa envelope JSON versionado (formato `gastometro-backup`, versão 1), com data de exportação, versão do aplicativo e payload.
+- A exportação gera um arquivo JSON para download na web e usa o compartilhamento de arquivos no Android. A importação usa o seletor de documentos nas duas plataformas.
+- IDs de notificações nativas não são exportados. Os agendamentos são reconciliados após a restauração, conforme as permissões disponíveis.
+- Antes de substituir ou mesclar, o estado bruto atual do carrinho e dos lembretes é preservado nas chaves `gastometro-backup-before-restore-cart` e `gastometro-backup-before-restore-reminders`.
+- Backups acima de 10 MB, malformados, incompatíveis, com dados inválidos ou com lembretes vinculados a listas inexistentes são rejeitados antes de alterar os stores.
+- O arquivo exportado não é enviado a servidor. O usuário continua responsável por armazenar sua cópia em local seguro.

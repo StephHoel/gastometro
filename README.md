@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.8.1-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.11.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
@@ -29,6 +29,9 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
+- Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
+- Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
+- Exporta listas, produtos e lembretes em backup JSON e permite restaurar por substituição ou mesclagem com resolução explícita de conflitos.
 
 ## Stack
 
@@ -50,17 +53,25 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs):
+
+- [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](docs/specs/active/18-sincronizacao-eficiente-de-lembretes.md)
+- [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](docs/specs/active/20-backup-e-restauracao-local.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
-- [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
-- [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
+
+### Comparação de preços
+
+A nova área permite cadastrar mercados, comparar preços por produto e ordenar os resultados por preço ou nome. A visão de cesta completa soma apenas lugares com preço informado para todos os itens; preços ausentes são exibidos como cesta incompleta, nunca como valor zero.
 
 Funcionalidades concluídas recentemente:
 
@@ -157,6 +168,10 @@ npm run web:test:offline
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
+
+### Testes E2E do roteamento web
+
+A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
 
 ### Limitações web conhecidas
 
