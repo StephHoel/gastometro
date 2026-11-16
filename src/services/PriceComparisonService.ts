@@ -43,7 +43,7 @@ export const PriceComparisonService = {
       bestPrice,
       worstPrice,
       difference,
-      differencePercent: bestPrice === null || bestPrice === 0 ? null : difference / bestPrice * 100,
+      differencePercent: worstPrice === null || worstPrice === 0 ? null : difference / worstPrice * 100,
       bestPlaceIds: bestPrice === null ? [] : offers.filter((offer) => offer.price === bestPrice).map((offer) => offer.placeId),
     }
   },
