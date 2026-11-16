@@ -31,12 +31,14 @@ const initialList = createDefaultList()
 
 const CART_RECOVERY_KEY = 'gastometro-recovery-cart'
 
-async function preserveCartData(value: unknown): Promise<void> {
+async function preserveCartData(value: unknown): Promise<boolean> {
   try {
     await AsyncStorage.setItem(CART_RECOVERY_KEY, JSON.stringify(value))
+    return true
   } catch (error) {
-    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados do carrinho. Evite limpar os dados do aplicativo e procure suporte.')
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados carrinho. Evite limpar os dados do aplicativo e procure suporte.')
     console.error('Falha ao preservar dados do carrinho:', error)
+    return false
   }
 }
 
@@ -49,7 +51,8 @@ async function migrateCartState(persistedState: unknown, version: number): Promi
   try {
     const result = normalizeCartPersistedState(persistedState, version)
     if (result.repaired) {
-      await preserveCartData(persistedState)
+      const preserved = await preserveCartData(persistedState)
+      if (!preserved) throw new Error('A cópia de segurança dos dados não pôde ser criada.')
       PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
     }
     return result.data as StateProps
@@ -170,8 +173,11 @@ export const useCartStore = create(
         try {
           const result = normalizeCartPersistedState(persistedState, 2)
           if (result.repaired) {
-            void preserveCartData(persistedState)
-            PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
+            void preserveCartData(persistedState).then((preserved) => {
+              PersistenceRecoveryService.report(preserved
+                ? getCartRecoveryMessage(result.discarded)
+                : 'A recuperação dos dados foi parcial e a cópia de segurança não pôde ser criada. Evite limpar os dados do aplicativo.')
+            })
           }
           return { ...currentState, ...result.data }
         } catch (error) {
