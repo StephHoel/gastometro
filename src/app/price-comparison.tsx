@@ -117,7 +117,7 @@ export default function PriceComparison() {
       <ScrollView className="flex-1" keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 36 }}>
         <View className="px-4 pt-4 gap-4">
           <View className="gap-1">
-            <TextWhite className="text-2xl font-bold">Comparação de preços</TextWhite>
+            <TextWhite accessibilityRole="header" className="text-2xl font-bold">Comparação de preços</TextWhite>
             <TextWhite className="text-sm text-slate-400">Compare cada produto e descubra onde a cesta completa custa menos.</TextWhite>
           </View>
 
@@ -210,7 +210,7 @@ export default function PriceComparison() {
           {!!error && <TextWhite accessibilityLiveRegion="assertive" className="text-sm text-red-400">{error}</TextWhite>}
 
           <View className="gap-2">
-            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação por item</TextWhite><TouchableOpacity accessibilityRole="button" accessibilityLabel={`Alterar ordenação da comparação por item. Ordenação atual: ${sortBy === "price" ? "menor preço" : "nome"}`} className="min-h-11 px-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor preço"}</TextWhite></TouchableOpacity></Row>
+            <Row className="items-center justify-between gap-2"><TextWhite accessibilityRole="header" className="text-xl font-bold">Comparação por item</TextWhite><TouchableOpacity accessibilityRole="button" accessibilityLabel={`Alterar ordenação da comparação por item. Ordenação atual: ${sortBy === "price" ? "menor preço" : "nome"}`} className="min-h-11 px-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor preço"}</TextWhite></TouchableOpacity></Row>
             {entries.length === 0 ? (
               <Card className="p-4"><TextWhite className="text-slate-400">Nenhum item comparado ainda.</TextWhite></Card>
             ) : entries.map((entry) => {
@@ -247,7 +247,7 @@ export default function PriceComparison() {
           </View>
 
           <View className="gap-2">
-            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação da cesta completa</TextWhite><TouchableOpacity accessibilityRole="button" accessibilityLabel={`Alterar ordenação da cesta completa. Ordenação atual: ${sortBy === "price" ? "menor total" : "nome"}`} className="min-h-11 px-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor total"}</TextWhite></TouchableOpacity></Row>
+            <Row className="items-center justify-between gap-2"><TextWhite accessibilityRole="header" className="text-xl font-bold">Comparação da cesta completa</TextWhite><TouchableOpacity accessibilityRole="button" accessibilityLabel={`Alterar ordenação da cesta completa. Ordenação atual: ${sortBy === "price" ? "menor total" : "nome"}`} className="min-h-11 px-2 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor total"}</TextWhite></TouchableOpacity></Row>
             <TextWhite className="text-sm text-slate-400">O total só é calculado quando há preço para todos os itens naquele lugar. Preços ausentes não viram R$ 0,00.</TextWhite>
             {basket.length === 0 || entries.length === 0 ? (
               <Card className="p-4"><TextWhite className="text-slate-400">Adicione itens e preços para comparar a cesta.</TextWhite></Card>
