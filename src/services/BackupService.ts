@@ -110,7 +110,7 @@ export const BackupService = {
       reminders: reminderResult.data.reminders,
     }
 
-    const listsById = new Map(payload.cart.lists.map((list) => [list.id, list]))
+    const listsById = new Map(payload.cart.lists.map((list) => [list.id, list] as const))
     for (const reminder of payload.reminders) {
       const list = listsById.get(reminder.listId)
       if (!list) {
