@@ -10,6 +10,8 @@ import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 
+import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
+
 import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
 
@@ -28,8 +30,8 @@ export default function Layout() {
   const setActiveList = useCartStore((state) => state.setActiveList)
   const reminders = useReminderStore((state) => state.reminders)
   const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
-  const listIdsKey = lists.map((list) => list.id).sort().join('|')
-  const remindersSignature = reminders.map((reminder) => [reminder.id, reminder.title, reminder.datetimeISO, reminder.enabled, reminder.listId].join('::')).sort().join('|')
+  const listIdsKey = getListIdsSignature(lists)
+  const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
 
   const handleNotificationResponse = useCallback(
@@ -84,6 +86,7 @@ export default function Layout() {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
 
