@@ -3,7 +3,6 @@ import { CustomButton as Button } from '@/components/Button'
 import { Page } from '@/components/Page'
 import { Row } from '@/components/Row'
 import { TextWhite } from '@/components/TextWhite'
-import { COLORS } from '@/constants/color'
 import type { PriceComparisonEntryProps } from '@/interfaces/PriceComparisonProps'
 import {
   compareBasket,
