@@ -64,8 +64,8 @@ assertIncludes('README.md', readme, 'React ' + react)
 assertIncludes('README.md', readme, 'Node ' + nodeVersion)
 
 assertIncludes('docs/SPEC.md', spec, 'Expo SDK ' + expoMajor)
-assertIncludes('docs/SPEC.md', spec, 'React Native ' + reactNative)
-assertIncludes('docs/SPEC.md', spec, 'React ' + react)
+assertIncludes('docs/SPEC.md', spec, 'React Native `' + reactNative + '`')
+assertIncludes('docs/SPEC.md', spec, 'React `' + react + '`')
 assertIncludes('docs/SPEC.md', spec, 'Node ' + nodeVersion)
 assertIncludes('docs/SPEC.md', spec, '**Versão do App:** ' + version)
 
