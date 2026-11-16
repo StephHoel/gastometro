@@ -188,6 +188,7 @@ Estado:
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 - `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
 - `BackupService` gera e valida envelopes JSON versionados, compara dados locais com backups, apresenta conflitos para decisão explícita e preserva o estado anterior antes da restauração.
+- Componentes reutilizáveis de texto, botões e ações de ícone expõem propriedades semânticas; a verificação de contraste é executada por script no workflow de pull requests.
 - `CartStore` e `ReminderStore` validam os dados hidratados e mantêm cópias de recuperação nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` quando encontram estruturas que precisam de reparo.
 
 Manipulação da lista:
