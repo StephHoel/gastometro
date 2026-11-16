@@ -127,7 +127,7 @@ export default function PriceComparison() {
             <TextInput
               className="rounded-lg bg-slate-700 px-3 py-3 text-white"
               placeholder="Nome do mercado ou loja"
-              placeholderTextColor={COLORS.inactive}
+              placeholderTextColor="#CBD5E1"
               accessibilityLabel="Nome do lugar"
               value={placeName}
               onChangeText={setPlaceName}
