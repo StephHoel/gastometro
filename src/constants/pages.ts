@@ -1,6 +1,6 @@
 export const titlePages = {
   "index": 'Gastômetro',
-  "calculator": "Calculadora",
+  "calculator": "Calculadora",\n  "comparison": "Comparação de preços",
   "lists": "Listas",
   "bills": "Contas a pagar",
   "list/add": 'Novo Item',
