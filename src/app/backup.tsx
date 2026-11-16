@@ -123,12 +123,20 @@ export default function BackupScreen() {
 
   function confirmReplace() {
     if (!preview) return
+    const confirmation = 'Todas as listas, produtos e lembretes atuais serão substituídos pelos dados do backup. Uma cópia dos dados atuais será preservada antes da operação.'
+    const summary = 'Restaurados: ' + preview.summary.lists + ' listas, ' + preview.summary.products + ' produtos e ' + preview.summary.reminders + ' lembretes.'
+    if (Platform.OS === 'web') {
+      if (window.confirm('Substituir dados locais? ' + confirmation)) {
+        void applyPayload(preview.envelope.payload, summary)
+      }
+      return
+    }
     Alert.alert(
       'Substituir dados locais?',
-      'Todas as listas, produtos e lembretes atuais serão substituídos pelos dados do backup. Uma cópia dos dados atuais será preservada antes da operação.',
+      confirmation,
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Substituir', style: 'destructive', onPress: () => void applyPayload(preview.envelope.payload, 'Restaurados: ' + preview.summary.lists + ' listas, ' + preview.summary.products + ' produtos e ' + preview.summary.reminders + ' lembretes.') },
+        { text: 'Substituir', style: 'destructive', onPress: () => void applyPayload(preview.envelope.payload, summary) },
       ],
     )
   }
