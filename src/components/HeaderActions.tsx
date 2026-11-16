@@ -34,17 +34,19 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
           action={() => router.push(ROUTES.Backup)}
         />
 
-        <Notification action={notificationActions} />
+        <Notification
+          action={notificationActions}
+          accessibilityLabel={activeListId ? "Abrir lembretes da lista ativa" : "Abrir central de lembretes"}
+        />
 
         {cartStore.products.length > 0 && (
           <Delete
             action={() => AlertService.remove(() => cartStore.clear())}
+            accessibilityLabel="Limpar itens da lista ativa"
           />
         )}
 
-        <Share
-          action={shareActions}
-        />
+        <Share action={shareActions} accessibilityLabel="Compartilhar lista atual" />
       </>
     )
   }
@@ -72,9 +74,9 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
 
     case "reminders/[listId]/edit/[reminderId]":
     case "reminders/[listId]/new":
-      return <Back action={() => router.push(ROUTES.Reminder.Id(listId))} />
+      return <Back action={() => router.push(ROUTES.Reminder.Id(listId))} accessibilityLabel="Voltar para a lista de lembretes" />
 
     default:
-      return <Back action={() => router.push(ROUTES.Index)} />
+      return <Back action={() => router.push(ROUTES.Index)} accessibilityLabel="Voltar para a tela inicial" />
   }
 }
