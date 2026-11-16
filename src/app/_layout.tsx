@@ -117,7 +117,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (Platform.OS === 'web') return
+    if (Platform.OS === 'web' || !cartHydrated) return
 
     let isMounted = true
 
@@ -145,7 +145,7 @@ export default function Layout() {
       isMounted = false
       subscription.remove()
     }
-  }, [])
+  }, [cartHydrated])
 
   useEffect(() => {
     if (!remindersHydrated || !cartHydrated) return
