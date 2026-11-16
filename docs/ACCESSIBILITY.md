@@ -27,6 +27,7 @@ O script calcula a razão de contraste pela fórmula de luminância relativa da 
 | Texto em lista selecionada | 7,58:1 |
 | Placeholder em campo | 6,97:1 |
 | Texto secundário em cartão | 9,85:1 |
+| Texto muted em cartão | 5,71:1 |
 | Ação lime no fundo | 11,84:1 |
 | Texto preto em botão lime | 13,93:1 |
 | Texto branco em botão de cancelar | 4,83:1 |
