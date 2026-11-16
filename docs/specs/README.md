@@ -19,8 +19,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
 | **Implementadas** | 14 | Mini-spec 11 (contas a pagar) |
-| **Ativas** | 2 | Mini-spec 17 (comparação de preços) |
-| **Planejadas** | 6 | Em prioridade de execução |
+| **Ativas** | 3 | Mini-spec 17 (comparação de preços) |
+| **Planejadas** | 5 | Em prioridade de execução |
 | **Total** | 22 | - |
 
 ## Status das mini-specs
@@ -45,13 +45,13 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [Testes E2E para roteamento web SPA](./active/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](./active/17-comparacao-de-precos-entre-lugares.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Testes E2E para roteamento web SPA](./planned/14-testes-e2e-roteamento-web-spa.md)
-2. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-3. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-4. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-5. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-6. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
+2. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+3. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+4. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+5. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
