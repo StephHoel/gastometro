@@ -1,4 +1,5 @@
 import { ReminderState } from '@/enums/ReminderState'
+import { PermissionState } from '@/enums/PermissionState'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
 import { AlertService } from '@/services/AlertService'
@@ -6,6 +7,91 @@ import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
 import { fromDateAndTime } from '@/utils/functions/DateFunctions'
+
+let reminderSyncPromise: Promise<void> | null = null
+let reminderSyncRequested = false
+
+async function reconcileReminderSchedules(): Promise<void> {
+  const permission = await NotificationService.getPermissionState()
+  if (permission === PermissionState.Unavailable) return
+
+  const scheduled = await NotificationService.getScheduledReminderNotifications()
+  if (scheduled === null) return
+
+  const reminders = useReminderStore.getState().reminders
+
+  for (const reminder of reminders) {
+    const matches = scheduled.filter((item) => item.reminderId === reminder.id)
+
+    if (permission !== PermissionState.Granted || !reminder.enabled) {
+      for (const item of matches) {
+        await NotificationService.cancelScheduled(item.notificationId)
+      }
+      if (reminder.notificationId && !matches.some((item) => item.notificationId === reminder.notificationId)) {
+        await NotificationService.cancelScheduled(reminder.notificationId)
+      }
+      if (reminder.notificationId) {
+        useReminderStore.getState().setReminderNotification(reminder.id, undefined)
+      }
+      continue
+    }
+
+    const expectedDate = new Date(reminder.datetimeISO)
+    const expectedISO = Number.isNaN(expectedDate.getTime()) ? null : expectedDate.toISOString()
+    const matching = matches.find((item) =>
+      item.title === reminder.title &&
+      item.listId === reminder.listId &&
+      item.datetimeISO === expectedISO
+    )
+
+    if (matching) {
+      for (const duplicate of matches) {
+        if (duplicate.notificationId !== matching.notificationId) {
+          await NotificationService.cancelScheduled(duplicate.notificationId)
+        }
+      }
+      if (reminder.notificationId !== matching.notificationId) {
+        useReminderStore.getState().setReminderNotification(reminder.id, matching.notificationId)
+      }
+      continue
+    }
+
+    for (const item of matches) {
+      await NotificationService.cancelScheduled(item.notificationId)
+    }
+    if (reminder.notificationId && !matches.some((item) => item.notificationId === reminder.notificationId)) {
+      await NotificationService.cancelScheduled(reminder.notificationId)
+    }
+    if (reminder.notificationId) {
+      useReminderStore.getState().setReminderNotification(reminder.id, undefined)
+    }
+
+    const scheduledId = await NotificationService.scheduleReminder({
+      ...reminder,
+      notificationId: undefined,
+    })
+    if (scheduledId) {
+      useReminderStore.getState().setReminderNotification(reminder.id, scheduledId)
+    }
+  }
+}
+
+function runReminderSync(): Promise<void> {
+  reminderSyncRequested = true
+  if (reminderSyncPromise) return reminderSyncPromise
+
+  reminderSyncPromise = (async () => {
+    while (reminderSyncRequested) {
+      reminderSyncRequested = false
+      await reconcileReminderSchedules()
+    }
+  })().finally(() => {
+    reminderSyncPromise = null
+    if (reminderSyncRequested) void runReminderSync()
+  })
+
+  return reminderSyncPromise
+}
 
 export const ReminderOrchestrator = {
   async ensurePermissionOnSave(): Promise<boolean> {
@@ -94,36 +180,7 @@ export const ReminderOrchestrator = {
     reminderStore.setReminderNotification(reminderId, scheduledId ?? undefined)
   },
 
-  async syncWithPermissions(): Promise<void> {
-    const reminderStore = useReminderStore.getState()
-    const permission = await NotificationService.getPermissionState()
-
-    if (permission !== 'granted') {
-      reminderStore.reminders.forEach((reminder) => {
-        if (reminder.notificationId) {
-          reminderStore.setReminderNotification(reminder.id, undefined)
-        }
-      })
-      return
-    }
-
-    for (const reminder of reminderStore.reminders) {
-      if (!reminder.enabled) {
-        if (reminder.notificationId) {
-          await NotificationService.cancelScheduled(reminder.notificationId)
-          reminderStore.setReminderNotification(reminder.id, undefined)
-        }
-        continue
-      }
-
-      if (reminder.notificationId) {
-        await NotificationService.cancelScheduled(reminder.notificationId)
-      }
-
-      const scheduledId = await NotificationService.scheduleReminder(reminder)
-      reminderStore.setReminderNotification(reminder.id, scheduledId ?? undefined)
-    }
-  },
+  syncWithPermissions: runReminderSync,
 
   async cleanupOrphans(validListIds: string[]): Promise<void> {
     const validIds = new Set(validListIds)
