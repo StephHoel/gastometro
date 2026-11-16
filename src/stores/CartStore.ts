@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { normalizeCartPersistedState } from '@/services/PersistenceMigrationService'
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 
 function createDefaultList(products: ProductProps[] = []): ShoppingListProps {
   return { id: uuid.v4().toString(), name: 'Lista 1', products }
@@ -26,6 +28,39 @@ function updateActiveListProducts(
 }
 
 const initialList = createDefaultList()
+
+const CART_RECOVERY_KEY = 'gastometro-recovery-cart'
+
+async function preserveCartData(value: unknown): Promise<void> {
+  try {
+    await AsyncStorage.setItem(CART_RECOVERY_KEY, JSON.stringify(value))
+  } catch (error) {
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados do carrinho. Evite limpar os dados do aplicativo e procure suporte.')
+    console.error('Falha ao preservar dados do carrinho:', error)
+  }
+}
+
+function getCartRecoveryMessage(discarded: number): string {
+  const details = discarded > 0 ? ' Registros inválidos ignorados: ' + discarded + '.' : ''
+  return 'Os dados locais da lista foram ajustados para manter a integridade.' + details + ' Uma cópia anterior foi preservada em ' + CART_RECOVERY_KEY + '.'
+}
+
+async function migrateCartState(persistedState: unknown, version: number): Promise<StateProps> {
+  try {
+    const result = normalizeCartPersistedState(persistedState, version)
+    if (result.repaired) {
+      await preserveCartData(persistedState)
+      PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
+    }
+    return result.data as StateProps
+  } catch (error) {
+    await preserveCartData(persistedState)
+    PersistenceRecoveryService.report('Não foi possível validar os dados locais da lista. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.')
+    throw error
+  }
+}
+
+
 
 export const useCartStore = create(
   persist<StateProps>(
@@ -129,18 +164,22 @@ export const useCartStore = create(
     {
       name: 'gastometro',
       storage: createJSONStorage(() => AsyncStorage),
-      version: 1,
-      migrate: (persistedState: unknown, version: number): StateProps => {
-        if (version === 0) {
-          const old = persistedState as { products?: ProductProps[] }
-          const defaultList = createDefaultList(old.products ?? [])
-          return {
-            lists: [defaultList],
-            activeListId: defaultList.id,
-            products: defaultList.products,
-          } as StateProps
+      version: 2,
+      migrate: migrateCartState,
+      merge: (persistedState, currentState) => {
+        try {
+          const result = normalizeCartPersistedState(persistedState, 2)
+          if (result.repaired) {
+            void preserveCartData(persistedState)
+            PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
+          }
+          return { ...currentState, ...result.data }
+        } catch (error) {
+          void preserveCartData(persistedState)
+          PersistenceRecoveryService.report('Os dados locais da lista não puderam ser validados. O estado inicial foi mantido e uma cópia do conteúdo anterior foi preservada para recuperação.')
+          console.error('Falha ao hidratar o carrinho:', error)
+          return currentState
         }
-        return persistedState as StateProps
       },
     },
   ),
