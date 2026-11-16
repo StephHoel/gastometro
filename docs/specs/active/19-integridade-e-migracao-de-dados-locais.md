@@ -73,3 +73,12 @@ Definir uma estratégia explícita de versionamento, validação, migração e r
 - Antes de remover o campo `products` do estado persistido, avaliar compatibilidade com instalações existentes e definir migração.
 - Não usar type assertion como substituto de validação de runtime.
 - Evitar adicionar biblioteca de schema sem justificar custo, tamanho e compatibilidade com Expo.
+
+## Decisões de implementação
+
+- Os stores `gastometro` e `gastometro-reminders` passam a usar schema versão 2, com migração explícita das versões anteriores.
+- A cópia anterior é preservada nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de qualquer reparo que descarte ou normalize registros.
+- IDs duplicados são normalizados de forma determinística no carrinho; lembretes duplicados ou inválidos são preservados na cópia e ignorados na coleção ativa.
+- O campo `products` continua existindo como espelho da lista ativa e é reconstruído a partir de `lists` durante a hidratação.
+- A limpeza de lembretes sem lista correspondente só ocorre depois da hidratação dos dois stores e após a cópia de recuperação ser gravada com sucesso.
+- Estruturas irrecuperáveis e versões futuras não são sobrescritas silenciosamente; a aplicação exibe um aviso e preserva o conteúdo original quando possível.
