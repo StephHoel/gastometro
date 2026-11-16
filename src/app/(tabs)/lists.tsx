@@ -124,7 +124,7 @@ export default function Lists() {
           placeholder={INPUTS.placeholder.list_name}
           accessibilityLabel="Nome da nova lista"
           accessibilityHint="Digite um nome para criar uma lista de compras"
-          placeholderTextColor={COLORS.inactive}
+          placeholderTextColor="#CBD5E1"
           value={newListName}
           onChangeText={(text) => setCreateValue("newListName", text)}
           onSubmitEditing={handleCreateList}
@@ -187,7 +187,7 @@ export default function Lists() {
                         </Text>
                       )}
                     </TextWhite>
-                    <TextWhite className="text-slate-400 text-xs mt-0.5">
+                    <TextWhite className="text-slate-300 text-xs mt-0.5">
                       {item.products.length}{" "}
                       {item.products.length === 1 ? "item" : "itens"}
                     </TextWhite>
