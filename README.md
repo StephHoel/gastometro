@@ -29,6 +29,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
+- Compara preços por item e o custo total da cesta entre mercados e lojas cadastrados, com dados locais offline.
 
 ## Stack
 
@@ -73,6 +74,8 @@ Funcionalidades concluídas recentemente:
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
+
+A comparação de preços está disponível na aba **Comparar**. Consulte [docs/COMPARACAO_PRECOS.md](docs/COMPARACAO_PRECOS.md) para conhecer as regras da comparação individual e da cesta completa.
 
 ## Como usar
 
