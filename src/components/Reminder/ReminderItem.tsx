@@ -27,16 +27,21 @@ export function ReminderItem({ item }: ReminderItemProps) {
   }
 
   return (
-    <TouchableOpacity className="bg-slate-800 rounded-lg p-3 mb-3 flex-row justify-between items-center" onPress={handleEditReminder} >
-      <View>
+    <View className="bg-slate-800 rounded-lg p-3 mb-3 flex-row justify-between items-center gap-3">
+      <TouchableOpacity
+        className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+        onPress={handleEditReminder}
+        accessibilityRole="button"
+        accessibilityLabel={`Editar lembrete ${item.title}, ${toDisplayDate(item.datetimeISO)}, ${status}`}
+      >
         <TextWhite className="font-bold">{item.title}</TextWhite>
         <TextWhite className="text-slate-300 text-xs mt-1">{toDisplayDate(item.datetimeISO)}</TextWhite>
         <TextWhite className="text-slate-400 text-xs mt-1">{status}</TextWhite>
-      </View>
+      </TouchableOpacity>
 
-      <Row className='gap-5 mx-4'>
-        <Delete action={removeReminder} size={SIZE.iconActions} />
+      <Row className="items-center">
+        <Delete action={removeReminder} size={SIZE.iconActions} accessibilityLabel={`Remover lembrete ${item.title}`} accessibilityHint="Remove este lembrete" />
       </Row>
-    </TouchableOpacity>
+    </View>
   )
 }
