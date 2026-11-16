@@ -18,12 +18,14 @@ function updateReminder(
 
 const REMINDER_RECOVERY_KEY = 'gastometro-recovery-reminders'
 
-async function preserveReminderData(value: unknown): Promise<void> {
+async function preserveReminderData(value: unknown): Promise<boolean> {
   try {
     await AsyncStorage.setItem(REMINDER_RECOVERY_KEY, JSON.stringify(value))
+    return true
   } catch (error) {
-    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
-    console.error('Falha ao preservar dados dos lembretes:', error)
+    PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados lembretes. Evite limpar os dados do aplicativo e procure suporte.')
+    console.error('Falha ao preservar dados do lembretes:', error)
+    return false
   }
 }
 
@@ -36,7 +38,8 @@ async function migrateReminderState(persistedState: unknown, version: number): P
   try {
     const result = normalizeReminderPersistedState(persistedState, version)
     if (result.repaired) {
-      await preserveReminderData(persistedState)
+      const preserved = await preserveReminderData(persistedState)
+      if (!preserved) throw new Error('A cópia de segurança dos dados não pôde ser criada.')
       PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
     }
     return result.data as ReminderStateProps
@@ -128,8 +131,11 @@ export const useReminderStore = create(
         try {
           const result = normalizeReminderPersistedState(persistedState, 2)
           if (result.repaired) {
-            void preserveReminderData(persistedState)
-            PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
+            void preserveReminderData(persistedState).then((preserved) => {
+              PersistenceRecoveryService.report(preserved
+                ? getReminderRecoveryMessage(result.discarded)
+                : 'A recuperação dos dados foi parcial e a cópia de segurança não pôde ser criada. Evite limpar os dados do aplicativo.')
+            })
           }
           return { ...currentState, ...result.data }
         } catch (error) {
