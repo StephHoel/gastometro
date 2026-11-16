@@ -26,6 +26,8 @@ export const PersistenceRecoveryService = {
   subscribe(listener: RecoveryListener): () => void {
     listeners.add(listener)
     listener(this.getMessage())
-    return () => listeners.delete(listener)
+    return () => {
+      listeners.delete(listener)
+    }
   },
 }
