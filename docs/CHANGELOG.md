@@ -1,3 +1,19 @@
+## 1.13.0 - 2026-11-16
+
+Implementação da mini-spec 22: consistência e validação da documentação técnica.
+
+### Documentação e fontes de verdade
+
+- README e guia principal atualizados para Expo SDK 58, React Native 0.88.1, React 19.3.0 e Node 24, alinhados à configuração efetiva.
+- Removidos badges estáticos de quantidade de testes e percentual de cobertura, que não tinham atualização automatizada.
+- Atualizadas referências de stack na mini-spec de testes e identificados explicitamente os números de execução antigos como históricos.
+- Corrigidos os links de mini-specs ativas e planejadas; o índice passa a ser a fonte única para status e contagens.
+
+### Automação
+
+- Adicionado `npm run check:docs` para validar versão, stack, changelog, badges e contagem de mini-specs.
+- A verificação documental é executada no workflow Expo Doctor em pull requests.
+
 ## 1.12.0 - 2026-11-16
 
 Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
