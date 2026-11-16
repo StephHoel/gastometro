@@ -30,7 +30,7 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
       <>
         <Notification action={notificationActions} accessibilityLabel={activeListId ? "Abrir lembretes da lista ativa" : "Abrir central de lembretes"} />
 
-        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Abrir backup e restauração" onPress={() => router.push("/backup")} className="px-2 py-1">
+        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Abrir backup e restauração" onPress={() => router.push("/backup")} className="min-w-11 min-h-11 px-2 py-1 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400">
           <Text className="text-lime-400 font-semibold">Backup</Text>
         </TouchableOpacity>
 
