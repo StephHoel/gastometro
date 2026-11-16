@@ -23,12 +23,13 @@ const payload = (lists = [list('l1', 'Lista')], reminders: BackupPayload['remind
   reminders,
 })
 
-const reminder = (id: string, title: string, listId = 'l1') => ({
+const reminder = (id: string, title: string, listId = 'l1', notificationId?: string) => ({
   id,
   title,
   datetimeISO: '2099-01-01T10:00:00.000Z',
   enabled: true,
   listId,
+  ...(notificationId ? { notificationId } : {}),
   createdAt: '2026-01-01T10:00:00.000Z',
   updatedAt: '2026-01-01T10:00:00.000Z',
 })
@@ -56,7 +57,7 @@ describe('BackupService', () => {
   })
 
   it('mescla registros novos e identifica conflitos sem duplicar registros idênticos', () => {
-    const local = payload([list('l1', 'Lista', [product('p1', 'Arroz')])], [reminder('r1', 'Lembrete')])
+    const local = payload([list('l1', 'Lista', [product('p1', 'Arroz')])], [reminder('r1', 'Lembrete', 'l1', 'native-notification-1')])
     const backup = payload([list('l1', 'Lista', [
       product('p1', 'Arroz'),
       product('p2', 'Feijão'),
