@@ -102,7 +102,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
 
       <Row>
         {includeDeleteButton && (
-          <Button onPress={handleRemoveReminder} type='Fail' className='flex-1'>
+          <Button onPress={handleRemoveReminder} type='Fail' className='flex-1' accessibilityLabel={'Remover lembrete ' + (reminder?.title ?? 'atual')}>
             <Button.Icon>
               <TrashIcon color={COLORS.black} size={SIZE.iconButton} />
             </Button.Icon>
