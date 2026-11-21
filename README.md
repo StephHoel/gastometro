@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.8.1-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.8.2-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
@@ -157,6 +157,10 @@ npm run web:test:offline
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
+
+### Testes E2E do roteamento web
+
+A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
 
 ### Limitações web conhecidas
 

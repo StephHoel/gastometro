@@ -143,11 +143,11 @@ describe('Lists screen', () => {
 
     await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
 
-    await waitFor(async () => {
-      await fireEvent.press(getByText('AddIcon'))
-    })
+    await fireEvent.press(getByText('AddIcon'))
 
-    expect(mockStore.addList).toHaveBeenCalledWith('Feira')
+    await waitFor(() => {
+      expect(mockStore.addList).toHaveBeenCalledWith('Feira')
+    })
     expect(mockAlertOk).not.toHaveBeenCalled()
   })
 
