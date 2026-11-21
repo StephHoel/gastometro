@@ -148,8 +148,6 @@ describe('Lists screen', () => {
     await waitFor(() => {
       expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     })
-
-    expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
   })
 
