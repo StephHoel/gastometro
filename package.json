@@ -32,7 +32,7 @@
     "check:expo": "npx expo-doctor",
     "deps:audit": "npm audit --omit=dev",
     "check:deps": "npx expo install --check",
-    "test:e2e:web": "npx --yes --package=playwright@1.56.1 -- node scripts/test-web-routing-e2e.cjs"
+    "test:e2e:web": "npx --yes --package=playwright@1.56.1 -- tsx scripts/test-web-routing-e2e.ts"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
