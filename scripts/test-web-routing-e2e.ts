@@ -130,7 +130,7 @@ function loadPlaywright(): any {
 
 async function runScenario(name: string, action: () => Promise<void>): Promise<void> {
   await action()
-  process.stdout.write("  ✓ " + name + "\\n")
+  process.stdout.write("  ✓ " + name + "\n")
 }
 
 async function runSuite(browser: any, cycle: number): Promise<void> {
@@ -186,14 +186,14 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
   } finally {
     await context.close()
   }
-  process.stdout.write("Execução " + cycle + "/3 concluída.\\n")
+  process.stdout.write("Execução " + cycle + "/3 concluída.\n")
 }
 
 async function main(): Promise<void> {
   const npm = process.platform === "win32" ? "npm.cmd" : "npm"
   const node = process.execPath
 
-  process.stdout.write("Gerando build web compatível com GitHub Pages...\\n")
+  process.stdout.write("Gerando build web compatível com GitHub Pages...\n")
   run(npm, ["run", "web:build"], {
     env: { ...process.env, EXPO_PUBLIC_ROUTER_BASE: BASE_PATH },
   })
@@ -211,10 +211,10 @@ async function main(): Promise<void> {
     const { chromium } = loadPlaywright()
     browser = await chromium.launch({ headless: true })
     for (let cycle = 1; cycle <= 3; cycle += 1) {
-      process.stdout.write("\\nExecução E2E " + cycle + "/3\\n")
+      process.stdout.write("\nExecução E2E " + cycle + "/3\n")
       await runSuite(browser, cycle)
     }
-    process.stdout.write("\\nTodos os cenários E2E passaram nas três execuções.\\n")
+    process.stdout.write("\nTodos os cenários E2E passaram nas três execuções.\n")
   } finally {
     if (browser) await browser.close()
     await new Promise<void>(resolve => server.close(() => resolve()))
@@ -222,6 +222,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error("\\nFalha na suíte E2E:", error)
+  console.error("\nFalha na suíte E2E:", error)
   process.exitCode = 1
 })
