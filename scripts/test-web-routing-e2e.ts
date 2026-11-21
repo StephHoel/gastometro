@@ -60,7 +60,7 @@ function startStaticServer(): Promise<import("node:http").Server> {
       return
     }
 
-    let relativePath = pathname.slice(BASE_PATH.length).replace(/^\\/+/, "")
+    let relativePath = pathname.slice(BASE_PATH.length).replace(/^\/+/, "")
     if (!relativePath) relativePath = "index.html"
     let target = path.resolve(DIST, relativePath)
 
