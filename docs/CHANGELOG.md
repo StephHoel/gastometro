@@ -24,6 +24,7 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 - Corrigidos os três testes que falhavam na execução anterior: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta considera seu controle independente. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
 - O build Android e os testes E2E web também concluíram com sucesso.
 - A interface identifica explicitamente tanto o lugar com menor preço quanto os lugares com maior preço, inclusive quando há empate.
+- Cesta sem itens agora retorna total indisponível (`null`), em vez de zero, evitando confundir ausência de compras com uma cesta de custo zero. Testes também garantem que preços zero informados continuam válidos.
 - O gate mínimo global de cobertura permanece em 80%.
 
 ### Documentação
