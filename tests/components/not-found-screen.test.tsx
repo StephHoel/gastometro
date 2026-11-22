@@ -1,5 +1,4 @@
 import React from 'react'
-import { Text, View } from 'react-native'
 import { render } from '@testing-library/react-native'
 import NotFound from '@/app/+not-found'
 
