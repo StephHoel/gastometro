@@ -168,9 +168,9 @@ async function runScenario(
   try {
     await action(page)
     assert.equal(pageErrors.length, 0, "Exceções JavaScript:\\n" + pageErrors.join("\\n"))
-    assert.equal(consoleErrors.length, 0, "Erros no console:\\n" + consoleErrors.join("\\n"))
     assert.equal(failedRequests.length, 0, "Requisições malsucedidas:\\n" + failedRequests.join("\\n"))
     assert.equal(failedResources.length, 0, "Recursos com HTTP de erro:\\n" + failedResources.join("\\n"))
+    assert.equal(consoleErrors.length, 0, "Erros no console:\\n" + consoleErrors.join("\\n"))
     await context.tracing.stop()
     process.stdout.write("  ✓ " + name + "\n")
   } catch (error) {
