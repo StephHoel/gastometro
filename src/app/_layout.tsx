@@ -1,4 +1,4 @@
-import { Tabs, usePathname, useRouter, type Href } from "expo-router"
+import { Tabs, usePathname, useRouter } from "expo-router"
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -80,8 +80,13 @@ export default function Layout() {
       ? redirectUrl.pathname.slice(basePath.length)
       : redirectUrl.pathname
 
-    router.replace((routePath + redirectUrl.search + redirectUrl.hash) as Href)
-  }, [router])
+    window.history.replaceState(
+      window.history.state,
+      '',
+      routePath + redirectUrl.search + redirectUrl.hash,
+    )
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }, [])
 
   useEffect(() => {
     if (Platform.OS === 'web') {
