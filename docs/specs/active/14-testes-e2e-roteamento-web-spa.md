@@ -23,7 +23,7 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 
 - Web: rota inicial (`/`).
 - Web: rota de calculadora (`/calculator`).
-- Web: rota de lista (`/list`).
+- Web: rota de listas (`/lists`).
 - Web: fallback de rota inválida (conforme configuração atual de `public/404.html`).
 
 ## Dados e persistência
