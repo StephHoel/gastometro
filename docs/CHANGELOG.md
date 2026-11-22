@@ -20,6 +20,20 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 
 # Changelog
 
+## Atualização de cobertura - 2026-11-22
+
+### Qualidade e testes
+
+- Ampliação da suíte automatizada, com medição global de 96,62% em statements, 92,20% em branches, 96,15% em funções e 97,82% em linhas.
+- A execução registrou 298 testes aprovados e 2 falhas, nos testes de store de carrinho e de contas. Os percentuais representam a medição produzida pelo Jest, mas a suíte ainda não está totalmente verde.
+- O gate mínimo global de cobertura permanece em 80%.
+
+### Documentação
+
+- README, SPEC e índice de documentação atualizados com os percentuais medidos e a situação da execução.
+- Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
+
+
 ## 1.8.2 - 2026-11-21
 
 Implementação da mini-spec 14: suíte E2E para validar o roteamento web SPA e o fallback utilizado no GitHub Pages.
