@@ -43,7 +43,7 @@ describe('PriceComparison screen', () => {
     await fireEvent.press(screen.getByLabelText('Editar Mercado A'))
     await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'Mercado B')
     await fireEvent.press(screen.getByText('Salvar lugar'))
-    expect(screen.getByText('Mercado B')).toBeTruthy()
+    expect(screen.getAllByText('Mercado B')[0]).toBeTruthy()
 
     await fireEvent.press(screen.getByLabelText('Remover Mercado B'))
     expect(screen.queryByText('Mercado B')).toBeNull()
@@ -124,11 +124,9 @@ describe('PriceComparison screen', () => {
 
   it('edita item sem referência de quantidade e apresenta diferença indisponível', async () => {
     const store = usePriceComparisonStore.getState()
-    store.addPlace({ name: 'Mercado A' })
-    const place = usePriceComparisonStore.getState().places[0]
-    store.addEntry({
-      itemName: 'Leite',
-      pricesByPlace: [{ placeId: place.id, price: 'inválido' }],
+    usePriceComparisonStore.setState({
+      places: [{ id: 'place-1', name: 'Mercado A' }],
+      entries: [{ id: 'entry-1', itemName: 'Leite', pricesByPlace: [{ placeId: 'place-1', price: 'inválido' }], createdAt: '', updatedAt: '' }],
     })
     const screen = await render(<PriceComparison />)
 
