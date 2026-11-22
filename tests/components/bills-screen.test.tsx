@@ -45,7 +45,7 @@ describe('Bills screen', () => {
     expect(useBillStore.getState().bills).toHaveLength(0)
   })
 
-  it('cadastra, edita, cancela edição e alterna status de pagamento', () => {
+  it('cadastra, edita, cancela edição e alterna status de pagamento', async () => {
     const screen = await render(<Bills />)
     fireEvent.changeText(screen.getByLabelText('Nome da conta'), 'Internet')
     fireEvent.changeText(screen.getByLabelText('Valor da conta'), '99,90')
