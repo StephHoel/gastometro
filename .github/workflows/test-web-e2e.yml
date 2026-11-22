@@ -30,6 +30,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Verificar tipos TypeScript
+        run: npm run check:ts
+
       - name: Instalar Chromium e dependências do sistema
         run: npx --yes --package=playwright@1.56.1 playwright install --with-deps chromium
 
