@@ -282,7 +282,6 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
 
 async function main(): Promise<void> {
   const npm = process.platform === "win32" ? "npm.cmd" : "npm"
-  const node = process.execPath
 
   process.stdout.write("Gerando build web compatível com GitHub Pages...\n")
   run(npm, ["run", "web:build"], {
@@ -293,7 +292,6 @@ async function main(): Promise<void> {
     const source = path.join(ROOT, "public", file)
     if (fs.existsSync(source)) fs.copyFileSync(source, path.join(DIST, file))
   }
-  run(node, [path.join(ROOT, "scripts", "inject-spa-routing.js")])
 
   const server = await startStaticServer()
   let browser: any
