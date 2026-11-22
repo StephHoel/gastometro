@@ -65,10 +65,10 @@ Observação:
 | ---------------------------- | ------------------------------ |
 | **Versão**                   | 1.9.0                          |
 | **Data**                     | 2026-11-22                     |
-| **Testes**                   | 298 passando, 2 falhando       |
-| **Cobertura**                | 97,82% linhas                  |
-| **Branches**                 | 92,20%                         |
-| **Statements**               | 96,62%                         |
-| **Funções**                  | 96,15%                         |
+| **Testes**                   | 303 passando                  |
+| **Cobertura**                | 97,87% linhas                  |
+| **Branches**                 | 91,90%                         |
+| **Statements**               | 96,57%                         |
+| **Funções**                  | 96,21%                         |
 
-A medição foi obtida no CI em 22/11/2026; a mesma execução ainda apresentou duas falhas de teste. Consulte `docs/coverages/README.md` para o registro e `docs/specs/README.md` para o status detalhado das mini-specs.
+A medição foi obtida no CI em 22/11/2026, com todos os 303 testes aprovados. Consulte `coverages/README.md` para o registro e `specs/README.md` para o status detalhado das mini-specs.
