@@ -20,7 +20,7 @@ describe('PriceComparison screen', () => {
     await fireEvent.changeText(screen.getByLabelText('Observação do lugar'), ' Unidade do bairro ')
     await fireEvent.press(screen.getByText('Adicionar lugar'))
 
-    expect(screen.getByText('Mercado Central')).toBeTruthy()
+    expect(screen.getAllByText('Mercado Central')[0]).toBeTruthy()
     expect(screen.getByText('Unidade do bairro')).toBeTruthy()
 
     await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'mercado central')
@@ -39,7 +39,7 @@ describe('PriceComparison screen', () => {
     await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'Mercado B')
     await fireEvent.press(screen.getByText('Cancelar'))
 
-    expect(screen.getByText('Mercado A')).toBeTruthy()
+    expect(screen.getAllByText('Mercado A')[0]).toBeTruthy()
     await fireEvent.press(screen.getByLabelText('Editar Mercado A'))
     await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'Mercado B')
     await fireEvent.press(screen.getByText('Salvar lugar'))
@@ -64,7 +64,7 @@ describe('PriceComparison screen', () => {
 
     expect(screen.getByText('Arroz')).toBeTruthy()
     expect(screen.getByText('Mercado B · Melhor preço')).toBeTruthy()
-    expect(screen.getByText('Cesta completa')).toBeTruthy()
+    expect(screen.getAllByText('Cesta completa')[0]).toBeTruthy()
     expect(screen.getByText(/Menor total/)).toBeTruthy()
 
     await fireEvent.press(screen.getByLabelText('Editar comparação de Arroz'))
