@@ -36,8 +36,8 @@ jest.mock('@/components/Icons', () => ({
 describe('Reminder form routes', () => {
   beforeEach(() => jest.clearAllMocks())
 
-  it('abre o formulário de criação associado à lista', () => {
-    const screen = render(<NewReminder />)
+  it('abre o formulário de criação associado à lista', async () => {
+    const screen = await render(<NewReminder />)
     expect(screen.getByText('Novo Lembrete')).toBeTruthy()
     expect(mockFormReminder).toHaveBeenCalledWith(expect.objectContaining({
       listId: 'list-123',
@@ -47,8 +47,8 @@ describe('Reminder form routes', () => {
     expect(mockFormReminder.mock.calls[0][0]).not.toHaveProperty('includeDeleteButton')
   })
 
-  it('abre o formulário de edição com identificadores e opção de exclusão', () => {
-    const screen = render(<EditReminder />)
+  it('abre o formulário de edição com identificadores e opção de exclusão', async () => {
+    const screen = await render(<EditReminder />)
     expect(screen.getByText('Editar')).toBeTruthy()
     expect(mockFormReminder).toHaveBeenCalledWith(expect.objectContaining({
       listId: 'list-123',
