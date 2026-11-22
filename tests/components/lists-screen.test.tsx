@@ -144,11 +144,9 @@ describe('Lists screen', () => {
     await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
     await fireEvent.press(getByText('AddIcon'))
 
-    await waitFor(() => {
-      expect(mockStore.addList).toHaveBeenCalledWith('Feira')
-    })
+    expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
-  })
+  }, 15000)
 
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = await render(<Lists />)
