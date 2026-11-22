@@ -40,7 +40,7 @@ O comando:
 - Navegar pela interface permite alternar entre início, listas e calculadora; voltar/avançar do navegador valida o histórico entre início e calculadora.
 - Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de 404.html, restaura o caminho original e exibe a tela própria `Página não encontrada`.
 
-Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
+Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. A resposta 404 do documento de rota inválida é esperada e validada separadamente, pois faz parte do fallback do GitHub Pages. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
 ## Integração contínua
 
