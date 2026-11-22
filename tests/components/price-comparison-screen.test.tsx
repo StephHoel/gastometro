@@ -93,6 +93,7 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Cadastre ao menos um lugar para informar preços.')).toBeTruthy()
     expect(screen.getByText('Adicione itens e preços para comparar a cesta.')).toBeTruthy()
     expect(screen.getByText('Nenhum item comparado ainda.')).toBeTruthy()
+    expect(screen.queryByText('R$ 0,00')).toBeNull()
   })
   it('rejeita duplicidade ao editar lugar e valida preços antes de salvar', async () => {
     const store = usePriceComparisonStore.getState()
