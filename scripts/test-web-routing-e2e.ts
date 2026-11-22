@@ -235,27 +235,33 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
 
     await page.getByText("Listas", { exact: true }).last().click()
+    await page.waitForURL("**/gastometro/lists")
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
 
     await page.getByText("Calculadora", { exact: true }).last().click()
-    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    await page.waitForURL("**/gastometro/calculator")
+    await page.getByPlaceholder("Preço da Embalagem").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
 
     await page.goBack({ waitUntil: "networkidle" })
+    await page.waitForURL("**/gastometro/lists")
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
 
     await page.goBack({ waitUntil: "networkidle" })
+    await page.waitForURL("**/gastometro/")
     await page.getByText("Total Geral:", { exact: false }).waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
 
     await page.goForward({ waitUntil: "networkidle" })
+    await page.waitForURL("**/gastometro/lists")
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
 
     await page.goForward({ waitUntil: "networkidle" })
-    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    await page.waitForURL("**/gastometro/calculator")
+    await page.getByPlaceholder("Preço da Embalagem").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
   })
 
