@@ -34,9 +34,10 @@ export default function PriceComparison() {
   const [prices, setPrices] = useState<Record<string, string>>({})
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null)
   const [error, setError] = useState('')
-  const [sortBy, setSortBy] = useState<'price' | 'name'>('price')
+  const [entrySortBy, setEntrySortBy] = useState<'price' | 'name'>('price')
+  const [basketSortBy, setBasketSortBy] = useState<'price' | 'name'>('price')
 
-  const basket = useMemo(() => compareBasket(entries, places, sortBy), [entries, places, sortBy])
+  const basket = useMemo(() => compareBasket(entries, places, basketSortBy), [entries, places, basketSortBy])
   const bestBasketPlaceId = basket
     .filter((place) => place.complete && place.total !== null)
     .sort((a, b) => (a.total ?? Infinity) - (b.total ?? Infinity))[0]?.placeId ?? null
@@ -157,7 +158,7 @@ export default function PriceComparison() {
                 <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Editar ' + place.name} onPress={() => startEditPlace(place.id)}>
                   <TextWhite className="text-lime-400 text-sm">Editar</TextWhite>
                 </TouchableOpacity>
-                <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Remover ' + place.name} onPress={() => removePlace(place.id)}>
+                <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Remover ' + place.name} onPress={() => { removePlace(place.id); if (editingPlaceId === place.id) resetPlaceForm() }}>
                   <TextWhite className="text-red-400 text-sm">Remover</TextWhite>
                 </TouchableOpacity>
               </Row>
@@ -211,11 +212,11 @@ export default function PriceComparison() {
           {!!error && <TextWhite className="text-sm text-red-400">{error}</TextWhite>}
 
           <View className="gap-2">
-            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação por item</TextWhite><TouchableOpacity accessibilityRole="button" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor preço"}</TextWhite></TouchableOpacity></Row>
+            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação por item</TextWhite><TouchableOpacity accessibilityRole="button" onPress={() => setEntrySortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {entrySortBy === "price" ? "nome" : "menor preço"}</TextWhite></TouchableOpacity></Row>
             {entries.length === 0 ? (
               <Card className="p-4"><TextWhite className="text-slate-400">Nenhum item comparado ainda.</TextWhite></Card>
             ) : entries.map((entry) => {
-              const result = compareEntryPrices(entry, places, sortBy)
+              const result = compareEntryPrices(entry, places, entrySortBy)
               return (
                 <Card key={entry.id} className="p-4 gap-2 border-slate-700 bg-slate-800">
                   <Row className="items-start justify-between gap-2">
@@ -248,7 +249,7 @@ export default function PriceComparison() {
           </View>
 
           <View className="gap-2">
-            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação da cesta completa</TextWhite><TouchableOpacity accessibilityRole="button" onPress={() => setSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {sortBy === "price" ? "nome" : "menor total"}</TextWhite></TouchableOpacity></Row>
+            <Row className="items-center justify-between gap-2"><TextWhite className="text-xl font-bold">Comparação da cesta completa</TextWhite><TouchableOpacity accessibilityRole="button" onPress={() => setBasketSortBy((current) => current === "price" ? "name" : "price")}><TextWhite className="text-sm text-lime-400">Ordenar por {basketSortBy === "price" ? "nome" : "menor total"}</TextWhite></TouchableOpacity></Row>
             <TextWhite className="text-sm text-slate-400">O total só é calculado quando há preço para todos os itens naquele lugar. Preços ausentes não viram R$ 0,00.</TextWhite>
             {basket.length === 0 || entries.length === 0 ? (
               <Card className="p-4"><TextWhite className="text-slate-400">Adicione itens e preços para comparar a cesta.</TextWhite></Card>
