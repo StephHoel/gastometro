@@ -1,5 +1,4 @@
 import React from 'react'
-import { Text, View } from 'react-native'
 import { render } from '@testing-library/react-native'
 import NewReminder from '@/app/reminders/[listId]/new'
 import EditReminder from '@/app/reminders/[listId]/edit/[reminderId]'
