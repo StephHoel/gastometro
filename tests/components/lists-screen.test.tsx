@@ -145,9 +145,7 @@ describe('Lists screen', () => {
 
     await fireEvent.press(getByText('AddIcon'))
 
-    await waitFor(() => {
-      expect(mockStore.addList).toHaveBeenCalledWith('Feira')
-    })
+    expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
   })
 
