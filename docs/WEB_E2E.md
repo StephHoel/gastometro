@@ -37,8 +37,8 @@ O comando:
 - A raiz carrega a tela inicial e define o título esperado.
 - A rota /calculator abre diretamente, sem navegação prévia.
 - Atualizar a página em /calculator preserva a tela e a URL.
-- Navegar pela interface e usar voltar/avançar do navegador mantém o histórico.
-- Uma rota inexistente passa pelo 404.html e preserva o caminho solicitado durante a restauração SPA.
+- Navegar pela interface entre as telas inicial, listas e calculadora, além de usar voltar/avançar, mantém o histórico.
+- Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de 404.html, inicializa a aplicação e preserva o caminho solicitado durante a restauração SPA.
 
 Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada repetição usa um novo contexto de navegador, isolando cookies e sessionStorage. Todos os cenários falham diante de erros JavaScript não tratados. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
