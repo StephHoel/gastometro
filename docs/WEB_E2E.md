@@ -16,7 +16,7 @@ Execute uma vez:
 npx --yes --package=playwright@1.56.1 playwright install chromium
 ```
 
-O Playwright é obtido temporariamente pelo npx, sem adicionar dependência de desenvolvimento nem alterar o lockfile do aplicativo.
+Playwright e tsx são obtidos temporariamente pelo npx, sem adicionar dependências de desenvolvimento nem alterar o lockfile do aplicativo.
 
 ## Executar
 
@@ -40,13 +40,13 @@ O comando:
 - Navegar pela interface e usar voltar/avançar do navegador mantém o histórico.
 - Uma rota inexistente passa pelo 404.html e preserva o caminho solicitado durante a restauração SPA.
 
-Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada repetição usa um novo contexto de navegador, isolando cookies e sessionStorage.
+Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada repetição usa um novo contexto de navegador, isolando cookies e sessionStorage. Todos os cenários falham diante de erros JavaScript não tratados. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
 ## Diagnóstico
 
 A execução falha quando a build não é gerada, o servidor local não inicia, o Chromium não pode ser iniciado, a aplicação produz erro JavaScript ou algum critério de URL/tela não é atendido. O terminal identifica o cenário que falhou.
 
-Se o navegador ainda não estiver instalado, repita a preparação do Chromium. Para depuração visual, altere temporariamente headless: true para headless: false no script scripts/test-web-routing-e2e.cjs.
+Se o navegador ainda não estiver instalado, repita a preparação do Chromium. Para depuração visual, abra o trace `artifacts/web-e2e/execucao-N-trace.zip` com `npx playwright show-trace` ou altere temporariamente `headless: true` para `headless: false` em `scripts/test-web-routing-e2e.ts`.
 
 ## Limitações
 
