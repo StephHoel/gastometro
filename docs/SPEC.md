@@ -50,12 +50,12 @@ Público esperado:
 - Fallback in-app para lembretes pendentes quando não há permissão de notificação.
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
+- Suíte E2E web com Playwright para validar rotas diretas, atualização de rotas profundas, navegação/histórico e fallback SPA do GitHub Pages; execução automatizada no CI.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- testes E2E para roteamento web SPA;
 - comparação de preços entre lugares;
 - sincronização eficiente de lembretes;
 - integridade e migração de dados locais;
