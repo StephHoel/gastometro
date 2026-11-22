@@ -18,8 +18,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 | Status | Quantidade | Últimas Atualizações |
 | ------ | ---------- | -------------------- |
-| **Implementadas** | 14 | Mini-spec 11 (contas a pagar) |
-| **Ativas** | 2 | Mini-specs 05 (testes - evolução contínua) e 14 (E2E - validação) |
+| **Implementadas** | 15 | Mini-spec 14 (testes E2E de roteamento web SPA) |
+| **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
 | **Planejadas** | 6 | Em prioridade de execução |
 | **Total** | 22 | - |
 
@@ -41,11 +41,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Refatoração de formulários para react-hook-form](./done/16-refatoracao-formularios-react-hook-form.md)
 - [Service Worker para funcionamento offline em web](./done/13-service-worker-offline-web.md)
 - [Contas a pagar](./done/11-contas-a-pagar.md)
+- [Testes E2E para roteamento web SPA](./done/14-testes-e2e-roteamento-web-spa.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [Testes E2E para roteamento web SPA](./active/14-testes-e2e-roteamento-web-spa.md) (implementação concluída; validação local pendente)
 
 ### Planejadas (ordem de prioridade)
 
