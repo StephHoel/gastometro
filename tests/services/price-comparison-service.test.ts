@@ -54,6 +54,16 @@ describe('PriceComparisonService', () => {
     expect(result.options.map((option) => option.placeId)).toEqual(['b', 'a'])
   })
 
+  it('ordena por nome sem alterar a identificação da melhor e pior oferta', () => {
+    const result = compareEntryPrices(entry('Leite', [
+      { placeId: 'a', price: '10' },
+      { placeId: 'b', price: '5' },
+    ]), places, 'name')
+    expect(result.options.map((option) => option.placeName)).toEqual(['Mercado A', 'Mercado B'])
+    expect(result.lowest?.placeId).toBe('b')
+    expect(result.highest?.placeId).toBe('a')
+  })
+
   it('não trata preços ausentes como zero no total da cesta', () => {
     const entries = [
       entry('Arroz', [{ placeId: 'a', price: '10' }, { placeId: 'b', price: '12' }]),
