@@ -139,7 +139,7 @@ describe('Lists screen', () => {
   })
 
   it('cria lista quando nome é válido', async () => {
-    const { getByPlaceholderText, getByText } = render(<Lists />)
+    const { getByPlaceholderText, getByText } = await render(<Lists />)
 
     fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
     fireEvent.press(getByText('AddIcon'))
