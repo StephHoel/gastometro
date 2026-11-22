@@ -17,3 +17,7 @@ Header do CSV:
 Observação:
 
 - Cada execução gera um novo arquivo neste diretório.
+
+## Última execução registrada
+
+Em 22/11/2026, o workflow `45043861533` executou a suíte com 303 testes aprovados em 50 suítes. A cobertura global foi de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas. O gate de cobertura e o build Android concluíram com sucesso.
