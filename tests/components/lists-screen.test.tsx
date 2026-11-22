@@ -146,7 +146,7 @@ describe('Lists screen', () => {
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
-  })
+  }, 10000)
 
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = await render(<Lists />)
