@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.8.1-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.8.2-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
 
@@ -54,7 +54,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
@@ -64,6 +63,7 @@ As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/s
 
 Funcionalidades concluídas recentemente:
 
+- Testes E2E do roteamento web SPA com Playwright, cobrindo rotas profundas, refresh, navegação/histórico e fallback do GitHub Pages (mini-spec 14 em `docs/specs/done/`).
 - Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
@@ -157,6 +157,10 @@ npm run web:test:offline
 - O deploy para GitHub Pages é executado automaticamente pelo workflow `.github/workflows/deploy-web.yml` em pushes para `main`.
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
+
+### Testes E2E do roteamento web
+
+A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
 
 ### Limitações web conhecidas
 

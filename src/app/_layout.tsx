@@ -66,6 +66,22 @@ export default function Layout() {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+
+    const redirect = window.sessionStorage.getItem('redirect')
+    if (!redirect) return
+
+    window.sessionStorage.removeItem('redirect')
+
+    const redirectUrl = new URL(redirect, window.location.origin)
+    window.history.replaceState(
+      window.history.state,
+      '',
+      redirectUrl.pathname + redirectUrl.search + redirectUrl.hash,
+    )
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }, [])
 
   useEffect(() => {
     if (Platform.OS === 'web') {

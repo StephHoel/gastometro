@@ -1,7 +1,7 @@
 # Mini-spec: Testes E2E para roteamento web SPA
 
 Número: 14
-Status: planejado
+Status: concluída
 
 ## Problema
 
@@ -23,7 +23,7 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 
 - Web: rota inicial (`/`).
 - Web: rota de calculadora (`/calculator`).
-- Web: rota de lista (`/list`).
+- Web: rota de listas (`/lists`).
 - Web: fallback de rota inválida (conforme configuração atual de `public/404.html`).
 
 ## Dados e persistência
@@ -41,9 +41,9 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 
 ## Critérios de aceite
 
-- Suíte E2E executa localmente com comando documentado.
+- Suíte E2E executa localmente com comando documentado e automaticamente no workflow de CI.
 - Existe cobertura mínima para: raiz, rota profunda direta, refresh em rota profunda e fallback de rota inválida.
-- Testes passam de forma consistente em pelo menos 3 execuções consecutivas locais.
+- Testes passam de forma consistente em pelo menos 3 execuções consecutivas em ambiente local ou CI.
 - Documentação do projeto descreve como rodar os testes E2E e limitações conhecidas.
 
 ## Fora de escopo
@@ -57,3 +57,17 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 - Preservar compatibilidade com GitHub Pages e o comportamento atual de SPA fallback.
 - Evitar dependência de serviços externos durante execução dos testes.
 - Priorizar cenários críticos de regressão de roteamento antes de ampliar escopo.
+
+
+## Decisões durante a implementação
+
+- A rota de listas implementada pelo Expo Router é `/lists`, não `/list`; os cenários usam a rota real da aplicação.
+- A suíte gera a build web com o prefixo `/gastometro`, copia os arquivos usados no deploy e simula a hospedagem estática localmente. O layout restaura o caminho salvo pelo `404.html` após a hidratação inicial, evitando divergência entre o HTML estático e a rota final.
+- A navegação por interface cobre as telas inicial, listas e calculadora; voltar e avançar validam o histórico entre início e calculadora, respeitando o comportamento de histórico das abas web.
+- O cenário de rota inválida confirma a resposta HTTP 404, a restauração do caminho original pelo redirecionamento e a exibição da tela própria `Página não encontrada`, em português.
+- Cada cenário usa um contexto de navegador independente, evitando compartilhamento de cookies, armazenamento e histórico. Em caso de falha, são salvos screenshot e trace específicos do cenário.
+- A validação de erros inclui exceções JavaScript, erros no console, requisições malsucedidas e respostas HTTP de erro para recursos não documentais.
+- O workflow `Testes E2E Web` executa a suíte em pull requests para `main` e em atualizações de `main`; em caso de falha, publica os artefatos de diagnóstico.
+- Foi criada uma tela `+not-found.tsx` própria para apresentar a rota inexistente em pt-BR.
+- A restauração da rota deixou de ocorrer em script executado antes da hidratação. O layout lê o caminho salvo pelo `404.html` e navega após a montagem inicial, evitando erro de hidratação.
+- A validação mais recente foi concluída no GitHub Actions no commit `dcd114a8cfdd8679033019ee2c7e7a8ac5f81669`: os sete cenários E2E passaram em três ciclos consecutivos, e os workflows de build APK/release, Expo Doctor, verificação de aumento de versão e CodeQL também finalizaram com sucesso.

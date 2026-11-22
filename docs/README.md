@@ -63,12 +63,9 @@ Observação:
 
 | Métrica                      | Valor                          |
 | ---------------------------- | ------------------------------ |
-| **Versão**                   | 1.7.3                          |
-| **Data**                     | 2026-06-24                     |
+| **Versão**                   | 1.8.2                          |
+| **Data**                     | 2026-11-21                     |
 | **Testes**                   | 195 passando                   |
 | **Cobertura**                | 90.08%                         |
-| **Mini-specs Implementadas** | 13                             |
-| **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
-| **Mini-specs Planejadas**    | 3                              |
 
 Consulte `docs/specs/README.md` para o status detalhado de todas as mini-specs.

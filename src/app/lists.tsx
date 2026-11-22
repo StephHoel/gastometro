@@ -34,7 +34,7 @@ export default function Lists() {
   const alertRef = useRef<CustomAlertRef>(null)
   useInitAlert(alertRef)
 
-  const { handleSubmit: handleCreateSubmit, watch: watchCreate, reset: resetCreate, setValue: setCreateValue } = useForm<CreateListForm>({
+  const { watch: watchCreate, reset: resetCreate, setValue: setCreateValue } = useForm<CreateListForm>({
     defaultValues: {
       newListName: "",
     },
@@ -58,6 +58,10 @@ export default function Lists() {
     }
     cartStore.addList(trimmed)
     resetCreate()
+  }
+
+  function handleCreateList() {
+    onCreateList({ newListName })
   }
 
   function handleSelectList(listId: string) {
@@ -121,14 +125,14 @@ export default function Lists() {
           placeholderTextColor={COLORS.inactive}
           value={newListName}
           onChangeText={(text) => setCreateValue("newListName", text)}
-          onSubmitEditing={() => handleCreateSubmit(onCreateList)()}
+          onSubmitEditing={handleCreateList}
           returnKeyType="done"
           maxLength={60}
         />
         <TouchableOpacity
           className="bg-lime-400 rounded-lg px-3 py-2 items-center justify-center"
           activeOpacity={0.7}
-          onPress={() => handleCreateSubmit(onCreateList)()}
+          onPress={handleCreateList}
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
