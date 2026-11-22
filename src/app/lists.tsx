@@ -121,14 +121,18 @@ export default function Lists() {
           placeholderTextColor={COLORS.inactive}
           value={newListName}
           onChangeText={(text) => setCreateValue("newListName", text)}
-          onSubmitEditing={() => handleCreateSubmit(onCreateList)()}
+          onSubmitEditing={() => {
+            void handleCreateSubmit(onCreateList)()
+          }}
           returnKeyType="done"
           maxLength={60}
         />
         <TouchableOpacity
           className="bg-lime-400 rounded-lg px-3 py-2 items-center justify-center"
           activeOpacity={0.7}
-          onPress={() => handleCreateSubmit(onCreateList)()}
+          onPress={() => {
+            void handleCreateSubmit(onCreateList)()
+          }}
         >
           <AddIcon size={SIZE.iconButton} color={COLORS.black} />
         </TouchableOpacity>
