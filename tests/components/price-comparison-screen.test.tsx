@@ -89,4 +89,53 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Adicione itens e preços para comparar a cesta.')).toBeTruthy()
     expect(screen.getByText('Nenhum item comparado ainda.')).toBeTruthy()
   })
+  it('rejeita duplicidade ao editar lugar e valida preços antes de salvar', async () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado A' })
+    store.addPlace({ name: 'Mercado B' })
+    const [a] = usePriceComparisonStore.getState().places
+    const screen = await render(<PriceComparison />)
+
+    await fireEvent.press(screen.getByLabelText('Editar Mercado A'))
+    await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'Mercado B')
+    await fireEvent.press(screen.getByText('Salvar lugar'))
+    expect(screen.getByText('Já existe um lugar com esse nome.')).toBeTruthy()
+    await fireEvent.press(screen.getByText('Cancelar'))
+
+    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Feijão')
+    await fireEvent.press(screen.getByText('Adicionar item'))
+    expect(screen.getByText('Informe o preço em pelo menos um lugar.')).toBeTruthy()
+
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), '-1')
+    await fireEvent.press(screen.getByText('Adicionar item'))
+    expect(screen.getByText('Informe preços válidos e não negativos.')).toBeTruthy()
+
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), 'R$ 9,00')
+    expect(screen.getByDisplayValue('9,00')).toBeTruthy()
+    await fireEvent.press(screen.getByText('Adicionar item'))
+    expect(screen.getByText('Feijão')).toBeTruthy()
+    expect(screen.getByText('Preço faltando para um ou mais itens')).toBeTruthy()
+    expect(screen.getByText('Incompleta')).toBeTruthy()
+
+    await fireEvent.press(screen.getAllByText(/Ordenar por/)[1])
+    expect(screen.getByText('Ordenar por menor total')).toBeTruthy()
+    expect(a.name).toBe('Mercado A')
+  })
+
+  it('edita item sem referência de quantidade e apresenta diferença indisponível', async () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado A' })
+    const place = usePriceComparisonStore.getState().places[0]
+    store.addEntry({
+      itemName: 'Leite',
+      pricesByPlace: [{ placeId: place.id, price: 'inválido' }],
+    })
+    const screen = await render(<PriceComparison />)
+
+    expect(screen.getAllByText('Não disponível')).toHaveLength(2)
+    await fireEvent.press(screen.getByLabelText('Editar comparação de Leite'))
+    expect(screen.getByLabelText('Quantidade de referência').props.value).toBe('')
+    await fireEvent.press(screen.getByText('Cancelar'))
+  })
+
 })
