@@ -53,7 +53,7 @@ describe('PriceComparisonStore', () => {
     store.addPlace({ name: 'Mercado B' })
     const [a, b] = usePriceComparisonStore.getState().places
     expect(usePriceComparisonStore.getState().updatePlace(a.id, { name: 'mercado b' })).toBe(false)
-    expect(usePriceComparisonStore.getState().updatePlace('inexistente', { name: 'Novo nome' })).toBe(true)
+    expect(usePriceComparisonStore.getState().updatePlace('inexistente', { name: 'Novo nome' })).toBe(false)
     expect(usePriceComparisonStore.getState().places).toEqual([a, b])
   })
 
