@@ -1,31 +1,14 @@
-import { createJSONStorage } from 'zustand/middleware'
+import uuid from 'react-native-uuid'
 import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 
 describe('PriceComparisonStore', () => {
-  beforeEach(async () => {
-    // Aguarda a hidratação automática iniciada na criação da store.
-    if (!usePriceComparisonStore.persist.hasHydrated()) {
-      await new Promise<void>((resolve) => {
-        usePriceComparisonStore.persist.onFinishHydration(() => resolve())
-      })
-    }
+  let uuidCounter = 0
 
-    // Usa armazenamento isolado por teste para impedir interferência de
-    // gravações assíncronas ou dados persistidos por outros testes.
-    const storage = new Map<string, string>()
-    usePriceComparisonStore.persist.setOptions({
-      storage: createJSONStorage(() => ({
-        getItem: async (name) => storage.get(name) ?? null,
-        setItem: async (name, value) => {
-          storage.set(name, value)
-        },
-        removeItem: async (name) => {
-          storage.delete(name)
-        },
-      })),
-    })
-
-    await usePriceComparisonStore.persist.rehydrate()
+  beforeEach(() => {
+    // O mock global retorna sempre o mesmo UUID. Cada entidade precisa de um
+    // identificador distinto para que a remoção de um lugar não remova os demais.
+    uuidCounter = 0
+    jest.mocked(uuid.v4).mockImplementation(() => `uuid-${++uuidCounter}`)
     usePriceComparisonStore.setState({ places: [], entries: [] })
   })
 
@@ -43,12 +26,16 @@ describe('PriceComparisonStore', () => {
     store.addPlace({ name: 'Mercado A' })
     store.addPlace({ name: 'Mercado B' })
     const [a, b] = usePriceComparisonStore.getState().places
+
+    expect(a.id).not.toBe(b.id)
+
     usePriceComparisonStore.getState().addEntry({
       itemName: 'Arroz',
       pricesByPlace: [{ placeId: a.id, price: '10' }, { placeId: b.id, price: '12' }],
     })
     usePriceComparisonStore.getState().removePlace(a.id)
-    expect(usePriceComparisonStore.getState().places).toHaveLength(1)
+
+    expect(usePriceComparisonStore.getState().places).toEqual([b])
     expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([{ placeId: b.id, price: '12' }])
   })
 
