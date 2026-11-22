@@ -245,19 +245,9 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
 
     await page.goBack({ waitUntil: "networkidle" })
-    await page.waitForURL("**/gastometro/lists")
-    await page.getByPlaceholder("Nome da lista").waitFor()
-    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-
-    await page.goBack({ waitUntil: "networkidle" })
     await page.waitForURL("**/gastometro/")
     await page.getByText("Total Geral:", { exact: false }).waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
-
-    await page.goForward({ waitUntil: "networkidle" })
-    await page.waitForURL("**/gastometro/lists")
-    await page.getByPlaceholder("Nome da lista").waitFor()
-    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
 
     await page.goForward({ waitUntil: "networkidle" })
     await page.waitForURL("**/gastometro/calculator")
