@@ -141,8 +141,8 @@ describe('Lists screen', () => {
   it('cria lista quando nome é válido', async () => {
     const { getByPlaceholderText, getByText } = await render(<Lists />)
 
-    fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
-    fireEvent.press(getByText('AddIcon'))
+    await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
+    await fireEvent.press(getByText('AddIcon'))
 
     await waitFor(() => {
       expect(mockStore.addList).toHaveBeenCalledWith('Feira')
@@ -153,9 +153,7 @@ describe('Lists screen', () => {
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = await render(<Lists />)
 
-    await waitFor(async () => {
-      await fireEvent.press(getByText('AddIcon'))
-    })
+    await fireEvent.press(getByText('AddIcon'))
 
     await waitFor(() => {
       expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
