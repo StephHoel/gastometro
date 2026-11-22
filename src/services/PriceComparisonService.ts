@@ -110,7 +110,7 @@ export function compareEntryPrices(
     (current, option) => !current || option.price > current.price ? option : current,
     null,
   )
-  const difference = lowest && highest ? highest.price - lowest.price : null
+  const difference = options.length >= 2 && lowest && highest ? highest.price - lowest.price : null
   const differencePercent = difference !== null && highest && highest.price > 0
     ? (difference / highest.price) * 100
     : null
