@@ -5,8 +5,6 @@ describe('PriceComparisonStore', () => {
   let uuidCounter = 0
 
   beforeEach(() => {
-    // O mock global retorna sempre o mesmo UUID. Cada entidade precisa de um
-    // identificador distinto para que a remoção de um lugar não remova os demais.
     uuidCounter = 0
     jest.mocked(uuid.v4).mockImplementation(() => [++uuidCounter])
     usePriceComparisonStore.setState({ places: [], entries: [] })
@@ -26,15 +24,12 @@ describe('PriceComparisonStore', () => {
     store.addPlace({ name: 'Mercado A' })
     store.addPlace({ name: 'Mercado B' })
     const [a, b] = usePriceComparisonStore.getState().places
-
     expect(a.id).not.toBe(b.id)
-
     usePriceComparisonStore.getState().addEntry({
       itemName: 'Arroz',
       pricesByPlace: [{ placeId: a.id, price: '10' }, { placeId: b.id, price: '12' }],
     })
     usePriceComparisonStore.getState().removePlace(a.id)
-
     expect(usePriceComparisonStore.getState().places).toEqual([b])
     expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([{ placeId: b.id, price: '12' }])
   })
@@ -48,6 +43,27 @@ describe('PriceComparisonStore', () => {
     expect(usePriceComparisonStore.getState().updateEntry(entry.id, { itemName: 'Arroz integral', pricesByPlace: [{ placeId: place.id, price: '11' }] })).toBe(true)
     expect(usePriceComparisonStore.getState().entries[0].itemName).toBe('Arroz integral')
     usePriceComparisonStore.getState().removeEntry(entry.id)
+    expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+  })
+
+  it('rejeita lugares inválidos, duplicados e atualizações com nome já utilizado', () => {
+    const store = usePriceComparisonStore.getState()
+    expect(store.addPlace({ name: '  ' })).toBe(false)
+    store.addPlace({ name: 'Mercado A' })
+    store.addPlace({ name: 'Mercado B' })
+    const [a, b] = usePriceComparisonStore.getState().places
+    expect(usePriceComparisonStore.getState().updatePlace(a.id, { name: 'mercado b' })).toBe(false)
+    expect(usePriceComparisonStore.getState().updatePlace('inexistente', { name: 'Novo nome' })).toBe(true)
+    expect(usePriceComparisonStore.getState().places).toEqual([a, b])
+  })
+
+  it('rejeita itens sem nome ou sem preço e preserva dados ao atualizar identificador inexistente', () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado A' })
+    const place = usePriceComparisonStore.getState().places[0]
+    expect(store.addEntry({ itemName: ' ', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(false)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [] })).toBe(false)
+    expect(store.updateEntry('inexistente', { itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(true)
     expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
   })
 })
