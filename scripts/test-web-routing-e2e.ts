@@ -266,7 +266,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
 
     await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
     await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
-    await page.getByText("Unmatched Route", { exact: true }).waitFor()
+    await page.getByText("Página não encontrada", { exact: true }).waitFor()
 
     assert.equal(fallbackStatus, 404, "A rota inexistente deve ser atendida pelo arquivo 404.html")
     assert.equal(new URL(page.url()).pathname, invalidPath)
