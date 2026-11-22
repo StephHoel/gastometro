@@ -99,6 +99,8 @@ export const useCartStore = create(
           if (state.lists.length <= 1) return {}
 
           const lists = state.lists.filter((l) => l.id !== listId)
+          if (lists.length === 0) return {}
+
           const activeListId =
             state.activeListId === listId ? lists[0].id : state.activeListId
           return { lists, activeListId, products: getActiveProducts(lists, activeListId) }
