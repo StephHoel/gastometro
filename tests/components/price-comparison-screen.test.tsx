@@ -123,7 +123,6 @@ describe('PriceComparison screen', () => {
   })
 
   it('edita item sem referência de quantidade e apresenta diferença indisponível', async () => {
-    const store = usePriceComparisonStore.getState()
     usePriceComparisonStore.setState({
       places: [{ id: 'place-1', name: 'Mercado A' }],
       entries: [{ id: 'entry-1', itemName: 'Leite', pricesByPlace: [{ placeId: 'place-1', price: 'inválido' }], createdAt: '', updatedAt: '' }],
