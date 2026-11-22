@@ -64,8 +64,9 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 - A rota de listas implementada pelo Expo Router é `/lists`, não `/list`; os cenários usam a rota real da aplicação.
 - A suíte gera a build web com o prefixo `/gastometro`, copia os arquivos usados no deploy, injeta a restauração SPA e simula a hospedagem estática localmente.
 - A navegação por interface cobre as telas inicial, listas e calculadora; voltar e avançar validam o histórico entre início e calculadora, respeitando o comportamento de histórico das abas web.
-- O cenário de rota inválida confirma a resposta HTTP 404, a restauração do caminho original pelo redirecionamento e a exibição da tela `Unmatched Route` do Expo Router.
+- O cenário de rota inválida confirma a resposta HTTP 404, a restauração do caminho original pelo redirecionamento e a exibição da tela própria `Página não encontrada`, em português.
 - Cada cenário usa um contexto de navegador independente, evitando compartilhamento de cookies, armazenamento e histórico. Em caso de falha, são salvos screenshot e trace específicos do cenário.
 - A validação de erros inclui exceções JavaScript, erros no console, requisições malsucedidas e respostas HTTP de erro para recursos não documentais.
 - O workflow `Testes E2E Web` executa a suíte em pull requests para `main` e em atualizações de `main`; em caso de falha, publica os artefatos de diagnóstico.
+- Foi criada uma tela `+not-found.tsx` própria para substituir a tela genérica do Expo Router e evitar erro de hidratação na rota inexistente.
 - A implementação e a documentação estão atualizadas; a execução local da suíte três vezes ainda precisa ser confirmada antes de concluir a mini-spec.
