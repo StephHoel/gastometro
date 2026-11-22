@@ -98,7 +98,7 @@ describe('Bills screen', () => {
     expect(screen.getByText('Assinatura')).toBeTruthy()
     expect(screen.getAllByText(/Vencimento:/)).toHaveLength(1)
 
-    await fireEvent.press(screen.getByLabelText('Marcar como paga'))
+    await fireEvent.press(screen.getAllByLabelText('Marcar como paga')[0])
     expect(screen.getByLabelText('Marcar como pendente')).toBeTruthy()
     await fireEvent.press(screen.getByLabelText('Marcar como pendente'))
     expect(screen.getAllByLabelText('Marcar como paga')).toHaveLength(2)
