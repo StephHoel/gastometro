@@ -265,7 +265,19 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     })
 
     await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
-    await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
+    await page.waitForFunction(
+      (expected: string) => window.location.pathname === expected,
+      invalidPath,
+      { timeout: 10000 },
+    ).catch(async error => {
+      const state = await page.evaluate(() => ({
+        pathname: window.location.pathname,
+        redirect: window.sessionStorage.getItem("redirect"),
+        baseURI: document.baseURI,
+        title: document.title,
+      }))
+      throw new Error("A rota original não foi restaurada: " + JSON.stringify(state) + ". " + error.message)
+    })
     await page.getByText("Página não encontrada", { exact: true }).waitFor()
 
     assert.equal(fallbackStatus, 404, "A rota inexistente deve ser atendida pelo arquivo 404.html")
