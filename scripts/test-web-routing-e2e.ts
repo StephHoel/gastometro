@@ -258,7 +258,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
     const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
     let fallbackStatus: number | undefined
-    page.on("response", response => {
+    page.on("response", (response: any) => {
       if (new URL(response.url()).pathname === invalidPath) {
         fallbackStatus = response.status()
       }
