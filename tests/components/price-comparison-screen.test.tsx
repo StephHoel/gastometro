@@ -65,7 +65,7 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Arroz')).toBeTruthy()
     expect(screen.getByText('Mercado B · Melhor preço')).toBeTruthy()
     expect(screen.getByText('Cesta completa')).toBeTruthy()
-    expect(screen.getByText('Menor total')).toBeTruthy()
+    expect(screen.getByText(/Menor total/)).toBeTruthy()
 
     fireEvent.press(screen.getByLabelText('Editar comparação de Arroz'))
     fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Arroz integral')
