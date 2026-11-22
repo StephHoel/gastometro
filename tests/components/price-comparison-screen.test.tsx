@@ -122,7 +122,7 @@ describe('PriceComparison screen', () => {
 
     await fireEvent.press(screen.getAllByText(/Ordenar por/)[1])
     expect(screen.getByText('Ordenar por menor total')).toBeTruthy()
-    expect(screen.getByText('Ordenar por menor preço')).toBeTruthy()
+    expect(screen.getByText('Ordenar por nome')).toBeTruthy()
     expect(a.name).toBe('Mercado A')
   })
 
