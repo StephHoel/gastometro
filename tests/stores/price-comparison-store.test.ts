@@ -1,7 +1,31 @@
+import { createJSONStorage } from 'zustand/middleware'
 import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 
 describe('PriceComparisonStore', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Aguarda a hidratação automática iniciada na criação da store.
+    if (!usePriceComparisonStore.persist.hasHydrated()) {
+      await new Promise<void>((resolve) => {
+        usePriceComparisonStore.persist.onFinishHydration(() => resolve())
+      })
+    }
+
+    // Usa armazenamento isolado por teste para impedir interferência de
+    // gravações assíncronas ou dados persistidos por outros testes.
+    const storage = new Map<string, string>()
+    usePriceComparisonStore.persist.setOptions({
+      storage: createJSONStorage(() => ({
+        getItem: async (name) => storage.get(name) ?? null,
+        setItem: async (name, value) => {
+          storage.set(name, value)
+        },
+        removeItem: async (name) => {
+          storage.delete(name)
+        },
+      })),
+    })
+
+    await usePriceComparisonStore.persist.rehydrate()
     usePriceComparisonStore.setState({ places: [], entries: [] })
   })
 
