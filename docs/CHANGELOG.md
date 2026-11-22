@@ -1,4 +1,6 @@
-## 1.9.0 - 2026-11-16
+# Changelog
+
+## 1.9.0 - 2026-11-22
 
 Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
 
@@ -14,14 +16,6 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 - Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
 - Adicionados testes de serviço e store para validação, cálculo, ordenação e integridade de preços ausentes.
 
-### Documentação
-
-- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
-
-# Changelog
-
-## Atualização de cobertura - 2026-11-22
-
 ### Qualidade e testes
 
 - Ampliação da suíte automatizada, com medição global de 96,62% em statements, 92,20% em branches, 96,15% em funções e 97,82% em linhas.
@@ -30,9 +24,9 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 
 ### Documentação
 
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
 - README, SPEC e índice de documentação atualizados com os percentuais medidos e a situação da execução.
 - Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
-
 
 ## 1.8.2 - 2026-11-21
 

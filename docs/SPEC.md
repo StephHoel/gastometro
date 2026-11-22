@@ -4,7 +4,8 @@
 >
 > **Versão do App:** 1.9.0
 > **Data:** 2026-11-22
-> **Cobertura de Testes (linhas):** 97.82%\n> Última medição em 2026-11-22: 96,62% statements, 92,20% branches, 96,15% funções e 97,82% linhas. A execução registrou 298 testes passando e 2 falhando; os percentuais não representam uma execução totalmente verde.
+> **Cobertura de Testes (linhas):** 97.82%
+> Última medição em 2026-11-22: 96,62% statements, 92,20% branches, 96,15% funções e 97,82% linhas. A execução registrou 298 testes passando e 2 falhando; os percentuais não representam uma execução totalmente verde.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
