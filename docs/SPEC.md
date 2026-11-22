@@ -149,7 +149,7 @@ Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceit
 
 ### Comparação de preços
 
-Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada. A comparação individual destaca menor e maior preço, diferença absoluta e percentual. A comparação da cesta só calcula total para lugares que tenham preço em todos os itens; ausência de preço nunca é interpretada como zero.
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca menor e maior preço; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
 
 ### Lembrete Local
 
