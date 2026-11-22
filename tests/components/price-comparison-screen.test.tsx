@@ -13,8 +13,8 @@ describe('PriceComparison screen', () => {
     usePriceComparisonStore.setState({ places: [], entries: [] })
   })
 
-  it('cadastra lugares e impede nomes duplicados', () => {
-    const screen = render(<PriceComparison />)
+  it('cadastra lugares e impede nomes duplicados', async () => {
+    const screen = await render(<PriceComparison />)
 
     fireEvent.changeText(screen.getByLabelText('Nome do lugar'), ' Mercado Central ')
     fireEvent.changeText(screen.getByLabelText('Observação do lugar'), ' Unidade do bairro ')
@@ -32,7 +32,7 @@ describe('PriceComparison screen', () => {
   it('edita, cancela e remove lugares', () => {
     const store = usePriceComparisonStore.getState()
     store.addPlace({ name: 'Mercado A', note: 'Antiga' })
-    const screen = render(<PriceComparison />)
+    const screen = await render(<PriceComparison />)
 
     fireEvent.press(screen.getByLabelText('Editar Mercado A'))
     expect(screen.getByText('Editar lugar')).toBeTruthy()
@@ -54,7 +54,7 @@ describe('PriceComparison screen', () => {
     store.addPlace({ name: 'Mercado A' })
     store.addPlace({ name: 'Mercado B' })
     const [a, b] = usePriceComparisonStore.getState().places
-    const screen = render(<PriceComparison />)
+    const screen = await render(<PriceComparison />)
 
     fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Arroz')
     fireEvent.changeText(screen.getByLabelText('Quantidade de referência'), '1 kg')
@@ -80,8 +80,8 @@ describe('PriceComparison screen', () => {
     expect(a.id).not.toBe(b.id)
   })
 
-  it('valida campos obrigatórios e informa ausência de lugares e itens', () => {
-    const screen = render(<PriceComparison />)
+  it('valida campos obrigatórios e informa ausência de lugares e itens', async () => {
+    const screen = await render(<PriceComparison />)
 
     fireEvent.press(screen.getByText('Adicionar lugar'))
     expect(screen.getByText('Informe o nome do lugar.')).toBeTruthy()
