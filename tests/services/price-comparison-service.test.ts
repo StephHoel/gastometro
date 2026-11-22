@@ -121,8 +121,16 @@ describe('PriceComparisonService', () => {
     expect(compareBasket(entries, places, 'name').map((place) => place.placeId)).toEqual(['a', 'b', 'c'])
   })
 
-  it('considera a cesta vazia incompleta e mantém ordenação alfabética', () => {
-    expect(compareBasket([], places).every((place) => !place.complete && place.total === 0)).toBe(true)
+  it('considera a cesta vazia indisponível, sem apresentar total zero, e mantém ordenação alfabética', () => {
+    expect(compareBasket([], places).every((place) => !place.complete && place.total === null)).toBe(true)
     expect(compareBasket([], [...places].reverse(), 'name').map((place) => place.placeId)).toEqual(['a', 'b', 'c'])
+  })
+
+  it('considera completa uma cesta com preços zero válidos', () => {
+    const result = compareBasket([
+      entry('Arroz', [{ placeId: 'a', price: '0' }]),
+      entry('Feijão', [{ placeId: 'a', price: '0,00' }]),
+    ], places)
+    expect(result.find((place) => place.placeId === 'a')).toMatchObject({ total: 0, complete: true })
   })
 })
