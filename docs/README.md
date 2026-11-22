@@ -67,8 +67,8 @@ Observação:
 | **Data**                     | 2026-06-24                     |
 | **Testes**                   | 195 passando                   |
 | **Cobertura**                | 90.08%                         |
-| **Mini-specs Implementadas** | 13                             |
+| **Mini-specs Implementadas** | 15                             |
 | **Mini-specs Ativas**        | 1 (testes - evolução contínua) |
-| **Mini-specs Planejadas**    | 3                              |
+| **Mini-specs Planejadas**    | 6                              |
 
 Consulte `docs/specs/README.md` para o status detalhado de todas as mini-specs.
