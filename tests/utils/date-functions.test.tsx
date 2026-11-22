@@ -38,7 +38,7 @@ describe('DateFunctions', () => {
   it('fromDateAndTime valida campos obrigatórios e datas inválidas', () => {
     expect(fromDateAndTime('', '12:00')).toBeNull()
     expect(fromDateAndTime('2026-06-21', '')).toBeNull()
-    expect(fromDateAndTime('not-a-date-at-all-xyz', 'not-a-time')).toBeNull()
+    expect(fromDateAndTime('2026-13-99', '25:99')).toBeNull()
     expect(fromDateAndTime('2026-06-21', '12:30')).toBe(new Date('2026-06-21T12:30:00').toISOString())
   })
 
