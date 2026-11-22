@@ -146,7 +146,7 @@ async function runScenario(
   const artifactsDirectory = path.join(ROOT, "artifacts", "web-e2e")
   const artifactPrefix = "execucao-" + cycle + "-" + name
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .toLowerCase()
@@ -172,7 +172,7 @@ async function runScenario(
     assert.deepEqual(failedRequests, [], "Uma ou mais requisições falharam")
     assert.deepEqual(failedResources, [], "Um ou mais recursos retornaram HTTP de erro")
     await context.tracing.stop()
-    process.stdout.write("  ✓ " + name + "\\n")
+    process.stdout.write("  ✓ " + name + "\n")
   } catch (error) {
     fs.mkdirSync(artifactsDirectory, { recursive: true })
     await page.screenshot({ path: path.join(artifactsDirectory, artifactPrefix + ".png"), fullPage: true }).catch(() => undefined)
