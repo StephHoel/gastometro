@@ -31,8 +31,8 @@ describe('Bills screen', () => {
     useBillStore.setState({ bills: [] })
   })
 
-  it('mostra estado vazio e valida campos obrigatórios e valores inválidos', () => {
-    const screen = render(<Bills />)
+  it('mostra estado vazio e valida campos obrigatórios e valores inválidos', async () => {
+    const screen = await render(<Bills />)
     expect(screen.getByText('Nenhuma conta cadastrada.')).toBeTruthy()
 
     fireEvent.press(screen.getByText('Adicionar conta'))
@@ -46,7 +46,7 @@ describe('Bills screen', () => {
   })
 
   it('cadastra, edita, cancela edição e alterna status de pagamento', () => {
-    const screen = render(<Bills />)
+    const screen = await render(<Bills />)
     fireEvent.changeText(screen.getByLabelText('Nome da conta'), 'Internet')
     fireEvent.changeText(screen.getByLabelText('Valor da conta'), '99,90')
     fireEvent.changeText(screen.getByLabelText('Data de vencimento'), '2099-12-31')
@@ -71,11 +71,11 @@ describe('Bills screen', () => {
     expect(screen.getByText('Nova conta')).toBeTruthy()
   })
 
-  it('confirma remoção e executa a ação selecionada', () => {
+  it('confirma remoção e executa a ação selecionada', async () => {
     useBillStore.setState({
       bills: [{ id: 'bill-1', title: 'Água', amount: '50', paid: false }],
     })
-    const screen = render(<Bills />)
+    const screen = await render(<Bills />)
 
     fireEvent.press(screen.getByLabelText('Remover Água'))
     expect(mockShowAlert).toHaveBeenCalledWith(expect.objectContaining({
