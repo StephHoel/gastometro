@@ -21,7 +21,7 @@ describe('BillStore', () => {
     await act(() => useBillStore.getState().setPaid(created.id, true))
     expect(useBillStore.getState().bills[0].paid).toBe(true)
 
-    await act(() => useBillStore.getState().updateBill('missing', { title: 'Não existe' }))
+    await act(() => useBillStore.getState().updateBill('missing', { title: 'Não existe', amount: '0' }))
     await act(() => useBillStore.getState().setPaid('missing', true))
     await act(() => useBillStore.getState().removeBill('missing'))
     expect(useBillStore.getState().bills[1]).toMatchObject({ title: 'Água', paid: false })
