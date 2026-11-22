@@ -131,17 +131,19 @@ function loadPlaywright(): any {
   return require(packageEntry)
 }
 
-async function runScenario(name: string, action: () => Promise<void>): Promise<void> {
+async function runScenario(name: string, action: () => Promise<void>, pageErrors: string[]): Promise<void> {
   await action()
+  assert.deepEqual(pageErrors, [], "A aplicação apresentou erro JavaScript")
   process.stdout.write("  ✓ " + name + "\n")
 }
 
 async function runSuite(browser: any, cycle: number): Promise<void> {
   const context = await browser.newContext()
   const page = await context.newPage()
-  page.on("pageerror", (error: Error) => {
-    throw new Error("Erro JavaScript no navegador: " + error.message)
-  })
+  const pageErrors: string[] = []
+  const artifactsDirectory = path.join(ROOT, "artifacts", "web-e2e")
+  page.on("pageerror", (error: Error) => pageErrors.push(error.message))
+  await context.tracing.start({ screenshots: true, snapshots: true, sources: true })
 
   try {
     await runScenario("raiz carrega a tela inicial", async () => {
@@ -150,7 +152,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       await page.getByText("Total Geral:", { exact: false }).waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
       assert.equal(await page.title(), "Gastômetro")
-    })
+    }, pageErrors)
 
     await runScenario("rota profunda abre diretamente", async () => {
       const response = await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
@@ -158,14 +160,29 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       await page.getByText("Calculadora", { exact: true }).last().waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
       assert.equal(await page.title(), "Calculadora")
-    })
+    }, pageErrors)
 
     await runScenario("atualização mantém a rota profunda", async () => {
       await page.reload({ waitUntil: "networkidle" })
       await page.getByText("Calculadora", { exact: true }).last().waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
       assert.equal(await page.title(), "Calculadora")
-    })
+    }, pageErrors)
+
+    await runScenario("rota de listas abre diretamente", async () => {
+      const response = await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
+      assert.ok(response.status() === 200 || response.status() === 404)
+      await page.getByPlaceholder("Nome da lista").waitFor()
+      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+      assert.equal(await page.title(), "Listas")
+    }, pageErrors)
+
+    await runScenario("atualização mantém a rota de listas", async () => {
+      await page.reload({ waitUntil: "networkidle" })
+      await page.getByPlaceholder("Nome da lista").waitFor()
+      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+      assert.equal(await page.title(), "Listas")
+    }, pageErrors)
 
     await runScenario("navegação e histórico do navegador funcionam", async () => {
       await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
@@ -177,7 +194,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
       await page.goForward({ waitUntil: "networkidle" })
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    })
+    }, pageErrors)
 
     await runScenario("rota inexistente preserva o caminho no fallback SPA", async () => {
       const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
@@ -185,7 +202,13 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
       assert.equal(new URL(page.url()).pathname, invalidPath)
       assert.ok(await page.locator("body").innerText())
-    })
+    }, pageErrors)
+  } catch (error) {
+    fs.mkdirSync(artifactsDirectory, { recursive: true })
+    const artifactPrefix = "execucao-" + cycle
+    await page.screenshot({ path: path.join(artifactsDirectory, artifactPrefix + ".png"), fullPage: true }).catch(() => undefined)
+    await context.tracing.stop({ path: path.join(artifactsDirectory, artifactPrefix + "-trace.zip") }).catch(() => undefined)
+    throw error
   } finally {
     await context.close()
   }
