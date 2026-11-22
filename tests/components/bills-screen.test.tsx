@@ -85,4 +85,23 @@ describe('Bills screen', () => {
     alert.buttons[0].action()
     expect(useBillStore.getState().bills).toHaveLength(0)
   })
+  it('distingue contas vencidas e sem vencimento e alterna o pagamento', async () => {
+    useBillStore.setState({
+      bills: [
+        { id: 'late', title: 'Aluguel', amount: '1500', paid: false, dueDate: '2000-01-01' },
+        { id: 'no-date', title: 'Assinatura', amount: '20', paid: false },
+      ],
+    })
+    const screen = await render(<Bills />)
+
+    expect(screen.getByText(/Vencida/)).toBeTruthy()
+    expect(screen.getByText('Assinatura')).toBeTruthy()
+    expect(screen.queryByText(/Vencimento:/)).toBeNull()
+
+    await fireEvent.press(screen.getByLabelText('Marcar como paga'))
+    expect(screen.getByLabelText('Marcar como pendente')).toBeTruthy()
+    await fireEvent.press(screen.getByLabelText('Marcar como pendente'))
+    expect(screen.getByLabelText('Marcar como paga')).toBeTruthy()
+  })
+
 })
