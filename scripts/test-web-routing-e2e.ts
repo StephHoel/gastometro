@@ -203,6 +203,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       assert.equal(new URL(page.url()).pathname, invalidPath)
       assert.ok(await page.locator("body").innerText())
     }, pageErrors)
+    await context.tracing.stop()
   } catch (error) {
     fs.mkdirSync(artifactsDirectory, { recursive: true })
     const artifactPrefix = "execucao-" + cycle
