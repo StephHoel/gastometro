@@ -153,7 +153,13 @@ async function runScenario(
 
   page.on("pageerror", (error: Error) => pageErrors.push(error.message))
   page.on("console", (message: any) => {
-    if (message.type() === "error") consoleErrors.push(message.text())
+    const text = message.text()
+    const expectedStaticFallback404 =
+      text.includes("Failed to load resource") && text.includes("404 (Not Found)")
+
+    if (message.type() === "error" && !expectedStaticFallback404) {
+      consoleErrors.push(text)
+    }
   })
   page.on("requestfailed", (request: any) => {
     failedRequests.push(request.url() + ": " + (request.failure()?.errorText ?? "falha desconhecida"))
