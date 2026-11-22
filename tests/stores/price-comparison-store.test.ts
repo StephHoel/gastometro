@@ -8,7 +8,7 @@ describe('PriceComparisonStore', () => {
     // O mock global retorna sempre o mesmo UUID. Cada entidade precisa de um
     // identificador distinto para que a remoção de um lugar não remova os demais.
     uuidCounter = 0
-    jest.mocked(uuid.v4).mockImplementation(() => `uuid-${++uuidCounter}`)
+    jest.mocked(uuid.v4).mockImplementation(() => [++uuidCounter])
     usePriceComparisonStore.setState({ places: [], entries: [] })
   })
 
