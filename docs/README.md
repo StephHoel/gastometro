@@ -63,9 +63,12 @@ Observação:
 
 | Métrica                      | Valor                          |
 | ---------------------------- | ------------------------------ |
-| **Versão**                   | 1.8.2                          |
-| **Data**                     | 2026-11-21                     |
-| **Testes**                   | 195 passando                   |
-| **Cobertura**                | 90.08%                         |
+| **Versão**                   | 1.9.0                          |
+| **Data**                     | 2026-11-22                     |
+| **Testes**                   | 298 passando, 2 falhando       |
+| **Cobertura**                | 97,82% linhas                  |
+| **Branches**                 | 92,20%                         |
+| **Statements**               | 96,62%                         |
+| **Funções**                  | 96,15%                         |
 
-Consulte `docs/specs/README.md` para o status detalhado de todas as mini-specs.
+A medição foi obtida no CI em 22/11/2026; a mesma execução ainda apresentou duas falhas de teste. Consulte `docs/coverages/README.md` para o registro e `docs/specs/README.md` para o status detalhado das mini-specs.

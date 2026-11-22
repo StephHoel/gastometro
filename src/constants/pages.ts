@@ -3,6 +3,7 @@ export const titlePages = {
   "calculator": "Calculadora",
   "lists": "Listas",
   "bills": "Contas a pagar",
+  "price-comparison": "Comparação de preços",
   "list/add": 'Novo Item',
   "list/edit/[id]": 'Editar Item',
   "reminders/index": 'Central de Lembretes',

@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.9.0 - 2026-11-22
+
+Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
+
+### Funcionalidade
+
+- Adicionada tela de comparação de preços com cadastro, edição e remoção de lugares e itens.
+- Incluída comparação individual com destaque da menor oferta, maior preço e diferença absoluta/percentual.
+- Incluída comparação da cesta completa, com indicação de cesta incompleta quando faltar preço em qualquer item do lugar.
+- Resultados podem ser ordenados por preço ou nome do lugar.
+
+### Persistência e qualidade
+
+- Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
+- Adicionados testes de serviço, store e tela para validação, cálculo, ordenação independente e integridade de preços ausentes.
+- Reforçadas as validações no store para rejeitar preços inválidos, lugares inexistentes, duplicidade de referência e atualizações para IDs inexistentes.
+- Parser monetário ampliado para aceitar valores pt-BR com símbolo de moeda e agrupamento de milhares.
+
+### Qualidade e testes
+
+- Na execução de CI de 2026-11-22, o Jest mediu 96,64% em statements, 92,00% em branches, 96,21% em funções e 97,86% em linhas; 300 testes passaram e 3 falharam.
+- As três falhas foram corrigidas: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta foi ajustada para seu próprio controle. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
+- A reexecução da suíte e do build está em andamento após essas correções; os percentuais acima são a medição da execução anterior, não uma aprovação da nova execução.
+- O gate mínimo global de cobertura permanece em 80%.
+
+### Documentação
+
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
+- README, SPEC e índice de documentação atualizados com os percentuais medidos e a situação da execução.
+- Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
+
 ## 1.8.2 - 2026-11-21
 
 Implementação da mini-spec 14: suíte E2E para validar o roteamento web SPA e o fallback utilizado no GitHub Pages.
