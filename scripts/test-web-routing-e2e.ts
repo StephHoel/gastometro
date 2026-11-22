@@ -269,7 +269,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       (expected: string) => window.location.pathname === expected,
       invalidPath,
       { timeout: 10000 },
-    ).catch(async error => {
+    ).catch(async (error: Error) => {
       const state = await page.evaluate(() => ({
         pathname: window.location.pathname,
         redirect: window.sessionStorage.getItem("redirect"),
