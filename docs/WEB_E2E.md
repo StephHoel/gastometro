@@ -40,7 +40,7 @@ O comando:
 - Navegar pela interface entre as telas inicial, listas e calculadora, além de usar voltar/avançar, mantém o histórico.
 - Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de 404.html, inicializa a aplicação e preserva o caminho solicitado durante a restauração SPA.
 
-Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada repetição usa um novo contexto de navegador, isolando cookies e sessionStorage. Cada cenário usa contexto isolado e falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
+Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
 ## Diagnóstico
 
