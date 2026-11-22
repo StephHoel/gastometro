@@ -42,6 +42,10 @@ O comando:
 
 Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
+## Integração contínua
+
+O workflow `Testes E2E Web` executa a suíte em pull requests direcionados à `main` e em atualizações da própria `main`. Ele instala Node.js 24, dependências do projeto e Chromium. Quando há falha, publica os screenshots e traces disponíveis como artefatos da execução.
+
 ## Diagnóstico
 
 A execução falha quando a build não é gerada, o servidor local não inicia, o Chromium não pode ser iniciado, a aplicação produz erro JavaScript ou algum critério de URL/tela não é atendido. O terminal identifica o cenário que falhou.
