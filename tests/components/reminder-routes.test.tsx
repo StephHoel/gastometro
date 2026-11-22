@@ -38,10 +38,10 @@ describe('Reminder form routes', () => {
 
   it('abre o formulário de criação associado à lista', () => {
     const screen = render(<NewReminder />)
-    expect(screen.getByText('Criar lembrete')).toBeTruthy()
+    expect(screen.getByText('Novo Lembrete')).toBeTruthy()
     expect(mockFormReminder).toHaveBeenCalledWith(expect.objectContaining({
       listId: 'list-123',
-      textButton: 'Criar lembrete',
+      textButton: 'Novo Lembrete',
     }))
     expect(mockFormReminder.mock.calls[0][0]).not.toHaveProperty('reminderId')
     expect(mockFormReminder.mock.calls[0][0]).not.toHaveProperty('includeDeleteButton')
@@ -49,11 +49,11 @@ describe('Reminder form routes', () => {
 
   it('abre o formulário de edição com identificadores e opção de exclusão', () => {
     const screen = render(<EditReminder />)
-    expect(screen.getByText('Atualizar lembrete')).toBeTruthy()
+    expect(screen.getByText('Editar')).toBeTruthy()
     expect(mockFormReminder).toHaveBeenCalledWith(expect.objectContaining({
       listId: 'list-123',
       reminderId: 'reminder-456',
-      textButton: 'Atualizar lembrete',
+      textButton: 'Editar',
       includeDeleteButton: true,
     }))
   })
