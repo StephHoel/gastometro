@@ -184,24 +184,54 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       assert.equal(await page.title(), "Listas")
     }, pageErrors)
 
-    await runScenario("navegação e histórico do navegador funcionam", async () => {
+    await runScenario("navegação entre telas e histórico do navegador funcionam", async () => {
       await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
+
+      await page.getByText("Listas", { exact: true }).last().click()
+      await page.getByPlaceholder("Nome da lista").waitFor()
+      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
       await page.getByText("Calculadora", { exact: true }).last().click()
       await page.getByText("Calculadora", { exact: true }).last().waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+
+      await page.goBack({ waitUntil: "networkidle" })
+      await page.getByPlaceholder("Nome da lista").waitFor()
+      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
       await page.goBack({ waitUntil: "networkidle" })
       await page.getByText("Total Geral:", { exact: false }).waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
+
       await page.goForward({ waitUntil: "networkidle" })
+      await page.getByPlaceholder("Nome da lista").waitFor()
+      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
+      await page.goForward({ waitUntil: "networkidle" })
+      await page.getByText("Calculadora", { exact: true }).last().waitFor()
       assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
     }, pageErrors)
 
-    await runScenario("rota inexistente preserva o caminho no fallback SPA", async () => {
+    await runScenario("rota inexistente executa o fallback SPA e preserva o caminho", async () => {
       const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
+      let fallbackStatus: number | undefined
+      page.on("response", response => {
+        if (new URL(response.url()).pathname === invalidPath) {
+          fallbackStatus = response.status()
+        }
+      })
+
       await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
       await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
+      await page.waitForFunction(() => document.title === "Gastômetro")
+
+      assert.equal(fallbackStatus, 404, "A rota inexistente deve ser atendida pelo arquivo 404.html")
       assert.equal(new URL(page.url()).pathname, invalidPath)
-      assert.ok(await page.locator("body").innerText())
+      assert.notEqual((await page.locator("body").innerText()).trim(), "")
+      assert.ok(
+        !(await page.locator("body").innerText()).includes("Redirecionando..."),
+        "A página não deve permanecer no documento de redirecionamento",
+      )
     }, pageErrors)
     await context.tracing.stop()
   } catch (error) {
