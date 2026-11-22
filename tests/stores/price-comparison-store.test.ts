@@ -63,7 +63,37 @@ describe('PriceComparisonStore', () => {
     const place = usePriceComparisonStore.getState().places[0]
     expect(store.addEntry({ itemName: ' ', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(false)
     expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [] })).toBe(false)
-    expect(store.updateEntry('inexistente', { itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(true)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: 'inexistente', price: '1' }] })).toBe(false)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: '-1' }] })).toBe(false)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: 'inválido' }] })).toBe(false)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [
+      { placeId: place.id, price: '1' },
+      { placeId: place.id, price: '2' },
+    ] })).toBe(false)
+    expect(store.updateEntry('inexistente', { itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(false)
     expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+  })
+
+  it('normaliza dados válidos e não altera o registro quando uma edição é inválida', () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado A', note: '  unidade central  ' })
+    const place = usePriceComparisonStore.getState().places[0]
+    expect(place.note).toBe('unidade central')
+    expect(store.addEntry({
+      itemName: '  Arroz  ',
+      quantityReference: '  1 kg  ',
+      pricesByPlace: [{ placeId: place.id, price: ' 10,50 ' }],
+    })).toBe(true)
+    const created = usePriceComparisonStore.getState().entries[0]
+    expect(created).toMatchObject({
+      itemName: 'Arroz',
+      quantityReference: '1 kg',
+      pricesByPlace: [{ placeId: place.id, price: '10,50' }],
+    })
+    expect(store.updateEntry(created.id, {
+      itemName: 'Arroz integral',
+      pricesByPlace: [{ placeId: 'unknown', price: '12' }],
+    })).toBe(false)
+    expect(usePriceComparisonStore.getState().entries[0]).toEqual(created)
   })
 })
