@@ -64,6 +64,8 @@ describe('PriceComparison screen', () => {
 
     expect(screen.getByText('Arroz')).toBeTruthy()
     expect(screen.getByText('Mercado B · Melhor preço')).toBeTruthy()
+    expect(screen.getByText('Mercado A · Maior preço')).toBeTruthy()
+    expect(screen.getByText('Maior preço: Mercado A (R$ 10,00)')).toBeTruthy()
     expect(screen.getAllByText('Cesta completa')[0]).toBeTruthy()
     expect(screen.getByText(/Menor total/)).toBeTruthy()
 
