@@ -2,7 +2,28 @@
 
 ## 1.8.2 - 2026-11-21
 
-Adiciona teste E2E
+Implementação da mini-spec 14: suíte E2E para validar o roteamento web SPA e o fallback utilizado no GitHub Pages.
+
+### Qualidade e testes
+
+- Adicionada suíte Playwright com sete cenários: carregamento da raiz, acesso direto e atualização das rotas de calculadora e listas, navegação entre telas com histórico do navegador e fallback para rota inexistente.
+- Cada cenário é executado em contexto isolado e a suíte completa roda em três ciclos consecutivos.
+- Incluída validação de exceções JavaScript, erros no console, requisições malsucedidas e respostas HTTP de erro em recursos.
+- Adicionada captura de screenshots e traces para facilitar o diagnóstico de falhas.
+- Criado o workflow `.github/workflows/test-web-e2e.yml`, com execução em pull requests para `main` e em atualizações da própria branch.
+- O workflow também verifica os tipos TypeScript e publica evidências quando a suíte falha.
+
+### Web e roteamento
+
+- Corrigida a restauração de rotas profundas do GitHub Pages para ocorrer após a hidratação inicial do Expo Router, evitando divergência entre o HTML inicial e a rota restaurada.
+- Adicionada página própria em pt-BR para rotas inexistentes.
+- Removido o script de injeção de redirecionamento executado antes da hidratação, substituído pela restauração controlada no layout.
+
+### Documentação
+
+- Criado `docs/WEB_E2E.md` com requisitos, preparação do Chromium, execução local, cenários cobertos, CI e limitações.
+- Mini-spec 14 movida para `docs/specs/done/` e marcada como concluída.
+- Atualizados README, SPEC e índice de mini-specs para refletir a cobertura E2E implementada.
 
 ## 1.8.1 - 2026-11-15
 
