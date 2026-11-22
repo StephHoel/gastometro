@@ -28,7 +28,7 @@ O comando:
 
 1. Gera a build estática com EXPO_PUBLIC_ROUTER_BASE=/gastometro.
 2. Copia os arquivos de fallback e Service Worker usados no deploy.
-3. Injeta o script de restauração de rota no index.html.
+3. O layout restaura o caminho salvo pelo 404 após a hidratação inicial, evitando divergência entre o HTML estático e a rota final.
 4. Inicia um servidor HTTP local sob o caminho /gastometro/.
 5. Executa os cenários em Chromium três vezes, criando um contexto de navegador independente para cada cenário.
 
@@ -44,7 +44,7 @@ Os testes não escrevem dados de negócio nem alteram o formato de persistência
 
 ## Integração contínua
 
-O workflow `Testes E2E Web` executa a suíte em pull requests direcionados à `main` e em atualizações da própria `main`. Ele instala Node.js 24, dependências do projeto e Chromium. Quando há falha, publica os screenshots e traces disponíveis como artefatos da execução.
+O workflow `Testes E2E Web` executa a suíte em pull requests direcionados à `main` e em atualizações da própria `main`. Ele instala Node.js 24, dependências do projeto, verifica os tipos TypeScript e instala o Chromium. Quando há falha, publica os screenshots e traces disponíveis como artefatos da execução.
 
 ## Diagnóstico
 
