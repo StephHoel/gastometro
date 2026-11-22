@@ -139,13 +139,14 @@ describe('Lists screen', () => {
   })
 
   it('cria lista quando nome é válido', async () => {
-    const { getByPlaceholderText, getByText } = await render(<Lists />)
+    const { getByPlaceholderText, getByText } = render(<Lists />)
 
-    await fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
+    fireEvent.changeText(getByPlaceholderText(INPUTS.placeholder.list_name), '  Feira  ')
+    fireEvent.press(getByText('AddIcon'))
 
-    await fireEvent.press(getByText('AddIcon'))
-
-    expect(mockStore.addList).toHaveBeenCalledWith('Feira')
+    await waitFor(() => {
+      expect(mockStore.addList).toHaveBeenCalledWith('Feira')
+    })
     expect(mockAlertOk).not.toHaveBeenCalled()
   })
 
