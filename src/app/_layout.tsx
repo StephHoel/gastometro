@@ -75,15 +75,10 @@ export default function Layout() {
     window.sessionStorage.removeItem('redirect')
 
     const redirectUrl = new URL(redirect, window.location.origin)
-    const basePath = new URL(document.baseURI).pathname.replace(/\/$/, '')
-    const routePath = basePath && redirectUrl.pathname.startsWith(basePath + '/')
-      ? redirectUrl.pathname.slice(basePath.length)
-      : redirectUrl.pathname
-
     window.history.replaceState(
       window.history.state,
       '',
-      routePath + redirectUrl.search + redirectUrl.hash,
+      redirectUrl.pathname + redirectUrl.search + redirectUrl.hash,
     )
     window.dispatchEvent(new PopStateEvent('popstate'))
   }, [])
