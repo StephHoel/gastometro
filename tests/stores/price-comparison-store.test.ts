@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 
@@ -83,6 +84,21 @@ describe('PriceComparisonStore', () => {
       pricesByPlace: [{ placeId: place.id, price: '1' }],
     })).toBe(false)
     expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+  })
+
+  it('persiste os dados em uma chave exclusiva', async () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado Persistido' })
+    const stored = await AsyncStorage.getItem('gastometro-price-comparisons')
+
+    expect(stored).not.toBeNull()
+    expect(JSON.parse(stored ?? '{}')).toMatchObject({
+      state: {
+        places: [{ name: 'Mercado Persistido' }],
+        entries: [],
+      },
+      version: 1,
+    })
   })
 
   it('normaliza dados válidos e preserva o registro quando uma edição é inválida', () => {
