@@ -1,4 +1,4 @@
-import { Tabs, usePathname, useRouter } from "expo-router"
+import { Tabs, usePathname, useRouter, type Href } from "expo-router"
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -66,6 +66,22 @@ export default function Layout() {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+
+    const redirect = window.sessionStorage.getItem('redirect')
+    if (!redirect) return
+
+    window.sessionStorage.removeItem('redirect')
+
+    const redirectUrl = new URL(redirect, window.location.origin)
+    const basePath = new URL(document.baseURI).pathname.replace(/\\/$/, '')
+    const routePath = basePath && redirectUrl.pathname.startsWith(basePath + '/')
+      ? redirectUrl.pathname.slice(basePath.length)
+      : redirectUrl.pathname
+
+    router.replace((routePath + redirectUrl.search + redirectUrl.hash) as Href)
+  }, [router])
 
   useEffect(() => {
     if (Platform.OS === 'web') {
