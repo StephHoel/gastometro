@@ -29,7 +29,7 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Já existe um lugar com esse nome.')).toBeTruthy()
   })
 
-  it('edita, cancela e remove lugares', () => {
+  it('edita, cancela e remove lugares', async () => {
     const store = usePriceComparisonStore.getState()
     store.addPlace({ name: 'Mercado A', note: 'Antiga' })
     const screen = await render(<PriceComparison />)
@@ -49,7 +49,7 @@ describe('PriceComparison screen', () => {
     expect(screen.queryByText('Mercado B')).toBeNull()
   })
 
-  it('cadastra, edita, ordena e remove itens e mostra cesta completa ou incompleta', () => {
+  it('cadastra, edita, ordena e remove itens e mostra cesta completa ou incompleta', async () => {
     const store = usePriceComparisonStore.getState()
     store.addPlace({ name: 'Mercado A' })
     store.addPlace({ name: 'Mercado B' })
