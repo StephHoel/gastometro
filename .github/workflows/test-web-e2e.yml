@@ -1,0 +1,45 @@
+name: Testes E2E Web
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  web-routing-e2e:
+    name: Roteamento web SPA
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Instalar Chromium e dependências do sistema
+        run: npx --yes --package=playwright@1.56.1 playwright install --with-deps chromium
+
+      - name: Executar testes E2E web
+        run: npm run test:e2e:web
+
+      - name: Publicar evidências de falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-e2e-web
+          path: artifacts/web-e2e/
+          if-no-files-found: ignore
