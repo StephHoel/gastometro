@@ -70,4 +70,4 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 - O workflow `Testes E2E Web` executa a suíte em pull requests para `main` e em atualizações de `main`; em caso de falha, publica os artefatos de diagnóstico.
 - Foi criada uma tela `+not-found.tsx` própria para apresentar a rota inexistente em pt-BR.
 - A restauração da rota deixou de ocorrer em script executado antes da hidratação. O layout lê o caminho salvo pelo `404.html` e navega após a montagem inicial, evitando erro de hidratação.
-- A validação foi concluída no GitHub Actions: o workflow `Testes E2E Web` executou todos os sete cenários em três ciclos consecutivos, sem falhas, no commit `b2ac4c96618909066c75f14be44d2cf797d08ead`.
+- A validação mais recente foi concluída no GitHub Actions no commit `dcd114a8cfdd8679033019ee2c7e7a8ac5f81669`: os sete cenários E2E passaram em três ciclos consecutivos, e os workflows de build APK/release, Expo Doctor, verificação de aumento de versão e CodeQL também finalizaram com sucesso.
