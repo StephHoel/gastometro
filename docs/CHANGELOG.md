@@ -20,8 +20,9 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 
 ### Qualidade e testes
 
-- Ampliação da suíte automatizada, com medição global de 96,62% em statements, 92,20% em branches, 96,15% em funções e 97,82% em linhas.
-- A execução registrou 298 testes aprovados e 2 falhas, nos testes de store de carrinho e de contas. Os percentuais representam a medição produzida pelo Jest, mas a suíte ainda não está totalmente verde.
+- Na execução de CI de 2026-11-22, o Jest mediu 96,64% em statements, 92,00% em branches, 96,21% em funções e 97,86% em linhas; 300 testes passaram e 3 falharam.
+- As três falhas foram corrigidas: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta foi ajustada para seu próprio controle. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
+- A reexecução da suíte e do build está em andamento após essas correções; os percentuais acima são a medição da execução anterior, não uma aprovação da nova execução.
 - O gate mínimo global de cobertura permanece em 80%.
 
 ### Documentação
