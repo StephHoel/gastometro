@@ -129,7 +129,7 @@ describe('PriceComparison screen', () => {
     })
     const screen = await render(<PriceComparison />)
 
-    expect(screen.getAllByText('Não disponível')).toHaveLength(2)
+    expect(screen.getAllByText(/Não disponível/)).toHaveLength(2)
     await fireEvent.press(screen.getByLabelText('Editar comparação de Leite'))
     expect(screen.getByLabelText('Quantidade de referência').props.value).toBe('')
     await fireEvent.press(screen.getByText('Cancelar'))
