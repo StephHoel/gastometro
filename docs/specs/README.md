@@ -14,15 +14,6 @@ Use estes documentos antes de iniciar qualquer alteração de produto. Quando um
 
 Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caracteres especiais.
 
-## Resumo de Status
-
-| Status | Quantidade | Últimas Atualizações |
-| ------ | ---------- | -------------------- |
-| **Implementadas** | 15 | Mini-spec 14 (testes E2E de roteamento web SPA) |
-| **Ativas** | 1 | Mini-spec 05 (testes - evolução contínua) |
-| **Planejadas** | 6 | Em prioridade de execução |
-| **Total** | 22 | - |
-
 ## Status das mini-specs
 
 ### Implementadas (ordem de conclusão)
