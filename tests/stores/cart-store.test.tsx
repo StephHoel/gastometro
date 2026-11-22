@@ -1,8 +1,13 @@
+import uuid from 'react-native-uuid'
 import { useCartStore } from '@/stores/CartStore'
 import type { ProductProps } from '@/interfaces/ProductProps'
 
 describe('useCartStore', () => {
+  let uuidCounter = 0
+
   beforeEach(() => {
+    uuidCounter = 0
+    jest.mocked(uuid.v4).mockImplementation(() => [++uuidCounter])
     useCartStore.setState({
       lists: [{ id: 'list-1', name: 'Lista 1', products: [] }],
       activeListId: 'list-1',
