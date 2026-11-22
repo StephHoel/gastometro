@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import type { IncomingMessage, Server, ServerResponse } from "node:http"
+
 const assert = require("node:assert/strict")
 const { spawnSync } = require("node:child_process")
 const fs = require("node:fs")
@@ -30,7 +32,7 @@ function run(
 
 function mimeType(filePath: string): string {
   const extension = path.extname(filePath).toLowerCase()
-  return ({
+  const mimeTypes: Record<string, string> = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
@@ -42,11 +44,12 @@ function mimeType(filePath: string): string {
     ".woff": "font/woff",
     ".woff2": "font/woff2",
     ".ico": "image/x-icon",
-  })[extension] || "application/octet-stream"
+  }
+  return mimeTypes[extension] ?? "application/octet-stream"
 }
 
-function startStaticServer(): Promise<import("node:http").Server> {
-  const server = http.createServer((request, response) => {
+function startStaticServer(): Promise<Server> {
+  const server = http.createServer((request: IncomingMessage, response: ServerResponse) => {
     let pathname: string
     try {
       pathname = decodeURIComponent(new URL(request.url ?? "/", BASE_URL).pathname)
@@ -119,8 +122,8 @@ async function waitForServer(): Promise<void> {
 function loadPlaywright(): any {
   const packageEntry = (process.env.PATH ?? "")
     .split(delimiter)
-    .map(directory => path.resolve(directory, "..", "playwright", "index.js"))
-    .find(candidate => fs.existsSync(candidate))
+    .map((directory: string) => path.resolve(directory, "..", "playwright", "index.js"))
+    .find((candidate: string) => fs.existsSync(candidate))
 
   if (!packageEntry) {
     throw new Error("Playwright não foi encontrado. Execute o comando pelo script npm.")
@@ -179,7 +182,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await runScenario("rota inexistente preserva o caminho no fallback SPA", async () => {
       const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
       await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
-      await page.waitForFunction(expected => window.location.pathname === expected, invalidPath)
+      await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
       assert.equal(new URL(page.url()).pathname, invalidPath)
       assert.ok(await page.locator("body").innerText())
     })
