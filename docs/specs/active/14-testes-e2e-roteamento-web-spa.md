@@ -67,4 +67,5 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 - O cenário de rota inválida confirma a resposta HTTP 404, a inicialização da aplicação após o redirecionamento e a preservação da URL solicitada.
 - Cada cenário usa um contexto de navegador independente, evitando compartilhamento de cookies, armazenamento e histórico. Em caso de falha, são salvos screenshot e trace específicos do cenário.
 - A validação de erros inclui exceções JavaScript, erros no console, requisições malsucedidas e respostas HTTP de erro para recursos não documentais.
+- O workflow `Testes E2E Web` executa a suíte em pull requests para `main` e em atualizações de `main`; em caso de falha, publica os artefatos de diagnóstico.
 - A implementação e a documentação estão atualizadas; a execução local da suíte três vezes ainda precisa ser confirmada antes de concluir a mini-spec.
