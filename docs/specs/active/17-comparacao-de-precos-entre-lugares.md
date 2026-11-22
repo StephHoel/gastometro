@@ -102,11 +102,11 @@ interface PriceComparisonEntryProps {
 - [x] Cadastro, edição e remoção de itens com preços parciais por lugar.
 - [x] Persistência offline-first em chave exclusiva, sem alterar os dados de listas, contas ou lembretes.
 - [x] Validação de preços não negativos, lugares existentes e identificadores válidos.
-- [x] Comparação de menor e maior oferta, diferença absoluta e percentual relativo à maior oferta.
+- [x] Comparação de menor e maior oferta, com identificação visual dos respectivos lugares, diferença absoluta e percentual relativo à maior oferta.
 - [x] Tratamento de preço zero como válido e de preço ausente/inválido como indisponível.
 - [x] Cesta completa somente quando todos os itens possuem preço válido no lugar.
 - [x] Ordenação independente das ofertas por item e dos totais da cesta.
 - [x] Acesso à tela pela navegação principal.
 - [x] Testes unitários, de store e de tela cobrindo os critérios funcionais.
-- [ ] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22.
+- [x] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22: 303 testes aprovados, cobertura de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
 - [ ] Validação manual da funcionalidade antes de mover a mini-spec para `done/`.
