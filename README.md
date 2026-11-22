@@ -54,7 +54,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Testes E2E para roteamento web SPA](docs/specs/planned/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
@@ -64,6 +63,7 @@ As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/s
 
 Funcionalidades concluídas recentemente:
 
+- Testes E2E do roteamento web SPA com Playwright, cobrindo rotas profundas, refresh, navegação/histórico e fallback do GitHub Pages (mini-spec 14 em `docs/specs/done/`).
 - Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
