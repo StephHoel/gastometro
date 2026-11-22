@@ -131,119 +131,157 @@ function loadPlaywright(): any {
   return require(packageEntry)
 }
 
-async function runScenario(name: string, action: () => Promise<void>, pageErrors: string[]): Promise<void> {
-  await action()
-  assert.deepEqual(pageErrors, [], "A aplicação apresentou erro JavaScript")
-  process.stdout.write("  ✓ " + name + "\n")
-}
-
-async function runSuite(browser: any, cycle: number): Promise<void> {
+async function runScenario(
+  browser: any,
+  name: string,
+  action: (page: any) => Promise<void>,
+  cycle: number,
+): Promise<void> {
   const context = await browser.newContext()
   const page = await context.newPage()
   const pageErrors: string[] = []
+  const consoleErrors: string[] = []
+  const failedRequests: string[] = []
+  const failedResources: string[] = []
   const artifactsDirectory = path.join(ROOT, "artifacts", "web-e2e")
+  const artifactPrefix = "execucao-" + cycle + "-" + name
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase()
+
   page.on("pageerror", (error: Error) => pageErrors.push(error.message))
+  page.on("console", (message: any) => {
+    if (message.type() === "error") consoleErrors.push(message.text())
+  })
+  page.on("requestfailed", (request: any) => {
+    failedRequests.push(request.url() + ": " + (request.failure()?.errorText ?? "falha desconhecida"))
+  })
+  page.on("response", (response: any) => {
+    if (response.status() >= 400 && response.request().resourceType() !== "document") {
+      failedResources.push(response.url() + ": HTTP " + response.status())
+    }
+  })
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true })
 
   try {
-    await runScenario("raiz carrega a tela inicial", async () => {
-      const response = await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
-      assert.equal(response.status(), 200)
-      await page.getByText("Total Geral:", { exact: false }).waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
-      assert.equal(await page.title(), "Gastômetro")
-    }, pageErrors)
-
-    await runScenario("rota profunda abre diretamente", async () => {
-      const response = await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
-      assert.ok(response.status() === 200 || response.status() === 404)
-      await page.getByText("Calculadora", { exact: true }).last().waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-      assert.equal(await page.title(), "Calculadora")
-    }, pageErrors)
-
-    await runScenario("atualização mantém a rota profunda", async () => {
-      await page.reload({ waitUntil: "networkidle" })
-      await page.getByText("Calculadora", { exact: true }).last().waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-      assert.equal(await page.title(), "Calculadora")
-    }, pageErrors)
-
-    await runScenario("rota de listas abre diretamente", async () => {
-      const response = await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
-      assert.ok(response.status() === 200 || response.status() === 404)
-      await page.getByPlaceholder("Nome da lista").waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-      assert.equal(await page.title(), "Listas")
-    }, pageErrors)
-
-    await runScenario("atualização mantém a rota de listas", async () => {
-      await page.reload({ waitUntil: "networkidle" })
-      await page.getByPlaceholder("Nome da lista").waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-      assert.equal(await page.title(), "Listas")
-    }, pageErrors)
-
-    await runScenario("navegação entre telas e histórico do navegador funcionam", async () => {
-      await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
-
-      await page.getByText("Listas", { exact: true }).last().click()
-      await page.getByPlaceholder("Nome da lista").waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-
-      await page.getByText("Calculadora", { exact: true }).last().click()
-      await page.getByText("Calculadora", { exact: true }).last().waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-
-      await page.goBack({ waitUntil: "networkidle" })
-      await page.getByPlaceholder("Nome da lista").waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-
-      await page.goBack({ waitUntil: "networkidle" })
-      await page.getByText("Total Geral:", { exact: false }).waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
-
-      await page.goForward({ waitUntil: "networkidle" })
-      await page.getByPlaceholder("Nome da lista").waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-
-      await page.goForward({ waitUntil: "networkidle" })
-      await page.getByText("Calculadora", { exact: true }).last().waitFor()
-      assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    }, pageErrors)
-
-    await runScenario("rota inexistente executa o fallback SPA e preserva o caminho", async () => {
-      const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
-      let fallbackStatus: number | undefined
-      page.on("response", response => {
-        if (new URL(response.url()).pathname === invalidPath) {
-          fallbackStatus = response.status()
-        }
-      })
-
-      await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
-      await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
-      await page.waitForFunction(() => document.title === "Gastômetro")
-
-      assert.equal(fallbackStatus, 404, "A rota inexistente deve ser atendida pelo arquivo 404.html")
-      assert.equal(new URL(page.url()).pathname, invalidPath)
-      assert.notEqual((await page.locator("body").innerText()).trim(), "")
-      assert.ok(
-        !(await page.locator("body").innerText()).includes("Redirecionando..."),
-        "A página não deve permanecer no documento de redirecionamento",
-      )
-    }, pageErrors)
+    await action(page)
+    assert.deepEqual(pageErrors, [], "A aplicação apresentou exceção JavaScript")
+    assert.deepEqual(consoleErrors, [], "O navegador registrou erros no console")
+    assert.deepEqual(failedRequests, [], "Uma ou mais requisições falharam")
+    assert.deepEqual(failedResources, [], "Um ou mais recursos retornaram HTTP de erro")
     await context.tracing.stop()
+    process.stdout.write("  ✓ " + name + "\\n")
   } catch (error) {
     fs.mkdirSync(artifactsDirectory, { recursive: true })
-    const artifactPrefix = "execucao-" + cycle
     await page.screenshot({ path: path.join(artifactsDirectory, artifactPrefix + ".png"), fullPage: true }).catch(() => undefined)
     await context.tracing.stop({ path: path.join(artifactsDirectory, artifactPrefix + "-trace.zip") }).catch(() => undefined)
     throw error
   } finally {
     await context.close()
   }
-  process.stdout.write("Execução " + cycle + "/3 concluída.\n")
+}
+
+async function runSuite(browser: any, cycle: number): Promise<void> {
+  const run = (name: string, action: (page: any) => Promise<void>) =>
+    runScenario(browser, name, action, cycle)
+
+  await run("raiz carrega a tela inicial", async page => {
+    const response = await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
+    assert.equal(response.status(), 200)
+    await page.getByText("Total Geral:", { exact: false }).waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
+    assert.equal(await page.title(), "Gastômetro")
+  })
+
+  await run("rota profunda abre diretamente", async page => {
+    const response = await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
+    assert.ok(response.status() === 200 || response.status() === 404)
+    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+    assert.equal(await page.title(), "Calculadora")
+  })
+
+  await run("atualização mantém a rota profunda", async page => {
+    const response = await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
+    assert.ok(response.status() === 200 || response.status() === 404)
+    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    await page.reload({ waitUntil: "networkidle" })
+    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+    assert.equal(await page.title(), "Calculadora")
+  })
+
+  await run("rota de listas abre diretamente", async page => {
+    const response = await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
+    assert.ok(response.status() === 200 || response.status() === 404)
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+    assert.equal(await page.title(), "Listas")
+  })
+
+  await run("atualização mantém a rota de listas", async page => {
+    const response = await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
+    assert.ok(response.status() === 200 || response.status() === 404)
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    await page.reload({ waitUntil: "networkidle" })
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+    assert.equal(await page.title(), "Listas")
+  })
+
+  await run("navegação entre telas e histórico do navegador funcionam", async page => {
+    await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
+
+    await page.getByText("Listas", { exact: true }).last().click()
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
+    await page.getByText("Calculadora", { exact: true }).last().click()
+    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+
+    await page.goBack({ waitUntil: "networkidle" })
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
+    await page.goBack({ waitUntil: "networkidle" })
+    await page.getByText("Total Geral:", { exact: false }).waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
+
+    await page.goForward({ waitUntil: "networkidle" })
+    await page.getByPlaceholder("Nome da lista").waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
+
+    await page.goForward({ waitUntil: "networkidle" })
+    await page.getByText("Calculadora", { exact: true }).last().waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+  })
+
+  await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
+    const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
+    let fallbackStatus: number | undefined
+    page.on("response", response => {
+      if (new URL(response.url()).pathname === invalidPath) {
+        fallbackStatus = response.status()
+      }
+    })
+
+    await page.goto("http://127.0.0.1:" + PORT + invalidPath, { waitUntil: "networkidle" })
+    await page.waitForFunction((expected: string) => window.location.pathname === expected, invalidPath)
+    await page.waitForFunction(() => document.title === "Gastômetro")
+
+    assert.equal(fallbackStatus, 404, "A rota inexistente deve ser atendida pelo arquivo 404.html")
+    assert.equal(new URL(page.url()).pathname, invalidPath)
+    assert.notEqual((await page.locator("body").innerText()).trim(), "")
+    assert.ok(
+      !(await page.locator("body").innerText()).includes("Redirecionando..."),
+      "A página não deve permanecer no documento de redirecionamento",
+    )
+  })
+
+  process.stdout.write("Execução " + cycle + "/3 concluída.\\n")
 }
 
 async function main(): Promise<void> {
