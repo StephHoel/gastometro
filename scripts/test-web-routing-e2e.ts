@@ -167,10 +167,10 @@ async function runScenario(
 
   try {
     await action(page)
-    assert.deepEqual(pageErrors, [], "A aplicação apresentou exceção JavaScript")
-    assert.deepEqual(consoleErrors, [], "O navegador registrou erros no console")
-    assert.deepEqual(failedRequests, [], "Uma ou mais requisições falharam")
-    assert.deepEqual(failedResources, [], "Um ou mais recursos retornaram HTTP de erro")
+    assert.equal(pageErrors.length, 0, "Exceções JavaScript:\\n" + pageErrors.join("\\n"))
+    assert.equal(consoleErrors.length, 0, "Erros no console:\\n" + consoleErrors.join("\\n"))
+    assert.equal(failedRequests.length, 0, "Requisições malsucedidas:\\n" + failedRequests.join("\\n"))
+    assert.equal(failedResources.length, 0, "Recursos com HTTP de erro:\\n" + failedResources.join("\\n"))
     await context.tracing.stop()
     process.stdout.write("  ✓ " + name + "\n")
   } catch (error) {
