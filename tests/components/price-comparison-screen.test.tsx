@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 import uuid from 'react-native-uuid'
-import PriceComparison from '@/app/price-comparison'
+import PriceComparison from '@/app/(tabs)/price-comparison'
 import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 
 describe('PriceComparison screen', () => {

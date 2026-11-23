@@ -1,7 +1,7 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
-import Lists from '@/app/lists'
+import Lists from '@/app/(tabs)/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'

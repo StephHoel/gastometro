@@ -16,6 +16,7 @@ import { SIZE } from '@/constants/size'
 import { Row } from '@/components/Row'
 import { AlertService } from '@/services/AlertService'
 import { ReminderFormData } from '@/interfaces/FormData/ReminderFormData'
+import { ROUTES } from '@/constants/routes'
 
 export function FormReminder({ listId, reminderId, textButton, iconButton, includeDeleteButton }: FormReminderProps) {
   const reminderStore = useReminderStore()
@@ -50,7 +51,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   }
 
   function redirect() {
-    router.push(`/reminders/${listId}`)
+    router.push(ROUTES.Reminder.Id(listId))
   }
 
   function handleRemoveReminder() {

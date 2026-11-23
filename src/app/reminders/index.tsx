@@ -11,6 +11,7 @@ import { useReminderStore } from '@/stores/ReminderStore'
 import { toDisplayDate } from '@/utils/functions/DateFunctions'
 import { ReminderFilter } from '@/interfaces/ReminderFilter'
 import { REMINDERS } from '@/constants/text/reminders'
+import { ROUTES } from '@/constants/routes'
 
 export default function ReminderCenter() {
   const router = useRouter()
@@ -91,7 +92,7 @@ export default function ReminderCenter() {
               <Row className="gap-2 mt-3">
                 <TouchableOpacity
                   className="bg-lime-400 rounded px-2 py-1"
-                  onPress={() => router.push(`./${item.listId}`)}
+                  onPress={() => router.push(ROUTES.Reminder.Id(item.listId))}
                 >
                   <TextWhite className="text-black text-xs">{REMINDERS.open_list_button}</TextWhite>
                 </TouchableOpacity>

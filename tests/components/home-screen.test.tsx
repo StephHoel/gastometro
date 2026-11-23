@@ -1,7 +1,7 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { render } from '@testing-library/react-native'
-import Home from '@/app/index'
+import Home from '@/app/(tabs)/index'
 
 const mockUseCartStore = jest.fn()
 const mockUseInitAlert = jest.fn()
