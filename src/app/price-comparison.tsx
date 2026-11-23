@@ -15,6 +15,9 @@ import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 import { SetCurrency } from '@/utils/functions/MathFunctions'
 import React, { useMemo, useState } from 'react'
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
+import { Delete } from '@/components/TouchableIcons'
+import { SIZE } from '@/constants/size'
+import { AlertService } from '@/services/AlertService'
 
 export default function PriceComparison() {
   const places = usePriceComparisonStore((state) => state.places)
@@ -114,17 +117,31 @@ export default function PriceComparison() {
     return value === null ? 'Não disponível' : SetCurrency(value)
   }
 
+  function onDelete(placeId: string, placeName?: string) {
+    AlertService.remove(() => {
+      removePlace(placeId)
+      if (editingPlaceId === placeId) resetPlaceForm()
+    }, placeName)
+  }
+
   return (
     <Page>
-      <ScrollView className="flex-1" keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 36 }}>
+      <ScrollView
+        className="flex-1"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 36 }}
+      >
         <View className="px-4 pt-4 gap-4">
           <View className="gap-1">
             <TextWhite className="text-2xl font-bold">Comparação de preços</TextWhite>
-            <TextWhite className="text-sm text-slate-400">Compare cada produto e descubra onde a cesta completa custa menos.</TextWhite>
+            <TextWhite className="text-sm text-slate-400">Compare cada produto e descubra onde seu carrinho completo custa menos.</TextWhite>
           </View>
 
           <Card className="p-4 gap-3 border-0 bg-slate-800">
-            <TextWhite className="text-lg font-bold">{editingPlaceId ? 'Editar lugar' : 'Cadastrar lugar'}</TextWhite>
+            <TextWhite className="text-lg font-bold">
+              {editingPlaceId ? 'Editar lugar' : 'Cadastrar lugar'}
+            </TextWhite>
+
             <TextInput
               className="rounded-lg bg-slate-700 px-3 py-3 text-white"
               placeholder="Nome do mercado ou loja"
@@ -134,6 +151,7 @@ export default function PriceComparison() {
               onChangeText={setPlaceName}
               maxLength={60}
             />
+
             <TextInput
               className="rounded-lg bg-slate-700 px-3 py-3 text-white"
               placeholder="Observação (opcional)"
@@ -143,23 +161,35 @@ export default function PriceComparison() {
               onChangeText={setPlaceNote}
               maxLength={120}
             />
+
             <Row className="gap-2">
               <Button className="mx-0 flex-1" onPress={savePlace}>
-                <Button.Text className="text-base">{editingPlaceId ? 'Salvar lugar' : 'Adicionar lugar'}</Button.Text>
+                <Button.Text className="text-base">
+                  {editingPlaceId ? 'Salvar lugar' : 'Adicionar lugar'}
+                </Button.Text>
               </Button>
-              {editingPlaceId && <Button type="Normal" className="mx-0 flex-1" onPress={resetPlaceForm}><Button.Text className="text-base">Cancelar</Button.Text></Button>}
+
+              {editingPlaceId && <Button
+                type="Normal"
+                className="mx-0 flex-1"
+                onPress={resetPlaceForm}
+              >
+                <Button.Text className="text-base">Cancelar</Button.Text>
+              </Button>}
             </Row>
+
             {places.map((place) => (
-              <Row key={place.id} className="items-center justify-between border-t border-slate-700 pt-2 gap-2">
-                <View className="flex-1">
-                  <TextWhite className="font-semibold">{place.name}</TextWhite>
+              <Row key={place.id} className="items-center justify-between border-t border-slate-700 pt-2 gap-4">
+                <Delete action={() => onDelete(place.id, place.name)} size={SIZE.iconActions} />
+
+                <TouchableOpacity
+                  className="flex-1"
+                  accessibilityLabel={'Editar ' + place.name}
+                  onPress={() => startEditPlace(place.id)}
+                >
+                  <TextWhite className="font-semibold text-xl">{place.name}</TextWhite>
+
                   {!!place.note && <TextWhite className="text-xs text-slate-400">{place.note}</TextWhite>}
-                </View>
-                <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Editar ' + place.name} onPress={() => startEditPlace(place.id)}>
-                  <TextWhite className="text-lime-400 text-sm">Editar</TextWhite>
-                </TouchableOpacity>
-                <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Remover ' + place.name} onPress={() => { removePlace(place.id); if (editingPlaceId === place.id) resetPlaceForm() }}>
-                  <TextWhite className="text-red-400 text-sm">Remover</TextWhite>
                 </TouchableOpacity>
               </Row>
             ))}

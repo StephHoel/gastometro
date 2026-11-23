@@ -1,4 +1,4 @@
-import { AddIcon, BackIcon, TrashIcon, ShareIcon, NotificationIcon, EditIcon } from "@/components/Icons"
+import { AddIcon, BackIcon, TrashIcon, ShareIcon, NotificationIcon, EditIcon, CartIcon, MarketIcon } from "@/components/Icons"
 import type { IconsProps } from "@/interfaces/IconsProps"
 import type { IconButtonProps } from '@/interfaces/IconButtonProps'
 import { TouchableOpacity, View } from "react-native"
@@ -61,6 +61,22 @@ export function Back({ action, size = 35 }: IconsProps) {
   return (
     <IconButton action={action}>
       <BackIcon size={size} />
+    </IconButton>
+  )
+}
+
+export function Market({ action, size = 35 }: IconsProps) {
+  return (
+    <IconButton action={action}>
+      <MarketIcon size={size} />
+    </IconButton>
+  )
+}
+
+export function Cart({ action, size = 35 }: IconsProps) {
+  return (
+    <IconButton action={action}>
+      <CartIcon size={size} />
     </IconButton>
   )
 }
