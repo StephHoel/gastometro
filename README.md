@@ -1,8 +1,8 @@
 # Gastômetro
 
 [![Release](https://img.shields.io/badge/Release-v1.9.0-blue)](docs/CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
+[![Tests](https://img.shields.io/badge/Tests-298%20passing-yellow)](docs/specs/active/05-testes-automatizados.md)
+[![Coverage](https://img.shields.io/badge/Coverage-97.82%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -208,7 +208,7 @@ Cobertura:
 npm run test:coverage
 ```
 
-O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%.
+O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. A última medição registrada (22/11/2026) foi de 97,82% em linhas, 96,62% em statements, 92,20% em branches e 96,15% em funções. Nessa execução, 298 testes passaram e 2 falharam; portanto, os percentuais são uma medição diagnóstica e a suíte ainda precisa voltar a ficar verde.
 
 Cobertura com exportação CSV:
 
