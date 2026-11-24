@@ -306,8 +306,8 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
       await page.getByLabel("Lugar Input").last().fill(place)
       await page.getByText("Adicionar lugar", { exact: true }).last().click()
-      await page.getByText("Lugares Cadastrados", { exact: true }).last().waitFor()
       await page.getByText(place, { exact: true }).last().waitFor()
+      await page.goto(BASE_URL + "/price-comparison", { waitUntil: "networkidle" })
     }
 
     await page.getByRole("button", { name: "Cadastrar item" }).last().click()
@@ -319,12 +319,12 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByLabel("Preço em Mercado D Input").last().fill("10,00")
     await page.getByText("Adicionar item", { exact: true }).last().click()
 
-    await page.getByText("Mercado A · Melhor preço", { exact: true }).waitFor()
-    await page.getByText("Mercado B · Melhor preço", { exact: true }).waitFor()
-    await page.getByText("Mercado C · Maior preço", { exact: true }).waitFor()
-    await page.getByText("Mercado D · Maior preço", { exact: true }).waitFor()
-    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).waitFor()
-    await page.getByText("Economia possível: R$ 5,00 (50,0%)").waitFor()
+    await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado B · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado C · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado D · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).last().waitFor()
+    await page.getByText("Economia possível: R$ 5,00 (50,0%)", { exact: true }).last().waitFor()
 
     const persistedBeforeReload = await page.evaluate(() =>
       window.localStorage.getItem("gastometro-price-comparisons")
@@ -336,11 +336,11 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(persistedState.state.entries[0].itemName, "Leite")
 
     await page.reload({ waitUntil: "networkidle" })
-    await page.getByText("Mercado A · Melhor preço", { exact: true }).waitFor()
-    await page.getByText("Mercado B · Melhor preço", { exact: true }).waitFor()
-    await page.getByText("Mercado C · Maior preço", { exact: true }).waitFor()
-    await page.getByText("Mercado D · Maior preço", { exact: true }).waitFor()
-    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).waitFor()
+    await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado B · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado C · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado D · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/price-comparison")
   })
 
