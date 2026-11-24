@@ -306,7 +306,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       await page.getByRole("button", { name: "Cadastrar lugar" }).click()
       await page.getByLabel("Lugar Input").fill(place)
       await page.getByText("Adicionar lugar", { exact: true }).click()
-      await page.getByText("Lugares Cadastrados", { exact: true }).waitFor()
+      await page.getByText("Lugares Cadastrados", { exact: true }).first().waitFor()
       await page.getByText(place, { exact: true }).waitFor()
     }
 
