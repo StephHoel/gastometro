@@ -37,7 +37,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [Comparação de preços entre lugares](./active/17-comparacao-de-precos-entre-lugares.md)
+- [Comparação de preços entre lugares](./active/17-comparacao-de-precos-entre-lugares.md) (E2E funcional de cadastro, empate e persistência implementado; validação manual pendente)
 
 ### Planejadas (ordem de prioridade)
 
