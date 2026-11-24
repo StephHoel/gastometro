@@ -23,19 +23,21 @@ import { AlertService } from '@/services/AlertService'
 export function FormCart(
   { data = undefined, buttonTitle, children }: FormProps<PriceComparisonEntryProps>
 ) {
+  const places = usePriceComparisonStore((state) => state.places)
   const { control, setFocus, handleSubmit, reset } = useForm<CartFormData>({
     defaultValues: {
       itemName: data?.itemName ?? '',
       quantityReference: data?.quantityReference ?? '',
-      pricesByPlace: data?.pricesByPlace ?? undefined,
+      pricesByPlace: places.map((place) => ({
+        placeId: place.id,
+        price: data?.pricesByPlace.find((item) => item.placeId === place.id)?.price ?? '',
+      })),
     },
   })
   const addEntry = usePriceComparisonStore((state) => state.addEntry)
   const updateEntry = usePriceComparisonStore((state) => state.updateEntry)
 
   const router = useRouter()
-
-  const places = usePriceComparisonStore((state) => state.places)
 
   const alertRef = useRef<CustomAlertRef>(null)
 
@@ -56,9 +58,9 @@ export function FormCart(
     // }
 
 
-    const pricesByPlace = places
-      .filter((_, index) => (formData.pricesByPlace?.find((prices) => prices?.placeId === `pricesByPlace.${index}`)?.price ?? '').trim().length > 0)
-      .map((place, index) => ({ placeId: place.id, price: (formData.pricesByPlace.find((prices) => prices.placeId === `pricesByPlace.${index}`)?.price ?? '').trim() }))
+    const pricesByPlace = (formData.pricesByPlace ?? [])
+      .filter((price) => price.price.trim().length > 0)
+      .map((price) => ({ placeId: price.placeId, price: price.price.trim() }))
 
     const validation = validateComparisonEntry(formData.itemName, pricesByPlace, places.map((place) => place.id))
 
@@ -84,7 +86,10 @@ export function FormCart(
       reset({
         itemName: data.itemName ?? '',
         quantityReference: data.quantityReference ?? '',
-        pricesByPlace: data.pricesByPlace ?? undefined,
+        pricesByPlace: places.map((place) => ({
+          placeId: place.id,
+          price: data.pricesByPlace.find((item) => item.placeId === place.id)?.price ?? '',
+        })),
       })
     }
   }, [data, reset])
@@ -121,7 +126,7 @@ export function FormCart(
         <View key={place.id} className="gap-1">
           <CustomInput
             control={control}
-            name={`pricesByPlace.${index}`}
+            name={`pricesByPlace.${index}.price`}
             nameField={`${NameField.PricesByPlace} ${place.name}`}
             placeholder={INPUTS.placeholder.prices_by_place}
             keyboardType="decimal-pad"
