@@ -2,9 +2,10 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.8.2
-> **Data:** 2026-11-21
-> **Cobertura de Testes:** 90.08%
+> **Versão do App:** 1.9.1
+> **Data:** 2026-11-24
+> **Cobertura de Testes (linhas):** 97,87% (última medição registrada em 2026-11-22)
+> Última medição histórica: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas, com 303 testes aprovados. A execução de 24/11/2026 inclui um novo teste de apresentação de empates; os indicadores serão substituídos após a geração do próximo relatório de cobertura.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -51,12 +52,13 @@ Público esperado:
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 - Suíte E2E web com Playwright para validar rotas diretas, atualização de rotas profundas, navegação/histórico e fallback SPA do GitHub Pages; execução automatizada no CI.
+- Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação; funcionalidade validada manualmente em Android e Web.
+- Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- comparação de preços entre lugares;
 - sincronização eficiente de lembretes;
 - integridade e migração de dados locais;
 - backup e restauração local;
@@ -146,6 +148,10 @@ interface BillProps {
 
 Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceita zero e não aceita negativos; vencimento é opcional e deve ser uma data ISO válida; contas não pagas com vencimento anterior ao dia atual são destacadas como vencidas.
 
+### Comparação de preços
+
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca visualmente a menor e a maior oferta, identificando todos os lugares empatados em cada extremo; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
+
 ### Lembrete Local
 
 ```ts
@@ -181,6 +187,7 @@ Estado:
 - A chave de storage atual é `gastometro`.
 - `useReminderStore` mantém lembretes com persistência dedicada (`gastometro-reminders`).
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
+- `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
 
 Manipulação da lista:
 

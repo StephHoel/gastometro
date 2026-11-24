@@ -5,6 +5,8 @@ import {
   nowISO,
   parseReminderDate,
   toDisplayDate,
+  toDateInputValue,
+  fromDateAndTime,
 } from '@/utils/functions/DateFunctions'
 
 describe('DateFunctions', () => {
@@ -25,6 +27,37 @@ describe('DateFunctions', () => {
 
     expect(defaults.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     expect(defaults.time).toMatch(/^\d{2}:\d{2}$/)
+  })
+
+  it('parseReminderDate e toDateInputValue devem preservar datas válidas', () => {
+    expect(parseReminderDate('2026-06-21T12:34:00')).toBeInstanceOf(Date)
+    expect(toDateInputValue('inválida')).toEqual({ date: '', time: '' })
+    expect(toDateInputValue('2026-06-21T12:34:00')).toEqual({ date: '2026-06-21', time: '12:34' })
+  })
+
+  it('fromDateAndTime valida campos obrigatórios e datas inválidas', () => {
+    expect(fromDateAndTime('', '12:00')).toBeNull()
+    expect(fromDateAndTime('2026-06-21', '')).toBeNull()
+    expect(fromDateAndTime('2026-13-99', '25:99')).toBeNull()
+    expect(fromDateAndTime('2026-06-21', '12:30')).toBe(new Date('2026-06-21T12:30:00').toISOString())
+  })
+
+  it('formatDateInput cobre entradas parciais, remove caracteres e limita o tamanho', () => {
+    expect(formatDateInput('20')).toBe('20')
+    expect(formatDateInput('2026')).toBe('2026')
+    expect(formatDateInput('2026-0')).toBe('2026-0')
+    expect(formatDateInput('202601')).toBe('2026-01')
+    expect(formatDateInput('2026010')).toBe('2026-01-0')
+    expect(formatDateInput('2026/13/40-extra')).toBe('2026-12-31')
+  })
+
+  it('formatTimeInput cobre entradas parciais e normaliza minutos e horas', () => {
+    expect(formatTimeInput('')).toBe('')
+    expect(formatTimeInput('1')).toBe('1')
+    expect(formatTimeInput('12')).toBe('12')
+    expect(formatTimeInput('123')).toBe('12:3')
+    expect(formatTimeInput('9999')).toBe('23:59')
+    expect(formatTimeInput('12:30:45')).toBe('12:30')
   })
 
   it('nowISO deve gerar ISO válido', () => {

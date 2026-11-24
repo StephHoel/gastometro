@@ -1,0 +1,234 @@
+import { Tabs, usePathname, useRouter } from "expo-router"
+
+import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { NotificationService } from '@/services/NotificationService'
+import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import { ServiceWorkerService } from '@/services/ServiceWorkerService'
+import { useCartStore } from '@/stores/CartStore'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { Platform, Text } from 'react-native'
+import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
+import "@/styles/global.css"
+import { COLORS } from '@/constants/color'
+import { TITLES } from '@/constants/titles'
+import { ERROR } from '@/constants/text/error'
+
+export default function Layout() {
+  const pathname = usePathname()
+  const router = useRouter()
+  const lists = useCartStore((state) => state.lists)
+  const activeListId = useCartStore((state) => state.activeListId)
+  const setActiveList = useCartStore((state) => state.setActiveList)
+  const handledNotificationKeysRef = useRef(new Set<string>())
+
+  const handleNotificationResponse = useCallback(
+    async (response: NotificationResponse) => {
+      try {
+        const responseKey = `${response.notification.request.identifier}:${response.actionIdentifier}`
+        if (handledNotificationKeysRef.current.has(responseKey)) return
+
+        handledNotificationKeysRef.current.add(responseKey)
+
+        const data = response.notification.request.content.data
+        const listId = NotificationService.getListIdFromNotification(data)
+        const reminderId = NotificationService.getReminderIdFromNotification(data)
+
+        if (!listId) return
+
+        const targetList = lists.find((list) => list.id === listId)
+
+        if (!targetList) {
+          if (reminderId) {
+            await ReminderOrchestrator.removeReminder(reminderId)
+          }
+          if (pathname !== '/') {
+            router.replace('/(tabs)/index')
+          }
+          return
+        }
+
+        if (activeListId !== targetList.id) {
+          setActiveList(targetList.id)
+        }
+
+        if (pathname !== '/') {
+          router.replace('/(tabs)/index')
+        }
+      } catch (error) {
+        console.error(ERROR.notification_response_failure, error)
+      }
+    },
+    [activeListId, lists, pathname, router, setActiveList],
+  )
+
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+    document.title = TITLES[pathname] ?? "Gastômetro"
+  }, [pathname])
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+
+    const redirect = window.sessionStorage.getItem('redirect')
+    if (!redirect) return
+
+    window.sessionStorage.removeItem('redirect')
+
+    const redirectUrl = new URL(redirect, window.location.origin)
+    window.history.replaceState(
+      window.history.state,
+      '',
+      redirectUrl.pathname + redirectUrl.search + redirectUrl.hash,
+    )
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }, [])
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      void ServiceWorkerService.register()
+      return
+    }
+
+    setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowBanner: true,
+        shouldShowList: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    })
+
+    if (Platform.OS === 'android') {
+      void setNotificationChannelAsync('default', {
+        name: 'Lembretes',
+        importance: AndroidImportance.HIGH,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: COLORS.active,
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (Platform.OS === 'web') return
+
+    let isMounted = true
+
+    async function bootstrapNotificationOpen() {
+      try {
+        const lastResponse = getLastNotificationResponse()
+        if (!isMounted || !lastResponse) return
+
+        await handleNotificationResponse(lastResponse)
+        clearLastNotificationResponse()
+      } catch (error) {
+        console.error(ERROR.reminder_bootstrap_failure, error)
+      } finally {
+        await NotificationService.clearDeliveredNotifications()
+      }
+    }
+
+    void bootstrapNotificationOpen()
+
+    const subscription = addNotificationResponseReceivedListener((response) => {
+      void handleNotificationResponse(response)
+    })
+
+    return () => {
+      isMounted = false
+      subscription.remove()
+    }
+  }, [handleNotificationResponse])
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function bootstrapReminders() {
+      try {
+        const listIds = lists.map((list) => list.id)
+        await ReminderOrchestrator.cleanupOrphans(listIds)
+        await ReminderOrchestrator.syncWithPermissions()
+
+        if (!isMounted) return
+      } catch (error) {
+        console.error(ERROR.reminder_bootstrap_failure, error)
+      }
+    }
+
+    void bootstrapReminders()
+
+    return () => {
+      isMounted = false
+    }
+  }, [lists])
+
+  return (
+    <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: COLORS.background,
+            borderColor: "transparent",
+          },
+          tabBarActiveTintColor: COLORS.active,
+          tabBarInactiveTintColor: COLORS.inactive,
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Início",
+            tabBarIcon: ({ color, size }) => (
+              <HomeIcon size={size} color={color as string} />
+            ),
+            headerTitle: "Início",
+          }}
+        />
+
+        <Tabs.Screen
+          name="lists"
+          options={{
+            title: "Listas",
+            tabBarIcon: ({ color, size }) => (
+              <ListIcon size={size} color={color as string} />
+            ),
+            headerTitle: "Listas",
+          }}
+        />
+
+        <Tabs.Screen
+          name="bills"
+          options={{
+            title: "Contas",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size - 4, fontWeight: "bold" }}>R$</Text>
+            ),
+            headerTitle: "Contas a pagar",
+          }}
+        />
+
+        <Tabs.Screen
+          name="price-comparison"
+          options={{
+            title: "Preços",
+            tabBarIcon: ({ color, size }) => (
+              <Text style={{ color, fontSize: size - 4, fontWeight: "bold" }}>$</Text>
+            ),
+            headerTitle: "Comparação de preços",
+          }}
+        />
+
+        <Tabs.Screen
+          name="calculator"
+          options={{
+            title: "Calculadora",
+            tabBarIcon: ({ color, size }) => (
+              <CalculatorIcon size={size} color={color as string} />
+            ),
+            headerTitle: "Calculadora",
+          }}
+        />
+      </Tabs>
+    </SafeAreaView>
+  )
+}

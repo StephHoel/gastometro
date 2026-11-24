@@ -16,19 +16,16 @@ import { SIZE } from '@/constants/size'
 import { Row } from '@/components/Row'
 import { AlertService } from '@/services/AlertService'
 import { ReminderFormData } from '@/interfaces/FormData/ReminderFormData'
+import { ROUTES } from '@/constants/routes'
 
 export function FormReminder({ listId, reminderId, textButton, iconButton, includeDeleteButton }: FormReminderProps) {
   const reminderStore = useReminderStore()
   const router = useRouter()
 
-  const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInputInstance | null>(null)
-  const inputRef3 = useRef<TextInputInstance | null>(null)
-
   const defaultDateTime = makeDefaultDateTime()
   const reminder = reminderStore.getById(reminderId ?? '')
 
-  const { control, handleSubmit, reset } = useForm<ReminderFormData>({
+  const { control, setFocus, handleSubmit, reset } = useForm<ReminderFormData>({
     defaultValues: {
       title: reminder?.title ?? '',
       dateValue: reminder ? toDateInputValue(reminder.datetimeISO).date : defaultDateTime.date,
@@ -50,7 +47,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
   }
 
   function redirect() {
-    router.push(`/reminders/${listId}`)
+    router.push(ROUTES.Reminder.Id(listId))
   }
 
   function handleRemoveReminder() {
@@ -79,9 +76,8 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
         nameField={NameField.Title}
         placeholder={REMINDERS.placeholder.title}
         maxLength={60}
-        selfRef={inputRef1}
         returnKeyType={"next"}
-        onSubmit={() => inputRef2.current?.focus()}
+        onSubmit={() => setFocus("dateValue")}
       />
 
       <CustomInput
@@ -90,9 +86,8 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
         nameField={NameField.Date}
         placeholder={REMINDERS.placeholder.date}
         maxLength={10}
-        selfRef={inputRef2}
         returnKeyType={"next"}
-        onSubmit={() => inputRef3.current?.focus()}
+        onSubmit={() => setFocus("timeValue")}
       />
 
       <CustomInput
@@ -101,7 +96,6 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
         nameField={NameField.Time}
         placeholder={REMINDERS.placeholder.time}
         maxLength={5}
-        selfRef={inputRef3}
         returnKeyType={"next"}
         onSubmit={() => handleSubmit(onSubmit)()}
       />

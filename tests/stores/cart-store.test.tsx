@@ -1,9 +1,18 @@
+import uuid from 'react-native-uuid'
 import { useCartStore } from '@/stores/CartStore'
 import type { ProductProps } from '@/interfaces/ProductProps'
 
 describe('useCartStore', () => {
+  let uuidCounter = 0
+
   beforeEach(() => {
-    useCartStore.setState({ products: [] })
+    uuidCounter = 0
+    jest.mocked(uuid.v4).mockImplementation(() => [++uuidCounter])
+    useCartStore.setState({
+      lists: [{ id: 'list-1', name: 'Lista 1', products: [] }],
+      activeListId: 'list-1',
+      products: [],
+    })
   })
 
   it('deve adicionar item usando ordenação do helper', () => {
@@ -40,4 +49,55 @@ describe('useCartStore', () => {
     store.clear()
     expect(useCartStore.getState().products).toEqual([])
   })
+  it('protege a lista única e ignora nomes vazios', () => {
+    const store = useCartStore.getState()
+
+    store.addList('   ')
+    store.removeList('list-1')
+    store.renameList('list-1', '   ')
+
+    expect(useCartStore.getState().lists).toEqual([
+      { id: 'list-1', name: 'Lista 1', products: [] },
+    ])
+    expect(useCartStore.getState().activeListId).toBe('list-1')
+  })
+
+  it('remove listas ativas e inativas mantendo a lista ativa correta', () => {
+    const store = useCartStore.getState()
+    store.addList('Lista 2', [
+      { id: 'p2', item: 'Feijão', quantity: '1', price: '8', collected: false },
+    ])
+    const secondListId = useCartStore.getState().activeListId
+
+    store.removeList('list-1')
+    expect(useCartStore.getState().activeListId).toBe(secondListId)
+    expect(useCartStore.getState().products.map((product) => product.id)).toEqual(['p2'])
+
+    store.addList('Lista 3')
+    const thirdListId = useCartStore.getState().activeListId
+    store.removeList(thirdListId)
+
+    expect(useCartStore.getState().activeListId).toBe(secondListId)
+    expect(useCartStore.getState().products.map((product) => product.id)).toEqual(['p2'])
+  })
+
+  it('renomeia listas com trim e ignora seleção inválida ou repetida', () => {
+    const store = useCartStore.getState()
+    store.addList(' Lista 2 ')
+    const secondListId = useCartStore.getState().activeListId
+
+    store.renameList(secondListId, '  Mercado  ')
+    expect(useCartStore.getState().lists.find((list) => list.id === secondListId)?.name).toBe('Mercado')
+
+    const before = useCartStore.getState().products
+    store.setActiveList('inexistente')
+    store.setActiveList(secondListId)
+    expect(useCartStore.getState().activeListId).toBe(secondListId)
+    expect(useCartStore.getState().products).toBe(before)
+
+    store.setActiveList('list-1')
+    expect(useCartStore.getState().activeListId).toBe('list-1')
+    expect(useCartStore.getState().products).toEqual([])
+  })
+
 })

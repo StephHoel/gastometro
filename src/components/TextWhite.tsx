@@ -1,7 +1,6 @@
 import React from 'react'
-import { Text } from 'react-native'
-import type { ChildrenClassNameProps } from '@/interfaces/ChildrenClassNameProps'
+import { Text, TextProps } from 'react-native'
 
-export function TextWhite({ children, className = '' }: ChildrenClassNameProps) {
-  return <Text className={`text-white ${className}`}>{children}</Text>
+export function TextWhite({ children, className = '', ...props }: TextProps) {
+  return <Text {...props} className={`text-white ${className}`}>{children}</Text>
 }

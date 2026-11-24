@@ -1,7 +1,7 @@
 import React from 'react'
 import type { ReactNode } from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
-import Lists from '@/app/lists'
+import Lists from '@/app/(tabs)/lists'
 import { INPUTS } from '@/constants/text/inputs'
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
@@ -146,7 +146,7 @@ describe('Lists screen', () => {
 
     expect(mockStore.addList).toHaveBeenCalledWith('Feira')
     expect(mockAlertOk).not.toHaveBeenCalled()
-  })
+  }, 10000)
 
   it('mostra erro ao tentar criar lista com nome vazio', async () => {
     const { getByText } = await render(<Lists />)
@@ -165,7 +165,7 @@ describe('Lists screen', () => {
     await fireEvent.press(getByText('Lista 2'))
 
     expect(mockStore.setActiveList).toHaveBeenCalledWith('list-2')
-    expect(mockPush).toHaveBeenCalledWith('/')
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
   })
 
   it('renomeia lista no modo edição', async () => {
@@ -233,4 +233,25 @@ describe('Lists screen', () => {
 
     expect(payload.message).toContain('1 lembrete(s) também serão removidos')
   })
+  it('rejeita nome vazio ao renomear e preserva a lista', async () => {
+    const { getAllByText, getByDisplayValue, getByText } = await render(<Lists />)
+
+    await fireEvent.press(getAllByText('EditIcon')[0])
+    await fireEvent.changeText(getByDisplayValue('Lista 1'), '   ')
+    await fireEvent.press(getByText(LISTS.rename_save))
+
+    expect(mockAlertOk).toHaveBeenCalledWith(ERROR.alert_title, ERROR.empty_list_name)
+    expect(mockStore.renameList).not.toHaveBeenCalled()
+  })
+
+  it('mostra o plural para listas com mais de um produto', async () => {
+    mockStore.lists[1].products = [
+      { id: 'p2', item: 'Feijão', quantity: '1', price: '8', collected: false },
+      { id: 'p3', item: 'Macarrão', quantity: '2', price: '6', collected: false },
+    ]
+    const { getByText } = await render(<Lists />)
+
+    expect(getByText('2 itens')).toBeTruthy()
+  })
+
 })

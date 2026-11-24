@@ -14,7 +14,7 @@ export default function NotFound() {
         <Text className="text-center text-base text-slate-300">
           O endereço acessado não corresponde a uma página do Gastômetro.
         </Text>
-        <Link href="/" className="rounded-lg bg-lime-400 px-5 py-3 font-semibold text-slate-900">
+        <Link href="/(tabs)/index" className="rounded-lg bg-lime-400 px-5 py-3 font-semibold text-slate-900">
           Voltar ao início
         </Link>
       </View>

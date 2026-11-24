@@ -33,6 +33,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Service Worker para funcionamento offline em web](./done/13-service-worker-offline-web.md)
 - [Contas a pagar](./done/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](./done/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](./done/17-comparacao-de-precos-entre-lugares.md)
 
 ### Ativas/Em andamento
 
@@ -40,9 +41,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [Comparação de preços entre lugares](./planned/17-comparacao-de-precos-entre-lugares.md)
-2. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-3. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-4. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-5. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-6. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
+2. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+3. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+4. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+5. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)

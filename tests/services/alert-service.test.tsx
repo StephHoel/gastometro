@@ -70,7 +70,7 @@ describe('AlertService', () => {
       collected: false,
     }
 
-    AlertService.remove(action, prod)
+    AlertService.remove(action, prod.item)
     AlertService.remove(action)
 
     const first = showAlert.mock.calls[0][0] as {

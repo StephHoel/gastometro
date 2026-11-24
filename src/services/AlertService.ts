@@ -43,16 +43,16 @@ export const AlertService = {
     })
   },
 
-  remove(action: () => void, prod?: ProductProps) {
+  remove(action: () => void, item?: string) {
     alertRef?.showAlert({
-      title: prod === undefined ? alert.removeAll.title : alert.remove.title,
-      message: prod === undefined
+      title:  (item === undefined ? alert.removeAll.title : alert.remove.title),
+      message: (item === undefined
         ? alert.removeAll.message
-        : alert.remove.message(prod.item),
+        : alert.remove.message(item)),
       buttons: [
         {
           text:
-            prod === undefined
+            item === undefined
               ? alert.removeAll.button.title
               : alert.remove.button.title,
           action: action,

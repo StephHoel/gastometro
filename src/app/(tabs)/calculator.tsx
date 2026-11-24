@@ -18,7 +18,7 @@ import { CalculatorFormData } from '@/interfaces/FormData/CalculatorFormData'
 import { CALC } from '@/constants/text/calculator'
 
 export default function Calculator() {
-  const { control, handleSubmit, reset } = useForm<CalculatorFormData>({
+  const { control, handleSubmit, setFocus, reset } = useForm<CalculatorFormData>({
     defaultValues: {
       price: "",
       quantity: "",
@@ -26,9 +26,6 @@ export default function Calculator() {
   })
 
   const [answer, answerState] = useState<number | null>(null)
-
-  const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInputInstance | null>(null)
 
   function onCalculate(formData: CalculatorFormData): void {
     Keyboard.dismiss()
@@ -58,10 +55,9 @@ export default function Calculator() {
             control={control}
             name="price"
             nameField={NameField.Price}
-            selfRef={inputRef1}
             placeholder={CALC.placeholder.price}
             keyboardType="number-pad"
-            onSubmit={() => inputRef2.current?.focus()}
+            onSubmit={() => setFocus("quantity")}
             returnKeyType={"next"}
           />
 
@@ -69,7 +65,6 @@ export default function Calculator() {
             control={control}
             name="quantity"
             nameField={NameField.Quantity}
-            selfRef={inputRef2}
             placeholder={CALC.placeholder.quantity}
             keyboardType="number-pad"
             onSubmit={() => handleSubmit(onCalculate)()}

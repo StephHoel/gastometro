@@ -12,6 +12,7 @@ import React, { useRef } from "react"
 import { View } from "react-native"
 import { TextWhite } from '@/components/TextWhite'
 import { Divider } from '@/components/Divider'
+import { ROUTES } from '@/constants/routes'
 
 export function Header({ activeListId }: { activeListId?: string }) {
   const route = useRoute<CurrentRoute>()
@@ -40,7 +41,7 @@ export function Header({ activeListId }: { activeListId?: string }) {
 
       <Divider className="border-white pt-3 mx-2" />
 
-      {route.name === "index" && <Add action={() => router.push("/list/add")} />}
+      {route.name === "index" && <Add action={() => router.push(ROUTES.List.Add)} />}
     </>
   )
 }

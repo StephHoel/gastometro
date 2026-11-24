@@ -72,6 +72,16 @@ jest.mock('@/components/TouchableIcons', () => ({
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
     return React.createElement(Text, { onPress: action }, 'Notification')
   },
+  Market: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Market')
+  },
+  Cart: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Cart')
+  },
 }))
 
 describe('Header and List branch coverage', () => {
@@ -117,7 +127,7 @@ describe('Header and List branch coverage', () => {
 
     await fireEvent.press(getByText('Back'))
 
-    expect(mockPush).toHaveBeenCalledWith('/')
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
     expect(queryByText('Add')).toBeNull()
   })
 
@@ -129,6 +139,27 @@ describe('Header and List branch coverage', () => {
     expect(queryByText('Back')).toBeNull()
     expect(queryByText('Share')).toBeNull()
     expect(queryByText('Add')).toBeNull()
+  })
+
+  it('Header de comparação: abre os formulários de lugar e item', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'price-comparison' })
+
+    const { getByText } = await render(<Header />)
+
+    await fireEvent.press(getByText('Market'))
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison/market/add')
+
+    await fireEvent.press(getByText('Cart'))
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison/cart/add')
+  })
+
+  it('Header dos formulários de comparação: retorna à tela de preços', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'price-comparison/cart/add' })
+
+    const { getByText } = await render(<Header />)
+    await fireEvent.press(getByText('Back'))
+
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison')
   })
 
   it('Header index: Notification com activeListId navega para reminders/[listId]', async () => {

@@ -4,7 +4,7 @@ import { Text } from 'react-native'
 import { Form } from '@/components/Form'
 import Add from '@/app/list/add'
 import Edit from '@/app/list/edit/[id]'
-import Home from '@/app/index'
+import Home from '@/app/(tabs)/index'
 import { useCartStore } from '@/stores/CartStore'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 
