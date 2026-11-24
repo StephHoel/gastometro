@@ -2,11 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import type {
-  PriceComparisonEntryProps,
-  PriceComparisonPlaceProps,
-  PriceComparisonStateProps,
-} from '@/interfaces/PriceComparisonProps'
+import type { PriceComparisonStateProps } from '@/interfaces/PriceComparisonProps'
 import { validatePlace } from '@/services/PriceComparisonService'
 
 function normalizeName(value: string): string {
