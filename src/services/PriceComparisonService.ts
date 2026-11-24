@@ -124,6 +124,10 @@ export function compareBasket(
   sortBy: 'price' | 'name' = 'price',
 ): BasketPlaceTotal[] {
   return places.map((place) => {
+    if (entries.length === 0) {
+      return { placeId: place.id, placeName: place.name, total: null, complete: false }
+    }
+
     let total = 0
     for (const entry of entries) {
       const price = entry.pricesByPlace.find((item) => item.placeId === place.id)

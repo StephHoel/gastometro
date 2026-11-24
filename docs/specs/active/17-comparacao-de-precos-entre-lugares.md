@@ -76,7 +76,7 @@ interface PriceComparisonEntryProps {
 
 ## Decisões complementares
 
-- A cesta só é considerada completa quando existe pelo menos um item cadastrado e todos os itens possuem preço válido naquele lugar.
+- A cesta só é considerada completa quando existe pelo menos um item cadastrado e todos os itens possuem preço válido naquele lugar. Sem itens, o total fica indisponível (`null`), nunca R$ 0,00.
 - Um item pode ter preço em apenas parte dos lugares cadastrados. Isso permite comparar ofertas disponíveis sem inventar valores para os lugares sem cotação.
 - A diferença percentual é calculada em relação ao maior preço; quando o maior preço é zero ou não há pelo menos duas ofertas válidas, o percentual fica indisponível.
 - A ordenação altera apenas a apresentação. A identificação da menor e da maior oferta permanece baseada nos valores, independentemente da ordem exibida.
@@ -103,10 +103,10 @@ interface PriceComparisonEntryProps {
 - [x] Persistência offline-first em chave exclusiva, sem alterar os dados de listas, contas ou lembretes.
 - [x] Validação de preços não negativos, lugares existentes e identificadores válidos.
 - [x] Comparação de menor e maior oferta, com identificação visual dos respectivos lugares, diferença absoluta e percentual relativo à maior oferta.
-- [x] Tratamento de preço zero como válido e de preço ausente/inválido como indisponível.
+- [x] Tratamento de preço zero como válido e de preço ausente/inválido como indisponível, inclusive cesta vazia sem total artificial igual a zero.
 - [x] Cesta completa somente quando todos os itens possuem preço válido no lugar.
 - [x] Ordenação independente das ofertas por item e dos totais da cesta.
 - [x] Acesso à tela pela navegação principal.
-- [x] Testes unitários, de store e de tela cobrindo os critérios funcionais.
+- [x] Testes unitários, de store e de tela cobrindo os critérios funcionais, incluindo cesta vazia e preços zero válidos.
 - [x] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22: 303 testes aprovados, cobertura de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
 - [ ] Validação manual da funcionalidade antes de mover a mini-spec para `done/`.
