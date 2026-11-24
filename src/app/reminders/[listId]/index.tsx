@@ -11,6 +11,7 @@ import { Add } from '@/components/TouchableIcons'
 import { Page } from '@/components/Page'
 import { useListIdParam } from '@/hooks/useParams'
 import { ReminderItem } from '@/components/Reminder/ReminderItem'
+import { ROUTES } from '@/constants/routes'
 
 export default function ListReminders() {
   const router = useRouter()
@@ -34,7 +35,7 @@ export default function ListReminders() {
           <TextWhite className='text-center'>{REMINDERS.invalid_list}</TextWhite>
           <TouchableOpacity
             className="bg-lime-400 rounded-lg px-3 py-2 self-start"
-            onPress={() => router.push('/lists')}
+            onPress={() => router.push(ROUTES.List.Index)}
           >
             <TextWhite className="text-black">{REMINDERS.back_to_lists}</TextWhite>
           </TouchableOpacity>
@@ -54,7 +55,7 @@ export default function ListReminders() {
           renderItem={({ item }) => <ReminderItem item={item} alertRef={alertRef} />}
         />
 
-        <Add action={() => router.push(`/reminders/${listId}/new`)} />
+        <Add action={() => router.push(ROUTES.Reminder.New(listId))} />
       </>)}
     </Page>
   )

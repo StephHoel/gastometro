@@ -1,4 +1,5 @@
-import { Back, Delete, Notification, Share } from "@/components/TouchableIcons"
+import { Back, Cart, Delete, Market, Notification, Share } from "@/components/TouchableIcons"
+import { ROUTES } from '@/constants/routes'
 import { useListIdParam } from '@/hooks/useParams'
 import { HeaderActionsProps } from '@/interfaces/HeaderActionsProps'
 import { AlertService } from "@/services/AlertService"
@@ -13,9 +14,9 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
 
   function notificationActions() {
     if (activeListId)
-      router.push(`/reminders/${activeListId}`)
+      router.push(ROUTES.Reminder.Id(activeListId))
     else
-      router.push('/reminders')
+      router.push(ROUTES.Reminder.Index)
   }
 
   async function shareActions() {
@@ -42,18 +43,32 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
     )
   }
 
+  function priceComparisonActions() {
+    return (
+      <>
+        <Market accessibilityRole="button" accessibilityLabel="Cadastrar lugar" action={() => router.push(ROUTES.PriceComparison.Market.Add)} />
+        <Cart accessibilityRole="button" accessibilityLabel="Cadastrar item" action={() => router.push(ROUTES.PriceComparison.Cart.Add)} />
+      </>
+    )
+  }
+
   switch (routeName) {
-    case "index":
-      return indexActions()
+    case "index": return indexActions()
+    case "price-comparison": return priceComparisonActions()
+
+    case "price-comparison/market/add":
+    case "price-comparison/cart/add":
+    case "price-comparison/market/edit/[marketId]":
+    case "price-comparison/cart/edit/[cartId]":
+      return <Back action={() => router.push(ROUTES.PriceComparison.Index)} />
+
+    case "calculator": return null
 
     case "reminders/[listId]/edit/[reminderId]":
     case "reminders/[listId]/new":
-      return <Back action={() => router.push(`/reminders/${listId}`)} />
-
-    case "calculator":
-      return null
+      return <Back action={() => router.push(ROUTES.Reminder.Id(listId))} />
 
     default:
-      return <Back action={() => router.push("/")} />
+      return <Back action={() => router.push(ROUTES.IndexTab)} />
   }
 }

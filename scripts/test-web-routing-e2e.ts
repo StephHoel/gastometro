@@ -295,6 +295,55 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     )
   })
 
+
+  await run("comparação de preços cadastra lugares e item, destaca empates e persiste após recarregar", async page => {
+    await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
+    await page.getByText("Preços", { exact: true }).last().click()
+    await page.getByText("Nenhum lugar cadastrado ainda.", { exact: true }).waitFor()
+
+    const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
+    for (const place of places) {
+      await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
+      await page.getByLabel("Lugar Input").last().fill(place)
+      await page.getByText("Adicionar lugar", { exact: true }).last().click()
+      await page.getByText(place, { exact: true }).last().waitFor()
+      await page.goto(BASE_URL + "/price-comparison", { waitUntil: "networkidle" })
+    }
+
+    await page.getByRole("button", { name: "Cadastrar item" }).last().click()
+    await page.getByLabel("Nome do item Input").last().fill("Leite")
+    await page.getByLabel("Referência de quantidade Input").last().fill("1 litro")
+    await page.getByLabel("Preço em Mercado A Input").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado B Input").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado C Input").last().fill("10,00")
+    await page.getByLabel("Preço em Mercado D Input").last().fill("10,00")
+    await page.getByText("Adicionar item", { exact: true }).last().click()
+
+    await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado B · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado C · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado D · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).last().waitFor()
+    await page.getByText("Economia possível: R$ 5,00 (50,0%)", { exact: true }).last().waitFor()
+
+    const persistedBeforeReload = await page.evaluate(() =>
+      window.localStorage.getItem("gastometro-price-comparisons")
+    )
+    assert.ok(persistedBeforeReload, "A comparação deve ser persistida no armazenamento local")
+    const persistedState = JSON.parse(persistedBeforeReload)
+    assert.equal(persistedState.state.places.length, 4)
+    assert.equal(persistedState.state.entries.length, 1)
+    assert.equal(persistedState.state.entries[0].itemName, "Leite")
+
+    await page.reload({ waitUntil: "networkidle" })
+    await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado B · Melhor preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado C · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Mercado D · Maior preço", { exact: true }).last().waitFor()
+    await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).last().waitFor()
+    assert.equal(new URL(page.url()).pathname, BASE_PATH + "/price-comparison")
+  })
+
   process.stdout.write("Execução " + cycle + "/3 concluída.\\n")
 }
 

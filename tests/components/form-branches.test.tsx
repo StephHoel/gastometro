@@ -100,7 +100,7 @@ describe('Form branch coverage', () => {
       const products = useCartStore.getState().products
       expect(products).toHaveLength(2)
       expect(products.some((product) => product.item === 'Feijao')).toBe(true)
-      expect(mockPush).toHaveBeenCalledWith('/')
+      expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
     })
   })
 
@@ -136,7 +136,7 @@ describe('Form branch coverage', () => {
       expect(updated?.item).toBe('Macarrao')
       expect(updated?.quantity).toBe('3')
       expect(updated?.price).toBe('7')
-      expect(mockPush).toHaveBeenCalledWith('/')
+      expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
     })
   })
 })

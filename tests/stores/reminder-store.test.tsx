@@ -78,4 +78,18 @@ describe('useReminderStore', () => {
     expect(reminder?.enabled).toBe(true)
     expect(reminder?.notificationId).toBe('notif-1')
   })
+  it('preserva campos omitidos e ignora atualizações para identificadores ausentes', () => {
+    const created = createBaseReminder()
+    const updated = useReminderStore.getState().updateReminder(created.id, { enabled: false })
+
+    expect(updated).toMatchObject({ title: 'Lembrete', enabled: false })
+    useReminderStore.getState().setEnabled('missing', true)
+    useReminderStore.getState().setReminderNotification('missing', 'notification-missing')
+
+    expect(useReminderStore.getState().getById(created.id)).toMatchObject({
+      title: 'Lembrete',
+      enabled: false,
+    })
+  })
+
 })

@@ -7,9 +7,10 @@ import { ScrollView } from "react-native"
 import { SortProductsByCollected } from '@/utils/functions/SortList'
 import { ListSectionHeader } from './ListSectionHeader'
 import { ListItem } from './List/ListItem'
+import { ROUTES } from '@/constants/routes'
 
 export function List({ cartStore }: ListProps) {
-  const nav = useRouter()
+  const router = useRouter()
   const { notCollected, collected } = SortProductsByCollected(cartStore.products)
 
   function toggleCollected(prod: ProductProps): void {
@@ -28,9 +29,9 @@ export function List({ cartStore }: ListProps) {
           product={prod}
           index={i}
           totalCount={notCollected.length}
-          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod.item)}
           onToggle={() => toggleCollected(prod)}
-          onEdit={() => nav.push(`/list/edit/${prod.id}`)}
+          onEdit={() => router.push(ROUTES.List.Edit(prod.id))}
         />
       ))}
 
@@ -44,9 +45,9 @@ export function List({ cartStore }: ListProps) {
           product={prod}
           index={i}
           totalCount={collected.length}
-          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod.item)}
           onToggle={() => toggleCollected(prod)}
-          onEdit={() => nav.push(`/list/edit/${prod.id}`)}
+          onEdit={() => router.push(ROUTES.List.Edit(prod.id))}
         />
       ))}
     </ScrollView>
