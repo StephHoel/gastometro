@@ -20,4 +20,4 @@ Observação:
 
 ## Última execução registrada
 
-Em 22/11/2026, o workflow `45043861533` executou a suíte com 303 testes aprovados em 50 suítes. A cobertura global foi de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas. O gate de cobertura e o build Android concluíram com sucesso.
+Última medição histórica registrada em 22/11/2026: workflow `45043861533`, com 303 testes aprovados em 50 suítes. A cobertura foi de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas. Essa medição antecede os novos testes de interface e E2E adicionados em 24/11/2026; os indicadores atuais serão atualizados após a conclusão do CI desta alteração.

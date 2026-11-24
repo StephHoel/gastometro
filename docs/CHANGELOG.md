@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.9.1 - 2026-11-24
+
+Reforço dos testes automatizados da comparação de preços e atualização da documentação.
+
+### Testes e interface
+
+- A tela agora apresenta, no resumo de maior preço, todos os lugares empatados no valor máximo; os destaques de menor e maior preço permanecem visíveis em cada oferta.
+- Adicionado teste de componente que valida múltiplos empates simultâneos no menor e no maior preço, incluindo diferença absoluta e percentual.
+- Adicionado cenário E2E Playwright para cadastrar quatro lugares e um item, validar a comparação com empates e confirmar a persistência após recarregar a aplicação.
+- Os botões de cadastro de lugar e item receberam rótulos acessíveis estáveis para automação e tecnologias assistivas.
+- A ordenação alfabética dos itens passou a operar sobre uma cópia do array, evitando mutação do estado do Zustand durante a renderização.
+
+### Documentação
+
+- Atualizados a mini-spec 17, o guia E2E web, o índice de documentação, o README e a SPEC para descrever o novo cenário funcional.
+- A validação manual em Android e Web permanece pendente.
+
+
 ## 1.9.0 - 2026-11-22
 
 Implementação da mini-spec 17: comparação offline-first de preços entre lugares.

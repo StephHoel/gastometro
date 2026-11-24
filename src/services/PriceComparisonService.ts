@@ -52,9 +52,6 @@ export function validateComparisonEntry(
 ): string | null {
   if (!itemName.trim()) return ERROR.item_name_required
 
-  // TODO por enquanto permitir salvar com preços vazios
-  // if (prices.length === 0) return ERROR.price_required
-
   const validPlaceIds = new Set(selectedPlaceIds)
   const seenPlaceIds = new Set<string>()
 

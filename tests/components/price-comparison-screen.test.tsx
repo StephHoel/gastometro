@@ -92,4 +92,37 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Maior preço: Mercado A (R$ 12,50)')).toBeTruthy()
     expect(screen.getByText('Economia possível: Não disponível')).toBeTruthy()
   })
+
+  it('identifica todos os lugares empatados no menor e no maior preço', async () => {
+    usePriceComparisonStore.setState({
+      places: [
+        { id: 'a', name: 'Mercado A' },
+        { id: 'b', name: 'Mercado B' },
+        { id: 'c', name: 'Mercado C' },
+        { id: 'd', name: 'Mercado D' },
+      ],
+      entries: [{
+        id: 'entry-tie',
+        itemName: 'Leite',
+        pricesByPlace: [
+          { placeId: 'a', price: '5,00' },
+          { placeId: 'b', price: '5,00' },
+          { placeId: 'c', price: '10,00' },
+          { placeId: 'd', price: '10,00' },
+        ],
+        createdAt: '',
+        updatedAt: '',
+      }],
+    })
+
+    const screen = await render(<PriceComparison />)
+
+    expect(screen.getByText('Mercado A · Melhor preço')).toBeTruthy()
+    expect(screen.getByText('Mercado B · Melhor preço')).toBeTruthy()
+    expect(screen.getByText('Mercado C · Maior preço')).toBeTruthy()
+    expect(screen.getByText('Mercado D · Maior preço')).toBeTruthy()
+    expect(screen.getByText('Maior preço: Mercado C, Mercado D (R$ 10,00)')).toBeTruthy()
+    expect(screen.getByText('Economia possível: R$ 5,00 (50,0%)')).toBeTruthy()
+  })
+
 })

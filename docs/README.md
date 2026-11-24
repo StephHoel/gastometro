@@ -9,6 +9,7 @@ Esta pasta concentra a documentação principal do projeto.
 - [**SPEC.md**](./SPEC.md) — Guia oficial para tomada de decisão de produto, arquitetura, design e processo. Leitura obrigatória antes de propor mudanças.
 - [**CHANGELOG.md**](./CHANGELOG.md) — Histórico de versões com descrição de funcionalidades, correções, impactos e compatibilidade.
 - [**WEB_DEPLOY.md**](./WEB_DEPLOY.md) — Instruções de build, deploy e troubleshooting para a versão web estática (GitHub Pages).
+- [**WEB_E2E.md**](./WEB_E2E.md) — Preparação e execução dos testes E2E web, incluindo o fluxo de comparação de preços.
 
 ### Mini-specs
 

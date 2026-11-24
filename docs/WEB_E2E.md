@@ -1,6 +1,6 @@
-# Testes E2E do roteamento web
+# Testes E2E web
 
-A suíte E2E valida o comportamento da versão web estática no mesmo subdiretório usado pelo GitHub Pages (/gastometro/). Os testes usam Chromium controlado pelo Playwright e um servidor HTTP local que reproduz a resolução de arquivos estáticos e o fallback por 404.html.
+A suíte E2E valida o comportamento da versão web estática no mesmo subdiretório usado pelo GitHub Pages (`/gastometro/`), cobrindo roteamento SPA e um fluxo funcional de comparação de preços. Os testes usam Chromium controlado pelo Playwright e um servidor HTTP local que reproduz a resolução de arquivos estáticos e o fallback por 404.html.
 
 ## Requisitos
 
@@ -38,9 +38,10 @@ O comando:
 - A rota /calculator abre diretamente, sem navegação prévia.
 - Atualizar a página em /calculator preserva a tela e a URL.
 - Navegar pela interface permite alternar entre início, listas e calculadora; voltar/avançar do navegador valida o histórico entre início e calculadora.
-- Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de 404.html, restaura o caminho original e exibe a tela própria `Página não encontrada`.
+- Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de `404.html`, restaura o caminho original e exibe a tela própria `Página não encontrada`.
+- O fluxo de comparação cadastra quatro lugares e um item com preços empatados, confere os destaques de menor e maior oferta e a diferença percentual, verifica a chave `gastometro-price-comparisons` no armazenamento local e recarrega a página para confirmar a persistência.
 
-Os testes não escrevem dados de negócio nem alteram o formato de persistência. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. A resposta 404 do documento de rota inválida é esperada e validada separadamente, pois faz parte do fallback do GitHub Pages. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
+O cenário funcional grava dados sintéticos apenas no contexto de navegador isolado do teste; nenhum dado real do usuário é acessado. Os demais cenários não escrevem dados de negócio. Cada cenário usa um contexto de navegador independente, isolando cookies, armazenamento e histórico. A validação falha diante de exceções JavaScript, erros no console, requisições malsucedidas ou recursos que retornem HTTP de erro. A resposta 404 do documento de rota inválida é esperada e validada separadamente, pois faz parte do fallback do GitHub Pages. Em caso de falha, a suíte salva screenshot e trace em `artifacts/web-e2e/`.
 
 ## Integração contínua
 
@@ -56,4 +57,5 @@ Se o navegador ainda não estiver instalado, repita a preparação do Chromium. 
 
 - A suíte cobre o roteamento web estático e o fallback SPA; não substitui testes E2E Android/iOS.
 - O servidor local simula o comportamento de arquivos estáticos do GitHub Pages, mas não valida a infraestrutura externa do GitHub.
-- O escopo não inclui carga, desempenho ou validação funcional completa das telas.
+- O fluxo funcional cobre cadastro de lugares e item, comparação de empates e persistência; não substitui testes E2E Android/iOS nem valida todas as operações de edição e remoção.
+- O escopo não inclui carga ou desempenho.

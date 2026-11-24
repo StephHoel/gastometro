@@ -16,8 +16,7 @@ function isValidEntry(
   entry: Omit<PriceComparisonEntryProps, 'id' | 'createdAt' | 'updatedAt'>,
   placeIds: Set<string>,
 ): boolean {
-  // TODO por enquanto permitir salvar com preços vazios
-  if (!entry.itemName.trim() /*|| entry.pricesByPlace.length === 0*/) return false
+  if (!entry.itemName.trim()) return false
 
   const seenPlaceIds = new Set<string>()
 

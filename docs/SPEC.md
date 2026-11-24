@@ -52,6 +52,7 @@ Público esperado:
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 - Suíte E2E web com Playwright para validar rotas diretas, atualização de rotas profundas, navegação/histórico e fallback SPA do GitHub Pages; execução automatizada no CI.
+- Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 
 ## 3. Funcionalidades Planejadas
@@ -149,7 +150,7 @@ Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceit
 
 ### Comparação de preços
 
-Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca visualmente a menor e a maior oferta, identificando o respectivo lugar; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca visualmente a menor e a maior oferta, identificando todos os lugares empatados em cada extremo; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
 
 ### Lembrete Local
 

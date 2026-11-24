@@ -66,7 +66,7 @@ interface PriceComparisonEntryProps {
 
 - Criar, editar e remover lugares de comparação.
 - Criar, editar e remover item de comparação com preços por lugar.
-- Exibir melhor oferta, pior oferta e diferença (R$ e %) por item comparado.
+- Exibir melhor oferta, pior oferta e diferença (R$ e %) por item comparado, identificando todos os lugares empatados no menor e no maior preço.
 - Persistir dados após reiniciar o app, em armazenamento local independente.
 - Não aceitar preços inválidos, negativos, referências a lugares inexistentes ou atualizações para identificadores inexistentes.
 - Ao remover um lugar, remover também seus preços associados sem apagar os demais dados dos itens.
@@ -102,11 +102,12 @@ interface PriceComparisonEntryProps {
 - [x] Cadastro, edição e remoção de itens com preços parciais por lugar.
 - [x] Persistência offline-first em chave exclusiva, sem alterar os dados de listas, contas ou lembretes.
 - [x] Validação de preços não negativos, lugares existentes e identificadores válidos.
-- [x] Comparação de menor e maior oferta, com identificação visual dos respectivos lugares, diferença absoluta e percentual relativo à maior oferta.
+- [x] Comparação de menor e maior oferta, com identificação visual de todos os lugares empatados no menor e no maior preço, diferença absoluta e percentual relativo à maior oferta.
 - [x] Tratamento de preço zero como válido e de preço ausente/inválido como indisponível, inclusive cesta vazia sem total artificial igual a zero.
 - [x] Cesta completa somente quando todos os itens possuem preço válido no lugar.
 - [x] Ordenação independente das ofertas por item e dos totais da cesta.
 - [x] Acesso à tela pela navegação principal.
-- [x] Testes unitários, de store e de tela cobrindo os critérios funcionais, incluindo cesta vazia e preços zero válidos.
+- [x] Testes unitários, de store e de tela cobrindo os critérios funcionais, incluindo cesta vazia, preços zero válidos e apresentação de todos os lugares empatados no menor e no maior preço.
 - [x] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22: 303 testes aprovados, cobertura de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
-- [ ] Validação manual da funcionalidade antes de mover a mini-spec para `done/`.
+- [x] Teste E2E web do fluxo de cadastro de lugares e item, comparação de preços empatados e persistência após recarregar a aplicação.
+- [ ] Validação manual da funcionalidade em Android e Web antes de mover a mini-spec para `done/`.

@@ -46,8 +46,8 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
   function priceComparisonActions() {
     return (
       <>
-        <Market action={() => router.push(ROUTES.PriceComparison.Market.Add)} />
-        <Cart action={() => router.push(ROUTES.PriceComparison.Cart.Add)} />
+        <Market accessibilityRole="button" accessibilityLabel="Cadastrar lugar" action={() => router.push(ROUTES.PriceComparison.Market.Add)} />
+        <Cart accessibilityRole="button" accessibilityLabel="Cadastrar item" action={() => router.push(ROUTES.PriceComparison.Cart.Add)} />
       </>
     )
   }

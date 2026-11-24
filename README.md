@@ -29,7 +29,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
-- Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
+- Compara preços de produtos entre mercados, identifica todos os lugares empatados nas melhores e piores ofertas e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 
 ## Stack
 
@@ -167,9 +167,9 @@ npm run web:test:offline
 - Antes do primeiro deploy, habilite GitHub Pages em `Settings > Pages` com `Source: GitHub Actions` (senão o `actions/deploy-pages` retorna erro 404).
 - A aplicação web está disponível em: **[https://stephhoel.github.io/gastometro/](https://stephhoel.github.io/gastometro/)**
 
-### Testes E2E do roteamento web
+### Testes E2E web
 
-A suíte E2E valida carregamento direto, atualização de rotas profundas, histórico do navegador e fallback SPA em Chromium. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
+A suíte Playwright valida carregamento direto, atualização de rotas profundas, histórico do navegador, fallback SPA e um fluxo funcional de comparação de preços com cadastro de lugares e item, empates de ofertas e persistência após recarregar. Consulte [docs/WEB_E2E.md](docs/WEB_E2E.md) para preparar o navegador e executar os cenários com `npm run test:e2e:web`.
 
 ### Limitações web conhecidas
 

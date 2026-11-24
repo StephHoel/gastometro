@@ -94,10 +94,13 @@ export default function PriceComparison() {
               }
             </Row>
 
-            {entries
+            {[...entries]
               .sort((a, b) => a.itemName.localeCompare(b.itemName))
               .map((entry) => {
                 const result = compareEntryPrices(entry, places, entrySortBy)
+                const highestPlaces = result.options
+                  .filter((option) => option.price === result.highest?.price)
+                  .map((option) => option.placeName)
 
                 return (
                   <Card key={entry.id} className="p-4 gap-2 border-slate-700 bg-slate-800">
@@ -136,7 +139,7 @@ export default function PriceComparison() {
 
                     <View className="border-t border-slate-700 pt-2 gap-1">
                       <TextWhite className="text-sm">
-                        Maior preço: {result.highest ? `${result.highest.placeName} (${SetCurrency(result.highest.price)})` : 'Não disponível'}
+                        Maior preço: {result.highest ? `${highestPlaces.join(', ')} (${SetCurrency(result.highest.price)})` : 'Não disponível'}
                       </TextWhite>
 
                       <TextWhite className="text-sm">
