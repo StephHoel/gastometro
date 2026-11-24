@@ -47,8 +47,7 @@ describe('PriceComparisonStore', () => {
     })).toBe(true)
     expect(usePriceComparisonStore.getState().entries[0].itemName).toBe('Arroz integral')
     usePriceComparisonStore.getState().removeEntry(entry.id)
-    expect(usePriceComparisonStore.getState().entries).toHaveLength(1)
-    expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([])
+    expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
   })
 
   it('rejeita lugares inválidos, duplicados e atualizações com nome ou ID já utilizado', () => {
@@ -62,7 +61,7 @@ describe('PriceComparisonStore', () => {
     expect(usePriceComparisonStore.getState().places).toEqual([a, b])
   })
 
-  it('rejeita itens sem nome, sem preço, inválidos ou ligados a lugares inexistentes', () => {
+  it('rejeita itens inválidos e permite itens sem preços', () => {
     const store = usePriceComparisonStore.getState()
     store.addPlace({ name: 'Mercado A' })
     const place = usePriceComparisonStore.getState().places[0]
@@ -81,7 +80,8 @@ describe('PriceComparisonStore', () => {
       itemName: 'Arroz',
       pricesByPlace: [{ placeId: place.id, price: '1' }],
     })).toBe(false)
-    expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+    expect(usePriceComparisonStore.getState().entries).toHaveLength(1)
+    expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([])
   })
 
   it('persiste os dados em uma chave exclusiva', async () => {
