@@ -14,7 +14,9 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 ### Persistência e qualidade
 
 - Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
-- Adicionados testes de serviço e store para validação, cálculo, ordenação e integridade de preços ausentes.
+- Adicionados testes de serviço, store e tela para validação, cálculo, ordenação independente e integridade de preços ausentes.
+- Reforçadas as validações no store para rejeitar preços inválidos, lugares inexistentes, duplicidade de referência e atualizações para IDs inexistentes.
+- Parser monetário ampliado para aceitar valores pt-BR com símbolo de moeda e agrupamento de milhares.
 
 ### Qualidade e testes
 

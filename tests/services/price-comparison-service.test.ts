@@ -59,6 +59,15 @@ describe('PriceComparisonService', () => {
     expect(result.differencePercent).toBeCloseTo(33.333)
   })
 
+  it('não calcula diferença quando existe apenas uma oferta válida', () => {
+    const result = compareEntryPrices(entry('Café', [{ placeId: 'a', price: '12,50' }]), places)
+    expect(result.options).toHaveLength(1)
+    expect(result.lowest?.price).toBe(12.5)
+    expect(result.highest?.price).toBe(12.5)
+    expect(result.difference).toBeNull()
+    expect(result.differencePercent).toBeNull()
+  })
+
   it('trata ofertas iguais, preço zero, lugar removido e valores inválidos', () => {
     const result = compareEntryPrices(entry('Leite', [
       { placeId: 'a', price: '0' },
