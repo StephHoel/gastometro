@@ -33,6 +33,18 @@ describe('Formulários de comparação de preços', () => {
     expect(mockPush).toHaveBeenCalledWith('/price-comparison')
   })
 
+  it('edita lugar existente sem criar um novo registro', async () => {
+    usePriceComparisonStore.getState().addPlace({ name: 'Mercado Antigo' })
+    const place = usePriceComparisonStore.getState().places[0]
+    const screen = await render(<FormMarket data={place} buttonTitle="Editar lugar" />)
+
+    await fireEvent.changeText(screen.getByLabelText('Lugar Input'), 'Mercado Atual')
+    await fireEvent.press(screen.getByText('Editar lugar'))
+
+    expect(usePriceComparisonStore.getState().places).toHaveLength(1)
+    expect(usePriceComparisonStore.getState().places[0].name).toBe('Mercado Atual')
+  })
+
   it('impede lugar vazio e nomes duplicados', async () => {
     usePriceComparisonStore.getState().addPlace({ name: 'Mercado Central' })
     const screen = await render(<FormMarket buttonTitle="Adicionar lugar" />)
@@ -64,6 +76,33 @@ describe('Formulários de comparação de preços', () => {
       pricesByPlace: [{ placeId: 'place-1', price: '10,50' }],
     })
     expect(mockPush).toHaveBeenCalledWith('/price-comparison')
+  })
+
+  it('edita item e mantém os preços associados aos lugares', async () => {
+    usePriceComparisonStore.setState({
+      places: [{ id: 'place-1', name: 'Mercado A' }],
+      entries: [{
+        id: 'entry-1',
+        itemName: 'Arroz',
+        quantityReference: '1 kg',
+        pricesByPlace: [{ placeId: 'place-1', price: '10,00' }],
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      }],
+    })
+    const entry = usePriceComparisonStore.getState().entries[0]
+    const screen = await render(<FormCart data={entry} buttonTitle="Editar item" />)
+
+    expect(screen.getByLabelText('Preço em Mercado A Input').props.value).toBe('10,00')
+    await fireEvent.changeText(screen.getByLabelText('Nome do item Input'), 'Arroz integral')
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A Input'), '11,25')
+    await fireEvent.press(screen.getByText('Editar item'))
+
+    expect(usePriceComparisonStore.getState().entries).toHaveLength(1)
+    expect(usePriceComparisonStore.getState().entries[0]).toMatchObject({
+      itemName: 'Arroz integral',
+      pricesByPlace: [{ placeId: 'place-1', price: '11,25' }],
+    })
   })
 
   it('permite cadastrar item sem preço', async () => {
