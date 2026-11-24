@@ -7,6 +7,18 @@ export const ERROR = {
   duplicate_item: 'Já existe um item com este nome na lista.',
   empty_list_name: 'O nome da lista não pode ser vazio.',
   cannot_remove_last_list: 'Não é possível remover a última lista.',
+  
+  // Comparação de Preços
+  duplicate_market_name: 'Já existe um lugar com esse nome.',
+  required_field: (field: string) => ` ${field} é obrigatório.`,
+  save_comparison_failure: 'Não foi possível salvar a comparação.',
+  item_name_required: 'Informe o nome do item.',
+  price_required: 'Informe o preço em pelo menos um lugar.',
+  invalid_place: 'Selecione um lugar válido para cada preço.',
+  price_invalid: 'Informe um preço ou deixe o lugar sem preço.',
+  price_negative: 'Informe preços válidos e não negativos.',
+  place_name_required: 'Informe o nome do lugar.',
+
 
   // WhatsApp
   whatsapp_unavailable: 'WhatsApp não disponível',

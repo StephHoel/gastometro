@@ -15,7 +15,6 @@ export function CustomInput<TFieldValues extends FieldValues>({
   nameField,
   placeholder,
   maxLength,
-  selfRef,
   returnKeyType,
   onSubmit,
   keyboardType = "default",
@@ -39,7 +38,7 @@ export function CustomInput<TFieldValues extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { value, onChange } }) => {
+      render={({ field: { value, onChange, ref } }) => {
         const inputValue = typeof value === 'string' ? value : ''
 
         return (
@@ -52,8 +51,9 @@ export function CustomInput<TFieldValues extends FieldValues>({
               placeholder={placeholder}
               onChangeText={(text) => onChange(normalizeText(text))}
               value={inputValue}
+              accessibilityLabel={nameField + " Input"}
               maxLength={maxLength}
-              ref={selfRef}
+              ref={ref}
               keyboardType={keyboardType}
               onFocus={() => {
                 if (typeof value === 'string' && (value === "0.00" || value === "0"))

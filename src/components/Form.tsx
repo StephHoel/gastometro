@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { Keyboard, View, type TextInputInstance } from "react-native"
+import { Keyboard, View } from "react-native"
 import uuid from "react-native-uuid"
 import { useCartStore } from "@/stores/CartStore"
 import { CustomButton as Button } from "@/components/Button"
@@ -18,9 +18,10 @@ import { INPUTS } from '@/constants/text/inputs'
 import { NameField } from '@/enums/NameField'
 import { ProductFormData } from '@/interfaces/FormData/ProductFormData'
 import { ROUTES } from '@/constants/routes'
+import { ProductProps } from '@/interfaces/ProductProps'
 
-export function Form({ data = undefined, buttonTitle, children }: FormProps) {
-  const { control, handleSubmit, reset } = useForm<ProductFormData>({
+export function Form({ data = undefined, buttonTitle, children }: FormProps<ProductProps>) {
+  const { control, handleSubmit, setFocus, reset } = useForm<ProductFormData>({
     defaultValues: {
       item: data?.item ?? "",
       qtt: data?.quantity ?? "",
@@ -30,11 +31,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   })
 
   const cartStore = useCartStore()
-  const navigation = useRouter()
+  const router = useRouter()
 
-  const inputRef1 = useRef<TextInputInstance | null>(null)
-  const inputRef2 = useRef<TextInputInstance | null>(null)
-  const inputRef3 = useRef<TextInputInstance | null>(null)
   const alertRef = useRef<CustomAlertRef>(null)
 
   useInitAlert(alertRef)
@@ -71,7 +69,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     else cartStore.add(product)
 
     reset()
-    navigation.push(ROUTES.Index)
+    router.push(ROUTES.IndexTab)
   }
 
   useEffect(() => {
@@ -94,9 +92,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         name="item"
         nameField={NameField.Item}
         placeholder={INPUTS.placeholder.item}
-        selfRef={inputRef1}
         returnKeyType={"next"}
-        onSubmit={() => inputRef2.current?.focus()}
+        onSubmit={() => setFocus("qtt")}
       />
 
       <CustomInput
@@ -104,10 +101,9 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         name="qtt"
         nameField={NameField.Quantity}
         placeholder={INPUTS.placeholder.quantity}
-        selfRef={inputRef2}
         returnKeyType={"next"}
-        keyboardType={"number-pad"}
-        onSubmit={() => inputRef3.current?.focus()}
+        keyboardType={"decimal-pad"}
+        onSubmit={() => setFocus("price")}
       />
 
       <CustomInput
@@ -115,9 +111,8 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
         name="price"
         nameField={NameField.Price}
         placeholder={INPUTS.placeholder.price}
-        selfRef={inputRef3}
         returnKeyType={"done"}
-        keyboardType={"number-pad"}
+        keyboardType={"decimal-pad"}
         onSubmit={() => handleSubmit(onSubmit)()}
       />
 

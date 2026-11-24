@@ -69,6 +69,6 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
       return <Back action={() => router.push(ROUTES.Reminder.Id(listId))} />
 
     default:
-      return <Back action={() => router.push(ROUTES.Index)} />
+      return <Back action={() => router.push(ROUTES.IndexTab)} />
   }
 }
