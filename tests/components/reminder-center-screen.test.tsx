@@ -85,6 +85,6 @@ describe('ReminderCenter screen', () => {
     expect(getByText(REMINDERS.in_list(REMINDERS.unknown_list))).toBeTruthy()
 
     await fireEvent.press(getAllByText(REMINDERS.open_list_button)[0])
-    expect(mockPush).toHaveBeenCalledWith('./list-1')
+    expect(mockPush).toHaveBeenCalledWith('/reminders/list-1')
   })
 })
