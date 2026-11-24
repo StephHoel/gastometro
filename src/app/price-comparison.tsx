@@ -233,14 +233,14 @@ export default function PriceComparison() {
                   </Row>
                   {result.options.map((option) => (
                     <Row key={option.placeId} className="justify-between gap-2">
-                      <TextWhite className={option.placeId === result.lowest?.placeId ? 'text-lime-400 font-semibold' : 'text-slate-300'}>
-                        {option.placeName}{option.placeId === result.lowest?.placeId ? ' · Melhor preço' : ''}
+                      <TextWhite className={option.price === result.lowest?.price ? 'text-lime-400 font-semibold' : 'text-slate-300'}>
+                        {option.placeName}{option.price === result.lowest?.price ? ' · Melhor preço' : ''}{result.options.length > 1 && option.price === result.highest?.price ? ' · Maior preço' : ''}
                       </TextWhite>
-                      <TextWhite className={option.placeId === result.lowest?.placeId ? 'text-lime-400 font-semibold' : ''}>{SetCurrency(option.price)}</TextWhite>
+                      <TextWhite className={option.price === result.lowest?.price ? 'text-lime-400 font-semibold' : ''}>{SetCurrency(option.price)}</TextWhite>
                     </Row>
                   ))}
                   <View className="border-t border-slate-700 pt-2 gap-1">
-                    <TextWhite className="text-sm">Maior preço: {formatDifference(result.highest?.price ?? null)}</TextWhite>
+                    <TextWhite className="text-sm">Maior preço: {result.highest ? `${result.highest.placeName} (${SetCurrency(result.highest.price)})` : 'Não disponível'}</TextWhite>
                     <TextWhite className="text-sm">Economia possível: {formatDifference(result.difference)}{result.differencePercent === null ? '' : ' (' + result.differencePercent.toFixed(1).replace('.', ',') + '%)'}</TextWhite>
                   </View>
                 </Card>

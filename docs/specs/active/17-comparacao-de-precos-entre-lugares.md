@@ -1,7 +1,7 @@
 # Mini-spec: Comparação de preços entre lugares
 
 Número: 17
-Status: ativa, aguardando validação
+Status: implementada, aguardando validação manual
 
 ## Problema
 
@@ -94,3 +94,19 @@ interface PriceComparisonEntryProps {
 - Lugares sem preço para todos os itens da cesta devem ser identificados como incompletos; preços ausentes nunca equivalem a zero.
 - Priorizar modelagem desacoplada em `src/interfaces`, `src/stores` e `src/services`.
 - Garantir cobertura de testes para regras de cálculo de menor preço e diferença percentual.
+
+
+## Status da implementação
+
+- [x] Cadastro, edição e remoção de lugares com nome normalizado e observação opcional.
+- [x] Cadastro, edição e remoção de itens com preços parciais por lugar.
+- [x] Persistência offline-first em chave exclusiva, sem alterar os dados de listas, contas ou lembretes.
+- [x] Validação de preços não negativos, lugares existentes e identificadores válidos.
+- [x] Comparação de menor e maior oferta, com identificação visual dos respectivos lugares, diferença absoluta e percentual relativo à maior oferta.
+- [x] Tratamento de preço zero como válido e de preço ausente/inválido como indisponível.
+- [x] Cesta completa somente quando todos os itens possuem preço válido no lugar.
+- [x] Ordenação independente das ofertas por item e dos totais da cesta.
+- [x] Acesso à tela pela navegação principal.
+- [x] Testes unitários, de store e de tela cobrindo os critérios funcionais.
+- [x] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22: 303 testes aprovados, cobertura de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
+- [ ] Validação manual da funcionalidade antes de mover a mini-spec para `done/`.

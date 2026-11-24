@@ -20,14 +20,16 @@ Implementação da mini-spec 17: comparação offline-first de preços entre lug
 
 ### Qualidade e testes
 
-- Ampliação da suíte automatizada, com medição global de 96,62% em statements, 92,20% em branches, 96,15% em funções e 97,82% em linhas.
-- A execução registrou 298 testes aprovados e 2 falhas, nos testes de store de carrinho e de contas. Os percentuais representam a medição produzida pelo Jest, mas a suíte ainda não está totalmente verde.
+- A execução final de CI em 2026-11-22 aprovou os 303 testes (50 suítes), com 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
+- Corrigidos os três testes que falhavam na execução anterior: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta considera seu controle independente. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
+- O build Android e os testes E2E web também concluíram com sucesso.
+- A interface identifica explicitamente tanto o lugar com menor preço quanto os lugares com maior preço, inclusive quando há empate.
 - O gate mínimo global de cobertura permanece em 80%.
 
 ### Documentação
 
 - Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
-- README, SPEC e índice de documentação atualizados com os percentuais medidos e a situação da execução.
+- README, SPEC e índice de documentação atualizados com os percentuais da execução aprovada.
 - Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
 
 ## 1.8.2 - 2026-11-21

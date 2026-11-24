@@ -4,8 +4,8 @@
 >
 > **Versão do App:** 1.9.0
 > **Data:** 2026-11-22
-> **Cobertura de Testes (linhas):** 97.82%
-> Última medição em 2026-11-22: 96,62% statements, 92,20% branches, 96,15% funções e 97,82% linhas. A execução registrou 298 testes passando e 2 falhando; os percentuais não representam uma execução totalmente verde.
+> **Cobertura de Testes (linhas):** 97,87%
+> Última medição em 2026-11-22: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas. Os 303 testes passaram na execução de CI.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -149,7 +149,7 @@ Regras: contas são persistidas separadamente em `gastometro-bills`; valor aceit
 
 ### Comparação de preços
 
-Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca menor e maior preço; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
+Os lugares e itens comparados usam contratos próprios (`PriceComparisonPlaceProps` e `PriceComparisonEntryProps`) e persistência dedicada (`gastometro-price-comparisons`). O parser aceita moeda pt-BR e decimal, e o store rejeita preços inválidos/negativos, referências a lugares inexistentes e atualizações para IDs desconhecidos. A comparação individual destaca visualmente a menor e a maior oferta, identificando o respectivo lugar; diferença absoluta e percentual só são calculadas quando existem ao menos duas ofertas válidas, com percentual relativo à maior oferta. A ordenação das ofertas é independente da ordenação da cesta. A cesta só calcula total para lugares que tenham preço válido em todos os itens; ausência de preço nunca é interpretada como zero.
 
 ### Lembrete Local
 
