@@ -303,21 +303,21 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
 
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
-      await page.getByRole("button", { name: "Cadastrar lugar" }).click()
-      await page.getByLabel("Lugar Input").fill(place)
-      await page.getByText("Adicionar lugar", { exact: true }).click()
+      await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
+      await page.getByLabel("Lugar Input").last().fill(place)
+      await page.getByText("Adicionar lugar", { exact: true }).last().click()
       await page.getByText("Lugares Cadastrados", { exact: true }).last().waitFor()
       await page.getByText(place, { exact: true }).last().waitFor()
     }
 
-    await page.getByRole("button", { name: "Cadastrar item" }).click()
-    await page.getByLabel("Nome do item Input").fill("Leite")
-    await page.getByLabel("Referência de quantidade Input").fill("1 litro")
-    await page.getByLabel("Preço em Mercado A Input").fill("5,00")
-    await page.getByLabel("Preço em Mercado B Input").fill("5,00")
-    await page.getByLabel("Preço em Mercado C Input").fill("10,00")
-    await page.getByLabel("Preço em Mercado D Input").fill("10,00")
-    await page.getByText("Adicionar item", { exact: true }).click()
+    await page.getByRole("button", { name: "Cadastrar item" }).last().click()
+    await page.getByLabel("Nome do item Input").last().fill("Leite")
+    await page.getByLabel("Referência de quantidade Input").last().fill("1 litro")
+    await page.getByLabel("Preço em Mercado A Input").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado B Input").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado C Input").last().fill("10,00")
+    await page.getByLabel("Preço em Mercado D Input").last().fill("10,00")
+    await page.getByText("Adicionar item", { exact: true }).last().click()
 
     await page.getByText("Mercado A · Melhor preço", { exact: true }).waitFor()
     await page.getByText("Mercado B · Melhor preço", { exact: true }).waitFor()
