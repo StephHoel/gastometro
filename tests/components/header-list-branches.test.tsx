@@ -117,7 +117,7 @@ describe('Header and List branch coverage', () => {
 
     await fireEvent.press(getByText('Back'))
 
-    expect(mockPush).toHaveBeenCalledWith('/')
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
     expect(queryByText('Add')).toBeNull()
   })
 
