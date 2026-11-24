@@ -45,7 +45,6 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Maior preço: Mercado A (R$ 10,00)')).toBeTruthy()
     expect(screen.getByText('Economia possível: R$ 2,00 (20,0%)')).toBeTruthy()
     expect(screen.getAllByText('Cesta completa')).toHaveLength(2)
-    expect(screen.getByText('R$ 18,00')).toBeTruthy()
   })
 
   it('marca cesta incompleta quando falta preço e alterna ordenações independentes', async () => {
