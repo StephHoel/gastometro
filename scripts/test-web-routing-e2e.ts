@@ -305,7 +305,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     for (const place of places) {
       await page.getByRole("button", { name: "Cadastrar lugar" }).click()
       await page.getByLabel("Lugar Input").fill(place)
-      await page.getByRole("button", { name: "Adicionar lugar" }).click()
+      await page.getByText("Adicionar lugar", { exact: true }).click()
       await page.getByText("Lugares Cadastrados", { exact: true }).waitFor()
       await page.getByText(place, { exact: true }).waitFor()
     }
@@ -317,7 +317,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByLabel("Preço em Mercado B Input").fill("5,00")
     await page.getByLabel("Preço em Mercado C Input").fill("10,00")
     await page.getByLabel("Preço em Mercado D Input").fill("10,00")
-    await page.getByRole("button", { name: "Adicionar item" }).click()
+    await page.getByText("Adicionar item", { exact: true }).click()
 
     await page.getByText("Mercado A · Melhor preço", { exact: true }).waitFor()
     await page.getByText("Mercado B · Melhor preço", { exact: true }).waitFor()
