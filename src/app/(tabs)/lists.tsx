@@ -26,6 +26,7 @@ import { SIZE } from '@/constants/size'
 import { useForm } from "react-hook-form"
 import { CreateListForm } from '@/interfaces/Form/CreateListForm'
 import { EditListForm } from '@/interfaces/Form/EditListForm'
+import { ROUTES } from '@/constants/routes'
 
 export default function Lists() {
   const cartStore = useCartStore()
@@ -66,7 +67,7 @@ export default function Lists() {
 
   function handleSelectList(listId: string) {
     cartStore.setActiveList(listId)
-    router.push("/")
+    router.push(ROUTES.IndexTab)
   }
 
   function handleStartEdit(listId: string, currentName: string) {
@@ -212,7 +213,7 @@ export default function Lists() {
                   ) : (
                     <>
                       <TouchableOpacity
-                        onPress={() => router.push(`../reminders/${item.id}`)}
+                        onPress={() => router.push(ROUTES.Reminder.Id(item.id))}
                         activeOpacity={0.7}
                         hitSlop={8}
                       >

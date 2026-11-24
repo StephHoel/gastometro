@@ -1,16 +1,14 @@
 import { NameField } from '@/enums/NameField'
-import type { RefObject } from 'react'
-import type { TextInputInstance } from "react-native"
 import type { Control, FieldPath, FieldValues } from 'react-hook-form'
+import { KeyboardTypeOptions, ReturnKeyTypeOptions } from 'react-native'
 
 export interface CustomInputProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>
   name: FieldPath<TFieldValues>
-  nameField: NameField
-  selfRef: RefObject<TextInputInstance | null>
+  nameField: NameField | string
   placeholder: string
   maxLength?: number
   onSubmit: () => void
-  returnKeyType: "next" | "done"
-  keyboardType?: "default" | "number-pad"
+  returnKeyType: ReturnKeyTypeOptions | undefined
+  keyboardType?: KeyboardTypeOptions | undefined
 }

@@ -5,5 +5,10 @@ export enum NameField {
   Unit = "Unidade",
   Title = "Título",
   Date = "Data",
-  Time = "Hora"
+  Time = "Hora",
+  Market = "Lugar",
+  Notes = "Observação",
+  ItemName = "Nome do item",
+  QuantityReference = "Referência de quantidade",
+  PricesByPlace = "Preço em"
 }

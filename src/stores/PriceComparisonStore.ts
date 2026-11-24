@@ -16,12 +16,18 @@ function isValidEntry(
   entry: Omit<PriceComparisonEntryProps, 'id' | 'createdAt' | 'updatedAt'>,
   placeIds: Set<string>,
 ): boolean {
-  if (!entry.itemName.trim() || entry.pricesByPlace.length === 0) return false
+  // TODO por enquanto permitir salvar com preços vazios
+  if (!entry.itemName.trim() /*|| entry.pricesByPlace.length === 0*/) return false
+
   const seenPlaceIds = new Set<string>()
+
   return entry.pricesByPlace.every(({ placeId, price }) => {
     if (!placeIds.has(placeId) || seenPlaceIds.has(placeId) || !price.trim()) return false
+
     seenPlaceIds.add(placeId)
+
     const parsed = parseComparisonPrice(price)
+
     return Number.isFinite(parsed) && parsed >= 0
   })
 }

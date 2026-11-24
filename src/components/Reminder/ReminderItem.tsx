@@ -10,13 +10,14 @@ import { useRouter } from 'expo-router'
 import { SIZE } from '@/constants/size'
 import { AlertService } from '@/services/AlertService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import { ROUTES } from '@/constants/routes'
 
 export function ReminderItem({ item }: ReminderItemProps) {
   const router = useRouter()
   const status = ReminderService.getStatus(item)
 
   function handleEditReminder(): void {
-    router.push(`/reminders/${item.listId}/edit/${item.id}`)
+    router.push(ROUTES.Reminder.Edit(item.listId, item.id))
   }
 
   function removeReminder() {

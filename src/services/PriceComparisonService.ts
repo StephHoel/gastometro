@@ -1,28 +1,11 @@
+import { ERROR } from '@/constants/text/error'
+import { BasketPlaceTotal } from '@/interfaces/BasketPlaceTotal'
+import { EntryComparison } from '@/interfaces/EntryComparison'
 import type {
   PriceComparisonEntryProps,
   PriceComparisonPlaceProps,
 } from '@/interfaces/PriceComparisonProps'
-
-export interface PriceOption {
-  placeId: string
-  placeName: string
-  price: number
-}
-
-export interface EntryComparison {
-  options: PriceOption[]
-  lowest: PriceOption | null
-  highest: PriceOption | null
-  difference: number | null
-  differencePercent: number | null
-}
-
-export interface BasketPlaceTotal {
-  placeId: string
-  placeName: string
-  total: number | null
-  complete: boolean
-}
+import { PriceOption } from '@/interfaces/PriceOption'
 
 /**
  * Interpreta valores monetários em pt-BR (1.234,56) e decimal (1234.56).
@@ -55,7 +38,7 @@ export function parseComparisonPrice(value: string): number {
 }
 
 export function validatePlace(name: string): string | null {
-  return name.trim() ? null : 'Informe o nome do lugar.'
+  return name.trim() ? null : ERROR.place_name_required
 }
 
 /**
@@ -67,20 +50,28 @@ export function validateComparisonEntry(
   prices: Array<{ placeId: string; price: string }>,
   selectedPlaceIds: string[],
 ): string | null {
-  if (!itemName.trim()) return 'Informe o nome do item.'
-  if (prices.length === 0) return 'Informe o preço em pelo menos um lugar.'
+  if (!itemName.trim()) return ERROR.item_name_required
+
+  // TODO por enquanto permitir salvar com preços vazios
+  // if (prices.length === 0) return ERROR.price_required
 
   const validPlaceIds = new Set(selectedPlaceIds)
   const seenPlaceIds = new Set<string>()
+
   for (const price of prices) {
     if (!validPlaceIds.has(price.placeId) || seenPlaceIds.has(price.placeId)) {
-      return 'Selecione um lugar válido para cada preço.'
+      return ERROR.invalid_place
     }
+
     seenPlaceIds.add(price.placeId)
-    if (!price.price.trim()) return 'Informe um preço ou deixe o lugar sem preço.'
+
+    if (!price.price.trim()) return ERROR.price_invalid
+
     const parsed = parseComparisonPrice(price.price)
-    if (!Number.isFinite(parsed) || parsed < 0) return 'Informe preços válidos e não negativos.'
+
+    if (!Number.isFinite(parsed) || parsed < 0) return ERROR.price_negative
   }
+
   return null
 }
 
