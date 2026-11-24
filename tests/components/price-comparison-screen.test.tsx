@@ -74,6 +74,7 @@ describe('PriceComparison screen', () => {
 
     await fireEvent.press(screen.getAllByText(/Ordenar por/)[0])
     expect(screen.getByText('Ordenar por menor preço')).toBeTruthy()
+    expect(screen.getByText('Ordenar por nome')).toBeTruthy()
 
     await fireEvent.press(screen.getByLabelText('Remover comparação de Arroz integral'))
     expect(screen.queryByText('Arroz integral')).toBeNull()
@@ -119,6 +120,7 @@ describe('PriceComparison screen', () => {
 
     await fireEvent.press(screen.getAllByText(/Ordenar por/)[1])
     expect(screen.getByText('Ordenar por menor total')).toBeTruthy()
+    expect(screen.getByText('Ordenar por menor preço')).toBeTruthy()
     expect(a.name).toBe('Mercado A')
   })
 
