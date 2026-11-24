@@ -165,7 +165,7 @@ describe('Lists screen', () => {
     await fireEvent.press(getByText('Lista 2'))
 
     expect(mockStore.setActiveList).toHaveBeenCalledWith('list-2')
-    expect(mockPush).toHaveBeenCalledWith('/')
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
   })
 
   it('renomeia lista no modo edição', async () => {
