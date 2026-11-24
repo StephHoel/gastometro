@@ -1,7 +1,7 @@
 # Mini-spec: Comparação de preços entre lugares
 
 Número: 17
-Status: implementada, aguardando validação manual
+Status: implementada e validada manualmente em Android e Web
 
 ## Problema
 
@@ -110,4 +110,4 @@ interface PriceComparisonEntryProps {
 - [x] Testes unitários, de store e de tela cobrindo os critérios funcionais, incluindo cesta vazia, preços zero válidos e apresentação de todos os lugares empatados no menor e no maior preço.
 - [x] Concluir a execução de CI após as correções dos três testes identificados no workflow de 2026-11-22: 303 testes aprovados, cobertura de 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
 - [x] Teste E2E web do fluxo de cadastro de lugares e item, comparação de preços empatados e persistência após recarregar a aplicação.
-- [ ] Validação manual da funcionalidade em Android e Web antes de mover a mini-spec para `done/`.
+- [x] Validação manual da funcionalidade concluída em Android e Web.

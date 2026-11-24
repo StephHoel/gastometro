@@ -52,7 +52,7 @@ Público esperado:
 - Service Worker na web com cache versionado para funcionamento offline após primeira visita online bem-sucedida.
 - CRUD offline-first de contas a pagar, com totais pendentes/pagos e destaque de vencidas.
 - Suíte E2E web com Playwright para validar rotas diretas, atualização de rotas profundas, navegação/histórico e fallback SPA do GitHub Pages; execução automatizada no CI.
-- Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação.
+- Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação; funcionalidade validada manualmente em Android e Web.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 
 ## 3. Funcionalidades Planejadas

@@ -15,8 +15,7 @@ Reforço dos testes automatizados da comparação de preços e atualização da 
 ### Documentação
 
 - Atualizados a mini-spec 17, o guia E2E web, o índice de documentação, o README e a SPEC para descrever o novo cenário funcional.
-- A validação manual em Android e Web permanece pendente.
-
+- A validação manual foi concluída em Android e Web; a mini-spec 17 foi movida para `docs/specs/done/`.
 
 ## 1.9.0 - 2026-11-22
 

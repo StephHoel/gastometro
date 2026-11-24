@@ -51,10 +51,9 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
-## Em implementação (aguardando validação dos PRs):
+## Em implementação (aguardando validação dos PRs)
 
 - [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
-- [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
 
 ## Funcionalidades planejadas
 

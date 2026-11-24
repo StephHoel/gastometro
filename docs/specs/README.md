@@ -33,11 +33,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Service Worker para funcionamento offline em web](./done/13-service-worker-offline-web.md)
 - [Contas a pagar](./done/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](./done/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](./done/17-comparacao-de-precos-entre-lugares.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [Comparação de preços entre lugares](./active/17-comparacao-de-precos-entre-lugares.md) (E2E funcional de cadastro, empate e persistência implementado; validação manual pendente)
 
 ### Planejadas (ordem de prioridade)
 
