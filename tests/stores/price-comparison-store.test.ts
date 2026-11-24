@@ -47,7 +47,8 @@ describe('PriceComparisonStore', () => {
     })).toBe(true)
     expect(usePriceComparisonStore.getState().entries[0].itemName).toBe('Arroz integral')
     usePriceComparisonStore.getState().removeEntry(entry.id)
-    expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+    expect(usePriceComparisonStore.getState().entries).toHaveLength(1)
+    expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([])
   })
 
   it('rejeita lugares inválidos, duplicados e atualizações com nome ou ID já utilizado', () => {
@@ -67,7 +68,7 @@ describe('PriceComparisonStore', () => {
     const place = usePriceComparisonStore.getState().places[0]
 
     expect(store.addEntry({ itemName: ' ', pricesByPlace: [{ placeId: place.id, price: '1' }] })).toBe(false)
-    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [] })).toBe(false)
+    expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [] })).toBe(true)
     expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: 'inexistente', price: '1' }] })).toBe(false)
     expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: '-1' }] })).toBe(false)
     expect(store.addEntry({ itemName: 'Arroz', pricesByPlace: [{ placeId: place.id, price: 'inválido' }] })).toBe(false)
