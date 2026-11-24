@@ -8,7 +8,7 @@ import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 import { useCartStore } from '@/stores/CartStore'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Platform, Text } from 'react-native'
-import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponseAsync, getLastNotificationResponseAsync, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
+import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 import "@/styles/global.css"
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
@@ -115,11 +115,11 @@ export default function Layout() {
 
     async function bootstrapNotificationOpen() {
       try {
-        const lastResponse = await getLastNotificationResponseAsync()
+        const lastResponse = getLastNotificationResponse()
         if (!isMounted || !lastResponse) return
 
         await handleNotificationResponse(lastResponse)
-        await clearLastNotificationResponseAsync()
+        clearLastNotificationResponse()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       } finally {
@@ -201,7 +201,7 @@ export default function Layout() {
           options={{
             title: "Contas",
             tabBarIcon: ({ color, size }) => (
-              <Text style={{ color, fontSize: size-4, fontWeight: "bold" }}>R$</Text>
+              <Text style={{ color, fontSize: size - 4, fontWeight: "bold" }}>R$</Text>
             ),
             headerTitle: "Contas a pagar",
           }}
@@ -235,6 +235,10 @@ export default function Layout() {
         <Tabs.Screen name="reminders/[listId]/index" options={{ href: null }} />
         <Tabs.Screen name="reminders/[listId]/new" options={{ href: null }} />
         <Tabs.Screen name="reminders/[listId]/edit/[reminderId]" options={{ href: null }} />
+        <Tabs.Screen name="price-comparison/market/add" options={{ href: null }} />
+        <Tabs.Screen name="price-comparison/market/edit/[marketId]" options={{ href: null }} />
+        <Tabs.Screen name="price-comparison/cart/add" options={{ href: null }} />
+        <Tabs.Screen name="price-comparison/cart/edit/[cartId]" options={{ href: null }} />
       </Tabs>
     </SafeAreaView>
   )
