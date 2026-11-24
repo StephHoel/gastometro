@@ -1,18 +1,26 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { AppState, Platform, Text } from 'react-native'
+import { SafeAreaView } from "react-native-safe-area-context"
 import { Tabs, usePathname, useRouter } from "expo-router"
+import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
-import { SafeAreaView } from "react-native-safe-area-context"
+
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
+
+import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
+
 import { useCartStore } from '@/stores/CartStore'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform, Text } from 'react-native'
-import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
-import "@/styles/global.css"
+import { useReminderStore } from '@/stores/ReminderStore'
+
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
+import { ROUTES } from '@/constants/routes'
+
+import "@/styles/global.css"
 
 export default function Layout() {
   const pathname = usePathname()
@@ -20,6 +28,10 @@ export default function Layout() {
   const lists = useCartStore((state) => state.lists)
   const activeListId = useCartStore((state) => state.activeListId)
   const setActiveList = useCartStore((state) => state.setActiveList)
+  const reminders = useReminderStore((state) => state.reminders)
+  const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const listIdsKey = getListIdsSignature(lists)
+  const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
 
   const handleNotificationResponse = useCallback(
@@ -43,7 +55,7 @@ export default function Layout() {
             await ReminderOrchestrator.removeReminder(reminderId)
           }
           if (pathname !== '/') {
-            router.replace('/(tabs)/index')
+            router.replace(ROUTES.IndexTab)
           }
           return
         }
@@ -53,7 +65,7 @@ export default function Layout() {
         }
 
         if (pathname !== '/') {
-          router.replace('/(tabs)/index')
+          router.replace(ROUTES.IndexTab)
         }
       } catch (error) {
         console.error(ERROR.notification_response_failure, error)
@@ -62,10 +74,19 @@ export default function Layout() {
     [activeListId, lists, pathname, router, setActiveList],
   )
 
+  const handleNotificationResponseRef = useRef<(response: NotificationResponse) => Promise<void>>(async () => undefined)
+  handleNotificationResponseRef.current = handleNotificationResponse
+
+  useEffect(() => {
+    const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
+    return unsubscribe
+  }, [])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
 
@@ -118,7 +139,7 @@ export default function Layout() {
         const lastResponse = getLastNotificationResponse()
         if (!isMounted || !lastResponse) return
 
-        await handleNotificationResponse(lastResponse)
+        await handleNotificationResponseRef.current(lastResponse)
         clearLastNotificationResponse()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
@@ -130,25 +151,26 @@ export default function Layout() {
     void bootstrapNotificationOpen()
 
     const subscription = addNotificationResponseReceivedListener((response) => {
-      void handleNotificationResponse(response)
+      void handleNotificationResponseRef.current(response)
     })
 
     return () => {
       isMounted = false
       subscription.remove()
     }
-  }, [handleNotificationResponse])
+  }, [])
 
   useEffect(() => {
+    if (!remindersHydrated) return
+
     let isMounted = true
 
     async function bootstrapReminders() {
       try {
-        const listIds = lists.map((list) => list.id)
+        const listIds = listIdsKey ? listIdsKey.split('|') : []
         await ReminderOrchestrator.cleanupOrphans(listIds)
-        await ReminderOrchestrator.syncWithPermissions()
-
         if (!isMounted) return
+        await ReminderOrchestrator.syncWithPermissions()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       }
@@ -159,7 +181,19 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [lists])
+  }, [listIdsKey, remindersSignature, remindersHydrated])
+
+  useEffect(() => {
+    if (!remindersHydrated || Platform.OS === 'web') return
+
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        void ReminderOrchestrator.syncWithPermissions()
+      }
+    })
+
+    return () => subscription.remove()
+  }, [remindersHydrated])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>

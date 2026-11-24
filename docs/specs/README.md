@@ -38,11 +38,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [Sincronização eficiente de lembretes](./active/18-sincronizacao-eficiente-de-lembretes.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-2. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-3. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-4. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-5. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+2. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+3. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+4. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)

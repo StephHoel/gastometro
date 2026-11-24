@@ -3,7 +3,7 @@ import { PermissionState } from '@/enums/PermissionState'
 import { IsWeb } from '@/utils/platform'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
-import { getPermissionsAsync, requestPermissionsAsync, scheduleNotificationAsync, SchedulableTriggerInputTypes, cancelScheduledNotificationAsync, dismissAllNotificationsAsync, PermissionStatus } from 'expo-notifications'
+import { getPermissionsAsync, requestPermissionsAsync, scheduleNotificationAsync, SchedulableTriggerInputTypes, cancelScheduledNotificationAsync, dismissAllNotificationsAsync, getAllScheduledNotificationsAsync, PermissionStatus } from 'expo-notifications'
 
 const LIST_ID_KEY = 'listId'
 const REMINDER_ID_KEY = 'reminderId'
@@ -46,6 +46,35 @@ export const NotificationService = {
     } catch (error) {
       console.error(ERROR.notification_permission_request_failure, error)
       return false
+    }
+  },
+
+  async getScheduledReminderNotifications(): Promise<Array<{
+    notificationId: string
+    reminderId: string | null
+    listId: string | null
+    title: string | null
+    datetimeISO: string | null
+  }> | null> {
+    if (IsWeb()) return []
+
+    try {
+      const notifications = await getAllScheduledNotificationsAsync()
+      return notifications.map((notification) => {
+        const trigger = notification.trigger as unknown as { date?: Date | string | number } | null
+        const rawDate = trigger?.date
+        const parsedDate = rawDate === undefined ? null : new Date(rawDate)
+        return {
+          notificationId: notification.identifier,
+          reminderId: this.getReminderIdFromNotification(notification.content.data),
+          listId: this.getListIdFromNotification(notification.content.data),
+          title: notification.content.title ?? null,
+          datetimeISO: parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate.toISOString() : null,
+        }
+      })
+    } catch (error) {
+      console.error(ERROR.notification_schedule_failure, error)
+      return null
     }
   },
 
