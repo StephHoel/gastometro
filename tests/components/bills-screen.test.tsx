@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import Bills from '@/app/bills'
+import Bills from '@/app/(tabs)/bills'
 import { useBillStore } from '@/stores/BillStore'
 import { AlertService } from '@/services/AlertService'
 

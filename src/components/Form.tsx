@@ -17,6 +17,7 @@ import { ERROR } from '@/constants/text/error'
 import { INPUTS } from '@/constants/text/inputs'
 import { NameField } from '@/enums/NameField'
 import { ProductFormData } from '@/interfaces/FormData/ProductFormData'
+import { ROUTES } from '@/constants/routes'
 
 export function Form({ data = undefined, buttonTitle, children }: FormProps) {
   const { control, handleSubmit, reset } = useForm<ProductFormData>({
@@ -70,7 +71,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps) {
     else cartStore.add(product)
 
     reset()
-    navigation.push("/")
+    navigation.push(ROUTES.Index)
   }
 
   useEffect(() => {
