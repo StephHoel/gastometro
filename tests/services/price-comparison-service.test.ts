@@ -41,7 +41,7 @@ describe('PriceComparisonService', () => {
     expect(validateComparisonEntry('Arroz', [{ placeId: 'a', price: '-1' }], ['a'])).toBe('Informe preços válidos e não negativos.')
     expect(validateComparisonEntry('Arroz', [{ placeId: 'a', price: 'abc' }], ['a'])).toBe('Informe preços válidos e não negativos.')
     expect(validateComparisonEntry('Arroz', [{ placeId: 'desconhecido', price: '10' }], ['a'])).toBe('Selecione um lugar válido para cada preço.')
-    expect(validateComparisonEntry('Arroz', [], ['a'])).toBe('Informe o preço em pelo menos um lugar.')
+    expect(validateComparisonEntry('Arroz', [], ['a'])).toBeNull()
     expect(validateComparisonEntry('Arroz', [{ placeId: 'a', price: '10' }, { placeId: 'a', price: '11' }], ['a'])).toBe('Selecione um lugar válido para cada preço.')
     expect(validateComparisonEntry('Arroz', [{ placeId: 'a', price: '10' }], ['a', 'b'])).toBeNull()
     expect(validateComparisonEntry('Arroz', [{ placeId: 'a', price: '10,50' }], ['a'])).toBeNull()
