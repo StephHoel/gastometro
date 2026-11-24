@@ -2,10 +2,10 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.9.0
-> **Data:** 2026-11-22
-> **Cobertura de Testes (linhas):** 97,87%
-> Última medição em 2026-11-22: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas. Os 303 testes passaram na execução de CI.
+> **Versão do App:** 1.9.1
+> **Data:** 2026-11-24
+> **Cobertura de Testes (linhas):** 97,87% (última medição registrada em 2026-11-22)
+> Última medição histórica: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas, com 303 testes aprovados. A execução de 24/11/2026 inclui um novo teste de apresentação de empates; os indicadores serão substituídos após a geração do próximo relatório de cobertura.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 

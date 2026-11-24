@@ -1,7 +1,7 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.9.0-blue)](docs/CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/Tests-303%20passing-green)](docs/specs/active/05-testes-automatizados.md)
+[![Release](https://img.shields.io/badge/Release-v1.9.1-blue)](docs/CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
