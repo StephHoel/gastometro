@@ -1,5 +1,6 @@
 export const ROUTES = {
-  Index: "/index",
+  Index: "/",
+  IndexTab: "/(tabs)/index",
 
   List: {
     Add: "/list/add",
@@ -10,6 +11,7 @@ export const ROUTES = {
 
   PriceComparison: {
     Index: "/price-comparison",
+    IndexTab: "/(tabs)/price-comparison",
 
     Market: {
       Add: "/price-comparison/market/add",
