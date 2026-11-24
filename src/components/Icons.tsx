@@ -15,6 +15,8 @@ import Whatsapp from '@/assets/svgs/logo-whatsapp.svg'
 import List from '@/assets/svgs/list.svg'
 import Notification from '@/assets/svgs/notifications.svg'
 import NotificationOutline from '@/assets/svgs/notifications-outline.svg'
+import CartPlus from '@/assets/svgs/cart-plus.svg'
+import MarketPlus from '@/assets/svgs/map-pin-plus.svg'
 
 export function AddIcon({ size = 24, color = COLORS.white }: IconsProps) {
   return <Add width={size} height={size} color={color} />
@@ -62,4 +64,12 @@ export function NotificationIcon({ size = 24, color = COLORS.white, checked }: I
   return checked
     ? <Notification width={size} height={size} color={color} />
     : <NotificationOutline width={size} height={size} color={color} />
+}
+
+export function MarketIcon({ size = 24, color = COLORS.white }: IconsProps) {
+  return <MarketPlus width={size} height={size} color={color} />
+}
+
+export function CartIcon({ size = 24, color = COLORS.white }: IconsProps) {
+  return <CartPlus width={size} height={size} color={color} />
 }

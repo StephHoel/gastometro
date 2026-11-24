@@ -28,7 +28,7 @@ export function List({ cartStore }: ListProps) {
           product={prod}
           index={i}
           totalCount={notCollected.length}
-          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod.item)}
           onToggle={() => toggleCollected(prod)}
           onEdit={() => nav.push(`/list/edit/${prod.id}`)}
         />
@@ -44,7 +44,7 @@ export function List({ cartStore }: ListProps) {
           product={prod}
           index={i}
           totalCount={collected.length}
-          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod)}
+          onDelete={() => AlertService.remove(() => cartStore.remove(prod.id), prod.item)}
           onToggle={() => toggleCollected(prod)}
           onEdit={() => nav.push(`/list/edit/${prod.id}`)}
         />

@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.9.0 - 2026-11-22
+
+Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
+
+### Funcionalidade
+
+- Adicionada tela de comparação de preços com cadastro, edição e remoção de lugares e itens.
+- Incluída comparação individual com destaque da menor oferta, maior preço e diferença absoluta/percentual.
+- Incluída comparação da cesta completa, com indicação de cesta incompleta quando faltar preço em qualquer item do lugar.
+- Resultados podem ser ordenados por preço ou nome do lugar.
+
+### Persistência e qualidade
+
+- Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
+- Adicionados testes de serviço, store e tela para validação, cálculo, ordenação independente e integridade de preços ausentes.
+- Reforçadas as validações no store para rejeitar preços inválidos, lugares inexistentes, duplicidade de referência e atualizações para IDs inexistentes.
+- Parser monetário ampliado para aceitar valores pt-BR com símbolo de moeda e agrupamento de milhares.
+
+### Qualidade e testes
+
+- A execução final de CI em 2026-11-22 aprovou os 303 testes (50 suítes), com 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
+- Corrigidos os três testes que falhavam na execução anterior: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta considera seu controle independente. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
+- O build Android e os testes E2E web também concluíram com sucesso.
+- A interface identifica explicitamente tanto o lugar com menor preço quanto os lugares com maior preço, inclusive quando há empate.
+- Cesta sem itens agora retorna total indisponível (`null`), em vez de zero, evitando confundir ausência de compras com uma cesta de custo zero. Testes também garantem que preços zero informados continuam válidos.
+- O gate mínimo global de cobertura permanece em 80%.
+
+### Documentação
+
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
+- README, SPEC e índice de documentação atualizados com os percentuais da execução aprovada.
+- Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
+
 ## 1.8.2 - 2026-11-21
 
 Implementação da mini-spec 14: suíte E2E para validar o roteamento web SPA e o fallback utilizado no GitHub Pages.

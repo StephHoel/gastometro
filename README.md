@@ -1,8 +1,8 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.8.2-blue)](docs/CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/Tests-195%20passing-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-90.08%25-brightgreen)](docs/coverages/)
+[![Release](https://img.shields.io/badge/Release-v1.9.0-blue)](docs/CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/Tests-303%20passing-green)](docs/specs/active/05-testes-automatizados.md)
+[![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -29,6 +29,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui lembretes locais por lista com suporte a notificações locais (quando disponível); ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal.
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
+- Compara preços de produtos entre mercados e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 
 ## Stack
 
@@ -50,16 +51,24 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs):
+
+- [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
+- [Comparação de preços entre lugares](docs/specs/active/17-comparacao-de-precos-entre-lugares.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Comparação de preços entre lugares](docs/specs/planned/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
+
+### Comparação de preços
+
+A nova área permite cadastrar mercados, comparar preços por produto e ordenar os resultados por preço ou nome. A visão de cesta completa soma apenas lugares com preço informado para todos os itens; preços ausentes são exibidos como cesta incompleta, nunca como valor zero.
 
 Funcionalidades concluídas recentemente:
 
@@ -199,7 +208,7 @@ Cobertura:
 npm run test:coverage
 ```
 
-O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%.
+O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. A última medição registrada no CI em 22/11/2026 foi de 97,87% em linhas, 96,57% em statements, 91,90% em branches e 96,21% em funções. Nessa execução, os 303 testes passaram.
 
 Cobertura com exportação CSV:
 

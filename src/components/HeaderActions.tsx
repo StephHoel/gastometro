@@ -1,4 +1,4 @@
-import { Back, Delete, Notification, Share } from "@/components/TouchableIcons"
+import { Back, Cart, Delete, Market, Notification, Share } from "@/components/TouchableIcons"
 import { useListIdParam } from '@/hooks/useParams'
 import { HeaderActionsProps } from '@/interfaces/HeaderActionsProps'
 import { AlertService } from "@/services/AlertService"
@@ -42,16 +42,30 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
     )
   }
 
+  function priceComparisonActions() {
+    return (
+      <>
+        <Market action={() => router.push("/price-comparison/market/add")} />
+        <Cart action={() => router.push("/price-comparison/cart/add")} />
+      </>
+    )
+  }
+
   switch (routeName) {
-    case "index":
-      return indexActions()
+    case "index": return indexActions()
+    case "price-comparison": return priceComparisonActions()
+
+    case "price-comparison/market/add":
+    case "price-comparison/cart/add":
+    case "price-comparison/market/edit/[marketId]":
+    case "price-comparison/cart/edit/[cartId]":
+      return <Back action={() => router.push(`/price-comparison`)} />
+
+    case "calculator": return null
 
     case "reminders/[listId]/edit/[reminderId]":
     case "reminders/[listId]/new":
       return <Back action={() => router.push(`/reminders/${listId}`)} />
-
-    case "calculator":
-      return null
 
     default:
       return <Back action={() => router.push("/")} />
