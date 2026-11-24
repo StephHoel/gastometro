@@ -1,29 +1,11 @@
 import { ERROR } from '@/constants/text/error'
+import { BasketPlaceTotal } from '@/interfaces/BasketPlaceTotal'
+import { EntryComparison } from '@/interfaces/EntryComparison'
 import type {
   PriceComparisonEntryProps,
   PriceComparisonPlaceProps,
 } from '@/interfaces/PriceComparisonProps'
-
-export interface PriceOption { // TODO remover interface daqui
-  placeId: string
-  placeName: string
-  price: number
-}
-
-export interface EntryComparison { // TODO remover interface daqui
-  options: PriceOption[]
-  lowest: PriceOption | null
-  highest: PriceOption | null
-  difference: number | null
-  differencePercent: number | null
-}
-
-export interface BasketPlaceTotal { // TODO remover interface daqui
-  placeId: string
-  placeName: string
-  total: number | null
-  complete: boolean
-}
+import { PriceOption } from '@/interfaces/PriceOption'
 
 /**
  * Interpreta valores monetários em pt-BR (1.234,56) e decimal (1234.56).
@@ -89,7 +71,7 @@ export function validateComparisonEntry(
 
     if (!Number.isFinite(parsed) || parsed < 0) return ERROR.price_negative
   }
-  
+
   return null
 }
 
