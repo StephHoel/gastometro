@@ -299,7 +299,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
   await run("comparação de preços cadastra lugares e item, destaca empates e persiste após recarregar", async page => {
     await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
     await page.getByText("Preços", { exact: true }).last().click()
-    await page.getByText("Lugares Cadastrados", { exact: true }).waitFor()
+    await page.getByText("Nenhum lugar cadastrado ainda.", { exact: true }).waitFor()
 
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
