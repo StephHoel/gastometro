@@ -1,7 +1,7 @@
 # Mini-spec: Comparação de preços entre lugares
 
 Número: 17
-Status: ativa
+Status: ativa, aguardando validação
 
 ## Problema
 
@@ -16,7 +16,7 @@ Adicionar uma funcionalidade offline-first para comparar preços do mesmo item e
 - O usuário deve poder cadastrar lugares para comparação (nome e observação opcional).
 - O usuário deve poder cadastrar um item de comparação e informar preço por lugar.
 - O app deve calcular automaticamente menor preço, maior preço e diferença absoluta/percentual entre opções.
-- O app deve permitir ordenar os resultados por menor preço e por nome do lugar.
+- O app deve permitir ordenar as ofertas por menor preço ou nome do lugar, e os totais da cesta por menor total ou nome do lugar.
 - O app deve sinalizar visualmente a melhor oferta para cada item comparado.
 - O usuário deve poder editar e remover comparações e lugares.
 
@@ -58,7 +58,7 @@ interface PriceComparisonEntryProps {
 
 - Nome do lugar vazio deve ser bloqueado.
 - Nome do item de comparação vazio deve ser bloqueado.
-- Preço vazio não deve ser aceito para um lugar selecionado.
+- Cada preço informado deve ser válido e não negativo. É permitido deixar um lugar sem preço para o item; nesse caso, a cesta daquele lugar fica incompleta.
 - Valores negativos não devem ser aceitos.
 - Duplicidade de lugar por nome normalizado deve ser bloqueada.
 
@@ -67,8 +67,19 @@ interface PriceComparisonEntryProps {
 - Criar, editar e remover lugares de comparação.
 - Criar, editar e remover item de comparação com preços por lugar.
 - Exibir melhor oferta, pior oferta e diferença (R$ e %) por item comparado.
-- Persistir dados após reiniciar o app.
+- Persistir dados após reiniciar o app, em armazenamento local independente.
+- Não aceitar preços inválidos, negativos, referências a lugares inexistentes ou atualizações para identificadores inexistentes.
+- Ao remover um lugar, remover também seus preços associados sem apagar os demais dados dos itens.
+- Tratar preço zero como valor válido e preço ausente como dado indisponível, nunca como zero.
+- Exibir a diferença percentual como proporção da maior oferta.
 - Manter sem regressão o fluxo atual de lista, lembretes e calculadora.
+
+## Decisões complementares
+
+- A cesta só é considerada completa quando existe pelo menos um item cadastrado e todos os itens possuem preço válido naquele lugar.
+- Um item pode ter preço em apenas parte dos lugares cadastrados. Isso permite comparar ofertas disponíveis sem inventar valores para os lugares sem cotação.
+- A diferença percentual é calculada em relação ao maior preço; quando o maior preço é zero ou não há pelo menos duas ofertas válidas, o percentual fica indisponível.
+- A ordenação altera apenas a apresentação. A identificação da menor e da maior oferta permanece baseada nos valores, independentemente da ordem exibida.
 
 ## Fora de escopo
 
