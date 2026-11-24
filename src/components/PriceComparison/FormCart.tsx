@@ -92,7 +92,7 @@ export function FormCart(
         })),
       })
     }
-  }, [data, reset])
+  }, [data, places, reset])
 
   return (
     <View className="my-5 gap-5">
@@ -114,7 +114,7 @@ export function FormCart(
         nameField={NameField.QuantityReference}
         placeholder={INPUTS.placeholder.quantity_reference}
         returnKeyType={places.length > 0 ? "next" : "done"}
-        onSubmit={() => places.length > 0 ? setFocus('pricesByPlace.0') : handleSubmit(onSubmit)()}
+        onSubmit={() => places.length > 0 ? setFocus('pricesByPlace.0.price') : handleSubmit(onSubmit)()}
         maxLength={40}
       />
 
@@ -131,7 +131,7 @@ export function FormCart(
             placeholder={INPUTS.placeholder.prices_by_place}
             keyboardType="decimal-pad"
             returnKeyType={places.length - 1 === index ? "done" : "next"}
-            onSubmit={() => places.length - 1 === index ? handleSubmit(onSubmit)() : setFocus(`pricesByPlace.${index + 1}`)}
+            onSubmit={() => places.length - 1 === index ? handleSubmit(onSubmit)() : setFocus(`pricesByPlace.${index + 1}.price`)}
             maxLength={40}
           />
         </View>
