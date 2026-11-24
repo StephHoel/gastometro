@@ -51,13 +51,6 @@ export function FormCart(
       return
     }
 
-    // TODO por enquanto permitir salvar com preços vazios
-    // if (formData.pricesByPlace.filter((prices) => (prices?.price ?? '').trim().length > 0).length === 0) {
-    //   AlertService.ok(ERROR.alert_title, ERROR.price_required)
-    //   return
-    // }
-
-
     const pricesByPlace = (formData.pricesByPlace ?? [])
       .filter((price) => price.price.trim().length > 0)
       .map((price) => ({ placeId: price.placeId, price: price.price.trim() }))
