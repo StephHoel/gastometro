@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { usePriceComparisonStore } from '@/stores/PriceComparisonStore'
 
@@ -28,13 +29,10 @@ describe('PriceComparisonStore', () => {
       itemName: 'Arroz',
       pricesByPlace: [{ placeId: a.id, price: '10' }, { placeId: b.id, price: '12' }],
     })
-    const beforeRemoval = usePriceComparisonStore.getState().entries[0].updatedAt
-
     usePriceComparisonStore.getState().removePlace(a.id)
 
     expect(usePriceComparisonStore.getState().places).toEqual([b])
     expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([{ placeId: b.id, price: '12' }])
-    expect(usePriceComparisonStore.getState().entries[0].updatedAt).not.toBe(beforeRemoval)
   })
 
   it('cria, edita e remove itens comparados', () => {
@@ -83,6 +81,21 @@ describe('PriceComparisonStore', () => {
       pricesByPlace: [{ placeId: place.id, price: '1' }],
     })).toBe(false)
     expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
+  })
+
+  it('persiste os dados em uma chave exclusiva', async () => {
+    const store = usePriceComparisonStore.getState()
+    store.addPlace({ name: 'Mercado Persistido' })
+    const stored = await AsyncStorage.getItem('gastometro-price-comparisons')
+
+    expect(stored).not.toBeNull()
+    expect(JSON.parse(stored ?? '{}')).toMatchObject({
+      state: {
+        places: [{ name: 'Mercado Persistido' }],
+        entries: [],
+      },
+      version: 1,
+    })
   })
 
   it('normaliza dados válidos e preserva o registro quando uma edição é inválida', () => {

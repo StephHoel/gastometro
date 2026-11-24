@@ -1,8 +1,13 @@
 import { act } from '@testing-library/react-native'
+import uuid from 'react-native-uuid'
 import { useBillStore } from '@/stores/BillStore'
 
 describe('BillStore', () => {
+  let uuidCounter = 0
+
   beforeEach(async () => {
+    uuidCounter = 0
+    jest.mocked(uuid.v4).mockImplementation(() => [++uuidCounter])
     await act(() => {
       useBillStore.setState({ bills: [] })
     })

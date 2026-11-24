@@ -227,7 +227,7 @@ export default function PriceComparison() {
                     <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Editar comparação de ' + entry.itemName} onPress={() => startEditEntry(entry)}>
                       <TextWhite className="text-lime-400 text-sm">Editar</TextWhite>
                     </TouchableOpacity>
-                    <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Remover comparação de ' + entry.itemName} onPress={() => removeEntry(entry.id)}>
+                    <TouchableOpacity accessibilityRole="button" accessibilityLabel={'Remover comparação de ' + entry.itemName} onPress={() => { removeEntry(entry.id); if (editingEntryId === entry.id) resetEntryForm() }}>
                       <TextWhite className="text-red-400 text-sm">Remover</TextWhite>
                     </TouchableOpacity>
                   </Row>
