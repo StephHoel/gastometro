@@ -58,7 +58,6 @@ Definir e implementar testes E2E para validar o roteamento web SPA do app em amb
 - Evitar dependência de serviços externos durante execução dos testes.
 - Priorizar cenários críticos de regressão de roteamento antes de ampliar escopo.
 
-
 ## Decisões durante a implementação
 
 - A rota de listas implementada pelo Expo Router é `/lists`, não `/list`; os cenários usam a rota real da aplicação.

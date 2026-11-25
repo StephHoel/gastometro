@@ -70,7 +70,6 @@ Tornar a sincronização de lembretes previsível, idempotente e independente de
 - Preferir seletores estáveis e dependências baseadas em identificadores, não em objetos completos de listas.
 - Não assumir que o identificador salvo em `notificationId` garante que a notificação ainda existe no sistema operacional.
 
-
 ## Implementação concluída
 
 A sincronização foi reorganizada para reconciliar o estado persistido com os agendamentos nativos sem cancelar notificações válidas nem reagendar lembretes sem alterações relevantes.
