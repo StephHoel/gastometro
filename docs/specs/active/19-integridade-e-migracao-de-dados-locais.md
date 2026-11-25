@@ -74,13 +74,23 @@ Definir uma estratégia explícita de versionamento, validação, migração e r
 - Não usar type assertion como substituto de validação de runtime.
 - Evitar adicionar biblioteca de schema sem justificar custo, tamanho e compatibilidade com Expo.
 
+## Validação pendente
+
+- Executar `npm run test -- --runInBand` e `npm run check:ts` na branch atualizada.
+- Validar a inicialização em Android e web com dados válidos, legados, malformados e versões futuras.
+- Confirmar em instalação existente que as chaves `gastometro` e `gastometro-reminders` permanecem compatíveis.
+
 ## Decisões de implementação
 
 - Campos desconhecidos são descartados durante a normalização, mas qualquer ocorrência marca o estado como reparado para que o conteúdo bruto seja preservado antes da gravação normalizada.
 - Campos opcionais ausentes recebem os valores padrão definidos pelo normalizador; campos opcionais presentes com tipos inválidos são removidos e contabilizados como reparo.
 
-- Os stores `gastometro` e `gastometro-reminders` passam a usar schema versão 2, com migração explícita das versões anteriores.
+- Os stores `gastometro` e `gastometro-reminders` passam a usar schema versão 3, com migração explícita das versões anteriores.
 - A cópia anterior é preservada nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de qualquer reparo que descarte ou normalize registros.
+- Escritas e remoções nas chaves principais ficam bloqueadas enquanto uma cópia de recuperação está pendente; escritas concorrentes são enfileiradas e liberadas somente após a cópia ser concluída.
+- Campos desconhecidos são descartados durante a normalização, mas sinalizam reparo para preservar o conteúdo bruto antes da gravação normalizada.
+- Campos opcionais ausentes recebem valores padrão; campos opcionais inválidos são removidos sem descartar o registro quando isso é seguro.
+- Referências `listId` inválidas são preservadas em cópia e removidas da coleção ativa somente após a cópia e a confirmação do cancelamento das notificações. Referências `itemId` antigas são mantidas como informação opcional e não provocam descarte do lembrete.
 - IDs duplicados são normalizados de forma determinística no carrinho; lembretes duplicados ou inválidos são preservados na cópia e ignorados na coleção ativa.
 - O campo `products` continua existindo como espelho da lista ativa e é reconstruído a partir de `lists` durante a hidratação.
 - A limpeza de lembretes sem lista correspondente só ocorre depois da hidratação dos dois stores e após a cópia de recuperação ser gravada com sucesso.

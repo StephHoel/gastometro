@@ -62,16 +62,16 @@ async function cancelReminderNotifications(reminder: {
   notificationId?: string
 }): Promise<boolean> {
   const scheduled = await getScheduledNotifications()
+  let cleanupCompleted = scheduled !== null
 
-  if (!scheduled) return false
-
-  let cleanupCompleted = true
   if (reminder.notificationId) {
     cleanupCompleted = await cancelSafely(reminder.notificationId) && cleanupCompleted
   }
-  for (const notification of scheduled) {
-    if (notification.reminderId === reminder.id && notification.notificationId !== reminder.notificationId) {
-      cleanupCompleted = await cancelSafely(notification.notificationId) && cleanupCompleted
+  if (scheduled) {
+    for (const notification of scheduled) {
+      if (notification.reminderId === reminder.id && notification.notificationId !== reminder.notificationId) {
+        cleanupCompleted = await cancelSafely(notification.notificationId) && cleanupCompleted
+      }
     }
   }
   return cleanupCompleted
@@ -247,14 +247,36 @@ export const ReminderOrchestrator = {
   },
 
   async removeByListId(listId: string): Promise<void> {
-    const reminderStore = useReminderStore.getState()
-    const reminders = reminderStore.getByListId(listId)
+    const reminders = useReminderStore.getState().getByListId(listId)
+    if (reminders.length === 0) return
 
-    for (const reminder of reminders) {
-      await cancelReminderNotifications(reminder)
+    try {
+      await AsyncStorage.setItem(
+        'gastometro-recovery-reminders-orphans',
+        JSON.stringify(reminders),
+      )
+    } catch (error) {
+      PersistenceRecoveryService.report(
+        'Não foi possível preservar os lembretes desta lista. Eles foram mantidos para uma nova tentativa de recuperação.',
+      )
+      console.error('Falha ao preservar lembretes antes de remover a lista:', error)
+      return
     }
 
-    reminderStore.removeByListId(listId)
+    let retained = 0
+    for (const reminder of reminders) {
+      if (await cancelReminderNotifications(reminder)) {
+        useReminderStore.getState().removeReminder(reminder.id)
+      } else {
+        retained += 1
+      }
+    }
+
+    if (retained > 0) {
+      PersistenceRecoveryService.report(
+        retained + ' lembrete(s) foram mantidos porque não foi possível confirmar o cancelamento das notificações.',
+      )
+    }
   },
 
   async rescheduleReminder(reminderId: string): Promise<void> {

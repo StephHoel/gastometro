@@ -106,7 +106,7 @@ describe('PersistenceMigrationService - carrinho', () => {
 
   it('preserva o erro para estrutura irrecuperável ou versão desconhecida', () => {
     expect(() => normalizeCartPersistedState({ broken: true }, 1)).toThrow()
-    expect(() => normalizeCartPersistedState({ products: [] }, 3)).toThrow()
+    expect(() => normalizeCartPersistedState({ products: [] }, 4)).toThrow()
   })
 })
 
@@ -171,6 +171,6 @@ describe('PersistenceMigrationService - lembretes', () => {
 
   it('preserva estrutura malformada e versão futura como erro explícito', () => {
     expect(() => normalizeReminderPersistedState({ reminders: {} }, 1)).toThrow()
-    expect(() => normalizeReminderPersistedState({ reminders: [] }, 3)).toThrow()
+    expect(() => normalizeReminderPersistedState({ reminders: [] }, 4)).toThrow()
   })
 })

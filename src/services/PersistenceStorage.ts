@@ -23,16 +23,26 @@ export function createRecoveryAwareStorage() {
         }
         await AsyncStorage.setItem(key, value)
       },
-      removeItem: (key: string) => AsyncStorage.removeItem(key),
+      removeItem: async (key: string) => {
+        if (!writesAllowed) return
+        await AsyncStorage.removeItem(key)
+      },
     },
     blockWrites() {
       writesAllowed = false
     },
     async allowWrites() {
-      writesAllowed = true
       const write = pendingWrite
-      pendingWrite = null
-      if (write) await AsyncStorage.setItem(write.key, write.value)
+      if (write) {
+        try {
+          await AsyncStorage.setItem(write.key, write.value)
+          pendingWrite = null
+        } catch (error) {
+          writesAllowed = false
+          throw error
+        }
+      }
+      writesAllowed = true
     },
   }
 }

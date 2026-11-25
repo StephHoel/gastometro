@@ -58,7 +58,7 @@ describe('Hidratação real dos stores persistidos', () => {
 
   it('preserva dados malformados e bloqueia a sobrescrita após falha de hidratação', async () => {
     const raw = JSON.stringify({
-      state: { lists: 'inválido', activeListId: 'missing', products: [] },
+      state: { lists: {}, activeListId: 'missing', products: 'inválido' },
       version: 3,
     })
     await AsyncStorage.setItem('gastometro', raw)

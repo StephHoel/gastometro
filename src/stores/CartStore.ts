@@ -45,30 +45,38 @@ async function preserveCartData(value: unknown): Promise<boolean> {
 }
 
 function getCartRecoveryMessage(discarded: number): string {
-  const details = discarded > 0 ? ' Registros inválidos ignorados: ' + discarded + '.' : ''
-  return 'Os dados locais da lista foram ajustados para manter a integridade.' + details + ' Uma cópia anterior foi preservada em ' + CART_RECOVERY_KEY + '.'
+  const details = discarded > 0 ? ' Alguns registros inválidos foram ignorados: ' + discarded + '.' : ''
+  return 'As listas e os produtos salvos no aparelho foram ajustados para continuar funcionando.' + details + ' Uma cópia local dos dados anteriores foi preservada para recuperação.'
 }
 
 async function migrateCartState(persistedState: unknown, version: number): Promise<StateProps> {
   try {
     const result = normalizeCartPersistedState(persistedState, version)
     if (result.repaired) {
+      cartPersistence.blockWrites()
       const preserved = await preserveCartData(persistedState)
       if (!preserved) throw new Error('A cópia de segurança dos dados não pôde ser criada.')
       PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
+      await cartPersistence.allowWrites()
     }
     return result.data as StateProps
   } catch (error) {
     cartPersistence.blockWrites()
     const preserved = await preserveCartData(persistedState)
+    if (preserved && version >= 0 && version <= 3) {
+      PersistenceRecoveryService.report('Não foi possível validar os dados antigos da lista. O conteúdo original foi preservado e uma lista vazia foi preparada para continuar usando o aplicativo.')
+      const recovered = normalizeCartPersistedState({ lists: [], activeListId: '', products: [] }, 3)
+      await cartPersistence.allowWrites()
+      return recovered.data as StateProps
+    }
+
     PersistenceRecoveryService.report(preserved
-      ? 'Não foi possível validar os dados locais da lista. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
-      : 'Não foi possível validar nem criar uma cópia dos dados locais da lista. Evite limpar os dados do aplicativo e procure suporte.')
+      ? 'A versão dos dados da lista não é compatível com esta versão do aplicativo. O conteúdo original foi preservado e não será sobrescrito.'
+      : 'Não foi possível validar nem preservar os dados locais da lista. O armazenamento foi protegido contra sobrescrita.')
+    console.error('Falha ao migrar os dados do carrinho:', error)
     throw error
   }
 }
-
-
 
 export const useCartStore = create(
   persist<StateProps>(
@@ -200,10 +208,11 @@ export const useCartStore = create(
           return { ...currentState, ...result.data }
         } catch (error) {
           cartPersistence.blockWrites()
-          void preserveCartData(persistedState).then((preserved) => {
+          void preserveCartData(persistedState).then(async (preserved) => {
             PersistenceRecoveryService.report(preserved
-              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito.'
+              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito até a cópia estar disponível.'
               : 'Não foi possível validar nem preservar os dados locais. O armazenamento foi protegido contra sobrescrita.')
+            if (preserved) await cartPersistence.allowWrites()
           })
           console.error('Falha ao hidratar os dados persistidos:', error)
           throw error

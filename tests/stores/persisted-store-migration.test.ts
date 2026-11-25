@@ -52,6 +52,20 @@ describe('Migrações dos stores persistidos', () => {
     )
   })
 
+  it('recupera uma estrutura legada irrecuperável somente depois de preservar o original', async () => {
+    const migrate = useCartStore.persist.getOptions().migrate
+    const migrated = await migrate!({ lists: 'inválido', products: null }, 1)
+
+    expect(migrated).toMatchObject({
+      lists: [{ name: 'Lista 1', products: [] }],
+      products: [],
+    })
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-cart',
+      expect.stringContaining('inválido'),
+    )
+  })
+
   it('não aceita versão futura e mantém cópia dos dados originais', async () => {
     const migrate = useCartStore.persist.getOptions().migrate
     await expect(migrate!({ lists: [] }, 99)).rejects.toThrow()
@@ -59,5 +73,9 @@ describe('Migrações dos stores persistidos', () => {
       'gastometro-recovery-cart',
       expect.stringContaining('lists'),
     )
+
+    jest.clearAllMocks()
+    useCartStore.setState({ products: [] })
+    expect(AsyncStorage.setItem).not.toHaveBeenCalledWith('gastometro', expect.any(String))
   })
 })

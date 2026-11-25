@@ -20,6 +20,15 @@ describe('PersistenceStorage', () => {
     )
   })
 
+  it('não remove os dados originais enquanto a persistência está bloqueada', async () => {
+    const persistence = createRecoveryAwareStorage()
+    persistence.blockWrites()
+
+    await persistence.storage.removeItem('gastometro')
+
+    expect(AsyncStorage.removeItem).not.toHaveBeenCalled()
+  })
+
   it('permite novas escritas após liberar a persistência', async () => {
     const persistence = createRecoveryAwareStorage()
     persistence.blockWrites()

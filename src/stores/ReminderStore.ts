@@ -32,25 +32,34 @@ async function preserveReminderData(value: unknown): Promise<boolean> {
 }
 
 function getReminderRecoveryMessage(discarded: number): string {
-  const details = discarded > 0 ? ' Registros inválidos ignorados: ' + discarded + '.' : ''
-  return 'Os dados locais dos lembretes foram ajustados para manter a integridade.' + details + ' Uma cópia anterior foi preservada em ' + REMINDER_RECOVERY_KEY + '.'
+  const details = discarded > 0 ? ' Alguns registros inválidos foram ignorados: ' + discarded + '.' : ''
+  return 'Os lembretes salvos no aparelho foram ajustados para continuar funcionando.' + details + ' Uma cópia local dos dados anteriores foi preservada para recuperação.'
 }
 
 async function migrateReminderState(persistedState: unknown, version: number): Promise<ReminderStateProps> {
   try {
     const result = normalizeReminderPersistedState(persistedState, version)
     if (result.repaired) {
+      reminderPersistence.blockWrites()
       const preserved = await preserveReminderData(persistedState)
       if (!preserved) throw new Error('A cópia de segurança dos dados não pôde ser criada.')
       PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
+      await reminderPersistence.allowWrites()
     }
     return result.data as ReminderStateProps
   } catch (error) {
     reminderPersistence.blockWrites()
     const preserved = await preserveReminderData(persistedState)
+    if (preserved && version >= 0 && version <= 3) {
+      PersistenceRecoveryService.report('Não foi possível validar os lembretes antigos. O conteúdo original foi preservado e uma coleção vazia foi preparada para continuar usando o aplicativo.')
+      await reminderPersistence.allowWrites()
+      return { reminders: [] } as ReminderStateProps
+    }
+
     PersistenceRecoveryService.report(preserved
-      ? 'Não foi possível validar os dados locais dos lembretes. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
-      : 'Não foi possível validar nem criar uma cópia dos dados locais dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
+      ? 'A versão dos lembretes não é compatível com esta versão do aplicativo. O conteúdo original foi preservado e não será sobrescrito.'
+      : 'Não foi possível validar nem preservar os dados locais dos lembretes. O armazenamento foi protegido contra sobrescrita.')
+    console.error('Falha ao migrar os lembretes:', error)
     throw error
   }
 }
@@ -156,10 +165,11 @@ export const useReminderStore = create(
           return { ...currentState, ...result.data }
         } catch (error) {
           reminderPersistence.blockWrites()
-          void preserveReminderData(persistedState).then((preserved) => {
+          void preserveReminderData(persistedState).then(async (preserved) => {
             PersistenceRecoveryService.report(preserved
-              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito.'
+              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito até a cópia estar disponível.'
               : 'Não foi possível validar nem preservar os dados locais. O armazenamento foi protegido contra sobrescrita.')
+            if (preserved) await reminderPersistence.allowWrites()
           })
           console.error('Falha ao hidratar os dados persistidos:', error)
           throw error
