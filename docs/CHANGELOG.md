@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.10.0 - 2026-11-25
+
+Implementação da mini-spec 19: integridade e migração de dados locais.
+
+### Persistência
+
+- Versionados os schemas persistidos de carrinho e lembretes para a versão 3.
+- Adicionada validação de estruturas, campos obrigatórios, datas, IDs duplicados e consistência entre lista ativa, listas e espelho de produtos.
+- Dados legados do carrinho são migrados para uma lista compatível; lembretes válidos mantêm seus identificadores e referências.
+- Registros inválidos isolados são reparados ou descartados de forma controlada, preservando os registros válidos.
+- Antes de aplicar reparos, o conteúdo anterior é copiado para `gastometro-recovery-cart` ou `gastometro-recovery-reminders`.
+- Estruturas irrecuperáveis e versões futuras geram erro explícito, preservam o conteúdo original e não são tratadas como estado válido.
+- Escritas e remoções ficam bloqueadas durante a recuperação; alterações concorrentes são enfileiradas até a cópia ser concluída.
+- Campos desconhecidos são descartados com sinalização de reparo, e campos opcionais inválidos são normalizados sem descartar registros recuperáveis.
+- A limpeza de lembretes órfãos preserva todos os registros antes de cancelar notificações e mantém os que não puderem ser cancelados.
+
+### Recuperação para o usuário
+
+- Adicionado aviso persistente na interface para informar quando dados locais foram reparados ou não puderam ser validados.
+- O usuário pode dispensar o aviso sem apagar a cópia de recuperação.
+- Mantidas as chaves originais `gastometro` e `gastometro-reminders`.
+
+### Testes
+
+- Adicionados testes de migração legada, recuperação parcial, IDs duplicados, listas ativas inconsistentes, lembretes malformados e versões desconhecidas.
+- Na validação da PR 69, 398 testes em 62 suítes e o type-check foram aprovados.
+
+### Documentação
+
+- Mini-spec 19 movida para `docs/specs/done/` e marcada como implementada; README, guia técnico e índice de mini-specs sincronizados.
+
 ## 1.9.2 - 2026-11-24
 
 Implementação da mini-spec 18: sincronização eficiente e idempotente de lembretes.

@@ -3,6 +3,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { useReminderStore } from '@/stores/ReminderStore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {
@@ -208,6 +209,65 @@ describe('ReminderOrchestrator', () => {
     expect(cancelScheduled).toHaveBeenCalledWith('n1')
     expect(useReminderStore.getState().getById('r1')).toBeUndefined()
     expect(useReminderStore.getState().getById('r2')).toBeDefined()
+  })
+
+  it('preserva e cancela notificação de lembrete órfão sem ID persistido', async () => {
+    seedReminders([makeReminder('orphan', { notificationId: undefined, listId: 'removed-list' })])
+    getScheduledReminderNotifications.mockResolvedValueOnce([{
+      notificationId: 'native-orphan',
+      reminderId: 'orphan',
+      listId: 'removed-list',
+      title: 'Lembrete orphan',
+      datetimeISO: '2099-01-01T10:00:00.000Z',
+    }])
+
+    await ReminderOrchestrator.cleanupOrphans([])
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('orphan'),
+    )
+    expect(cancelScheduled).toHaveBeenCalledWith('native-orphan')
+    expect(useReminderStore.getState().getById('orphan')).toBeUndefined()
+  })
+
+  it('preserva todos os lembretes órfãos antes de cancelar ou remover qualquer registro', async () => {
+    const first = makeReminder('orphan-a', { notificationId: 'native-a', listId: 'removed-list' })
+    const second = makeReminder('orphan-b', { notificationId: 'native-b', listId: 'removed-list' })
+    seedReminders([first, second])
+
+    await ReminderOrchestrator.cleanupOrphans([])
+
+    const recoveryCall = (AsyncStorage.setItem as jest.Mock).mock.calls.find(
+      ([key]) => key === 'gastometro-recovery-reminders-orphans',
+    )
+    expect(JSON.parse(recoveryCall[1])).toEqual([first, second])
+    expect(cancelScheduled).toHaveBeenCalledWith('native-a')
+    expect(cancelScheduled).toHaveBeenCalledWith('native-b')
+    expect(useReminderStore.getState().reminders).toHaveLength(0)
+  })
+
+  it('mantém o lembrete quando o cancelamento da notificação falha', async () => {
+    seedReminders([makeReminder('orphan-cancel-fails', { notificationId: 'native-fail', listId: 'removed-list' })])
+    cancelScheduled.mockRejectedValueOnce(new Error('falha nativa'))
+
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('orphan-cancel-fails'),
+    )
+    expect(useReminderStore.getState().getById('orphan-cancel-fails')).toBeDefined()
+  })
+
+  it('mantém lembretes órfãos quando não consegue preservar uma cópia', async () => {
+    seedReminders([makeReminder('orphan-2', { notificationId: 'native-2', listId: 'removed-list' })])
+    ;(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('storage indisponível'))
+
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
+
+    expect(useReminderStore.getState().getById('orphan-2')).toBeDefined()
+    expect(cancelScheduled).not.toHaveBeenCalled()
   })
 
   it('saveReminder solicita permissão ao criar e alerta quando negada', async () => {
