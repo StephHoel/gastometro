@@ -2,7 +2,7 @@ import { PermissionState } from '@/enums/PermissionState'
 import type { ReminderProps } from '@/interfaces/ReminderProps'
 import { NotificationService } from '@/services/NotificationService'
 import { IsWeb } from '@/utils/platform'
-import { cancelScheduledNotificationAsync, dismissAllNotificationsAsync, getPermissionsAsync, PermissionStatus, requestPermissionsAsync, scheduleNotificationAsync } from 'expo-notifications'
+import { cancelScheduledNotificationAsync, dismissAllNotificationsAsync, getAllScheduledNotificationsAsync, getPermissionsAsync, PermissionStatus, requestPermissionsAsync, scheduleNotificationAsync } from 'expo-notifications'
 
 jest.mock('@/utils/platform', () => ({
   IsWeb: jest.fn(),
@@ -28,6 +28,7 @@ describe('NotificationService', () => {
   const scheduleNotificationAsyncMock = scheduleNotificationAsync as jest.Mock
   const cancelScheduledNotificationAsyncMock = cancelScheduledNotificationAsync as jest.Mock
   const dismissAllNotificationsAsyncMock = dismissAllNotificationsAsync as jest.Mock
+  const getAllScheduledNotificationsAsyncMock = getAllScheduledNotificationsAsync as jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -74,6 +75,35 @@ describe('NotificationService', () => {
     getPermissionsAsyncMock.mockRejectedValueOnce(new Error('sem acesso'))
 
     await expect(NotificationService.ensurePermissionForScheduling()).resolves.toBe(false)
+  })
+
+  it('consulta os agendamentos nativos e extrai os dados dos lembretes', async () => {
+    getAllScheduledNotificationsAsyncMock.mockResolvedValueOnce([{
+      identifier: 'native-1',
+      content: {
+        title: 'Comprar leite',
+        data: { reminderId: 'rem-1', listId: 'list-1' },
+      },
+      trigger: { date: new Date('2099-01-01T12:00:00.000Z') },
+    }])
+
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toEqual([{
+      notificationId: 'native-1',
+      reminderId: 'rem-1',
+      listId: 'list-1',
+      title: 'Comprar leite',
+      datetimeISO: '2099-01-01T12:00:00.000Z',
+    }])
+  })
+
+  it('não consulta agendamentos no web e sinaliza falha na consulta nativa', async () => {
+    mockedIsWeb.mockReturnValue(true)
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toEqual([])
+    expect(getAllScheduledNotificationsAsyncMock).not.toHaveBeenCalled()
+
+    mockedIsWeb.mockReturnValue(false)
+    getAllScheduledNotificationsAsyncMock.mockRejectedValueOnce(new Error('falha'))
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toBeNull()
   })
 
   it('scheduleReminder retorna null para web, data inválida ou passada', async () => {
@@ -141,5 +171,78 @@ describe('NotificationService', () => {
     expect(NotificationService.getReminderIdFromNotification(undefined)).toBeNull()
     expect(NotificationService.getReminderIdFromNotification({ reminderId: 1 })).toBeNull()
     expect(NotificationService.getReminderIdFromNotification({ reminderId: 'rem-1' })).toBe('rem-1')
+  })
+})
+
+
+describe('NotificationService - formatos e permissões adicionais', () => {
+  const mockedIsWeb = IsWeb as jest.Mock
+  const getAllScheduledNotifications = getAllScheduledNotificationsAsync as jest.Mock
+  const getPermissions = getPermissionsAsync as jest.Mock
+  const requestPermissions = requestPermissionsAsync as jest.Mock
+  const scheduleNotification = scheduleNotificationAsync as jest.Mock
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockedIsWeb.mockReturnValue(false)
+  })
+
+  it('retorna metadados nulos quando o agendamento não possui data ou payload reconhecível', async () => {
+    getAllScheduledNotifications.mockResolvedValueOnce([
+      {
+        identifier: 'without-trigger',
+        content: { title: null, data: null },
+        trigger: null,
+      },
+      {
+        identifier: 'invalid-date',
+        content: { title: 'Aviso', data: { reminderId: 10, listId: false } },
+        trigger: { date: 'data-inválida' },
+      },
+    ])
+
+    await expect(NotificationService.getScheduledReminderNotifications()).resolves.toEqual([
+      {
+        notificationId: 'without-trigger',
+        reminderId: null,
+        listId: null,
+        title: null,
+        datetimeISO: null,
+      },
+      {
+        notificationId: 'invalid-date',
+        reminderId: null,
+        listId: null,
+        title: 'Aviso',
+        datetimeISO: null,
+      },
+    ])
+  })
+
+  it('retorna false quando o usuário nega a solicitação de permissão', async () => {
+    getPermissions.mockResolvedValueOnce({ granted: false })
+    requestPermissions.mockResolvedValueOnce({ granted: false })
+
+    await expect(NotificationService.ensurePermissionForScheduling()).resolves.toBe(false)
+    expect(requestPermissions).toHaveBeenCalledTimes(1)
+  })
+
+  it('envia os identificadores do lembrete e da lista ao agendar a notificação', async () => {
+    scheduleNotification.mockResolvedValueOnce('native-reminder-id')
+
+    await expect(NotificationService.scheduleReminder(makeReminder())).resolves.toBe('native-reminder-id')
+
+    expect(scheduleNotification).toHaveBeenCalledWith(expect.objectContaining({
+      content: expect.objectContaining({
+        title: 'Comprar leite',
+        data: {
+          listId: 'list-1',
+          reminderId: 'rem-1',
+        },
+      }),
+      trigger: expect.objectContaining({
+        date: new Date('2099-01-01T12:00:00.000Z'),
+      }),
+    }))
   })
 })

@@ -5,6 +5,7 @@ import { List } from '@/components/List'
 import { useRouter } from 'expo-router'
 import { useRoute } from 'expo-router/react-navigation'
 import type { StateProps } from '@/interfaces/StateProps'
+import { ROUTES } from '@/constants/routes'
 
 const mockPush = jest.fn()
 const mockRemove = jest.fn()
@@ -127,7 +128,7 @@ describe('Header and List branch coverage', () => {
 
     await fireEvent.press(getByText('Back'))
 
-    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
+    expect(mockPush).toHaveBeenCalledWith(ROUTES.Index)
     expect(queryByText('Add')).toBeNull()
   })
 

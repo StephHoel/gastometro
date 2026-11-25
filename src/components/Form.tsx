@@ -69,7 +69,7 @@ export function Form({ data = undefined, buttonTitle, children }: FormProps<Prod
     else cartStore.add(product)
 
     reset()
-    router.push(ROUTES.IndexTab)
+    router.push(ROUTES.Index)
   }
 
   useEffect(() => {

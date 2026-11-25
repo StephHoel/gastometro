@@ -1,18 +1,26 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { AppState, Platform, Text } from 'react-native'
+import { SafeAreaView } from "react-native-safe-area-context"
 import { Tabs, usePathname, useRouter } from "expo-router"
+import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
-import { SafeAreaView } from "react-native-safe-area-context"
+
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
+
+import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
+
 import { useCartStore } from '@/stores/CartStore'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { Platform, Text } from 'react-native'
-import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
-import "@/styles/global.css"
+import { useReminderStore } from '@/stores/ReminderStore'
+
 import { COLORS } from '@/constants/color'
 import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
+import { ROUTES } from '@/constants/routes'
+
+import "@/styles/global.css"
 
 export default function Layout() {
   const pathname = usePathname()
@@ -20,7 +28,16 @@ export default function Layout() {
   const lists = useCartStore((state) => state.lists)
   const activeListId = useCartStore((state) => state.activeListId)
   const setActiveList = useCartStore((state) => state.setActiveList)
+  const reminders = useReminderStore((state) => state.reminders)
+  const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const listIdsKey = getListIdsSignature(lists)
+  const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
+  const previousReminderSyncRef = useRef<Map<string, string> | null>(null)
+  const bootstrapCompletedRef = useRef(false)
+  const previousListIdsKeyRef = useRef<string | null>(null)
+  const listIdsKeyRef = useRef(listIdsKey)
+  listIdsKeyRef.current = listIdsKey
 
   const handleNotificationResponse = useCallback(
     async (response: NotificationResponse) => {
@@ -43,7 +60,7 @@ export default function Layout() {
             await ReminderOrchestrator.removeReminder(reminderId)
           }
           if (pathname !== '/') {
-            router.replace('/(tabs)/index')
+            router.replace(ROUTES.Index)
           }
           return
         }
@@ -53,7 +70,7 @@ export default function Layout() {
         }
 
         if (pathname !== '/') {
-          router.replace('/(tabs)/index')
+          router.replace(ROUTES.Index)
         }
       } catch (error) {
         console.error(ERROR.notification_response_failure, error)
@@ -62,10 +79,19 @@ export default function Layout() {
     [activeListId, lists, pathname, router, setActiveList],
   )
 
+  const handleNotificationResponseRef = useRef<(response: NotificationResponse) => Promise<void>>(async () => undefined)
+  handleNotificationResponseRef.current = handleNotificationResponse
+
+  useEffect(() => {
+    const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
+    return unsubscribe
+  }, [])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
     document.title = TITLES[pathname] ?? "Gastômetro"
   }, [pathname])
+
   useEffect(() => {
     if (Platform.OS !== 'web') return
 
@@ -118,7 +144,7 @@ export default function Layout() {
         const lastResponse = getLastNotificationResponse()
         if (!isMounted || !lastResponse) return
 
-        await handleNotificationResponse(lastResponse)
+        await handleNotificationResponseRef.current(lastResponse)
         clearLastNotificationResponse()
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
@@ -130,36 +156,113 @@ export default function Layout() {
     void bootstrapNotificationOpen()
 
     const subscription = addNotificationResponseReceivedListener((response) => {
-      void handleNotificationResponse(response)
+      void handleNotificationResponseRef.current(response)
     })
 
     return () => {
       isMounted = false
       subscription.remove()
     }
-  }, [handleNotificationResponse])
+  }, [])
 
   useEffect(() => {
+    if (!remindersHydrated) return
+
     let isMounted = true
+    const currentReminderSync = new Map<string, string>(
+      reminders.map((reminder): [string, string] => [
+        reminder.id,
+        JSON.stringify([
+          reminder.id,
+          reminder.title,
+          reminder.datetimeISO,
+          reminder.enabled,
+          reminder.listId,
+        ]),
+      ]),
+    )
+    const previousReminderSync = previousReminderSyncRef.current
+    const previousListIdsKey = previousListIdsKeyRef.current
+    const isInitialBootstrap = !bootstrapCompletedRef.current
+    const listsChanged = previousListIdsKey !== null && previousListIdsKey !== listIdsKey
+    const changedReminderIds = new Set<string>()
 
-    async function bootstrapReminders() {
+    if (!isInitialBootstrap && !listsChanged && previousReminderSync) {
+      for (const [reminderId, signature] of currentReminderSync) {
+        if (previousReminderSync.get(reminderId) !== signature) {
+          changedReminderIds.add(reminderId)
+        }
+      }
+      for (const reminderId of previousReminderSync.keys()) {
+        if (!currentReminderSync.has(reminderId)) {
+          changedReminderIds.add(reminderId)
+        }
+      }
+    }
+
+    previousReminderSyncRef.current = currentReminderSync
+    previousListIdsKeyRef.current = listIdsKey
+
+    async function synchronizeReminders() {
       try {
-        const listIds = lists.map((list) => list.id)
-        await ReminderOrchestrator.cleanupOrphans(listIds)
-        await ReminderOrchestrator.syncWithPermissions()
+        if (isInitialBootstrap || listsChanged) {
+          const listIds = listIdsKey ? listIdsKey.split('|') : []
+          const cleanupCompleted = await ReminderOrchestrator.cleanupOrphans(listIds)
+          if (!isMounted || !cleanupCompleted) return
+          await ReminderOrchestrator.syncWithPermissions()
+          if (isMounted) bootstrapCompletedRef.current = true
+          return
+        }
 
-        if (!isMounted) return
+        if (changedReminderIds.size > 0) {
+          await Promise.all(
+            [...changedReminderIds].map((reminderId) =>
+              ReminderOrchestrator.syncReminder(reminderId),
+            ),
+          )
+        }
       } catch (error) {
         console.error(ERROR.reminder_bootstrap_failure, error)
       }
     }
 
-    void bootstrapReminders()
+    void synchronizeReminders()
 
     return () => {
       isMounted = false
     }
-  }, [lists])
+  }, [listIdsKey, remindersSignature, remindersHydrated])
+
+  useEffect(() => {
+    if (!remindersHydrated || Platform.OS === 'web') return
+
+    let isMounted = true
+    let syncInProgress = false
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state !== 'active' || syncInProgress) return
+
+      syncInProgress = true
+      void (async () => {
+        try {
+          const listIds = listIdsKeyRef.current ? listIdsKeyRef.current.split('|') : []
+          const cleanupCompleted = await ReminderOrchestrator.cleanupOrphans(listIds)
+          if (isMounted && cleanupCompleted) {
+            await ReminderOrchestrator.syncWithPermissions()
+            bootstrapCompletedRef.current = true
+          }
+        } catch (error) {
+          console.error(ERROR.reminder_bootstrap_failure, error)
+        } finally {
+          syncInProgress = false
+        }
+      })()
+    })
+
+    return () => {
+      isMounted = false
+      subscription.remove()
+    }
+  }, [remindersHydrated])
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>

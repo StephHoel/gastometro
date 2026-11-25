@@ -1,17 +1,15 @@
 export const ROUTES = {
   Index: "/",
-  IndexTab: "/(tabs)/index",
 
   List: {
     Add: "/list/add",
     Index: "/lists",
-    
+
     Edit: (listId: string) => `/list/edit/${listId}` as const,
   },
 
   PriceComparison: {
     Index: "/price-comparison",
-    IndexTab: "/(tabs)/price-comparison",
 
     Market: {
       Add: "/price-comparison/market/add",
@@ -28,10 +26,7 @@ export const ROUTES = {
     Index: "/reminders",
 
     Id: (listId: string) => `/reminders/${listId}` as const,
-
     New: (listId: string) => `/reminders/${listId}/new` as const,
-
     Edit: (listId: string, reminderId: string) => `/reminders/${listId}/edit/${reminderId}` as const,
   },
-
 } as const
