@@ -1,13 +1,19 @@
-import { ReminderState } from '@/enums/ReminderState'
-import { PermissionState } from '@/enums/PermissionState'
-import { ERROR } from '@/constants/text/error'
-import { REMINDERS } from '@/constants/text/reminders'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderService } from '@/services/ReminderService'
 import { useReminderStore } from '@/stores/ReminderStore'
+
 import { fromDateAndTime } from '@/utils/functions/DateFunctions'
+
+import { ReminderState } from '@/enums/ReminderState'
+import { PermissionState } from '@/enums/PermissionState'
 import type { ReminderProps } from '@/interfaces/ReminderProps'
+
+import { ERROR } from '@/constants/text/error'
+import { REMINDERS } from '@/constants/text/reminders'
 
 let reminderSyncPromise: Promise<void> | null = null
 let fullSyncRequested = false
@@ -122,10 +128,10 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
     const expectedISO = Number.isNaN(expectedDate.getTime()) ? null : expectedDate.toISOString()
     const matching = expectedISO
       ? matches.find((item) =>
-          item.title === reminder.title &&
-          item.listId === reminder.listId &&
-          item.datetimeISO === expectedISO
-        )
+        item.title === reminder.title &&
+        item.listId === reminder.listId &&
+        item.datetimeISO === expectedISO
+      )
       : undefined
 
     if (matching) {
@@ -136,7 +142,7 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
       }
       const latest = useReminderStore.getState().getById(reminder.id)
       if (latest && getReminderScheduleKey(latest) === getReminderScheduleKey(reminder) &&
-          latest.notificationId !== matching.notificationId) {
+        latest.notificationId !== matching.notificationId) {
         useReminderStore.getState().setReminderNotification(reminder.id, matching.notificationId)
       }
       continue
@@ -274,6 +280,27 @@ export const ReminderOrchestrator = {
         }
       }
     }
+
+    const reminders = useReminderStore.getState().reminders
+    const orphans = reminders.filter((reminder) => !validIds.has(reminder.listId))
+    if (orphans.length === 0) cleanupCompleted = true
+
+    try {
+      await AsyncStorage.setItem('gastometro-recovery-reminders-orphans', JSON.stringify(orphans))
+    } catch (error) {
+      PersistenceRecoveryService.report('Foram encontrados lembretes sem uma lista correspondente, mas não foi possível criar uma cópia de recuperação. Os lembretes foram mantidos para evitar perda de dados.')
+      console.error('Falha ao preservar lembretes órfãos:', error)
+      return false
+    }
+
+    for (const reminder of orphans) {
+      await cancelReminderNotifications(reminder)
+      useReminderStore.getState().removeReminder(reminder.id)
+    }
+
+    PersistenceRecoveryService.report(
+      orphans.length + ' lembrete(s) sem uma lista correspondente foram removidos da coleção ativa. Uma cópia foi preservada em gastometro-recovery-reminders-orphans.',
+    )
 
     return cleanupCompleted
   },
