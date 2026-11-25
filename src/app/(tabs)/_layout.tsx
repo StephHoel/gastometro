@@ -107,11 +107,6 @@ export default function Layout() {
     return unsubscribe
   }, [])
 
-  useEffect(() => {
-    const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
-    return unsubscribe
-  }, [])
-
   useEffect(() => { updateWebTitle(pathname) }, [pathname])
 
   useEffect(() => {
@@ -254,18 +249,6 @@ export default function Layout() {
       isMounted = false
     }
   }, [listIdsKey, remindersSignature, remindersHydrated, cartHydrated])
-
-  useEffect(() => {
-    if (!remindersHydrated || !cartHydrated || isWeb) return
-
-    const subscription = AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        void ReminderOrchestrator.syncWithPermissions()
-      }
-    })
-
-    return () => subscription.remove()
-  }, [remindersHydrated, cartHydrated])
 
   useEffect(() => {
     if (!remindersHydrated || isWeb) return
