@@ -9,12 +9,12 @@ export function normalizeCartPersistedState(
   value: unknown,
   version: number,
 ): MigrationResult<CartPersistedData> {
-  if (version < 0 || version > 3) {
+  if (version < 0 || version > 2) {
     throw new Error('Versão de dados do carrinho não suportada: ' + version)
   }
   if (!isRecord(value)) throw new Error('Estrutura persistida do carrinho inválida.')
 
-  let repaired = false
+  let repaired = hasUnknownFields(value, ['lists', 'activeListId', 'products'])
   let discarded = 0
   let rawLists: unknown[]
 
@@ -38,6 +38,8 @@ export function normalizeCartPersistedState(
       return
     }
 
+    if (hasUnknownFields(rawList, ['id', 'name', 'products'])) repaired = true
+
     const rawId = isNonEmptyString(rawList.id) ? rawList.id.trim() : 'lista-recuperada-' + (listIndex + 1)
     const id = uniqueId(rawId, usedListIds)
     if (id !== rawId) repaired = true
@@ -51,6 +53,7 @@ export function normalizeCartPersistedState(
 
     const products: ProductProps[] = []
     rawProducts.forEach((rawProduct) => {
+      if (isRecord(rawProduct) && hasUnknownFields(rawProduct, ['id', 'item', 'quantity', 'price', 'collected'])) repaired = true
       const product = parseProduct(rawProduct)
       if (!product) {
         discarded += 1
@@ -141,7 +144,7 @@ export function normalizeReminderPersistedState(
   value: unknown,
   version: number,
 ): MigrationResult<{ reminders: ReminderProps[] }> {
-  if (version < 0 || version > 3) {
+  if (version < 0 || version > 2) {
     throw new Error('Versão de dados dos lembretes não suportada: ' + version)
   }
   if (!isRecord(value)) throw new Error('Estrutura persistida dos lembretes inválida.')
@@ -149,7 +152,7 @@ export function normalizeReminderPersistedState(
     throw new Error('A coleção persistida de lembretes está malformada.')
   }
 
-  let repaired = value.reminders === undefined
+  let repaired = value.reminders === undefined || hasUnknownFields(value, ['reminders'])
   let discarded = 0
   const reminders: ReminderProps[] = []
   const usedIds = new Set<string>()
@@ -167,6 +170,8 @@ export function normalizeReminderPersistedState(
       repaired = true
       return
     }
+
+    if (hasUnknownFields(rawReminder, ['id', 'title', 'datetimeISO', 'enabled', 'listId', 'itemId', 'notificationId', 'createdAt', 'updatedAt'])) repaired = true
 
     const normalizedId = rawReminder.id.trim()
     if (usedIds.has(normalizedId)) {
@@ -214,4 +219,9 @@ export function normalizeReminderPersistedState(
   })
 
   return { data: { reminders }, repaired, discarded }
+}
+
+function hasUnknownFields(value: Record<string, unknown>, allowedFields: string[]): boolean {
+  const allowed = new Set(allowedFields)
+  return Object.keys(value).some((field) => !allowed.has(field))
 }

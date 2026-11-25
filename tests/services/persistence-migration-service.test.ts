@@ -49,9 +49,64 @@ describe('PersistenceMigrationService - carrinho', () => {
     expect(result.data.products).toEqual([product('p1', 'Arroz')])
   })
 
+  it('descarta campos desconhecidos e sinaliza a normalização para preservar o original', () => {
+    const result = normalizeCartPersistedState({
+      unexpected: true,
+      lists: [{
+        id: 'list-1',
+        name: 'Lista',
+        products: [{ ...product('p1', 'Arroz'), legacyField: 'valor' }],
+        legacyListField: true,
+      }],
+      activeListId: 'list-1',
+      products: [],
+    }, 2)
+
+    expect(result.repaired).toBe(true)
+    expect(result.data).toEqual({
+      lists: [{ id: 'list-1', name: 'Lista', products: [product('p1', 'Arroz')] }],
+      activeListId: 'list-1',
+      products: [product('p1', 'Arroz')],
+    })
+  })
+
+  it('produz o mesmo resultado ao normalizar novamente um estado já normalizado', () => {
+    const first = normalizeCartPersistedState({
+      lists: [{ id: 'list-1', name: 'Lista', products: [product('p1', 'Arroz')] }],
+      activeListId: 'list-1',
+      products: [],
+    }, 2)
+    const second = normalizeCartPersistedState(first.data, 3)
+
+    expect(second.data).toEqual(first.data)
+    expect(second.repaired).toBe(false)
+    expect(second.discarded).toBe(0)
+  })
+
+  it('preserva a semântica dos campos opcionais ausentes e remove opcionais inválidos', () => {
+    const result = normalizeReminderPersistedState({
+      reminders: [{
+        id: 'r1',
+        title: 'Comprar pão',
+        datetimeISO: '2099-01-01T10:00:00.000Z',
+        listId: 'list-1',
+      }],
+    }, 2)
+
+    expect(result.data.reminders[0]).toMatchObject({
+      id: 'r1',
+      enabled: true,
+      listId: 'list-1',
+      createdAt: '2099-01-01T10:00:00.000Z',
+      updatedAt: '2099-01-01T10:00:00.000Z',
+    })
+    expect(result.data.reminders[0]?.itemId).toBeUndefined()
+    expect(result.data.reminders[0]?.notificationId).toBeUndefined()
+  })
+
   it('preserva o erro para estrutura irrecuperável ou versão desconhecida', () => {
     expect(() => normalizeCartPersistedState({ broken: true }, 1)).toThrow()
-    expect(() => normalizeCartPersistedState({ products: [] }, 4)).toThrow()
+    expect(() => normalizeCartPersistedState({ products: [] }, 3)).toThrow()
   })
 })
 
@@ -99,8 +154,23 @@ describe('PersistenceMigrationService - lembretes', () => {
     expect(result.data.reminders[0].id).toBe('r1')
   })
 
+  it('descarta campos desconhecidos de lembretes e sinaliza a alteração', () => {
+    const result = normalizeReminderPersistedState({
+      reminders: [{
+        id: 'r1',
+        title: 'Comprar pão',
+        datetimeISO: '2099-01-01T10:00:00.000Z',
+        listId: 'list-1',
+        legacyField: 'valor',
+      }],
+    }, 2)
+
+    expect(result.repaired).toBe(true)
+    expect(result.data.reminders[0]).not.toHaveProperty('legacyField')
+  })
+
   it('preserva estrutura malformada e versão futura como erro explícito', () => {
     expect(() => normalizeReminderPersistedState({ reminders: {} }, 1)).toThrow()
-    expect(() => normalizeReminderPersistedState({ reminders: [] }, 4)).toThrow()
+    expect(() => normalizeReminderPersistedState({ reminders: [] }, 3)).toThrow()
   })
 })

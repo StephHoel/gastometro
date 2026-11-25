@@ -76,6 +76,9 @@ Definir uma estratégia explícita de versionamento, validação, migração e r
 
 ## Decisões de implementação
 
+- Campos desconhecidos são descartados durante a normalização, mas qualquer ocorrência marca o estado como reparado para que o conteúdo bruto seja preservado antes da gravação normalizada.
+- Campos opcionais ausentes recebem os valores padrão definidos pelo normalizador; campos opcionais presentes com tipos inválidos são removidos e contabilizados como reparo.
+
 - Os stores `gastometro` e `gastometro-reminders` passam a usar schema versão 2, com migração explícita das versões anteriores.
 - A cópia anterior é preservada nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de qualquer reparo que descarte ou normalize registros.
 - IDs duplicados são normalizados de forma determinística no carrinho; lembretes duplicados ou inválidos são preservados na cópia e ignorados na coleção ativa.
