@@ -1,65 +1,9 @@
-import type { ProductProps } from '@/interfaces/ProductProps'
+import { CartPersistedData } from '@/interfaces/CartPersistedData'
+import type { MigrationResult } from '@/interfaces/MigrationResult'
+import { ProductProps } from '@/interfaces/ProductProps'
 import type { ReminderProps } from '@/interfaces/ReminderProps'
-import type { ShoppingListProps } from '@/interfaces/ShoppingListProps'
-
-export interface CartPersistedData {
-  lists: ShoppingListProps[]
-  activeListId: string
-  products: ProductProps[]
-}
-
-export interface MigrationResult<T> {
-  data: T
-  repaired: boolean
-  discarded: number
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0
-}
-
-function uniqueId(base: string, used: Set<string>): string {
-  if (!used.has(base)) {
-    used.add(base)
-    return base
-  }
-
-  let suffix = 2
-  let candidate = base + '-recovered-' + suffix
-  while (used.has(candidate)) {
-    suffix += 1
-    candidate = base + '-recovered-' + suffix
-  }
-  used.add(candidate)
-  return candidate
-}
-
-function parseProduct(value: unknown): ProductProps | null {
-  if (!isRecord(value) || !isNonEmptyString(value.id) || !isNonEmptyString(value.item)) return null
-
-  const quantity = typeof value.quantity === 'string'
-    ? value.quantity
-    : typeof value.quantity === 'number' && Number.isFinite(value.quantity)
-      ? String(value.quantity)
-      : '0'
-  const price = typeof value.price === 'string'
-    ? value.price
-    : typeof value.price === 'number' && Number.isFinite(value.price)
-      ? String(value.price)
-      : '0'
-
-  return {
-    id: value.id.trim(),
-    item: value.item.trim(),
-    quantity,
-    price,
-    collected: typeof value.collected === 'boolean' ? value.collected : false,
-  }
-}
+import { ShoppingListProps } from '@/interfaces/ShoppingListProps'
+import { isRecord, isNonEmptyString, isValidDate } from '@/utils/verification_is'
 
 export function normalizeCartPersistedState(
   value: unknown,
@@ -154,8 +98,43 @@ export function normalizeCartPersistedState(
   }
 }
 
-function isValidDate(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0 && !Number.isNaN(new Date(value).getTime())
+function uniqueId(base: string, used: Set<string>): string {
+  if (!used.has(base)) {
+    used.add(base)
+    return base
+  }
+
+  let suffix = 2
+  let candidate = base + '-recovered-' + suffix
+  while (used.has(candidate)) {
+    suffix += 1
+    candidate = base + '-recovered-' + suffix
+  }
+  used.add(candidate)
+  return candidate
+}
+
+function parseProduct(value: unknown): ProductProps | null {
+  if (!isRecord(value) || !isNonEmptyString(value.id) || !isNonEmptyString(value.item)) return null
+
+  const quantity = typeof value.quantity === 'string'
+    ? value.quantity
+    : typeof value.quantity === 'number' && Number.isFinite(value.quantity)
+      ? String(value.quantity)
+      : '0'
+  const price = typeof value.price === 'string'
+    ? value.price
+    : typeof value.price === 'number' && Number.isFinite(value.price)
+      ? String(value.price)
+      : '0'
+
+  return {
+    id: value.id.trim(),
+    item: value.item.trim(),
+    quantity,
+    price,
+    collected: typeof value.collected === 'boolean' ? value.collected : false,
+  }
 }
 
 export function normalizeReminderPersistedState(
