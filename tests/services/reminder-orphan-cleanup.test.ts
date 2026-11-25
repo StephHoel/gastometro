@@ -1,4 +1,5 @@
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { NotificationService } from '@/services/NotificationService'
 import { useReminderStore } from '@/stores/ReminderStore'
 
@@ -88,11 +89,27 @@ describe('ReminderOrchestrator - limpeza de órfãos', () => {
     cancelScheduled.mockRejectedValueOnce(new Error('falha ao cancelar'))
     getScheduled.mockResolvedValue([])
 
-    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(true)
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
 
     expect(cancelScheduled).toHaveBeenCalledWith('native-1')
     expect(cancelScheduled).toHaveBeenCalledWith('native-2')
-    expect(useReminderStore.getState().reminders).toHaveLength(0)
+    expect(useReminderStore.getState().getById('rem-1')).toBeDefined()
+    expect(useReminderStore.getState().getById('rem-2')).toBeUndefined()
+  })
+
+  it('mantém lembretes quando o cancelamento falha durante a remoção da lista', async () => {
+    useReminderStore.setState({
+      reminders: [makeReminder('rem-fail', 'list-1', 'native-fail')] as never[],
+    })
+    cancelScheduled.mockRejectedValueOnce(new Error('falha ao cancelar'))
+
+    await ReminderOrchestrator.removeByListId('list-1')
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('rem-fail'),
+    )
+    expect(useReminderStore.getState().getById('rem-fail')).toBeDefined()
   })
 
   it('remove os lembretes de uma lista somente depois de processar seus agendamentos', async () => {
@@ -106,6 +123,10 @@ describe('ReminderOrchestrator - limpeza de órfãos', () => {
 
     await ReminderOrchestrator.removeByListId('list-1')
 
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('rem-1'),
+    )
     expect(cancelScheduled).toHaveBeenCalledWith('native-1')
     expect(cancelScheduled).toHaveBeenCalledWith('native-2')
     expect(useReminderStore.getState().getById('rem-1')).toBeUndefined()

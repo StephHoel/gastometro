@@ -13,6 +13,7 @@ import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 const mockAppStateRemove = jest.fn()
 const mockRouterReplace = jest.fn()
 let mockHydrationListener: (() => void) | undefined
+let mockCartHydrationListener: (() => void) | undefined
 let mockHydrated = false
 let mockCartState: Record<string, any>
 let mockReminderState: Record<string, any>
@@ -20,7 +21,16 @@ let mockReminderState: Record<string, any>
 jest.mock('@/stores/CartStore', () => ({
   useCartStore: Object.assign(
     jest.fn((selector: (state: any) => unknown) => selector(mockCartState)),
-    { getState: () => mockCartState },
+    {
+      getState: () => mockCartState,
+      persist: {
+        hasHydrated: () => mockHydrated,
+        onFinishHydration: (callback: () => void) => {
+          mockCartHydrationListener = callback
+          return jest.fn()
+        },
+      },
+    },
   ),
 }))
 
@@ -128,6 +138,7 @@ describe('Layout - bootstrap e listeners de lembretes', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockHydrationListener = undefined
+    mockCartHydrationListener = undefined
     mockHydrated = false
     ;(Platform as { OS: string }).OS = 'android'
     ;(usePathname as jest.Mock).mockReturnValue('/')
@@ -155,9 +166,11 @@ describe('Layout - bootstrap e listeners de lembretes', () => {
     expect(ReminderOrchestrator.cleanupOrphans).not.toHaveBeenCalled()
     expect(ReminderOrchestrator.syncWithPermissions).not.toHaveBeenCalled()
     expect(mockHydrationListener).toBeDefined()
+    expect(mockCartHydrationListener).toBeDefined()
 
     await act(async () => {
       mockHydrationListener?.()
+      mockCartHydrationListener?.()
     })
 
     await waitFor(() => {
