@@ -1,7 +1,7 @@
 # Mini-spec: Sincronização eficiente de lembretes
 
 Número: 18
-Status: planejado
+Status: implementado
 
 ## Problema
 
@@ -69,3 +69,34 @@ Tornar a sincronização de lembretes previsível, idempotente e independente de
 - Inspecionar o comportamento de hidratação do Zustand antes de alterar o momento do bootstrap.
 - Preferir seletores estáveis e dependências baseadas em identificadores, não em objetos completos de listas.
 - Não assumir que o identificador salvo em `notificationId` garante que a notificação ainda existe no sistema operacional.
+
+
+## Implementação concluída
+
+A sincronização foi reorganizada para reconciliar o estado persistido com os agendamentos nativos sem cancelar notificações válidas nem reagendar lembretes sem alterações relevantes.
+
+### Decisões implementadas
+
+- O bootstrap aguarda a hidratação do store e utiliza assinaturas estáveis dos campos relevantes dos lembretes e dos identificadores das listas.
+- Alterações em produtos, nomes de listas e metadados transitórios não provocam sincronização desnecessária.
+- Alterações individuais são reconciliadas pelo ID do lembrete; mudanças estruturais nos identificadores das listas e o bootstrap utilizam reconciliação global.
+- A reconciliação consulta os agendamentos nativos, recupera referências persistidas perdidas, remove duplicidades e substitui somente agendamentos ausentes ou divergentes.
+- As sincronizações globais e individuais são serializadas e solicitações concorrentes são consolidadas.
+- Agendamentos concluídos após uma edição ou remoção concorrente são descartados e reconciliados com o estado atual.
+- A limpeza de órfãos preserva registros para nova tentativa quando a consulta nativa falha e continua o processamento diante de falhas individuais de cancelamento.
+- A retomada do aplicativo revalida permissões e tenta novamente a limpeza de órfãos antes de concluir o bootstrap.
+- O fluxo de desativação cancela agendamentos mesmo quando a leitura de permissões está indisponível.
+- Listeners de resposta são registrados uma vez por montagem e removidos no cleanup.
+
+### Compatibilidade preservada
+
+- Mantidos o contrato `ReminderProps` e a chave de persistência `gastometro-reminders`.
+- O `AlertService` e o fallback in-app da web permanecem preservados.
+- A web não tenta agendar notificações nativas.
+- Não foram incluídos toasts, notificações push ou agendamento web em segundo plano; esses itens permanecem no escopo da mini-spec 23.
+
+### Validação
+
+- Testes unitários e de integração adicionados para reconciliação idempotente, sincronização granular, concorrência, permissões, falhas nativas, limpeza de órfãos e bootstrap.
+- Expo Doctor, testes E2E Web, verificação de versionamento e workflow de build Android concluídos com sucesso na CI da PR 68.
+- Validação funcional manual em Android e Web concluída.

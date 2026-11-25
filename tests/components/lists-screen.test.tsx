@@ -6,6 +6,7 @@ import { INPUTS } from '@/constants/text/inputs'
 import { ERROR } from '@/constants/text/error'
 import { LISTS } from '@/constants/text/lists'
 import { mockPush } from '../setup/mocks/expo-router'
+import { ROUTES } from '@/constants/routes'
 
 const mockUseInitAlert = jest.fn()
 const mockAlertOk = jest.fn()
@@ -165,7 +166,7 @@ describe('Lists screen', () => {
     await fireEvent.press(getByText('Lista 2'))
 
     expect(mockStore.setActiveList).toHaveBeenCalledWith('list-2')
-    expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
+    expect(mockPush).toHaveBeenCalledWith(ROUTES.Index)
   })
 
   it('renomeia lista no modo edição', async () => {
@@ -216,6 +217,30 @@ describe('Lists screen', () => {
 
     expect(payload.buttons[0].text).toBe(LISTS.confirm_remove_button)
     await payload.buttons[0].action()
+
+    expect(mockStore.removeList).toHaveBeenCalledWith('list-2')
+  })
+
+
+  it('aguarda a limpeza dos lembretes antes de remover a lista', async () => {
+    let finishCleanup: (() => void) | undefined
+    mockRemoveByListId.mockImplementationOnce(
+      () => new Promise<undefined>((resolve) => { finishCleanup = () => resolve(undefined) }),
+    )
+
+    const { getAllByText } = await render(<Lists />)
+    await fireEvent.press(getAllByText('TrashIcon')[1])
+
+    const payload = mockShowAlert.mock.calls[0][0] as {
+      buttons: Array<{ action: () => Promise<void> }>
+    }
+    const removal = payload.buttons[0].action()
+
+    expect(mockRemoveByListId).toHaveBeenCalledWith('list-2')
+    expect(mockStore.removeList).not.toHaveBeenCalled()
+
+    finishCleanup?.()
+    await removal
 
     expect(mockStore.removeList).toHaveBeenCalledWith('list-2')
   })

@@ -34,6 +34,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Contas a pagar](./done/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](./done/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](./done/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](./done/18-sincronizacao-eficiente-de-lembretes.md)
 
 ### Ativas/Em andamento
 
@@ -41,8 +42,8 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [Sincronização eficiente de lembretes](./planned/18-sincronizacao-eficiente-de-lembretes.md)
-2. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
-3. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-4. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-5. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+1. [Integridade e migração de dados locais](./planned/19-integridade-e-migracao-de-dados-locais.md)
+2. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
+3. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+4. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+5. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)

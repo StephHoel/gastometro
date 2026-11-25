@@ -67,7 +67,7 @@ export default function Lists() {
 
   function handleSelectList(listId: string) {
     cartStore.setActiveList(listId)
-    router.push(ROUTES.IndexTab)
+    router.push(ROUTES.Index)
   }
 
   function handleStartEdit(listId: string, currentName: string) {

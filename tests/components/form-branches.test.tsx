@@ -4,6 +4,7 @@ import { Text } from 'react-native'
 import { Form } from '@/components/Form'
 import { useCartStore } from '@/stores/CartStore'
 import { useRouter } from 'expo-router'
+import { ROUTES } from '@/constants/routes'
 
 const mockPush = jest.fn()
 
@@ -100,7 +101,7 @@ describe('Form branch coverage', () => {
       const products = useCartStore.getState().products
       expect(products).toHaveLength(2)
       expect(products.some((product) => product.item === 'Feijao')).toBe(true)
-      expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
+      expect(mockPush).toHaveBeenCalledWith(ROUTES.Index)
     })
   })
 
@@ -136,7 +137,7 @@ describe('Form branch coverage', () => {
       expect(updated?.item).toBe('Macarrao')
       expect(updated?.quantity).toBe('3')
       expect(updated?.price).toBe('7')
-      expect(mockPush).toHaveBeenCalledWith('/(tabs)/index')
+      expect(mockPush).toHaveBeenCalledWith(ROUTES.Index)
     })
   })
 })

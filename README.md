@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.9.1-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.9.2-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
 
@@ -30,6 +30,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Possui central de lembretes com filtros por status.
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
 - Compara preços de produtos entre mercados, identifica todos os lugares empatados nas melhores e piores ofertas e calcula o custo da cesta completa quando todos os preços estão disponíveis.
+- Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 
 ## Stack
 
@@ -51,19 +52,15 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
-## Em implementação (aguardando validação dos PRs)
-
-- [Testes E2E para roteamento web SPA](docs/specs/active/14-testes-e2e-roteamento-web-spa.md)
-
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Sincronização eficiente de lembretes](docs/specs/planned/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
+- [Feedback com toast e disparo de lembretes na web](docs/specs/planned/23-feedback-toast-e-lembretes-web.md)
 
 ### Comparação de preços
 
@@ -73,6 +70,7 @@ Funcionalidades concluídas recentemente:
 
 - Testes E2E do roteamento web SPA com Playwright, cobrindo rotas profundas, refresh, navegação/histórico e fallback do GitHub Pages (mini-spec 14 em `docs/specs/done/`).
 - Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
+- Sincronização idempotente de lembretes, com preservação de notificações válidas, reconciliação granular e limpeza resiliente de órfãos (mini-spec 18 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
