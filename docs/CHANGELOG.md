@@ -18,6 +18,7 @@ Implementação da mini-spec 18: sincronização eficiente e idempotente de lemb
 - Adicionados testes para consulta de agendamentos, preservação de notificações válidas, recuperação de agendamentos e deduplicação.
 - Mantida a chave `gastometro-reminders` e o contrato persistido de `ReminderProps`.
 - A web continua sem agendamento nativo.
+- Mini-spec 18 movida para `docs/specs/done/` após conclusão da implementação e das validações.
 
 ## 1.9.1 - 2026-11-24
 

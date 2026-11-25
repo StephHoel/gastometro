@@ -34,11 +34,11 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Contas a pagar](./done/11-contas-a-pagar.md)
 - [Testes E2E para roteamento web SPA](./done/14-testes-e2e-roteamento-web-spa.md)
 - [Comparação de preços entre lugares](./done/17-comparacao-de-precos-entre-lugares.md)
+- [Sincronização eficiente de lembretes](./done/18-sincronizacao-eficiente-de-lembretes.md)
 
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
-- [Sincronização eficiente de lembretes](./active/18-sincronizacao-eficiente-de-lembretes.md)
 
 ### Planejadas (ordem de prioridade)
 
