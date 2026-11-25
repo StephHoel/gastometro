@@ -57,19 +57,19 @@ Esta pasta concentra a documentação principal do projeto.
 
 Observação:
 
-- O fluxo não-interativo aceita `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`.
+- O fluxo não-interativo aceita `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`, com `1` (patch), `2` (minor), `3` (major) ou uma versão exata `X.Y.Z`, como `2.1.0`. A opção `4` abre o prompt de versão manual.
 - Quando usado `n`, `no` ou `no-commit`, o script atualiza versão/changelog sem commit e sem push.
 
 ## Status Atual
 
 | Métrica                      | Valor                          |
 | ---------------------------- | ------------------------------ |
-| **Versão**                   | 1.9.0                          |
-| **Data**                     | 2026-11-22                     |
-| **Testes**                   | 303 passando                  |
+| **Versão**                   | 1.10.0                         |
+| **Data**                     | 2026-11-25                     |
+| **Testes**                   | 398 passando (62 suítes)       |
 | **Cobertura**                | 97,87% linhas                  |
 | **Branches**                 | 91,90%                         |
 | **Statements**               | 96,57%                         |
 | **Funções**                  | 96,21%                         |
 
-A medição foi obtida no CI em 22/11/2026, com todos os 303 testes aprovados. Consulte `coverages/README.md` para o registro e `specs/README.md` para o status detalhado das mini-specs.
+A cobertura informada é a última medição registrada em 22/11/2026, com 97,87% de linhas. Em 25/11/2026, a validação da PR 69 executou 398 testes em 62 suítes, todos aprovados, e o type-check passou. O build Android não foi concluído porque o Gradle não conseguiu resolver `org.gradle.toolchains.foojay-resolver-convention:1.0.0`. Consulte `coverages/README.md` para o histórico de cobertura e `specs/README.md` para o status das mini-specs.

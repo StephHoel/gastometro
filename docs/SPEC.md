@@ -2,7 +2,7 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.9.2
+> **Versão do App:** 1.10.0
 > **Data:** 2026-11-25
 > **Cobertura de Testes (linhas):** 97,87% (última medição registrada em 2026-11-22)
 > Última medição histórica: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas, com 303 testes aprovados. A execução de 24/11/2026 inclui um novo teste de apresentação de empates; os indicadores serão substituídos após a geração do próximo relatório de cobertura.
@@ -55,12 +55,12 @@ Público esperado:
 - Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação; funcionalidade validada manualmente em Android e Web.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 - Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
+- Validação e migração versionada dos stores locais, com preservação de cópia anterior antes de reparos e aviso recuperável para o usuário.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- integridade e migração de dados locais;
 - backup e restauração local;
 - acessibilidade e usabilidade assistiva;
 - consistência e validação da documentação técnica;
@@ -190,6 +190,9 @@ Estado:
 - O bootstrap de lembretes depende da hidratação, dos campos relevantes dos lembretes e dos IDs das listas; mudanças em produtos não disparam sincronização.
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 - `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
+- `CartStore` e `ReminderStore` usam schemas de persistência versão 3 e validam os dados antes de disponibilizá-los; migrações explícitas normalizam dados legados.
+- Quando há reparos, os stores preservam o conteúdo bruto nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de gravar o estado normalizado. Escritas e remoções nas chaves principais ficam bloqueadas até a conclusão da cópia, com operações concorrentes enfileiradas.
+- Estruturas irrecuperáveis e versões futuras não são sobrescritas silenciosamente; a interface informa a ocorrência. A limpeza de lembretes órfãos depende da hidratação dos stores, da cópia de recuperação e do cancelamento confirmado das notificações.
 
 Manipulação da lista:
 
@@ -369,9 +372,10 @@ Regras de versionamento:
 Fluxo de criação de versão (script oficial):
 
 - interativo: `npm run new-version`;
-- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`;
-- tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
+- não-interativo: `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`;
+- primeiro argumento: `1` (patch), `2` (minor), `3` (major) ou versão exata no formato `X.Y.Z`, sem zeros à esquerda (ex.: `2.1.0`). A opção `4` continua abrindo o prompt de versão manual.
 - quando o terceiro argumento for `n`, `no` ou `no-commit`, o fluxo atualiza arquivos de versão/changelog sem criar commit/push automático.
+- o script carrega o seletor de versão antes do stash WIP, para que mudanças locais no seletor sejam usadas na mesma execução.
 - branch de release: criar branch nova para versionamento **somente se** o fluxo iniciar na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - se já estiver em branch de trabalho/release, reaproveitar a branch atual e não criar outra.
 

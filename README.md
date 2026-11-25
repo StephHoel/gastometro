@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.9.2-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.10.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
 
@@ -31,6 +31,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Gerencia contas a pagar em uma seção independente, com totais, vencimentos e persistência offline.
 - Compara preços de produtos entre mercados, identifica todos os lugares empatados nas melhores e piores ofertas e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
+- Valida e migra dados locais do carrinho e dos lembretes, preservando cópias de recuperação antes de reparos e informando o usuário sobre ocorrências.
 
 ## Stack
 
@@ -56,7 +57,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
@@ -71,6 +71,7 @@ Funcionalidades concluídas recentemente:
 - Testes E2E do roteamento web SPA com Playwright, cobrindo rotas profundas, refresh, navegação/histórico e fallback do GitHub Pages (mini-spec 14 em `docs/specs/done/`).
 - Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
 - Sincronização idempotente de lembretes, com preservação de notificações válidas, reconciliação granular e limpeza resiliente de órfãos (mini-spec 18 em `docs/specs/done/`).
+- Integridade e migração versionada dos dados locais, com validação, recuperação segura e proteção contra sobrescrita de dados inválidos ou de versões futuras (mini-spec 19 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
@@ -205,7 +206,7 @@ Cobertura:
 npm run test:coverage
 ```
 
-O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. A última medição registrada no CI em 22/11/2026 foi de 97,87% em linhas, 96,57% em statements, 91,90% em branches e 96,21% em funções. Nessa execução, os 303 testes passaram.
+O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. A última medição registrada no CI em 22/11/2026 foi de 97,87% em linhas, 96,57% em statements, 91,90% em branches e 96,21% em funções. Nessa execução, os 303 testes passaram. Em 25/11/2026, a validação da PR da mini-spec 19 executou 398 testes em 62 suítes, todos aprovados, e o type-check passou; o build Android permaneceu pendente por falha na resolução de um plugin Gradle.
 
 Cobertura com exportação CSV:
 
@@ -266,10 +267,10 @@ Regras atuais:
 Fluxo de criação de versão:
 
 - Interativo: `npm run new-version`
-- Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`
-- Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual)
+- Não-interativo: `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`
+- Use `1` (patch), `2` (minor), `3` (major) ou uma versão exata no formato `X.Y.Z`. A opção `4` abre o prompt de versão manual.
 - Exemplo: `npm run new-version -- 1 "Ajustes de documentação e scripts de release"`
-- Exemplo sem commit/push automático: `npm run new-version -- 1 "Ajustes de documentação e scripts de release" no-commit`
+- Exemplo com versão personalizada, sem commit/push automático: `npm run new-version -- 2.1.0 "Ajustes de documentação e scripts de release" no-commit`
 - Quando o terceiro argumento for `n`, `no` ou `no-commit`, o script atualiza os arquivos de versão/changelog sem criar commit nem executar push.
 - Branch de release: criar uma branch nova para versionamento **apenas se** o fluxo for iniciado na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - Se o fluxo já estiver sendo executado em uma branch de trabalho/release, reutilizar a branch atual e não criar outra.
