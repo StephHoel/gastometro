@@ -371,9 +371,10 @@ Regras de versionamento:
 Fluxo de criação de versão (script oficial):
 
 - interativo: `npm run new-version`;
-- não-interativo: `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`;
-- tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual).
+- não-interativo: `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`;
+- primeiro argumento: `1` (patch), `2` (minor), `3` (major) ou versão exata no formato `X.Y.Z`, sem zeros à esquerda (ex.: `2.1.0`). A opção `4` continua abrindo o prompt de versão manual.
 - quando o terceiro argumento for `n`, `no` ou `no-commit`, o fluxo atualiza arquivos de versão/changelog sem criar commit/push automático.
+- o script carrega o seletor de versão antes do stash WIP, para que mudanças locais no seletor sejam usadas na mesma execução.
 - branch de release: criar branch nova para versionamento **somente se** o fluxo iniciar na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - se já estiver em branch de trabalho/release, reaproveitar a branch atual e não criar outra.
 

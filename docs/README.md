@@ -57,7 +57,7 @@ Esta pasta concentra a documentação principal do projeto.
 
 Observação:
 
-- O fluxo não-interativo aceita `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`.
+- O fluxo não-interativo aceita `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`, com `1` (patch), `2` (minor), `3` (major) ou uma versão exata `X.Y.Z`, como `2.1.0`. A opção `4` abre o prompt de versão manual.
 - Quando usado `n`, `no` ou `no-commit`, o script atualiza versão/changelog sem commit e sem push.
 
 ## Status Atual
@@ -66,7 +66,7 @@ Observação:
 | ---------------------------- | ------------------------------ |
 | **Versão**                   | 1.9.0                          |
 | **Data**                     | 2026-11-22                     |
-| **Testes**                   | 303 passando                  |
+| **Testes**                   | 303 passando                   |
 | **Cobertura**                | 97,87% linhas                  |
 | **Branches**                 | 91,90%                         |
 | **Statements**               | 96,57%                         |
