@@ -95,7 +95,6 @@ interface PriceComparisonEntryProps {
 - Priorizar modelagem desacoplada em `src/interfaces`, `src/stores` e `src/services`.
 - Garantir cobertura de testes para regras de cálculo de menor preço e diferença percentual.
 
-
 ## Status da implementação
 
 - [x] Cadastro, edição e remoção de lugares com nome normalizado e observação opcional.
