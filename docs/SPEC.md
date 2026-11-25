@@ -193,6 +193,7 @@ Estado:
 - `CartStore` e `ReminderStore` usam schemas de persistência versão 3 e validam os dados antes de disponibilizá-los; migrações explícitas normalizam dados legados.
 - Quando há reparos, os stores preservam o conteúdo bruto nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de gravar o estado normalizado. Escritas e remoções nas chaves principais ficam bloqueadas até a conclusão da cópia, com operações concorrentes enfileiradas.
 - Estruturas irrecuperáveis e versões futuras não são sobrescritas silenciosamente; a interface informa a ocorrência. A limpeza de lembretes órfãos depende da hidratação dos stores, da cópia de recuperação e do cancelamento confirmado das notificações.
+- `BackupService` gera e valida envelopes JSON versionados, compara dados locais com backups, apresenta conflitos para decisão explícita e preserva o estado anterior antes da restauração.
 
 Manipulação da lista:
 

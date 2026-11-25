@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.11.0 - 2026-11-25
+
+Implementação da mini-spec 20: backup e restauração local.
+
+### Funcionalidade
+
+- Adicionada exportação de listas, produtos e lembretes em arquivo JSON versionado, com download na web e compartilhamento no Android.
+- Adicionada importação por seletor de arquivos, validação e pré-visualização do conteúdo antes da restauração.
+- Disponibilizadas as estratégias de substituição integral e mesclagem com dados locais.
+- Conflitos de listas, produtos e lembretes exibem os valores locais e os valores do backup; cada conflito exige escolha explícita.
+- IDs de notificações nativas são excluídos do backup e os agendamentos são reconciliados após a restauração.
+- Dados locais anteriores são preservados antes da operação de restauração.
+
+### Qualidade e documentação
+
+- Adicionados testes para envelope, validação, referências, mesclagem e resolução de conflitos.
+- Documentadas as decisões de formato, limite de tamanho e política de conflitos na mini-spec 20.
+
 ## 1.10.0 - 2026-11-25
 
 Implementação da mini-spec 19: integridade e migração de dados locais.

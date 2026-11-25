@@ -40,10 +40,10 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [Backup e restauração local](./active/20-backup-e-restauracao-local.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-2. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-3. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
-4. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)
+1. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+2. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+3. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)
