@@ -12,10 +12,15 @@ interface PendingWrite {
 export function createRecoveryAwareStorage() {
   let writesAllowed = true
   let pendingWrite: PendingWrite | null = null
+  const originalValues = new Map<string, string>()
 
   return {
     storage: {
-      getItem: (key: string) => AsyncStorage.getItem(key),
+      getItem: async (key: string) => {
+        const value = await AsyncStorage.getItem(key)
+        if (value !== null) originalValues.set(key, value)
+        return value
+      },
       setItem: async (key: string, value: string) => {
         if (!writesAllowed) {
           pendingWrite = { key, value }
@@ -27,6 +32,11 @@ export function createRecoveryAwareStorage() {
         if (!writesAllowed) return
         await AsyncStorage.removeItem(key)
       },
+    },
+    takeOriginalValue(key: string) {
+      const value = originalValues.get(key)
+      originalValues.delete(key)
+      return value
     },
     blockWrites() {
       writesAllowed = false

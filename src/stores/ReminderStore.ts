@@ -22,7 +22,8 @@ const reminderPersistence = createRecoveryAwareStorage()
 
 async function preserveReminderData(value: unknown): Promise<boolean> {
   try {
-    await AsyncStorage.setItem(REMINDER_RECOVERY_KEY, JSON.stringify(value))
+    const originalValue = reminderPersistence.takeOriginalValue('gastometro-reminders')
+    await AsyncStorage.setItem(REMINDER_RECOVERY_KEY, originalValue ?? JSON.stringify(value))
     return true
   } catch (error) {
     PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados dos lembretes. Evite limpar os dados do aplicativo e procure suporte.')
@@ -52,8 +53,9 @@ async function migrateReminderState(persistedState: unknown, version: number): P
     const preserved = await preserveReminderData(persistedState)
     if (preserved && version >= 0 && version <= 3) {
       PersistenceRecoveryService.report('Não foi possível validar os lembretes antigos. O conteúdo original foi preservado e uma coleção vazia foi preparada para continuar usando o aplicativo.')
+      const recovered = normalizeReminderPersistedState({ reminders: [] }, 3)
       await reminderPersistence.allowWrites()
-      return { reminders: [] } as ReminderStateProps
+      return recovered.data as ReminderStateProps
     }
 
     PersistenceRecoveryService.report(preserved

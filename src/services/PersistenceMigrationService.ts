@@ -9,7 +9,7 @@ export function normalizeCartPersistedState(
   value: unknown,
   version: number,
 ): MigrationResult<CartPersistedData> {
-  if (version < 0 || version > 2) {
+  if (version < 0 || version > 3) {
     throw new Error('Versão de dados do carrinho não suportada: ' + version)
   }
   if (!isRecord(value)) throw new Error('Estrutura persistida do carrinho inválida.')
@@ -144,7 +144,7 @@ export function normalizeReminderPersistedState(
   value: unknown,
   version: number,
 ): MigrationResult<{ reminders: ReminderProps[] }> {
-  if (version < 0 || version > 2) {
+  if (version < 0 || version > 3) {
     throw new Error('Versão de dados dos lembretes não suportada: ' + version)
   }
   if (!isRecord(value)) throw new Error('Estrutura persistida dos lembretes inválida.')

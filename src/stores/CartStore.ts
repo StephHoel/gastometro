@@ -35,7 +35,8 @@ const cartPersistence = createRecoveryAwareStorage()
 
 async function preserveCartData(value: unknown): Promise<boolean> {
   try {
-    await AsyncStorage.setItem(CART_RECOVERY_KEY, JSON.stringify(value))
+    const originalValue = cartPersistence.takeOriginalValue('gastometro')
+    await AsyncStorage.setItem(CART_RECOVERY_KEY, originalValue ?? JSON.stringify(value))
     return true
   } catch (error) {
     PersistenceRecoveryService.report('Não foi possível criar uma cópia de recuperação dos dados do carrinho. Evite limpar os dados do aplicativo e procure suporte.')
