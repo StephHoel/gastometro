@@ -52,11 +52,14 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs)
+
+- [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)

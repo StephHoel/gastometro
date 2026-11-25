@@ -55,6 +55,7 @@ Público esperado:
 - Fluxo E2E funcional da comparação de preços com cadastro de lugares e item, identificação de empates e persistência após recarregar a aplicação; funcionalidade validada manualmente em Android e Web.
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 - Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
+- Validação e migração versionada dos stores locais, com preservação de cópia anterior antes de reparos e aviso recuperável para o usuário.
 
 ## 3. Funcionalidades Planejadas
 
@@ -190,6 +191,7 @@ Estado:
 - O bootstrap de lembretes depende da hidratação, dos campos relevantes dos lembretes e dos IDs das listas; mudanças em produtos não disparam sincronização.
 - `useBillStore` mantém contas a pagar em persistência isolada (`gastometro-bills`), sem compartilhar modelo ou estado com produtos.
 - `usePriceComparisonStore` mantém lugares e preços em persistência isolada (`gastometro-price-comparisons`), sem alterar listas, lembretes ou contas.
+- `CartStore` e `ReminderStore` validam os dados hidratados e mantêm cópias de recuperação nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` quando encontram estruturas que precisam de reparo.
 
 Manipulação da lista:
 
