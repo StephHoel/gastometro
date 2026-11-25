@@ -1,11 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { AppState, Text } from 'react-native'
+import { AppState, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Tabs, usePathname, useRouter } from "expo-router"
-import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
+
+import {
+  addNotificationResponseReceivedListener,
+  AndroidImportance,
+  clearLastNotificationResponse,
+  getLastNotificationResponse,
+  setNotificationChannelAsync,
+  setNotificationHandler,
+  type NotificationResponse,
+} from 'expo-notifications'
 
 import { CalculatorIcon, HomeIcon, ListIcon } from "@/components/Icons"
 
+import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
 import { NotificationService } from '@/services/NotificationService'
 import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
@@ -31,6 +41,8 @@ export default function Layout() {
   const setActiveList = useCartStore((state) => state.setActiveList)
   const reminders = useReminderStore((state) => state.reminders)
   const [remindersHydrated, setRemindersHydrated] = useState(useReminderStore.persist.hasHydrated())
+  const [cartHydrated, setCartHydrated] = useState(useCartStore.persist.hasHydrated())
+  const [recoveryNotice, setRecoveryNotice] = useState(PersistenceRecoveryService.getMessage())
   const listIdsKey = getListIdsSignature(lists)
   const remindersSignature = getReminderSyncSignature(reminders)
   const handledNotificationKeysRef = useRef(new Set<string>())
@@ -83,6 +95,13 @@ export default function Layout() {
   const handleNotificationResponseRef = useRef<(response: NotificationResponse) => Promise<void>>(async () => undefined)
   handleNotificationResponseRef.current = handleNotificationResponse
 
+  useEffect(() => PersistenceRecoveryService.subscribe(setRecoveryNotice), [])
+
+  useEffect(() => {
+    const unsubscribe = useCartStore.persist.onFinishHydration(() => setCartHydrated(true))
+    return unsubscribe
+  }, [])
+
   useEffect(() => {
     const unsubscribe = useReminderStore.persist.onFinishHydration(() => setRemindersHydrated(true))
     return unsubscribe
@@ -133,7 +152,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (isWeb) return
+    if (isWeb || !cartHydrated) return
 
     let isMounted = true
 
@@ -161,10 +180,10 @@ export default function Layout() {
       isMounted = false
       subscription.remove()
     }
-  }, [])
+  }, [cartHydrated])
 
   useEffect(() => {
-    if (!remindersHydrated) return
+    if (!remindersHydrated || !cartHydrated) return
 
     let isMounted = true
     const currentReminderSync = new Map<string, string>(
@@ -229,7 +248,7 @@ export default function Layout() {
     return () => {
       isMounted = false
     }
-  }, [listIdsKey, remindersSignature, remindersHydrated])
+  }, [listIdsKey, remindersSignature, remindersHydrated, cartHydrated])
 
   useEffect(() => {
     if (!remindersHydrated || isWeb) return
@@ -264,6 +283,15 @@ export default function Layout() {
 
   return (
     <SafeAreaView className="bg-slate-900 flex-1" edges={['top']}>
+      {recoveryNotice && (
+        <View className="bg-amber-900 px-4 py-3 gap-2">
+          <Text className="text-white text-sm">{recoveryNotice}</Text>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Fechar aviso de recuperação" onPress={() => PersistenceRecoveryService.dismiss()}>
+            <Text className="text-amber-200 font-bold text-right">Fechar aviso</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <Tabs
         screenOptions={{
           headerShown: false,

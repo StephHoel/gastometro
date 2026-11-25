@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.9.2-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.10.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
 
@@ -52,11 +52,14 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs)
+
+- [Integridade e migração de dados locais](docs/specs/active/19-integridade-e-migracao-de-dados-locais.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Integridade e migração de dados locais](docs/specs/planned/19-integridade-e-migracao-de-dados-locais.md)
 - [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
@@ -266,10 +269,10 @@ Regras atuais:
 Fluxo de criação de versão:
 
 - Interativo: `npm run new-version`
-- Não-interativo (com argumentos): `npm run new-version -- <tipo> "<texto do changelog>" [n|no|no-commit]`
-- Tipos aceitos em `<tipo>`: `1` (patch), `2` (minor), `3` (major), `4` (manual)
+- Não-interativo: `npm run new-version -- <tipo|versão> "<texto do changelog>" [n|no|no-commit]`
+- Use `1` (patch), `2` (minor), `3` (major) ou uma versão exata no formato `X.Y.Z`. A opção `4` abre o prompt de versão manual.
 - Exemplo: `npm run new-version -- 1 "Ajustes de documentação e scripts de release"`
-- Exemplo sem commit/push automático: `npm run new-version -- 1 "Ajustes de documentação e scripts de release" no-commit`
+- Exemplo com versão personalizada, sem commit/push automático: `npm run new-version -- 2.1.0 "Ajustes de documentação e scripts de release" no-commit`
 - Quando o terceiro argumento for `n`, `no` ou `no-commit`, o script atualiza os arquivos de versão/changelog sem criar commit nem executar push.
 - Branch de release: criar uma branch nova para versionamento **apenas se** o fluxo for iniciado na `main` (ex.: `chore/new-version-YYYY-MM-DD`).
 - Se o fluxo já estiver sendo executado em uma branch de trabalho/release, reutilizar a branch atual e não criar outra.
