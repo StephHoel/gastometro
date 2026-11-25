@@ -3,6 +3,7 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { AlertService } from '@/services/AlertService'
 import { NotificationService } from '@/services/NotificationService'
 import { useReminderStore } from '@/stores/ReminderStore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 jest.mock('@/services/AlertService', () => ({
   AlertService: {
@@ -208,6 +209,36 @@ describe('ReminderOrchestrator', () => {
     expect(cancelScheduled).toHaveBeenCalledWith('n1')
     expect(useReminderStore.getState().getById('r1')).toBeUndefined()
     expect(useReminderStore.getState().getById('r2')).toBeDefined()
+  })
+
+  it('preserva e cancela notificação de lembrete órfão sem ID persistido', async () => {
+    seedReminders([makeReminder('orphan', { notificationId: undefined, listId: 'removed-list' })])
+    getScheduledReminderNotifications.mockResolvedValueOnce([{
+      notificationId: 'native-orphan',
+      reminderId: 'orphan',
+      listId: 'removed-list',
+      title: 'Lembrete orphan',
+      datetimeISO: '2099-01-01T10:00:00.000Z',
+    }])
+
+    await ReminderOrchestrator.cleanupOrphans([])
+
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'gastometro-recovery-reminders-orphans',
+      expect.stringContaining('orphan'),
+    )
+    expect(cancelScheduled).toHaveBeenCalledWith('native-orphan')
+    expect(useReminderStore.getState().getById('orphan')).toBeUndefined()
+  })
+
+  it('mantém lembretes órfãos quando não consegue preservar uma cópia', async () => {
+    seedReminders([makeReminder('orphan-2', { notificationId: 'native-2', listId: 'removed-list' })])
+    ;(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('storage indisponível'))
+
+    await expect(ReminderOrchestrator.cleanupOrphans([])).resolves.toBe(false)
+
+    expect(useReminderStore.getState().getById('orphan-2')).toBeDefined()
+    expect(cancelScheduled).not.toHaveBeenCalled()
   })
 
   it('saveReminder solicita permissão ao criar e alerta quando negada', async () => {
