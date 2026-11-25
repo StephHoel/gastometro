@@ -29,11 +29,13 @@ function getReminderScheduleKey(reminder: ReminderProps): string {
   ])
 }
 
-async function cancelSafely(notificationId?: string): Promise<void> {
+async function cancelSafely(notificationId?: string): Promise<boolean> {
   try {
     await NotificationService.cancelScheduled(notificationId)
+    return true
   } catch (error) {
     console.error(ERROR.notification_cancel_failure, error)
+    return false
   }
 }
 
@@ -61,17 +63,18 @@ async function cancelReminderNotifications(reminder: {
 }): Promise<boolean> {
   const scheduled = await getScheduledNotifications()
 
+  if (!scheduled) return false
+
+  let cleanupCompleted = true
   if (reminder.notificationId) {
-    await cancelSafely(reminder.notificationId)
+    cleanupCompleted = await cancelSafely(reminder.notificationId) && cleanupCompleted
   }
-  if (scheduled) {
-    for (const notification of scheduled) {
-      if (notification.reminderId === reminder.id && notification.notificationId !== reminder.notificationId) {
-        await cancelSafely(notification.notificationId)
-      }
+  for (const notification of scheduled) {
+    if (notification.reminderId === reminder.id && notification.notificationId !== reminder.notificationId) {
+      cleanupCompleted = await cancelSafely(notification.notificationId) && cleanupCompleted
     }
   }
-  return scheduled !== null
+  return cleanupCompleted
 }
 
 async function reconcileReminderSchedules(targetReminderIds: Set<string> | null): Promise<void> {
@@ -267,39 +270,45 @@ export const ReminderOrchestrator = {
 
   async cleanupOrphans(validListIds: string[]): Promise<boolean> {
     const validIds = new Set(validListIds)
-    const reminderStore = useReminderStore.getState()
-    let cleanupCompleted = true
+    const orphans = useReminderStore.getState().reminders.filter(
+      (reminder) => !validIds.has(reminder.listId),
+    )
 
-    for (const reminder of reminderStore.reminders) {
-      if (!validIds.has(reminder.listId)) {
-        const cleanupConfirmed = await cancelReminderNotifications(reminder)
-        if (cleanupConfirmed) {
-          reminderStore.removeReminder(reminder.id)
-        } else {
-          cleanupCompleted = false
-        }
-      }
-    }
+    if (orphans.length === 0) return true
 
-    const reminders = useReminderStore.getState().reminders
-    const orphans = reminders.filter((reminder) => !validIds.has(reminder.listId))
-    if (orphans.length === 0) cleanupCompleted = true
-
+    // A cópia precisa conter todos os registros antes de qualquer cancelamento ou remoção.
     try {
-      await AsyncStorage.setItem('gastometro-recovery-reminders-orphans', JSON.stringify(orphans))
+      await AsyncStorage.setItem(
+        'gastometro-recovery-reminders-orphans',
+        JSON.stringify(orphans),
+      )
     } catch (error) {
-      PersistenceRecoveryService.report('Foram encontrados lembretes sem uma lista correspondente, mas não foi possível criar uma cópia de recuperação. Os lembretes foram mantidos para evitar perda de dados.')
+      PersistenceRecoveryService.report(
+        'Foram encontrados lembretes sem uma lista correspondente, mas não foi possível preservar uma cópia. Os lembretes foram mantidos.',
+      )
       console.error('Falha ao preservar lembretes órfãos:', error)
       return false
     }
 
+    let cleanupCompleted = true
+    let removed = 0
+
     for (const reminder of orphans) {
-      await cancelReminderNotifications(reminder)
+      const cleanupConfirmed = await cancelReminderNotifications(reminder)
+      if (!cleanupConfirmed) {
+        cleanupCompleted = false
+        continue
+      }
+
       useReminderStore.getState().removeReminder(reminder.id)
+      removed += 1
     }
 
+    const retained = orphans.length - removed
     PersistenceRecoveryService.report(
-      orphans.length + ' lembrete(s) sem uma lista correspondente foram removidos da coleção ativa. Uma cópia foi preservada em gastometro-recovery-reminders-orphans.',
+      retained === 0
+        ? removed + ' lembrete(s) sem uma lista correspondente foram removidos após a preservação da cópia de recuperação.'
+        : removed + ' lembrete(s) órfãos foram removidos. ' + retained + ' permaneceram ativos porque não foi possível confirmar o cancelamento das notificações.',
     )
 
     return cleanupCompleted
