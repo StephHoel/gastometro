@@ -7,6 +7,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { normalizeReminderPersistedState } from '@/services/PersistenceMigrationService'
 import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
+import { createRecoveryAwareStorage } from '@/services/PersistenceStorage'
 
 function updateReminder(
   reminders: ReminderProps[],
@@ -17,6 +18,7 @@ function updateReminder(
 }
 
 const REMINDER_RECOVERY_KEY = 'gastometro-recovery-reminders'
+const reminderPersistence = createRecoveryAwareStorage()
 
 async function preserveReminderData(value: unknown): Promise<boolean> {
   try {
@@ -44,6 +46,7 @@ async function migrateReminderState(persistedState: unknown, version: number): P
     }
     return result.data as ReminderStateProps
   } catch (error) {
+    reminderPersistence.blockWrites()
     const preserved = await preserveReminderData(persistedState)
     PersistenceRecoveryService.report(preserved
       ? 'Não foi possível validar os dados locais dos lembretes. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
@@ -126,26 +129,40 @@ export const useReminderStore = create(
     }),
     {
       name: 'gastometro-reminders',
-      storage: createJSONStorage(() => AsyncStorage),
-      version: 2,
+      storage: createJSONStorage(() => reminderPersistence.storage),
+      version: 3,
       migrate: migrateReminderState,
       merge: (persistedState, currentState) => {
+        if (persistedState === undefined) {
+          void reminderPersistence.allowWrites()
+          return currentState
+        }
+
         try {
-          const result = normalizeReminderPersistedState(persistedState, 2)
+          const result = normalizeReminderPersistedState(persistedState, 3)
           if (result.repaired) {
-            void preserveReminderData(persistedState).then((preserved) => {
-              PersistenceRecoveryService.report(preserved
-                ? getReminderRecoveryMessage(result.discarded)
-                : 'A recuperação dos dados foi parcial e a cópia de segurança não pôde ser criada. Evite limpar os dados do aplicativo.')
+            reminderPersistence.blockWrites()
+            void preserveReminderData(persistedState).then(async (preserved) => {
+              if (preserved) {
+                PersistenceRecoveryService.report(getReminderRecoveryMessage(result.discarded))
+                await reminderPersistence.allowWrites()
+              } else {
+                PersistenceRecoveryService.report('Os dados foram ajustados, mas a cópia de recuperação falhou. As alterações locais permanecerão protegidas contra sobrescrita.')
+              }
             })
+          } else {
+            void reminderPersistence.allowWrites()
           }
           return { ...currentState, ...result.data }
         } catch (error) {
+          reminderPersistence.blockWrites()
           void preserveReminderData(persistedState).then((preserved) => {
-            PersistenceRecoveryService.report(preserved ? 'Os dados locais dos lembretes não puderam ser validados. A coleção inicial foi mantida e uma cópia do conteúdo anterior foi preservada para recuperação.' : 'Os dados locais dos lembretes não puderam ser validados e a cópia de recuperação falhou. Evite limpar os dados do aplicativo.')
+            PersistenceRecoveryService.report(preserved
+              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito.'
+              : 'Não foi possível validar nem preservar os dados locais. O armazenamento foi protegido contra sobrescrita.')
           })
-          console.error('Falha ao hidratar os lembretes:', error)
-          return currentState
+          console.error('Falha ao hidratar os dados persistidos:', error)
+          throw error
         }
       },
     },

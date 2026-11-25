@@ -8,6 +8,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { normalizeCartPersistedState } from '@/services/PersistenceMigrationService'
 import { PersistenceRecoveryService } from '@/services/PersistenceRecoveryService'
+import { createRecoveryAwareStorage } from '@/services/PersistenceStorage'
 
 function createDefaultList(products: ProductProps[] = []): ShoppingListProps {
   return { id: uuid.v4().toString(), name: 'Lista 1', products }
@@ -30,6 +31,7 @@ function updateActiveListProducts(
 const initialList = createDefaultList()
 
 const CART_RECOVERY_KEY = 'gastometro-recovery-cart'
+const cartPersistence = createRecoveryAwareStorage()
 
 async function preserveCartData(value: unknown): Promise<boolean> {
   try {
@@ -57,6 +59,7 @@ async function migrateCartState(persistedState: unknown, version: number): Promi
     }
     return result.data as StateProps
   } catch (error) {
+    cartPersistence.blockWrites()
     const preserved = await preserveCartData(persistedState)
     PersistenceRecoveryService.report(preserved
       ? 'Não foi possível validar os dados locais da lista. O conteúdo original foi preservado para recuperação. Evite limpar os dados do aplicativo.'
@@ -170,26 +173,40 @@ export const useCartStore = create(
     }),
     {
       name: 'gastometro',
-      storage: createJSONStorage(() => AsyncStorage),
-      version: 2,
+      storage: createJSONStorage(() => cartPersistence.storage),
+      version: 3,
       migrate: migrateCartState,
       merge: (persistedState, currentState) => {
+        if (persistedState === undefined) {
+          void cartPersistence.allowWrites()
+          return currentState
+        }
+
         try {
-          const result = normalizeCartPersistedState(persistedState, 2)
+          const result = normalizeCartPersistedState(persistedState, 3)
           if (result.repaired) {
-            void preserveCartData(persistedState).then((preserved) => {
-              PersistenceRecoveryService.report(preserved
-                ? getCartRecoveryMessage(result.discarded)
-                : 'A recuperação dos dados foi parcial e a cópia de segurança não pôde ser criada. Evite limpar os dados do aplicativo.')
+            cartPersistence.blockWrites()
+            void preserveCartData(persistedState).then(async (preserved) => {
+              if (preserved) {
+                PersistenceRecoveryService.report(getCartRecoveryMessage(result.discarded))
+                await cartPersistence.allowWrites()
+              } else {
+                PersistenceRecoveryService.report('Os dados foram ajustados, mas a cópia de recuperação falhou. As alterações locais permanecerão protegidas contra sobrescrita.')
+              }
             })
+          } else {
+            void cartPersistence.allowWrites()
           }
           return { ...currentState, ...result.data }
         } catch (error) {
+          cartPersistence.blockWrites()
           void preserveCartData(persistedState).then((preserved) => {
-            PersistenceRecoveryService.report(preserved ? 'Os dados locais da lista não puderam ser validados. O estado inicial foi mantido e uma cópia do conteúdo anterior foi preservada para recuperação.' : 'Os dados locais da lista não puderam ser validados e a cópia de recuperação falhou. Evite limpar os dados do aplicativo.')
+            PersistenceRecoveryService.report(preserved
+              ? 'Não foi possível validar os dados locais. O conteúdo original foi preservado e não será sobrescrito.'
+              : 'Não foi possível validar nem preservar os dados locais. O armazenamento foi protegido contra sobrescrita.')
           })
-          console.error('Falha ao hidratar o carrinho:', error)
-          return currentState
+          console.error('Falha ao hidratar os dados persistidos:', error)
+          throw error
         }
       },
     },
