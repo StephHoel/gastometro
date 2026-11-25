@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { AppState, Platform, Text } from 'react-native'
+import { AppState, Text } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Tabs, usePathname, useRouter } from "expo-router"
 import { addNotificationResponseReceivedListener, AndroidImportance, clearLastNotificationResponse, getLastNotificationResponse, setNotificationChannelAsync, setNotificationHandler, type NotificationResponse } from 'expo-notifications'
@@ -11,12 +11,13 @@ import { ReminderOrchestrator } from '@/services/ReminderOrchestrator'
 import { ServiceWorkerService } from '@/services/ServiceWorkerService'
 
 import { getListIdsSignature, getReminderSyncSignature } from '@/utils/functions/ReminderSyncKey'
+import { updateWebTitle } from '@/utils/functions/UpdateWebTitle'
+import { isAndroid, isNative, isWeb } from '@/utils/platform'
 
 import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
 
 import { COLORS } from '@/constants/color'
-import { TITLES } from '@/constants/titles'
 import { ERROR } from '@/constants/text/error'
 import { ROUTES } from '@/constants/routes'
 
@@ -87,13 +88,10 @@ export default function Layout() {
     return unsubscribe
   }, [])
 
-  useEffect(() => {
-    if (Platform.OS !== 'web') return
-    document.title = TITLES[pathname] ?? "Gastômetro"
-  }, [pathname])
+  useEffect(() => { updateWebTitle(pathname) }, [pathname])
 
   useEffect(() => {
-    if (Platform.OS !== 'web') return
+    if (isNative) return
 
     const redirect = window.sessionStorage.getItem('redirect')
     if (!redirect) return
@@ -110,7 +108,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       void ServiceWorkerService.register()
       return
     }
@@ -124,7 +122,7 @@ export default function Layout() {
       }),
     })
 
-    if (Platform.OS === 'android') {
+    if (isAndroid) {
       void setNotificationChannelAsync('default', {
         name: 'Lembretes',
         importance: AndroidImportance.HIGH,
@@ -135,7 +133,7 @@ export default function Layout() {
   }, [])
 
   useEffect(() => {
-    if (Platform.OS === 'web') return
+    if (isWeb) return
 
     let isMounted = true
 
@@ -234,7 +232,7 @@ export default function Layout() {
   }, [listIdsKey, remindersSignature, remindersHydrated])
 
   useEffect(() => {
-    if (!remindersHydrated || Platform.OS === 'web') return
+    if (!remindersHydrated || isWeb) return
 
     let isMounted = true
     let syncInProgress = false
@@ -279,6 +277,9 @@ export default function Layout() {
       >
         <Tabs.Screen
           name="index"
+          listeners={{
+            focus: () => updateWebTitle('/'),
+          }}
           options={{
             title: "Início",
             tabBarIcon: ({ color, size }) => (
@@ -290,6 +291,9 @@ export default function Layout() {
 
         <Tabs.Screen
           name="lists"
+          listeners={{
+            focus: () => updateWebTitle('/lists'),
+          }}
           options={{
             title: "Listas",
             tabBarIcon: ({ color, size }) => (
@@ -301,6 +305,9 @@ export default function Layout() {
 
         <Tabs.Screen
           name="bills"
+          listeners={{
+            focus: () => updateWebTitle('/bills'),
+          }}
           options={{
             title: "Contas",
             tabBarIcon: ({ color, size }) => (
@@ -312,6 +319,9 @@ export default function Layout() {
 
         <Tabs.Screen
           name="price-comparison"
+          listeners={{
+            focus: () => updateWebTitle('/price-comparison'),
+          }}
           options={{
             title: "Preços",
             tabBarIcon: ({ color, size }) => (
@@ -323,6 +333,9 @@ export default function Layout() {
 
         <Tabs.Screen
           name="calculator"
+          listeners={{
+            focus: () => updateWebTitle('/calculator'),
+          }}
           options={{
             title: "Calculadora",
             tabBarIcon: ({ color, size }) => (

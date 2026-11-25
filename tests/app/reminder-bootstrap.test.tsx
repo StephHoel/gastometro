@@ -72,6 +72,22 @@ jest.mock('react-native', () => {
   }
 })
 
+jest.mock('@/utils/platform', () => {
+  const { Platform } = require('react-native')
+
+  return {
+    get isWeb() { return Platform.OS === 'web' },
+    get isNative() { return Platform.OS !== 'web' },
+    get isAndroid() { return Platform.OS === 'android' },
+    get isIOS() { return Platform.OS === 'ios' },
+    IsWeb: () => Platform.OS === 'web',
+    detectWeb: () => Platform.OS === 'web',
+    withWebFallback: (nativeFunction: () => Promise<unknown>, webFunction?: () => Promise<unknown>, fallbackValue?: unknown) =>
+      Platform.OS === 'web' ? (webFunction ? webFunction() : Promise.resolve(fallbackValue)) : nativeFunction(),
+  }
+})
+
+
 jest.mock('expo-notifications', () => ({
   AndroidImportance: { HIGH: 4 },
   addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
@@ -116,6 +132,15 @@ describe('Layout - bootstrap e listeners de lembretes', () => {
     ;(Platform as { OS: string }).OS = 'android'
     ;(usePathname as jest.Mock).mockReturnValue('/')
     ;(useRouter as jest.Mock).mockReturnValue({ replace: mockRouterReplace })
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: {
+        sessionStorage: { getItem: jest.fn().mockReturnValue(null), removeItem: jest.fn() },
+        location: { origin: 'https://gastometro.test' },
+        history: { state: null, replaceState: jest.fn() },
+        dispatchEvent: jest.fn(),
+      },
+    })
     mockCartState = {
       lists: [{ id: 'list-1', name: 'Lista 1', products: [] }],
       activeListId: 'list-1',
