@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form"
 import { CreateListForm } from '@/interfaces/Form/CreateListForm'
 import { EditListForm } from '@/interfaces/Form/EditListForm'
 import { ROUTES } from '@/constants/routes'
+import { COLORS } from '@/constants/color'
 
 export default function Lists() {
   const cartStore = useCartStore()

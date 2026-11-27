@@ -1,6 +1,6 @@
-import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps"
-import React, { type PropsWithChildren } from "react"
+import React from "react"
 import { Text, TextProps, TouchableOpacity } from "react-native"
+import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps"
 
 function Button({ children, type = "Success", className, ...rest }: ButtonTouchableProps) {
   let typeColor: string
@@ -41,7 +41,7 @@ function ButtonText({ children, className = "text-3xl" }: TextProps) {
   )
 }
 
-function ButtonIcon({ children }: PropsWithChildren) {
+function ButtonIcon({ children }: TextProps) {
   return children
 }
 

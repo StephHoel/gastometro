@@ -11,12 +11,12 @@ describe('ListItem accessibility', () => {
     collected: false,
   }
 
-  it('exposes contextual names for remove, collect and edit actions', () => {
+  it('exposes contextual names for remove, collect and edit actions', async () => {
     const onDelete = jest.fn()
     const onToggle = jest.fn()
     const onEdit = jest.fn()
 
-    const { getByRole } = render(
+    const { getByRole } = await render(
       <ListItem
         product={product}
         index={0}
@@ -32,9 +32,9 @@ describe('ListItem accessibility', () => {
     expect(getByRole('button', { name: 'Editar Arroz' })).toBeTruthy()
   })
 
-  it('announces the collected state and toggles it when activated', () => {
+  it('announces the collected state and toggles it when activated', async () => {
     const onToggle = jest.fn()
-    const { getByRole, rerender } = render(
+    const { getByRole, rerender } = await render(
       <ListItem
         product={product}
         index={0}
