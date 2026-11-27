@@ -48,10 +48,10 @@ jest.mock('@/services/AlertService', () => ({
 }))
 
 jest.mock('@/components/TouchableIcons', () => ({
-  Add: ({ action }: { action?: () => void }) => {
+  Add: ({ action, accessibilityLabel }: { action?: () => void; accessibilityLabel?: string }) => {
     const React = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return React.createElement(Text, { onPress: action }, 'Add')
+    return React.createElement(Text, { onPress: action, accessibilityRole: 'button', accessibilityLabel }, 'Add')
   },
   Backup: ({ action }: { action?: () => void }) => {
     const React = jest.requireActual('react') as typeof import('react')
@@ -99,6 +99,13 @@ describe('Header and List branch coverage', () => {
     ]
       ; (useRouter as jest.Mock).mockReturnValue({ push: mockPush })
       ; (useRoute as jest.Mock).mockReturnValue({ name: 'index' })
+  })
+
+  it('Header anuncia o título e a ação para adicionar produto', async () => {
+    const { getByRole } = await render(<Header />)
+
+    expect(getByRole('header')).toBeTruthy()
+    expect(getByRole('button', { name: 'Adicionar item à lista' })).toBeTruthy()
   })
 
   it('Header index: executa remove e share quando há produtos', async () => {
