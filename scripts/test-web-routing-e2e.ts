@@ -366,7 +366,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
       await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
-      await page.getByLabel("Lugar").last().fill(place)
+      await page.getByRole("textbox", { name: "Lugar", exact: true }).fill(place)
       await page.getByText("Adicionar lugar", { exact: true }).last().click()
       await page.getByText(place, { exact: true }).last().waitFor()
       await page.goto(BASE_URL + "/price-comparison", { waitUntil: "networkidle" })
