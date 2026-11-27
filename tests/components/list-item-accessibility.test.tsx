@@ -36,8 +36,8 @@ describe('Acessibilidade do item da lista', () => {
     expect(collectCheckbox.props.accessibilityState).toEqual({ checked: false })
     expect(editButton.props.accessibilityHint).toBe('Abre o formulário de edição do produto')
 
-    fireEvent.press(removeButton)
-    fireEvent.press(editButton)
+    await fireEvent.press(removeButton)
+    await fireEvent.press(editButton)
     expect(onDelete).toHaveBeenCalledTimes(1)
     expect(onEdit).toHaveBeenCalledTimes(1)
   })
