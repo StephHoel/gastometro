@@ -2,10 +2,9 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.10.0
-> **Data:** 2026-11-25
-> **Cobertura de Testes (linhas):** 97,87% (última medição registrada em 2026-11-22)
-> Última medição histórica: 96,57% statements, 91,90% branches, 96,21% funções e 97,87% linhas, com 303 testes aprovados. A execução de 24/11/2026 inclui um novo teste de apresentação de empates; os indicadores serão substituídos após a geração do próximo relatório de cobertura.
+> **Versão do App:** 1.11.0
+> **Data:** 2026-11-26
+> **Última validação de código e testes (commit `1f5d909`):** TypeScript aprovado; 439 testes em 65 suítes; 91,12% statements, 85,13% branches, 89,53% funções e 92,69% linhas. Expo Doctor aprovado.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
 
@@ -56,12 +55,12 @@ Público esperado:
 - Comparação offline-first de preços entre lugares, por item e por cesta completa, com persistência independente.
 - Sincronização idempotente de lembretes, preservando notificações nativas válidas e ignorando alterações em produtos e nomes de listas.
 - Validação e migração versionada dos stores locais, com preservação de cópia anterior antes de reparos e aviso recuperável para o usuário.
+- Backup e restauração local por JSON versionado (v2), incluindo listas, lembretes, contas e comparação de preços, com migração de backups v1, substituição ou mesclagem explícita, validação prévia e rollback coordenado dos quatro stores.
 
 ## 3. Funcionalidades Planejadas
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- backup e restauração local;
 - acessibilidade e usabilidade assistiva;
 - consistência e validação da documentação técnica;
 - feedback com toast e disparo de lembretes na web.
@@ -75,8 +74,8 @@ Antes de implementar qualquer item planejado, a IA deve pedir ou propor uma pequ
 Use esta seção como verdade atual do repositório.
 
 - Node 24 conforme `.nvmrc`.
-- Expo `~56`.
-- React Native `0.85`.
+- Expo `~58.1.0`.
+- React Native `0.88.1`.
 - React `19`.
 - TypeScript com `strict: true`.
 - React Hook Form para gerenciamento de formulários.
@@ -193,6 +192,11 @@ Estado:
 - `CartStore` e `ReminderStore` usam schemas de persistência versão 3 e validam os dados antes de disponibilizá-los; migrações explícitas normalizam dados legados.
 - Quando há reparos, os stores preservam o conteúdo bruto nas chaves `gastometro-recovery-cart` e `gastometro-recovery-reminders` antes de gravar o estado normalizado. Escritas e remoções nas chaves principais ficam bloqueadas até a conclusão da cópia, com operações concorrentes enfileiradas.
 - Estruturas irrecuperáveis e versões futuras não são sobrescritas silenciosamente; a interface informa a ocorrência. A limpeza de lembretes órfãos depende da hidratação dos stores, da cópia de recuperação e do cancelamento confirmado das notificações.
+- `BackupService` gera e valida envelopes JSON versionados, verifica o limite em bytes UTF-8, remove IDs de notificações importados, valida referências de listas e produtos dos lembretes e referências de locais nas comparações, compara dados locais com backups e valida novamente a integridade após a resolução de conflitos.
+- `BackupRestoreService` preserva os valores brutos anteriores e grava os quatro stores (carrinho, lembretes, contas e comparação de preços) antes de atualizar o estado em memória; falhas acionam rollback das quatro chaves e dos quatro estados Zustand.
+- A exportação e a importação aplicam o mesmo limite máximo de 10 MB em bytes UTF-8. A restauração é serializada para impedir operações simultâneas e só inicia a reconciliação de notificações após a persistência dos dados.
+- Na web, o navegador controla o download; no Android, o arquivo temporário é criado no cache e encaminhado ao compartilhamento do sistema. O compartilhamento não garante que uma cópia permanente tenha sido salva.
+- O JSON não é criptografado nem protegido por senha e pode conter nomes de listas, produtos e lembretes. O usuário deve escolher um destino confiável. As cópias de recuperação em AsyncStorage ajudam no rollback local, mas não substituem um backup externo e podem ser removidas junto com os dados do aplicativo.
 
 Manipulação da lista:
 

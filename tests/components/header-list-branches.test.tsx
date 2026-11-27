@@ -53,6 +53,11 @@ jest.mock('@/components/TouchableIcons', () => ({
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
     return React.createElement(Text, { onPress: action }, 'Add')
   },
+  Backup: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Backup')
+  },
   Back: ({ action }: { action?: () => void }) => {
     const React = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
@@ -102,7 +107,9 @@ describe('Header and List branch coverage', () => {
     await fireEvent.press(getByText('Delete'))
     await fireEvent.press(getByText('Share'))
     await fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByText('Backup'))
 
+    expect(mockPush).toHaveBeenCalledWith(ROUTES.Backup)
     expect(mockRemove).toHaveBeenCalled()
     expect(mockShare).toHaveBeenCalled()
     expect(mockPaste).not.toHaveBeenCalled()

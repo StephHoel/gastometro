@@ -1,8 +1,21 @@
-import { AddIcon, BackIcon, TrashIcon, ShareIcon, NotificationIcon, EditIcon, CartIcon, MarketIcon } from "@/components/Icons"
+import React from 'react'
+import { TouchableOpacity, View } from "react-native"
+
+import {
+  AddIcon,
+  BackIcon,
+  TrashIcon,
+  ShareIcon,
+  NotificationIcon,
+  EditIcon,
+  CartIcon,
+  MarketIcon,
+  HardDriveIcon
+} from "@/components/Icons"
+
 import type { IconsProps } from "@/interfaces/IconsProps"
 import type { IconButtonProps } from '@/interfaces/IconButtonProps'
-import { TouchableOpacity, View } from "react-native"
-import React from 'react'
+
 import { COLORS } from '@/constants/color'
 
 function IconButton({ action, children, containerClass, wrapperClass, ...props }: IconButtonProps) {
@@ -87,6 +100,14 @@ export function Notification({ action, checked, size, ...props }: IconsProps) {
   return (
     <IconButton {...props} action={action}>
       <NotificationIcon size={size} checked={checked} />
+    </IconButton>
+  )
+}
+
+export function Backup({ action, size, ...props }: IconsProps) {
+  return (
+    <IconButton {...props} action={action}>
+      <HardDriveIcon size={size} />
     </IconButton>
   )
 }

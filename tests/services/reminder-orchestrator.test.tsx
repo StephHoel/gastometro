@@ -480,7 +480,7 @@ describe('ReminderOrchestrator - concorrência, órfãos e falhas nativas', () =
     cancelScheduled.mockRejectedValueOnce(new Error('falha nativa ao cancelar'))
     scheduleReminder.mockResolvedValueOnce('scheduled-r-enabled')
 
-    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBeUndefined()
+    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBe(false)
 
     expect(scheduleReminder).toHaveBeenCalledTimes(1)
     expect(useReminderStore.getState().getById('r-enabled')?.notificationId).toBe('scheduled-r-enabled')
@@ -496,7 +496,7 @@ describe('ReminderOrchestrator - concorrência, órfãos e falhas nativas', () =
       .mockRejectedValueOnce(new Error('falha nativa ao agendar'))
       .mockResolvedValueOnce('scheduled-r-succeeds')
 
-    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBeUndefined()
+    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBe(false)
 
     expect(scheduleReminder).toHaveBeenCalledTimes(2)
     expect(useReminderStore.getState().getById('r-fails')?.notificationId).toBeUndefined()

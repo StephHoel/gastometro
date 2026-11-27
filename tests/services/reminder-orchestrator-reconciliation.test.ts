@@ -118,7 +118,7 @@ describe('ReminderOrchestrator - reconciliação adicional', () => {
     ])
     scheduleReminder.mockResolvedValueOnce(null)
 
-    await ReminderOrchestrator.syncWithPermissions()
+    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBe(false)
 
     expect(cancelScheduled).toHaveBeenCalledWith('outdated-native-id')
     expect(cancelScheduled).toHaveBeenCalledWith('persisted-id')
@@ -198,4 +198,14 @@ describe('ReminderOrchestrator - divergências de agendamento', () => {
     expect(scheduleReminder).toHaveBeenCalledTimes(1)
     expect(useReminderStore.getState().getById('rem-1')?.notificationId).toBe('replacement-id')
   })
+  it('informa falha quando não consegue cancelar um agendamento antigo', async () => {
+    seedReminder()
+    getScheduledReminderNotifications.mockResolvedValueOnce([
+      { ...notification('outdated-native-id'), title: 'Título antigo' },
+    ])
+    cancelScheduled.mockResolvedValue(false)
+
+    await expect(ReminderOrchestrator.syncWithPermissions()).resolves.toBe(false)
+  })
+
 })

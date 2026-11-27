@@ -108,13 +108,15 @@ export const NotificationService = {
     }
   },
 
-  async cancelScheduled(notificationId?: string): Promise<void> {
-    if (IsWeb() || !notificationId) return
+  async cancelScheduled(notificationId?: string): Promise<boolean> {
+    if (IsWeb() || !notificationId) return true
 
     try {
       await cancelScheduledNotificationAsync(notificationId)
+      return true
     } catch (error) {
       console.error(ERROR.notification_cancel_failure, error)
+      return false
     }
   },
 

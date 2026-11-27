@@ -5,6 +5,8 @@ export const titlePages = {
   
   "calculator": "Calculadora",
 
+  "backup": "Backup e Restauração",
+
   "lists": "Listas",
   "list/add": 'Novo Item',
   "list/edit/[id]": 'Editar Item',

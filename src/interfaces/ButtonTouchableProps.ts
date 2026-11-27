@@ -3,5 +3,5 @@ import type { TouchableOpacityProps } from "react-native"
 
 export interface ButtonTouchableProps extends Omit<TouchableOpacityProps, "children"> {
   children?: ReactNode
-  type?: "Success" | "Fail" | "Normal"
+  type?: "Success" | "Fail" | "Normal" | "Default"
 }

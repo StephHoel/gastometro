@@ -1,4 +1,4 @@
-import { Back, Cart, Delete, Market, Notification, Share } from "@/components/TouchableIcons"
+import { Back, Backup, Cart, Delete, Market, Notification, Share } from "@/components/TouchableIcons"
 import { ROUTES } from '@/constants/routes'
 import { useListIdParam } from '@/hooks/useParams'
 import { HeaderActionsProps } from '@/interfaces/HeaderActionsProps'
@@ -28,6 +28,12 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
   function indexActions() {
     return (
       <>
+        <Backup
+          accessibilityRole="button"
+          accessibilityLabel="Abrir backup e restauração"
+          action={() => router.push(ROUTES.Backup)}
+        />
+
         <Notification action={notificationActions} />
 
         {cartStore.products.length > 0 && (

@@ -15,7 +15,7 @@ import type { ReminderProps } from '@/interfaces/ReminderProps'
 import { ERROR } from '@/constants/text/error'
 import { REMINDERS } from '@/constants/text/reminders'
 
-let reminderSyncPromise: Promise<void> | null = null
+let reminderSyncPromise: Promise<boolean> | null = null
 let fullSyncRequested = false
 const reminderSyncRequestedIds = new Set<string>()
 
@@ -31,8 +31,7 @@ function getReminderScheduleKey(reminder: ReminderProps): string {
 
 async function cancelSafely(notificationId?: string): Promise<boolean> {
   try {
-    await NotificationService.cancelScheduled(notificationId)
-    return true
+    return (await NotificationService.cancelScheduled(notificationId)) !== false
   } catch (error) {
     console.error(ERROR.notification_cancel_failure, error)
     return false
@@ -77,13 +76,14 @@ async function cancelReminderNotifications(reminder: {
   return cleanupCompleted
 }
 
-async function reconcileReminderSchedules(targetReminderIds: Set<string> | null): Promise<void> {
+async function reconcileReminderSchedules(targetReminderIds: Set<string> | null): Promise<boolean> {
   const permission = await NotificationService.getPermissionState()
-  if (permission === PermissionState.Unavailable) return
+  if (permission === PermissionState.Unavailable) return true
 
   const scheduled = await getScheduledNotifications()
-  if (scheduled === null) return
+  if (scheduled === null) return false
 
+  let completed = true
   const reminderStore = useReminderStore.getState()
   const reminders = targetReminderIds
     ? reminderStore.reminders.filter((reminder) => targetReminderIds.has(reminder.id))
@@ -91,21 +91,19 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
   const validReminderIds = new Set(reminderStore.reminders.map((reminder) => reminder.id))
 
   if (!targetReminderIds) {
-    // A reconciliação global também remove notificações de lembretes já excluídos.
     for (const notification of scheduled) {
       if (notification.reminderId && !validReminderIds.has(notification.reminderId)) {
-        await cancelSafely(notification.notificationId)
+        completed = await cancelSafely(notification.notificationId) && completed
       }
     }
   }
 
-  // IDs direcionados que não existem mais no store representam lembretes removidos.
   if (targetReminderIds) {
     for (const reminderId of targetReminderIds) {
       if (validReminderIds.has(reminderId)) continue
       for (const notification of scheduled) {
         if (notification.reminderId === reminderId) {
-          await cancelSafely(notification.notificationId)
+          completed = await cancelSafely(notification.notificationId) && completed
         }
       }
     }
@@ -116,10 +114,10 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
 
     if (permission !== PermissionState.Granted || !reminder.enabled) {
       for (const item of matches) {
-        await cancelSafely(item.notificationId)
+        completed = await cancelSafely(item.notificationId) && completed
       }
       if (reminder.notificationId && !matches.some((item) => item.notificationId === reminder.notificationId)) {
-        await cancelSafely(reminder.notificationId)
+        completed = await cancelSafely(reminder.notificationId) && completed
       }
       if (reminder.notificationId) {
         useReminderStore.getState().setReminderNotification(reminder.id, undefined)
@@ -140,7 +138,7 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
     if (matching) {
       for (const duplicate of matches) {
         if (duplicate.notificationId !== matching.notificationId) {
-          await cancelSafely(duplicate.notificationId)
+          completed = await cancelSafely(duplicate.notificationId) && completed
         }
       }
       const latest = useReminderStore.getState().getById(reminder.id)
@@ -152,34 +150,42 @@ async function reconcileReminderSchedules(targetReminderIds: Set<string> | null)
     }
 
     for (const item of matches) {
-      await cancelSafely(item.notificationId)
+      completed = await cancelSafely(item.notificationId) && completed
     }
     if (reminder.notificationId && !matches.some((item) => item.notificationId === reminder.notificationId)) {
-      await cancelSafely(reminder.notificationId)
+      completed = await cancelSafely(reminder.notificationId) && completed
     }
     if (reminder.notificationId) {
       useReminderStore.getState().setReminderNotification(reminder.id, undefined)
+    }
+
+    if (!Number.isNaN(expectedDate.getTime()) && expectedDate.getTime() <= Date.now()) {
+      continue
     }
 
     const scheduledId = await scheduleSafely({
       ...reminder,
       notificationId: undefined,
     })
-    if (!scheduledId) continue
+    if (!scheduledId) {
+      completed = false
+      continue
+    }
 
-    // O lembrete pode ter sido editado ou removido enquanto a API nativa agendava.
     const latest = useReminderStore.getState().getById(reminder.id)
     if (!latest || getReminderScheduleKey(latest) !== getReminderScheduleKey(reminder)) {
-      await cancelSafely(scheduledId)
+      completed = await cancelSafely(scheduledId) && completed
       reminderSyncRequestedIds.add(reminder.id)
       continue
     }
 
     useReminderStore.getState().setReminderNotification(reminder.id, scheduledId)
   }
+
+  return completed
 }
 
-function runReminderSync(reminderId?: string): Promise<void> {
+function runReminderSync(reminderId?: string): Promise<boolean> {
   if (reminderId) {
     reminderSyncRequestedIds.add(reminderId)
   } else {
@@ -189,13 +195,15 @@ function runReminderSync(reminderId?: string): Promise<void> {
   if (reminderSyncPromise) return reminderSyncPromise
 
   reminderSyncPromise = (async () => {
+    let completed = true
     while (fullSyncRequested || reminderSyncRequestedIds.size > 0) {
       const isFullSync = fullSyncRequested
       fullSyncRequested = false
       const targetIds = isFullSync ? null : new Set(reminderSyncRequestedIds)
       reminderSyncRequestedIds.clear()
-      await reconcileReminderSchedules(targetIds)
+      completed = await reconcileReminderSchedules(targetIds) && completed
     }
+    return completed
   })().finally(() => {
     reminderSyncPromise = null
     if (fullSyncRequested || reminderSyncRequestedIds.size > 0) {
@@ -284,7 +292,7 @@ export const ReminderOrchestrator = {
     await this.syncReminder(reminderId)
   },
 
-  syncReminder(reminderId: string): Promise<void> {
+  syncReminder(reminderId: string): Promise<boolean> {
     return runReminderSync(reminderId)
   },
 

@@ -137,7 +137,7 @@ async function runScenario(
   action: (page: any) => Promise<void>,
   cycle: number,
 ): Promise<void> {
-  const context = await browser.newContext()
+  const context = await browser.newContext({ acceptDownloads: true })
   const page = await context.newPage()
   const pageErrors: string[] = []
   const consoleErrors: string[] = []
@@ -342,6 +342,151 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByText("Mercado D · Maior preço", { exact: true }).last().waitFor()
     await page.getByText("Maior preço: Mercado C, Mercado D (R$ 10,00)", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/price-comparison")
+  })
+
+
+  await run("backup web exporta e restaura dados reais das seis coleções", async page => {
+    const fixture = {
+      cart: { state: { lists: [{ id: "e2e-list-001", name: "Lista E2E", products: [{ id: "e2e-product-001", quantity: "2", item: "Arroz E2E", price: "25.90", collected: true }] }], activeListId: "e2e-list-001", products: [{ id: "e2e-product-001", quantity: "2", item: "Arroz E2E", price: "25.90", collected: true }] }, version: 3 },
+      reminders: { state: { reminders: [{ id: "e2e-reminder-001", title: "Lembrete E2E", datetimeISO: "2026-12-01T10:00:00.000Z", enabled: true, listId: "e2e-list-001", itemId: "e2e-product-001", createdAt: "2026-11-27T10:00:00.000Z", updatedAt: "2026-11-27T10:00:00.000Z" }] }, version: 3 },
+      bills: { state: { bills: [{ id: "e2e-bill-001", title: "Conta E2E", amount: "125.90", paid: false }] }, version: 1 },
+      priceComparison: { state: { places: [{ id: "e2e-place-001", name: "Mercado E2E", note: "Local de teste" }], entries: [{ id: "e2e-entry-001", itemName: "Feijão E2E", quantityReference: "1 kg", pricesByPlace: [{ placeId: "e2e-place-001", price: "8.75" }], createdAt: "2026-11-27T10:00:00.000Z", updatedAt: "2026-11-27T10:00:00.000Z" }] }, version: 1 },
+    }
+
+    await page.addInitScript((data: any) => {
+      if (window.sessionStorage.getItem("e2e-backup-clean-install") === "true") return
+      window.localStorage.setItem("gastometro", JSON.stringify(data.cart))
+      window.localStorage.setItem("gastometro-reminders", JSON.stringify(data.reminders))
+      window.localStorage.setItem("gastometro-bills", JSON.stringify(data.bills))
+      window.localStorage.setItem("gastometro-price-comparisons", JSON.stringify(data.priceComparison))
+    }, fixture)
+    await page.goto(BASE_URL + "/backup", { waitUntil: "networkidle" })
+    await page.getByRole("button", { name: "Gerar backup" }).waitFor()
+
+    const downloadPromise = page.waitForEvent("download")
+    await page.getByRole("button", { name: "Gerar backup" }).click()
+    const download = await downloadPromise
+    const downloadPath = await download.path()
+    assert.ok(downloadPath, "O navegador deve disponibilizar o arquivo JSON exportado")
+    const backupJson = fs.readFileSync(downloadPath, "utf8")
+    const envelope = JSON.parse(backupJson)
+    assert.equal(envelope.format, "gastometro-backup")
+    assert.equal(envelope.version, 2)
+    const exported = envelope.payload
+    assert.equal(exported.cart.lists[0].products[0].item, "Arroz E2E")
+    assert.equal(exported.reminders[0].itemId, "e2e-product-001")
+    assert.equal(exported.bills[0].title, "Conta E2E")
+    assert.equal(exported.priceComparison.places[0].name, "Mercado E2E")
+    assert.equal(exported.priceComparison.entries[0].pricesByPlace[0].placeId, "e2e-place-001")
+    assert.equal(exported.priceComparison.entries[0].pricesByPlace[0].price, "8.75")
+
+    const uploadBackup = async () => {
+      const chooserPromise = page.waitForEvent("filechooser")
+      await page.getByRole("button", { name: "Selecionar arquivo JSON" }).click()
+      const chooser = await chooserPromise
+      await chooser.setFiles({ name: "gastometro-backup-e2e.json", mimeType: "application/json", buffer: Buffer.from(backupJson, "utf8") })
+      await page.getByRole("button", { name: "Validar e visualizar" }).click()
+      await page.getByText("Resumo do backup", { exact: true }).waitFor()
+      for (const summary of ["Listas: 1", "Produtos: 1", "Lembretes: 1", "Contas: 1", "Locais de comparação: 1", "Comparações de preços: 1"]) {
+        await page.getByText(summary, { exact: true }).waitFor()
+      }
+    }
+
+    await uploadBackup()
+    const replaceButton = page.getByRole("button", { name: "Substituir dados locais" })
+    const cancelDialogPromise = page.waitForEvent("dialog")
+    const cancelClickPromise = replaceButton.click()
+    const cancelDialog = await cancelDialogPromise
+    assert.equal(cancelDialog.type(), "confirm")
+    assert.ok(cancelDialog.message().includes("Todas as listas"))
+    await cancelDialog.dismiss()
+    await cancelClickPromise
+
+    // Cancelar a confirmação não pode alterar nenhum dos quatro stores locais.
+    const unchangedAfterCancel = await page.evaluate(() => ({
+      cart: JSON.parse(window.localStorage.getItem("gastometro") || "null"),
+      reminders: JSON.parse(window.localStorage.getItem("gastometro-reminders") || "null"),
+      bills: JSON.parse(window.localStorage.getItem("gastometro-bills") || "null"),
+      priceComparison: JSON.parse(window.localStorage.getItem("gastometro-price-comparisons") || "null"),
+    }))
+    assert.equal(unchangedAfterCancel.cart.state.lists[0].id, "e2e-list-001")
+    assert.equal(unchangedAfterCancel.reminders.state.reminders[0].id, "e2e-reminder-001")
+    assert.equal(unchangedAfterCancel.bills.state.bills[0].id, "e2e-bill-001")
+    assert.equal(unchangedAfterCancel.priceComparison.state.entries[0].id, "e2e-entry-001")
+    await page.getByText("Resumo do backup", { exact: true }).waitFor()
+
+    // Simula instalação limpa e restaura o arquivo exportado, verificando os quatro stores.
+    await page.evaluate(() => {
+      window.sessionStorage.setItem("e2e-backup-clean-install", "true")
+      window.localStorage.clear()
+    })
+    await page.reload({ waitUntil: "networkidle" })
+    await uploadBackup()
+    const confirmDialogPromise = page.waitForEvent("dialog")
+    const confirmClickPromise = page.getByRole("button", { name: "Substituir dados locais" }).click()
+    const confirmation = await confirmDialogPromise
+    assert.equal(confirmation.type(), "confirm")
+    assert.ok(confirmation.message().includes("Todas as listas"))
+    await confirmation.accept()
+    await confirmClickPromise
+    await page.getByText(/Restauração concluída/).waitFor()
+
+    const readPersistedStores = () => page.evaluate(() => ({
+      cart: JSON.parse(window.localStorage.getItem("gastometro") || "null"),
+      reminders: JSON.parse(window.localStorage.getItem("gastometro-reminders") || "null"),
+      bills: JSON.parse(window.localStorage.getItem("gastometro-bills") || "null"),
+      priceComparison: JSON.parse(window.localStorage.getItem("gastometro-price-comparisons") || "null"),
+    }))
+    const assertCompleteRestore = (restored: any) => {
+      assert.equal(restored.cart.state.lists.length, 1)
+      assert.equal(restored.cart.state.lists[0].id, "e2e-list-001")
+      assert.equal(restored.cart.state.lists[0].name, "Lista E2E")
+      assert.equal(restored.cart.state.lists[0].products.length, 1)
+      assert.equal(restored.cart.state.lists[0].products[0].id, "e2e-product-001")
+      assert.equal(restored.cart.state.lists[0].products[0].item, "Arroz E2E")
+      assert.equal(restored.cart.state.lists[0].products[0].quantity, "2")
+      assert.equal(restored.cart.state.lists[0].products[0].price, "25.90")
+      assert.equal(restored.cart.state.lists[0].products[0].collected, true)
+      assert.equal(restored.cart.state.activeListId, "e2e-list-001")
+      assert.equal(restored.cart.state.products.length, 1)
+
+      assert.equal(restored.reminders.state.reminders.length, 1)
+      assert.equal(restored.reminders.state.reminders[0].id, "e2e-reminder-001")
+      assert.equal(restored.reminders.state.reminders[0].listId, "e2e-list-001")
+      assert.equal(restored.reminders.state.reminders[0].itemId, "e2e-product-001")
+      assert.equal(restored.reminders.state.reminders[0].enabled, true)
+      assert.equal(restored.reminders.state.reminders[0].title, "Lembrete E2E")
+      assert.equal(Object.hasOwn(restored.reminders.state.reminders[0], "notificationId"), false)
+
+      assert.equal(restored.bills.state.bills.length, 1)
+      assert.equal(restored.bills.state.bills[0].id, "e2e-bill-001")
+      assert.equal(restored.bills.state.bills[0].title, "Conta E2E")
+      assert.equal(restored.bills.state.bills[0].amount, "125.90")
+      assert.equal(restored.bills.state.bills[0].paid, false)
+
+      assert.equal(restored.priceComparison.state.places.length, 1)
+      assert.equal(restored.priceComparison.state.places[0].id, "e2e-place-001")
+      assert.equal(restored.priceComparison.state.places[0].name, "Mercado E2E")
+      assert.equal(restored.priceComparison.state.places[0].note, "Local de teste")
+      assert.equal(restored.priceComparison.state.entries.length, 1)
+      assert.equal(restored.priceComparison.state.entries[0].id, "e2e-entry-001")
+      assert.equal(restored.priceComparison.state.entries[0].itemName, "Feijão E2E")
+      assert.equal(restored.priceComparison.state.entries[0].quantityReference, "1 kg")
+      assert.equal(restored.priceComparison.state.entries[0].pricesByPlace.length, 1)
+      assert.equal(restored.priceComparison.state.entries[0].pricesByPlace[0].placeId, "e2e-place-001")
+      assert.equal(restored.priceComparison.state.entries[0].pricesByPlace[0].price, "8.75")
+      assert.equal(restored.priceComparison.state.entries[0].createdAt, "2026-11-27T10:00:00.000Z")
+      assert.equal(restored.priceComparison.state.entries[0].updatedAt, "2026-11-27T10:00:00.000Z")
+    }
+
+    assertCompleteRestore(await readPersistedStores())
+
+    // Mesclar o mesmo arquivo deve ignorar todos os registros idênticos, sem duplicá-los.
+    await uploadBackup()
+    await page.getByRole("button", { name: "Mesclar com dados locais" }).click()
+    await page.getByText(/Restauração concluída/).waitFor()
+    await page.getByText("Resumo do backup", { exact: true }).waitFor({ state: "detached" })
+    assertCompleteRestore(await readPersistedStores())
   })
 
   process.stdout.write("Execução " + cycle + "/3 concluída.\\n")
