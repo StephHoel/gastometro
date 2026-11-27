@@ -8,6 +8,7 @@
 - Mensagens de erro e alertas são expostos como regiões vivas; diálogos identificam o contexto modal.
 - Botões reutilizáveis têm papel semântico e foco visível na web.
 - Controles de listas, lembretes e comparação têm rótulos específicos, estados selecionados e alvos de toque ampliados.
+- A calculadora identifica as ações de limpar e calcular com nomes e dicas acessíveis; o resultado é anunciado quando atualizado.
 - A ampliação de texto permanece habilitada pelas configurações padrão do React Native.
 
 ## Verificação de contraste
