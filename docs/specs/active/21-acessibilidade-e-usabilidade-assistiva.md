@@ -30,6 +30,8 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 
 - Home/lista de compras e itens da lista.
 - Gerenciamento de múltiplas listas.
+- Contas a pagar.
+- Comparação de preços entre lugares e itens.
 - Calculadora.
 - Formulários de criação e edição de produtos.
 - Central de lembretes e telas de lembretes por lista.

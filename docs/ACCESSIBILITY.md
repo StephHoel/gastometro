@@ -41,6 +41,8 @@ A validação automatizada não substitui o teste com tecnologia assistiva. Ante
 
 - [ ] Percorrer a tela inicial, ouvir os totais e navegar entre adicionar, remover, editar e coletar produtos.
 - [ ] Confirmar que o checkbox anuncia o nome do produto e seu estado.
+- [ ] Conferir os rótulos e estados de pagamento das contas.
+- [ ] Navegar pela calculadora e pela comparação de preços, incluindo ordenação, edição e remoção.
 - [ ] Criar, selecionar, renomear e remover listas.
 - [ ] Criar, editar, remover e abrir lembretes.
 - [ ] Confirmar que alertas anunciam título, mensagem e ações sem repetição indevida.
@@ -49,13 +51,13 @@ A validação automatizada não substitui o teste com tecnologia assistiva. Ante
 
 - [ ] Percorrer os controles com Tab e Shift+Tab, sem saltos inesperados.
 - [ ] Confirmar foco visível em todos os botões e campos.
-- [ ] Executar os fluxos essenciais sem mouse.
+- [ ] Executar os fluxos essenciais sem mouse, incluindo listas, calculadora, contas, lembretes e comparação de preços.
 - [ ] Confirmar que mensagens de erro e estados selecionados são anunciados.
 
 ### Ampliação
 
 - [ ] Testar ampliação de texto do sistema/navegador e zoom do navegador em 200%.
-- [ ] Confirmar que campos, rótulos, botões e informações essenciais continuam disponíveis, sem cortes ou sobreposição.
+- [ ] Confirmar que campos, rótulos, botões e informações essenciais continuam disponíveis, sem cortes ou sobreposição nas telas de listas, calculadora, contas, lembretes e comparação.
 
 Os cenários automatizados de teclado, foco visível e ampliação de 200% são executados pela suíte `npm run test:e2e:web`. Eles complementam, mas não substituem, a verificação manual com leitor de tela.
 
