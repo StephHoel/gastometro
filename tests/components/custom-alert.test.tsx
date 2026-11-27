@@ -4,9 +4,9 @@ import { CustomAlert } from '@/components/CustomAlert'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
 describe('CustomAlert', () => {
-  it('deve exibir título, mensagem e botão cancelar quando há múltiplas ações', async () => {
+  it('deve exibir título, mensagem e botões com nomes acessíveis quando há múltiplas ações', async () => {
     const ref = createRef<CustomAlertRef>()
-    const { getByText } = await render(<CustomAlert ref={ref} />)
+    const { getByText, getByRole } = await render(<CustomAlert ref={ref} />)
 
     await act(() => {
       ref.current?.showAlert({
@@ -22,11 +22,14 @@ describe('CustomAlert', () => {
     expect(getByText('Título')).toBeTruthy()
     expect(getByText('Mensagem')).toBeTruthy()
     expect(getByText('Cancelar')).toBeTruthy()
+    expect(getByRole('button', { name: 'OK' })).toBeTruthy()
+    expect(getByRole('button', { name: 'Outra ação' })).toBeTruthy()
+    expect(getByRole('button', { name: 'Cancelar' })).toBeTruthy()
   })
 
   it('deve manter um único botão OK sem adicionar cancelar', async () => {
     const ref = createRef<CustomAlertRef>()
-    const { getByText, queryByText } = await render(<CustomAlert ref={ref} />)
+    const { getByText, getByRole, queryByText } = await render(<CustomAlert ref={ref} />)
 
     const action = jest.fn()
     await act(() => {
@@ -37,7 +40,7 @@ describe('CustomAlert', () => {
       })
     })
 
-    await fireEvent.press(getByText('OK'))
+    await fireEvent.press(getByRole('button', { name: 'OK' }))
 
     expect(action).toHaveBeenCalledTimes(1)
     expect(queryByText('Cancelar')).toBeNull()
