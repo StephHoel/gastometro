@@ -1,4 +1,5 @@
 import React, { type ReactNode } from 'react'
+import type { TextProps } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import ListReminders from '@/app/reminders/[listId]/index'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -63,7 +64,7 @@ jest.mock('@/components/Page', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children, accessibilityLiveRegion, accessibilityRole }: { children: ReactNode; accessibilityLiveRegion?: 'none' | 'polite' | 'assertive'; accessibilityRole?: string }) => {
+  TextWhite: ({ children, accessibilityLiveRegion, accessibilityRole }: { children: ReactNode; accessibilityLiveRegion?: TextProps['accessibilityLiveRegion']; accessibilityRole?: TextProps['accessibilityRole'] }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
     return ReactModule.createElement(Text, { accessibilityLiveRegion, accessibilityRole }, children)
