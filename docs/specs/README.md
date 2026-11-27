@@ -36,6 +36,7 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 - [Comparação de preços entre lugares](./done/17-comparacao-de-precos-entre-lugares.md)
 - [Sincronização eficiente de lembretes](./done/18-sincronizacao-eficiente-de-lembretes.md)
 - [Integridade e migração de dados locais](./done/19-integridade-e-migracao-de-dados-locais.md)
+- [Backup e restauração local](./done/20-backup-e-restauracao-local.md)
 
 ### Ativas/Em andamento
 
@@ -43,7 +44,6 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 
 ### Planejadas (ordem de prioridade)
 
-1. [Backup e restauração local](./planned/20-backup-e-restauracao-local.md)
-2. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-3. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
-4. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)
+1. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
+2. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+3. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)

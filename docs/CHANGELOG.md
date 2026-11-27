@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.11.0 - 2026-11-27
+
+Implementação da mini-spec 20: backup e restauração local.
+
+### Funcionalidade
+
+- Adicionada exportação de listas, produtos, lembretes, contas e comparação de preços em arquivo JSON versionado (schema v2), com download na web e compartilhamento no Android.
+- Backups v1 continuam importáveis: listas e lembretes são preservados e as coleções de contas e comparação são inicializadas vazias.
+- A validação das contas reutiliza as regras do cadastro, aceitando vencimento vazio e rejeitando datas inexistentes e valores inválidos.
+- Adicionada importação por seletor de arquivos, validação e pré-visualização do conteúdo antes da restauração.
+- Disponibilizadas as estratégias de substituição integral e mesclagem com dados locais.
+- Conflitos de listas, produtos, lembretes, contas, locais e comparações exibem os valores locais e do backup; cada conflito exige escolha explícita.
+- Locais com nomes equivalentes são reconhecidos durante a mesclagem e as referências de preços são remapeadas para o identificador local, evitando duplicidade e referências órfãs.
+- IDs de notificações nativas são excluídos do backup e os agendamentos são reconciliados após a restauração.
+- Dados locais anteriores dos quatro stores (carrinho, lembretes, contas e comparação de preços) são preservados antes da restauração; falhas disparam rollback dos valores persistidos e dos estados em memória.
+- A pré-visualização e os resumos exibem contagens de listas, produtos, lembretes, contas, locais e registros de comparação.
+
+### Qualidade e documentação
+
+- Ampliada a cobertura da tela de backup para exportação por download e importação via arquivo no navegador.
+- Adicionados testes de interação para os seis tipos de conflito, escolhas locais/do backup, cancelamento da confirmação Web e bloqueio de operações concorrentes.
+- Adicionado cenário E2E Web para exportar, importar, pré-visualizar as seis coleções, cancelar a substituição e mesclar o backup.
+- No workflow `46021328819` (27/11/2026), TypeScript, 456 testes em 65 suítes, Expo Doctor, verificação de versão, CodeQL e as três execuções do E2E Web foram aprovados. O job de build Android iniciou após o E2E, mas foi cancelado durante `assembleRelease`, sem confirmação de APK gerado.
+- Adicionados testes para envelope v2, migração v1→v2, validação de contas e comparações, referências, mesclagem, conflitos, persistência dos quatro stores e rollback.
+- A validação de lembretes confirma que `itemId`, quando informado, pertence à mesma lista; a resolução de conflitos revalida as referências antes de permitir a persistência.
+- A pré-visualização informa a versão original do arquivo e identifica a migração de backups v1 para o schema v2.
+- Os testes de restauração simulam falhas em cada uma das quatro chaves persistidas e verificam o rollback dos dados e estados locais.
+- Reforçada a validação do tamanho em bytes UTF-8 e a remoção de IDs de notificações recebidos de arquivos externos.
+- Implementada persistência coordenada dos stores com preservação dos valores brutos e tentativa de rollback.
+- A tela invalida pré-visualizações após edição do JSON e bloqueia operações simultâneas.
+- Documentadas as decisões de formato, limite de tamanho e política de conflitos na mini-spec 20.
+- A exportação também rejeita arquivos acima de 10 MB em bytes UTF-8, mantendo o limite simétrico com a importação.
+- A restauração rejeita operações simultâneas e os testes de interface cobrem erros de leitura, persistência e reconciliação de notificações.
+- Registrados os limites de segurança: o arquivo não é criptografado, o compartilhamento não confirma armazenamento permanente e as cópias locais de recuperação não substituem backup externo.
+- Validação manual Android/Web concluída; mini-spec 20 movida para `docs/specs/done/`.
+
 ## 1.10.0 - 2026-11-25
 
 Implementação da mini-spec 19: integridade e migração de dados locais.

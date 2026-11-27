@@ -1,8 +1,8 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.10.0-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.11.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
-[![Coverage](https://img.shields.io/badge/Coverage-97.87%25-brightgreen)](docs/coverages/)
+[![Coverage](https://img.shields.io/badge/Coverage-93.38%25-brightgreen)](docs/coverages/)
 
 Aplicativo mobile para organizar listas de compras de supermercado de forma simples, offline e com foco em uso rápido durante a compra.
 
@@ -32,6 +32,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Compara preços de produtos entre mercados, identifica todos os lugares empatados nas melhores e piores ofertas e calcula o custo da cesta completa quando todos os preços estão disponíveis.
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 - Valida e migra dados locais do carrinho e dos lembretes, preservando cópias de recuperação antes de reparos e informando o usuário sobre ocorrências.
+- Exporta e restaura backup JSON versionado com listas, produtos, lembretes, contas e comparações de preços, por substituição ou mesclagem com resolução explícita de conflitos.
 
 ## Stack
 
@@ -57,7 +58,6 @@ Compatibilidade atual de plataforma:
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Backup e restauração local](docs/specs/planned/20-backup-e-restauracao-local.md)
 - [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
 - [Feedback com toast e disparo de lembretes na web](docs/specs/planned/23-feedback-toast-e-lembretes-web.md)
@@ -72,6 +72,7 @@ Funcionalidades concluídas recentemente:
 - Contas a pagar com cadastro, edição, baixa, exclusão, totais e destaque de vencidas (mini-spec 11 em `docs/specs/done/`).
 - Sincronização idempotente de lembretes, com preservação de notificações válidas, reconciliação granular e limpeza resiliente de órfãos (mini-spec 18 em `docs/specs/done/`).
 - Integridade e migração versionada dos dados locais, com validação, recuperação segura e proteção contra sobrescrita de dados inválidos ou de versões futuras (mini-spec 19 em `docs/specs/done/`).
+- Backup e restauração local em JSON v2, abrangendo listas, lembretes, contas e comparação de preços, com migração v1, mesclagem com conflitos e rollback coordenado (mini-spec 20 em `docs/specs/done/`).
 
 - Compatibilidade web com GitHub Pages (mini-spec 08 em `docs/specs/done/`).
 - Múltiplas listas com gerenciamento dedicado (mini-spec 09 em `docs/specs/done/`).
@@ -206,7 +207,7 @@ Cobertura:
 npm run test:coverage
 ```
 
-O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. A última medição registrada no CI em 22/11/2026 foi de 97,87% em linhas, 96,57% em statements, 91,90% em branches e 96,21% em funções. Nessa execução, os 303 testes passaram. Em 25/11/2026, a validação da PR da mini-spec 19 executou 398 testes em 62 suítes, todos aprovados, e o type-check passou; o build Android permaneceu pendente por falha na resolução de um plugin Gradle.
+O Jest bloqueia a execução quando a cobertura global do código runtime fica abaixo de 80%. Na execução do workflow `46021328819` (27/11/2026), passaram 456 testes em 65 suítes, com 93,38% de cobertura em linhas, 91,81% em statements, 86,00% em branches e 90,00% em funções. TypeScript, Expo Doctor, CodeQL, verificação de versão e as três execuções do E2E Web também foram aprovados. O job de build Android iniciou após o E2E, mas foi cancelado durante `assembleRelease`; portanto, essa execução não produziu confirmação de build Android concluído. A validação manual da Spec 20 em Android e Web foi concluída.
 
 Cobertura com exportação CSV:
 
