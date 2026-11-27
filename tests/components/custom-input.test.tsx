@@ -1,6 +1,5 @@
-import React, { createRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import type { TextInputInstance } from 'react-native'
 import { CustomInput } from '@/components/CustomInput'
 import { NameField } from '@/enums/NameField'
 import { useForm } from 'react-hook-form'
@@ -59,6 +58,16 @@ async function renderCustomInput({
 }
 
 describe('CustomInput', () => {
+  it('usa o nome do campo como rótulo acessível padrão', async () => {
+    const { getByLabelText } = await renderCustomInput({
+      nameField: NameField.Item,
+      placeholder: 'Nome do produto',
+      returnKeyType: 'next',
+    })
+
+    expect(getByLabelText('Item').props.accessibilityHint).toBe('Nome do produto')
+  })
+
   it('permite substituir o nome acessível padrão quando o contexto exigir', async () => {
     function ContextualInput() {
       const { control } = useForm<TestFormData>({ defaultValues: { value: '' } })

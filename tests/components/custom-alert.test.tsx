@@ -29,7 +29,7 @@ describe('CustomAlert', () => {
 
   it('deve manter um único botão OK sem adicionar cancelar', async () => {
     const ref = createRef<CustomAlertRef>()
-    const { getByText, getByRole, queryByText } = await render(<CustomAlert ref={ref} />)
+    const { getByRole, queryByText } = await render(<CustomAlert ref={ref} />)
 
     const action = jest.fn()
     await act(() => {
