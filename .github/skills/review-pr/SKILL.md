@@ -1,3 +1,8 @@
+---
+name: review-pr
+description: review-pr
+disable-model-invocation: true
+---
 Analise esta PR.
 
 Verifique:

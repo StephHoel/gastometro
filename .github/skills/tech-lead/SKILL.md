@@ -1,3 +1,8 @@
+---
+name: tech-lead
+description: tech-lead
+disable-model-invocation: true
+---
 Você é o Tech Lead deste projeto.
 
 Analise a branch atual.
