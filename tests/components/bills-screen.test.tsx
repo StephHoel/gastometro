@@ -54,15 +54,24 @@ describe('Bills screen', () => {
     expect(useBillStore.getState().bills).toHaveLength(1)
     expect(screen.getByText('Internet')).toBeTruthy()
     expect(screen.getByText('Total pendente')).toBeTruthy()
+    expect(screen.getByLabelText('Data de vencimento').props.accessibilityHint).toBe(
+      'Informe a data no formato ano, mês e dia',
+    )
 
-    await fireEvent.press(screen.getByLabelText('Editar conta Internet'))
+    const editButton = screen.getByRole('button', { name: 'Editar conta Internet' })
+    expect(editButton.props.accessibilityHint).toBe('Abre o formulário para alterar esta conta')
+    await fireEvent.press(editButton)
     expect(screen.getByText('Editar conta')).toBeTruthy()
     await fireEvent.changeText(screen.getByLabelText('Nome da conta'), 'Internet fibra')
     await fireEvent.press(screen.getByText('Salvar alterações'))
     expect(useBillStore.getState().bills[0].title).toBe('Internet fibra')
 
-    await fireEvent.press(screen.getByLabelText('Marcar conta Internet fibra como paga'))
+    const payCheckbox = screen.getByRole('checkbox', { name: 'Marcar conta Internet fibra como paga' })
+    expect(payCheckbox.props.accessibilityState).toEqual({ checked: false })
+    expect(payCheckbox.props.accessibilityHint).toBe('Alterna o status de pagamento desta conta')
+    await fireEvent.press(payCheckbox)
     expect(useBillStore.getState().bills[0].paid).toBe(true)
+    expect(screen.getByRole('checkbox', { name: 'Marcar conta Internet fibra como pendente' }).props.accessibilityState).toEqual({ checked: true })
     expect(screen.getByText('Total pago')).toBeTruthy()
 
     await fireEvent.press(screen.getByLabelText('Editar conta Internet fibra'))
@@ -76,7 +85,9 @@ describe('Bills screen', () => {
     })
     const screen = await render(<Bills />)
 
-    await fireEvent.press(screen.getByLabelText('Remover conta Água'))
+    const removeButton = screen.getByRole('button', { name: 'Remover conta Água' })
+    expect(removeButton.props.accessibilityHint).toBe('Abre a confirmação para remover esta conta')
+    await fireEvent.press(removeButton)
     expect(mockShowAlert).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Remover conta',
       message: 'Deseja remover "Água"?',
