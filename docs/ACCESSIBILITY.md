@@ -9,6 +9,8 @@
 - Botões reutilizáveis têm papel semântico e foco visível na web.
 - Controles de listas, lembretes e comparação têm rótulos específicos, estados selecionados e alvos de toque ampliados.
 - A calculadora identifica as ações de limpar e calcular com nomes e dicas acessíveis; o resultado é anunciado quando atualizado.
+- Formulários de lembretes e comparação identificam explicitamente a ação de salvar; ações de retorno informam a tela de destino.
+- Estados vazios da central e da lista de lembretes são anunciados quando o conteúdo muda.
 - A ampliação de texto permanece habilitada pelas configurações padrão do React Native.
 
 ## Verificação de contraste

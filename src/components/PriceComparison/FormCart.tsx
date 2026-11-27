@@ -130,7 +130,7 @@ export function FormCart(
         </View>
       ))}
 
-      <CustomButton onPress={() => handleSubmit(onSubmit)()}>
+      <CustomButton onPress={() => handleSubmit(onSubmit)()} accessibilityLabel={buttonTitle} accessibilityHint="Valida e salva os dados da comparação">
         <CustomButton.Icon>{children}</CustomButton.Icon>
         <CustomButton.Text>{buttonTitle}</CustomButton.Text>
       </CustomButton>

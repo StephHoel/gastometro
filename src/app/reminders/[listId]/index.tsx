@@ -52,7 +52,7 @@ export default function ListReminders() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
           ListEmptyComponent={
-            <TextWhite className="text-slate-400 mt-2 text-center">{REMINDERS.empty_list}</TextWhite>
+            <TextWhite accessibilityLiveRegion="polite" className="text-slate-400 mt-2 text-center">{REMINDERS.empty_list}</TextWhite>
           }
           renderItem={({ item }) => <ReminderItem item={item} alertRef={alertRef} />}
         />

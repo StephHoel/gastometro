@@ -68,7 +68,7 @@ export function HeaderActions({ routeName, activeListId }: HeaderActionsProps) {
     case "price-comparison/cart/add":
     case "price-comparison/market/edit/[marketId]":
     case "price-comparison/cart/edit/[cartId]":
-      return <Back action={() => router.push(ROUTES.PriceComparison.Index)} />
+      return <Back action={() => router.push(ROUTES.PriceComparison.Index)} accessibilityLabel="Voltar para a comparação de preços" />
 
     case "calculator": return null
 

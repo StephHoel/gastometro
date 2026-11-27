@@ -81,7 +81,7 @@ export default function ReminderCenter() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
         ListEmptyComponent={
-          <TextWhite className="text-slate-400 mt-2">{REMINDERS.center_empty}</TextWhite>
+          <TextWhite accessibilityLiveRegion="polite" className="text-slate-400 mt-2">{REMINDERS.center_empty}</TextWhite>
         }
         renderItem={({ item }) => {
           const listName = listNameMap.get(item.listId) ?? REMINDERS.unknown_list
