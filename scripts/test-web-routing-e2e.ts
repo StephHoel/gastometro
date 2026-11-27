@@ -360,6 +360,44 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     }
   })
 
+  await run("telas principais preservam navegação por teclado e controles com zoom de 200%", async page => {
+    const routes = [
+      { path: "/lists", selector: 'input[placeholder="Nome da lista"]' },
+      { path: "/bills", selector: 'body' },
+      { path: "/reminders", selector: 'body' },
+      { path: "/price-comparison", selector: 'body' },
+    ]
+
+    await page.setViewportSize({ width: 640, height: 480 })
+    await page.evaluate(() => { document.documentElement.style.zoom = "200%" })
+
+    for (const route of routes) {
+      await page.goto(BASE_URL + route.path, { waitUntil: "networkidle" })
+      await page.locator(route.selector).first().waitFor()
+      await page.keyboard.press("Tab")
+
+      const focusState = await page.evaluate(() => ({
+        tagName: document.activeElement?.tagName,
+        role: document.activeElement?.getAttribute("role"),
+        label: document.activeElement?.getAttribute("aria-label"),
+      }))
+      assert.notEqual(focusState.tagName, "BODY", "A navegação por teclado deve alcançar um controle em " + route.path)
+
+      const controls = page.locator('button, input, textarea, select, [role="button"], [role="checkbox"]')
+      const count = await controls.count()
+      assert.ok(count > 0, "A tela deve oferecer controles interativos em " + route.path)
+
+      for (let index = 0; index < count; index += 1) {
+        const control = controls.nth(index)
+        if (!(await control.isVisible())) continue
+        const bounds = await control.boundingBox()
+        assert.ok(bounds && bounds.width > 0 && bounds.height > 0, "Controle sem área visível em " + route.path)
+        await control.scrollIntoViewIfNeeded()
+        assert.equal(await control.isVisible(), true, "Controle deve permanecer acessível após rolagem em " + route.path)
+      }
+    }
+  })
+
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
     const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
     let fallbackStatus: number | undefined
