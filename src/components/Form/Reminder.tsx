@@ -106,7 +106,7 @@ export function FormReminder({ listId, reminderId, textButton, iconButton, inclu
             <Button.Icon>
               <TrashIcon color={COLORS.black} size={SIZE.iconButton} />
             </Button.Icon>
-            <Button.Text className='text-2xl'>{REMINDERS.button.remove}</Button.Text>
+            <Button.Text className='text-2xl !text-white'>{REMINDERS.button.remove}</Button.Text>
           </Button>
         )}
 

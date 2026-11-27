@@ -57,6 +57,7 @@ const checks = [
   { category: 'Componente gráfico e foco', label: 'Contorno de foco no fundo principal', foreground: palette.active, background: palette.background, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Contorno de foco em cartão', foreground: palette.active, background: palette.slate800, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Ícone claro em cartão', foreground: palette.white, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Ícone de remoção em botão de alerta', foreground: palette.black, background: palette.red600, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Ícone secundário em cartão', foreground: palette.slate400, background: palette.slate800, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Indicador de seleção em cartão', foreground: palette.active, background: palette.slate800, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Ícone em lista selecionada', foreground: palette.slate300, background: palette.slate600, minimum: 3 },

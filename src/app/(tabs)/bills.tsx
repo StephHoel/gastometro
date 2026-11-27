@@ -207,7 +207,7 @@ export default function Bills() {
             bills.map((bill) => {
               const overdue = isBillOverdue(bill)
               const secondaryTextClass = bill.paid
-                ? 'text-slate-500 line-through'
+                ? 'text-slate-300 line-through'
                 : 'text-slate-300'
 
               return (
@@ -244,7 +244,7 @@ export default function Bills() {
                       accessibilityHint="Abre o formulário para alterar esta conta"
                       className="min-h-11 flex-1 gap-1 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                     >
-                      <TextWhite className={`font-bold ${bill.paid ? 'text-slate-500 line-through' : ''}`}>
+                      <TextWhite className={`font-bold ${bill.paid ? 'text-slate-300 line-through' : ''}`}>
                         {bill.title}
                       </TextWhite>
                       <TextWhite className={`text-sm ${secondaryTextClass}`}>
