@@ -4,7 +4,7 @@
 
 - Botões de ícone possuem papel de botão, nome acessível contextual e alvo de toque mínimo de 44 × 44 pontos.
 - A coleta de produtos é anunciada como checkbox, com nome dinâmico e estado marcado/desmarcado.
-- Campos reutilizáveis recebem rótulo e dica a partir do nome e da finalidade do campo.
+- Campos reutilizáveis recebem rótulo e dica a partir do nome e da finalidade do campo; os rótulos são apresentados em português e podem ser contextualizados pela tela.
 - Mensagens de erro e alertas são expostos como regiões vivas; diálogos identificam o contexto modal.
 - Botões reutilizáveis têm papel semântico e foco visível na web.
 - Controles de listas, lembretes e comparação têm rótulos específicos, estados selecionados e alvos de toque ampliados.

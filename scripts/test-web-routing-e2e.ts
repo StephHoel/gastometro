@@ -264,8 +264,8 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
   await run("calculadora permite navegação por teclado e ampliação de 200%", async page => {
     await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
 
-    const priceInput = page.getByLabel("Preço da Embalagem Input").last()
-    const quantityInput = page.getByLabel("Quantidade Input").last()
+    const priceInput = page.getByLabel("Preço da embalagem").last()
+    const quantityInput = page.getByLabel("Quantidade de unidades").last()
     const clearButton = page.getByRole("button", { name: "Limpar campos da calculadora" })
     const calculateButton = page.getByRole("button", { name: "Calcular preço por unidade" })
 
@@ -344,19 +344,19 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
       await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
-      await page.getByLabel("Lugar Input").last().fill(place)
+      await page.getByLabel("Lugar").last().fill(place)
       await page.getByText("Adicionar lugar", { exact: true }).last().click()
       await page.getByText(place, { exact: true }).last().waitFor()
       await page.goto(BASE_URL + "/price-comparison", { waitUntil: "networkidle" })
     }
 
     await page.getByRole("button", { name: "Cadastrar item" }).last().click()
-    await page.getByLabel("Nome do item Input").last().fill("Leite")
-    await page.getByLabel("Referência de quantidade Input").last().fill("1 litro")
-    await page.getByLabel("Preço em Mercado A Input").last().fill("5,00")
-    await page.getByLabel("Preço em Mercado B Input").last().fill("5,00")
-    await page.getByLabel("Preço em Mercado C Input").last().fill("10,00")
-    await page.getByLabel("Preço em Mercado D Input").last().fill("10,00")
+    await page.getByLabel("Nome do item").last().fill("Leite")
+    await page.getByLabel("Referência de quantidade").last().fill("1 litro")
+    await page.getByLabel("Preço em Mercado A").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado B").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado C").last().fill("10,00")
+    await page.getByLabel("Preço em Mercado D").last().fill("10,00")
     await page.getByText("Adicionar item", { exact: true }).last().click()
 
     await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()

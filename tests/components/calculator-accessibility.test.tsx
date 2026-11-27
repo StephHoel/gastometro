@@ -8,7 +8,10 @@ jest.mock('@/components/Header', () => ({
 
 describe('Calculator accessibility', () => {
   it('exposes descriptive names and hints for its primary actions', async () => {
-    const { getByRole } = await render(<Calculator />)
+    const { getByRole, getByLabelText } = await render(<Calculator />)
+
+    expect(getByLabelText('Preço da embalagem')).toBeTruthy()
+    expect(getByLabelText('Quantidade de unidades')).toBeTruthy()
 
     const clearButton = getByRole('button', { name: 'Limpar campos da calculadora' })
     const calculateButton = getByRole('button', { name: 'Calcular preço por unidade' })

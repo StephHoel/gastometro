@@ -59,6 +59,29 @@ async function renderCustomInput({
 }
 
 describe('CustomInput', () => {
+  it('permite substituir o nome acessível padrão quando o contexto exigir', async () => {
+    function ContextualInput() {
+      const { control } = useForm<TestFormData>({ defaultValues: { value: '' } })
+      return (
+        <CustomInput
+          control={control}
+          name="value"
+          nameField={NameField.Price}
+          placeholder="Preço"
+          accessibilityLabel="Preço da embalagem"
+          accessibilityHint="Informe o preço total da embalagem"
+          returnKeyType="done"
+          onSubmit={jest.fn()}
+        />
+      )
+    }
+
+    const { getByLabelText } = await render(<ContextualInput />)
+    expect(getByLabelText('Preço da embalagem').props.accessibilityHint).toBe(
+      'Informe o preço total da embalagem',
+    )
+  })
+
   it('deve normalizar decimais quando campo for Preço', async () => {
     const { getByPlaceholderText, onValueChange } = await renderCustomInput({
       nameField: NameField.Price,

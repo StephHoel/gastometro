@@ -71,6 +71,7 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 ## Decisões de implementação
 
 - Os componentes reutilizáveis de texto, botões e botões de ícone expõem papéis, rótulos, dicas e estados de acessibilidade.
+- Campos de formulário usam rótulos em português, com possibilidade de contextualização quando o nome genérico do campo for insuficiente.
 - A calculadora identifica as ações de limpar e calcular e anuncia o resultado atualizado por região viva.
 - Ações icon-only informam o contexto do item ou da lista; checkboxes anunciam o nome do produto e seu estado de coleta.
 - Os alvos de toque principais usam dimensão mínima de 44 × 44 pontos; botões textuais usam altura mínima de 48 pontos.

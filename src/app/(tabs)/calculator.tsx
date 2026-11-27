@@ -56,6 +56,8 @@ export default function Calculator() {
             name="price"
             nameField={NameField.Price}
             placeholder={CALC.placeholder.price}
+            accessibilityLabel="Preço da embalagem"
+            accessibilityHint="Informe o preço total da embalagem"
             keyboardType="number-pad"
             onSubmit={() => setFocus("quantity")}
             returnKeyType={"next"}
@@ -66,6 +68,8 @@ export default function Calculator() {
             name="quantity"
             nameField={NameField.Quantity}
             placeholder={CALC.placeholder.quantity}
+            accessibilityLabel="Quantidade de unidades"
+            accessibilityHint="Informe quantas unidades há na embalagem"
             keyboardType="number-pad"
             onSubmit={() => handleSubmit(onCalculate)()}
             returnKeyType={"done"}

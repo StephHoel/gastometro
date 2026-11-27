@@ -7,6 +7,8 @@ export interface CustomInputProps<TFieldValues extends FieldValues> {
   name: FieldPath<TFieldValues>
   nameField: NameField | string
   placeholder: string
+  accessibilityLabel?: string
+  accessibilityHint?: string
   maxLength?: number
   onSubmit: () => void
   returnKeyType: ReturnKeyTypeOptions | undefined
