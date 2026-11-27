@@ -247,7 +247,7 @@ describe('Header and List branch coverage', () => {
       setActiveList: jest.fn(),
     }
 
-    const { toJSON, getByText } = await render(<List cartStore={cartStore} />)
+    const { toJSON, getByText, getByRole } = await render(<List cartStore={cartStore} />)
     const serializedTree = JSON.stringify(toJSON())
     const arrozIndex = serializedTree.indexOf('2x Arroz')
     const feijaoIndex = serializedTree.indexOf('1x Feijão')
@@ -255,7 +255,8 @@ describe('Header and List branch coverage', () => {
     expect(arrozIndex).toBeGreaterThan(-1)
     expect(feijaoIndex).toBeGreaterThan(-1)
     expect(arrozIndex).toBeLessThan(feijaoIndex)
-    expect(getByText('Coletados')).toBeTruthy()
+    expect(getByRole('header', { name: 'Não coletados' })).toBeTruthy()
+    expect(getByRole('header', { name: 'Coletados' })).toBeTruthy()
   })
 
   it('List: quando todos estão coletados mostra apenas a seção coletados', async () => {
