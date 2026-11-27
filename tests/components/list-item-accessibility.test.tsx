@@ -62,7 +62,7 @@ describe('Acessibilidade do item da lista', () => {
     await fireEvent.press(collectControl)
     expect(onToggle).toHaveBeenCalledTimes(1)
 
-    rerender(
+    await rerender(
       <ListItem
         product={{ ...product, collected: true }}
         index={0}
