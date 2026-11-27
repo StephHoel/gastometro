@@ -261,7 +261,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
   })
 
-  await run("calculadora permite navegação por teclado e ampliação de 200%", async page => {
+  await run("calculadora permite navegação por teclado, foco visível e ampliação visual de 200%", async page => {
     await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
 
     const priceInput = page.getByLabel("Preço da embalagem").last()
@@ -269,7 +269,10 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     const clearButton = page.getByRole("button", { name: "Limpar campos da calculadora" })
     const calculateButton = page.getByRole("button", { name: "Calcular preço por unidade" })
 
+    await priceInput.fill("10,00")
+    await quantityInput.fill("2")
     await priceInput.focus()
+
     await page.keyboard.press("Tab")
     assert.equal(
       await quantityInput.evaluate((element: Element) => element === document.activeElement),
@@ -284,21 +287,32 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
       "Tab deve mover o foco da quantidade para a ação de limpar",
     )
 
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await calculateButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco para a ação de calcular",
+    )
+
     const outlineWidth = await page.evaluate(() =>
       window.getComputedStyle(document.activeElement as Element).outlineWidth
     )
     assert.notEqual(outlineWidth, "0px", "O controle focado deve exibir indicador visual")
 
     await page.keyboard.press("Enter")
+    await page.getByText("Preço por Unidade: R$ 5,00", { exact: true }).waitFor()
+
     await page.evaluate(() => {
       document.documentElement.style.zoom = "200%"
     })
     await page.setViewportSize({ width: 640, height: 480 })
-    await calculateButton.scrollIntoViewIfNeeded()
 
-    const buttonBounds = await calculateButton.boundingBox()
-    assert.ok(buttonBounds && buttonBounds.width > 0 && buttonBounds.height > 0)
-    assert.equal(await calculateButton.isVisible(), true)
+    for (const control of [priceInput, quantityInput, clearButton, calculateButton]) {
+      await control.scrollIntoViewIfNeeded()
+      assert.equal(await control.isVisible(), true, "O controle deve continuar disponível com ampliação")
+      const bounds = await control.boundingBox()
+      assert.ok(bounds && bounds.width > 0 && bounds.height > 0, "O controle deve manter dimensões visíveis")
+    }
   })
 
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {

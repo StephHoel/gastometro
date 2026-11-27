@@ -22,9 +22,9 @@ describe('Formulários de comparação de preços', () => {
   it('cadastra lugar, normaliza os campos e retorna à comparação', async () => {
     const screen = await render(<FormMarket buttonTitle="Adicionar lugar" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar Input'), ' Mercado Central ')
-    await fireEvent.changeText(screen.getByLabelText('Observação Input'), ' Unidade Centro ')
-    await fireEvent.press(screen.getByText('Adicionar lugar'))
+    await fireEvent.changeText(screen.getByLabelText('Lugar'), ' Mercado Central ')
+    await fireEvent.changeText(screen.getByLabelText('Observação'), ' Unidade Centro ')
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
 
     expect(usePriceComparisonStore.getState().places[0]).toMatchObject({
       name: 'Mercado Central',
@@ -38,8 +38,8 @@ describe('Formulários de comparação de preços', () => {
     const place = usePriceComparisonStore.getState().places[0]
     const screen = await render(<FormMarket data={place} buttonTitle="Editar lugar" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar Input'), 'Mercado Atual')
-    await fireEvent.press(screen.getByText('Editar lugar'))
+    await fireEvent.changeText(screen.getByLabelText('Lugar'), 'Mercado Atual')
+    await fireEvent.press(screen.getByRole('button', { name: 'Editar lugar' }))
 
     expect(usePriceComparisonStore.getState().places).toHaveLength(1)
     expect(usePriceComparisonStore.getState().places[0].name).toBe('Mercado Atual')
@@ -49,11 +49,11 @@ describe('Formulários de comparação de preços', () => {
     usePriceComparisonStore.getState().addPlace({ name: 'Mercado Central' })
     const screen = await render(<FormMarket buttonTitle="Adicionar lugar" />)
 
-    await fireEvent.press(screen.getByText('Adicionar lugar'))
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
     expect(AlertService.ok).toHaveBeenCalled()
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar Input'), 'mercado central')
-    await fireEvent.press(screen.getByText('Adicionar lugar'))
+    await fireEvent.changeText(screen.getByLabelText('Lugar'), 'mercado central')
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
     expect(AlertService.ok).toHaveBeenCalledTimes(2)
     expect(usePriceComparisonStore.getState().places).toHaveLength(1)
   })
@@ -65,10 +65,10 @@ describe('Formulários de comparação de preços', () => {
     })
     const screen = await render(<FormCart buttonTitle="Adicionar item" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Nome do item Input'), 'Arroz')
-    await fireEvent.changeText(screen.getByLabelText('Referência de quantidade Input'), '1 kg')
-    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A Input'), '10,50')
-    await fireEvent.press(screen.getByText('Adicionar item'))
+    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Arroz')
+    await fireEvent.changeText(screen.getByLabelText('Referência de quantidade'), '1 kg')
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), '10,50')
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar item' }))
 
     expect(usePriceComparisonStore.getState().entries[0]).toMatchObject({
       itemName: 'Arroz',
@@ -93,10 +93,10 @@ describe('Formulários de comparação de preços', () => {
     const entry = usePriceComparisonStore.getState().entries[0]
     const screen = await render(<FormCart data={entry} buttonTitle="Editar item" />)
 
-    expect(screen.getByLabelText('Preço em Mercado A Input').props.value).toBe('10,00')
-    await fireEvent.changeText(screen.getByLabelText('Nome do item Input'), 'Arroz integral')
-    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A Input'), '11,25')
-    await fireEvent.press(screen.getByText('Editar item'))
+    expect(screen.getByLabelText('Preço em Mercado A').props.value).toBe('10,00')
+    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Arroz integral')
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), '11,25')
+    await fireEvent.press(screen.getByRole('button', { name: 'Editar item' }))
 
     expect(usePriceComparisonStore.getState().entries).toHaveLength(1)
     expect(usePriceComparisonStore.getState().entries[0]).toMatchObject({
@@ -112,8 +112,8 @@ describe('Formulários de comparação de preços', () => {
     })
     const screen = await render(<FormCart buttonTitle="Adicionar item" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Nome do item Input'), 'Feijão')
-    await fireEvent.press(screen.getByText('Adicionar item'))
+    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Feijão')
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar item' }))
 
     expect(usePriceComparisonStore.getState().entries[0].pricesByPlace).toEqual([])
     expect(AlertService.ok).not.toHaveBeenCalled()
@@ -126,12 +126,12 @@ describe('Formulários de comparação de preços', () => {
     })
     const screen = await render(<FormCart buttonTitle="Adicionar item" />)
 
-    await fireEvent.press(screen.getByText('Adicionar item'))
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar item' }))
     expect(AlertService.ok).toHaveBeenCalledTimes(1)
 
-    await fireEvent.changeText(screen.getByLabelText('Nome do item Input'), 'Café')
-    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A Input'), '-1')
-    await fireEvent.press(screen.getByText('Adicionar item'))
+    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Café')
+    await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), '-1')
+    await fireEvent.press(screen.getByRole('button', { name: 'Adicionar item' }))
     expect(AlertService.ok).toHaveBeenCalledTimes(2)
     expect(usePriceComparisonStore.getState().entries).toHaveLength(0)
   })
