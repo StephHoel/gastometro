@@ -19,7 +19,7 @@ A suíte dedicada de acessibilidade pode ser executada separadamente:
 npm run test:a11y
 ```
 
-Ela verifica nomes, papéis, dicas, estados e anúncios nos componentes reutilizáveis, item de lista e calculadora. Os testes unitários funcionais continuam sendo executados pelo comando `npm test`.
+Ela verifica nomes, papéis, dicas, estados e anúncios em componentes reutilizáveis, listas e itens, formulários de lembretes, formulários genéricos, alertas, calculadora, contas, central de lembretes e comparação de preços. Essa suíte é complementar aos testes unitários funcionais, que continuam sendo executados pelo comando `npm test`.
 
 A auditoria web com axe-core está integrada à suíte Playwright:
 
@@ -27,7 +27,7 @@ A auditoria web com axe-core está integrada à suíte Playwright:
 npm run test:e2e:web
 ```
 
-A auditoria executa as regras WCAG 2.0 e 2.1 dos níveis A e AA nas telas iniciais, listas, calculadora e comparação de preços. A suíte unitária dedicada cobre botões reutilizáveis, itens de lista, calculadora, contas, central de lembretes e comparação de preços. Os cenários E2E também verificam rotas, navegação, foco por teclado e disponibilidade dos controles com zoom de 200% nas telas principais.
+A auditoria executa as regras WCAG 2.0 e 2.1 dos níveis A e AA na tela inicial, calculadora, listas, contas, central de lembretes e comparação de preços. O cenário de teclado e ampliação também executa a auditoria nas quatro telas principais (listas, contas, lembretes e comparação). Os cenários E2E verificam sequência de foco, retorno com Shift+Tab, foco visível, alvos de ícone/checkbox de pelo menos 44 × 44 px e disponibilidade dos controles com zoom de 200%.
 
 A auditoria automatizada é complementar: não comprova sozinha a experiência real com leitor de tela e pode não detectar problemas de ordem de leitura, clareza contextual ou anúncios excessivos.
 

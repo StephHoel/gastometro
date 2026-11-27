@@ -38,8 +38,10 @@ O comando:
 - A rota /calculator abre diretamente, sem navegação prévia.
 - Atualizar a página em /calculator preserva a tela e a URL.
 - Navegar pela interface permite alternar entre início, listas e calculadora; voltar/avançar do navegador valida o histórico entre início e calculadora.
-- A calculadora pode ser percorrida com Tab a partir do campo de preço, respeita a ordem de foco até a ação de limpar e exibe indicador de foco visível.
+- A calculadora pode ser percorrida com Tab e Shift+Tab, respeita a ordem de foco entre preço, quantidade e ações e exibe indicador de foco visível.
 - A tela da calculadora permanece utilizável com ampliação de 200% e viewport reduzido, mantendo os controles de ação disponíveis.
+- A auditoria axe-core executa WCAG 2.0/2.1 A e AA na tela inicial, calculadora, listas, contas, central de lembretes e comparação de preços.
+- Nas telas de listas, contas, lembretes e comparação, a navegação E2E verifica foco por teclado, dimensões visíveis dos controles e alvos de ícone/checkbox com pelo menos 44 × 44 px.
 - Uma rota inexistente recebe a resposta 404 do servidor estático, executa o redirecionamento de `404.html`, restaura o caminho original e exibe a tela própria `Página não encontrada`.
 - O fluxo de comparação cadastra quatro lugares e um item com preços empatados, confere os destaques de menor e maior oferta e a diferença percentual, verifica a chave `gastometro-price-comparisons` no armazenamento local e recarrega a página para confirmar a persistência.\n- O fluxo de backup prepara dados sintéticos não vazios nas seis coleções (listas, produtos, lembretes, contas, locais e comparações), incluindo referências entre lembrete/lista/produto e preço/local. Exporta o JSON v2 e verifica IDs, valores e referências no conteúdo do arquivo.
 - O mesmo fluxo importa o arquivo e confere os valores exatos das seis contagens, cancela a confirmação de substituição e verifica que a prévia continua disponível. Em seguida limpa as quatro chaves persistidas, recarrega a aplicação para simular uma instalação limpa, importa novamente e confirma a substituição. Por fim, lê as quatro chaves persistidas e verifica quantidades, campos, estado de coleta/pagamento, valores monetários, metadados e referências. Uma nova importação do mesmo arquivo valida a mesclagem idempotente: os registros idênticos permanecem únicos e inalterados.
@@ -58,7 +60,7 @@ Se o navegador ainda não estiver instalado, repita a preparação do Chromium. 
 
 ## Limitações
 
-- A suíte cobre o roteamento web estático, o fallback SPA, navegação por teclado e ampliação de 200%; não substitui testes E2E Android/iOS.
+- A suíte cobre o roteamento web estático, o fallback SPA, auditoria axe-core WCAG A/AA nas rotas indicadas, navegação por teclado, alvos de toque na web e ampliação de 200%; não substitui testes E2E Android/iOS.
 - O servidor local simula o comportamento de arquivos estáticos do GitHub Pages, mas não valida a infraestrutura externa do GitHub.
 - O fluxo funcional de comparação cobre cadastro de lugares e item, comparação de empates e persistência.
 - O fluxo funcional de backup cobre exportação e validação do conteúdo JSON v2 não vazio, pré-visualização das seis coleções, cancelamento da substituição, restauração em armazenamento limpo e conferência dos campos dos quatro stores persistidos, seguida de mesclagem idempotente de registros idênticos. O cenário passou nas três execuções do workflow 46021328819.

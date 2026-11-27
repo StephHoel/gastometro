@@ -33,7 +33,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 - Valida e migra dados locais do carrinho e dos lembretes, preservando cópias de recuperação antes de reparos e informando o usuário sobre ocorrências.
 - Exporta e restaura backup JSON versionado com listas, produtos, lembretes, contas e comparações de preços, por substituição ou mesclagem com resolução explícita de conflitos.
-- Inclui rótulos e estados acessíveis nos principais controles, foco visível na web e verificação automatizada de contraste WCAG AA.
+- Inclui rótulos e estados acessíveis nos principais controles, suíte unitária dedicada de acessibilidade, auditoria axe-core WCAG A/AA, navegação E2E por teclado e verificação automatizada de contraste WCAG AA. A validação manual com TalkBack e leitor de tela permanece pendente.
 
 ## Stack
 
