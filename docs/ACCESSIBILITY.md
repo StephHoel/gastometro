@@ -27,7 +27,7 @@ A auditoria web com axe-core está integrada à suíte Playwright:
 npm run test:e2e:web
 ```
 
-A auditoria executa as regras WCAG 2.0 e 2.1 dos níveis A e AA nas telas iniciais, listas, calculadora e comparação de preços. Os cenários E2E também verificam rotas, navegação, foco por teclado e disponibilidade dos controles com zoom de 200% nas telas principais.
+A auditoria executa as regras WCAG 2.0 e 2.1 dos níveis A e AA nas telas iniciais, listas, calculadora e comparação de preços. A suíte unitária dedicada cobre botões reutilizáveis, itens de lista, calculadora, contas, central de lembretes e comparação de preços. Os cenários E2E também verificam rotas, navegação, foco por teclado e disponibilidade dos controles com zoom de 200% nas telas principais.
 
 A auditoria automatizada é complementar: não comprova sozinha a experiência real com leitor de tela e pode não detectar problemas de ordem de leitura, clareza contextual ou anúncios excessivos.
 
