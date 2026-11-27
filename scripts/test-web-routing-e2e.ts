@@ -261,6 +261,46 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
   })
 
+  await run("calculadora permite navegação por teclado e ampliação de 200%", async page => {
+    await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
+
+    const priceInput = page.getByLabel("Preço da Embalagem Input").last()
+    const quantityInput = page.getByLabel("Quantidade Input").last()
+    const clearButton = page.getByRole("button", { name: "Limpar campos da calculadora" })
+    const calculateButton = page.getByRole("button", { name: "Calcular preço por unidade" })
+
+    await priceInput.focus()
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await quantityInput.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco do preço para a quantidade",
+    )
+
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await clearButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco da quantidade para a ação de limpar",
+    )
+
+    const outlineWidth = await page.evaluate(() =>
+      window.getComputedStyle(document.activeElement as Element).outlineWidth
+    )
+    assert.notEqual(outlineWidth, "0px", "O controle focado deve exibir indicador visual")
+
+    await page.keyboard.press("Enter")
+    await page.evaluate(() => {
+      document.documentElement.style.zoom = "200%"
+    })
+    await page.setViewportSize({ width: 640, height: 480 })
+    await calculateButton.scrollIntoViewIfNeeded()
+
+    const buttonBounds = await calculateButton.boundingBox()
+    assert.ok(buttonBounds && buttonBounds.width > 0 && buttonBounds.height > 0)
+    assert.equal(await calculateButton.isVisible(), true)
+  })
+
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
     const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
     let fallbackStatus: number | undefined

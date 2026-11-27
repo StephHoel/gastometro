@@ -19,8 +19,8 @@ describe('CustomAlert', () => {
       })
     })
 
-    expect(getByText('Título')).toBeTruthy()
-    expect(getByText('Mensagem')).toBeTruthy()
+    expect(getByText('Título').props.accessibilityRole).toBe('header')
+    expect(getByText('Mensagem').props.accessibilityLiveRegion).toBe('assertive')
     expect(getByText('Cancelar')).toBeTruthy()
     expect(getByRole('button', { name: 'OK' })).toBeTruthy()
     expect(getByRole('button', { name: 'Outra ação' })).toBeTruthy()

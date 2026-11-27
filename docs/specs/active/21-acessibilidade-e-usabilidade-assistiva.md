@@ -79,4 +79,4 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - A ampliação de texto permanece habilitada pelo comportamento padrão do React Native, sem limitar o fator de escala.
 - A verificação de contraste usa a fórmula de luminância relativa da WCAG e pode ser executada por `npm run check:a11y:contrast`; o workflow Expo Doctor executa essa verificação em pull requests.
 - Nenhuma preferência de acessibilidade é persistida pelo app.
-- A verificação manual com TalkBack e leitor de tela/navegação por teclado em navegador permanece pendente e deve ser concluída durante a validação do PR.
+- A suíte E2E web cobre navegação por teclado, foco visível e ampliação de 200%; a validação manual com TalkBack e leitor de tela permanece pendente e deve ser concluída durante a validação do PR.

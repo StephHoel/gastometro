@@ -55,4 +55,6 @@ A validação automatizada não substitui o teste com tecnologia assistiva. Ante
 - [ ] Testar ampliação de texto do sistema/navegador e zoom do navegador em 200%.
 - [ ] Confirmar que campos, rótulos, botões e informações essenciais continuam disponíveis, sem cortes ou sobreposição.
 
+Os cenários automatizados de teclado, foco visível e ampliação de 200% são executados pela suíte `npm run test:e2e:web`. Eles complementam, mas não substituem, a verificação manual com leitor de tela.
+
 Data da verificação manual: pendente.
