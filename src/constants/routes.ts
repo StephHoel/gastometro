@@ -1,6 +1,8 @@
 export const ROUTES = {
   Index: "/",
 
+  Backup: "/backup",
+
   List: {
     Add: "/list/add",
     Index: "/lists",
