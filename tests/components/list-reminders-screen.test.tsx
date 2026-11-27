@@ -63,10 +63,10 @@ jest.mock('@/components/Page', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => {
+  TextWhite: ({ children, accessibilityLiveRegion, accessibilityRole }: { children: ReactNode; accessibilityLiveRegion?: 'none' | 'polite' | 'assertive'; accessibilityRole?: string }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, props, children)
+    return ReactModule.createElement(Text, { accessibilityLiveRegion, accessibilityRole }, children)
   },
 }))
 
