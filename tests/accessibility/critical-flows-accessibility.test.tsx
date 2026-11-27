@@ -1,6 +1,5 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
-import { Text } from 'react-native'
 
 import { CustomButton } from '@/components/Button'
 import { Delete } from '@/components/TouchableIcons'

@@ -139,6 +139,40 @@ async function waitForDocumentTitle(page: any, expectedTitle: string): Promise<v
   )
 }
 
+async function auditWebAccessibility(page: any): Promise<void> {
+  const axePath = (process.env.PATH ?? "")
+    .split(delimiter)
+    .map((directory: string) => path.resolve(directory, "..", "axe-core", "axe.min.js"))
+    .find((candidate: string) => fs.existsSync(candidate))
+
+  if (!axePath) {
+    throw new Error("axe-core não foi encontrado. Execute a suíte pelo script npm.")
+  }
+
+  await page.addScriptTag({ path: axePath })
+  const results = await page.evaluate(async () => {
+    const axe = (window as any).axe
+    return axe.run(document, {
+      runOnly: {
+        type: "tag",
+        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+      },
+    })
+  })
+
+  const violations = results.violations.map((violation: any) => ({
+    id: violation.id,
+    impact: violation.impact,
+    description: violation.description,
+    nodes: violation.nodes.map((node: any) => ({
+      target: node.target,
+      summary: node.failureSummary,
+    })),
+  }))
+
+  assert.deepEqual(violations, [], "Violações WCAG encontradas: " + JSON.stringify(violations, null, 2))
+}
+
 async function runScenario(
   browser: any,
   name: string,
@@ -207,6 +241,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByText("Total Geral:", { exact: false }).waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
     await waitForDocumentTitle(page, "Gastômetro")
+    await auditWebAccessibility(page)
   })
 
   await run("rota profunda abre diretamente", async page => {
@@ -215,6 +250,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByText("Calculadora", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
     await waitForDocumentTitle(page, "Calculadora")
+    await auditWebAccessibility(page)
   })
 
   await run("atualização mantém a rota profunda", async page => {
@@ -233,6 +269,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
     await waitForDocumentTitle(page, "Listas")
+    await auditWebAccessibility(page)
   })
 
   await run("atualização mantém a rota de listas", async page => {
@@ -362,6 +399,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
     await page.getByText("Preços", { exact: true }).last().click()
     await page.getByText("Nenhum lugar cadastrado ainda.", { exact: true }).waitFor()
+    await auditWebAccessibility(page)
 
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
