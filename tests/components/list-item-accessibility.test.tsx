@@ -44,7 +44,7 @@ describe('Acessibilidade do item da lista', () => {
 
   it('anuncia o estado de coleta e alterna quando ativado', async () => {
     const onToggle = jest.fn()
-    const { getByRole, rerender } = await render(
+    const { getByLabelText, rerender } = await render(
       <ListItem
         product={product}
         index={0}
@@ -55,7 +55,11 @@ describe('Acessibilidade do item da lista', () => {
       />,
     )
 
-    fireEvent.press(getByRole('checkbox', { name: 'Marcar Arroz como coletado' }))
+    const collectControl = getByLabelText('Marcar Arroz como coletado')
+    expect(collectControl.props.accessibilityRole).toBe('checkbox')
+    expect(collectControl.props.accessibilityState).toEqual({ checked: false })
+
+    await fireEvent.press(collectControl)
     expect(onToggle).toHaveBeenCalledTimes(1)
 
     rerender(
@@ -69,6 +73,8 @@ describe('Acessibilidade do item da lista', () => {
       />,
     )
 
-    expect(getByRole('checkbox', { name: 'Desmarcar Arroz como coletado' }).props.accessibilityState).toEqual({ checked: true })
+    const collectedControl = getByLabelText('Desmarcar Arroz como coletado')
+    expect(collectedControl.props.accessibilityRole).toBe('checkbox')
+    expect(collectedControl.props.accessibilityState).toEqual({ checked: true })
   })
 })
