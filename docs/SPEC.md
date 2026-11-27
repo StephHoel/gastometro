@@ -2,8 +2,8 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.11.0
-> **Data:** 2026-11-26
+> **Versão do App:** 1.12.0
+> **Data:** 2026-11-27
 > **Última validação de código e testes (commit `1f5d909`):** TypeScript aprovado; 439 testes em 65 suítes; 91,12% statements, 85,13% branches, 89,53% funções e 92,69% linhas. Expo Doctor aprovado.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
