@@ -26,6 +26,36 @@ describe('Form branch coverage', () => {
     })
   })
 
+  it('expõe rótulos acessíveis nos campos e identifica a ação do produto', async () => {
+    const { getByLabelText, getByRole } = await render(
+      <Form buttonTitle="Adicionar">
+        <Text>+</Text>
+      </Form>,
+    )
+
+    expect(getByLabelText('Item').props.accessibilityHint).toBe('Item')
+    expect(getByLabelText('Quantidade').props.accessibilityHint).toBe('1')
+    expect(getByLabelText('Preço').props.accessibilityHint).toBe('1,39')
+    expect(getByRole('button', { name: 'Adicionar produto à lista' })).toBeTruthy()
+  })
+
+  it('identifica a ação de salvar alterações do produto em edição', async () => {
+    const product = {
+      id: '1',
+      item: 'Arroz',
+      quantity: '1',
+      price: '10',
+      collected: false,
+    }
+    const { getByRole } = await render(
+      <Form data={product} buttonTitle="Editar">
+        <Text>*</Text>
+      </Form>,
+    )
+
+    expect(getByRole('button', { name: 'Salvar alterações do produto Arroz' })).toBeTruthy()
+  })
+
   it('não adiciona item quando nome está vazio', async () => {
     const { getByPlaceholderText, getByText } = await render(
       <Form buttonTitle="Salvar">
