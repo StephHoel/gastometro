@@ -22,7 +22,7 @@ describe('Formulários de comparação de preços', () => {
   it('cadastra lugar, normaliza os campos e retorna à comparação', async () => {
     const screen = await render(<FormMarket buttonTitle="Adicionar lugar" />)
 
-    const marketInput = screen.getByLabelText('Lugar')
+    const marketInput = screen.getByLabelText('Nome do lugar')
     expect(marketInput.props.accessibilityHint).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Adicionar lugar' }).props.accessibilityHint).toBe(
       'Valida e salva os dados do lugar',
@@ -43,7 +43,7 @@ describe('Formulários de comparação de preços', () => {
     const place = usePriceComparisonStore.getState().places[0]
     const screen = await render(<FormMarket data={place} buttonTitle="Editar lugar" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar'), 'Mercado Atual')
+    await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'Mercado Atual')
     await fireEvent.press(screen.getByRole('button', { name: 'Editar lugar' }))
 
     expect(usePriceComparisonStore.getState().places).toHaveLength(1)
@@ -57,7 +57,7 @@ describe('Formulários de comparação de preços', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
     expect(AlertService.ok).toHaveBeenCalled()
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar'), 'mercado central')
+    await fireEvent.changeText(screen.getByLabelText('Nome do lugar'), 'mercado central')
     await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
     expect(AlertService.ok).toHaveBeenCalledTimes(2)
     expect(usePriceComparisonStore.getState().places).toHaveLength(1)
