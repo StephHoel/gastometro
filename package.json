@@ -10,6 +10,7 @@
     "build:local": "sh ./scripts/build-local.sh",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:a11y": "jest tests/accessibility --runInBand",
     "test:coverage": "jest --coverage",
     "test:coverage:csv": "sh ./scripts/test-coverage-csv.sh",
     "clear:coverage": "rm -rf coverage",

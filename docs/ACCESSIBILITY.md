@@ -4,15 +4,32 @@
 
 - Botões de ícone possuem papel de botão, nome acessível contextual e alvo de toque mínimo de 44 × 44 pontos.
 - A coleta de produtos é anunciada como checkbox, com nome dinâmico e estado marcado/desmarcado.
-- Campos reutilizáveis recebem rótulo e dica a partir do nome e da finalidade do campo; os rótulos são apresentados em português e podem ser contextualizados pela tela.
-- Mensagens de erro e alertas são expostos como regiões vivas; diálogos identificam o contexto modal.
+- Campos reutilizáveis recebem rótulo e dica em português; telas podem substituir nomes genéricos por descrições contextuais.
+- Mensagens de erro e alertas expõem semântica e anúncios para tecnologias assistivas.
+- Controles de listas, lembretes, contas e comparação possuem rótulos contextuais e estados acessíveis.
+- A calculadora identifica campos e ações e anuncia o resultado atualizado.
 - Botões reutilizáveis têm papel semântico e foco visível na web.
-- Controles de listas, lembretes e comparação têm rótulos específicos, estados selecionados e alvos de toque ampliados.
-- O estado pago das contas mantém texto legível, sem depender de tons muted abaixo do contraste AA.
-- A calculadora identifica as ações de limpar e calcular com nomes e dicas acessíveis; o resultado é anunciado quando atualizado.
-- Formulários de lembretes e comparação identificam explicitamente a ação de salvar; ações de retorno informam a tela de destino.
-- Estados vazios da central e da lista de lembretes são anunciados quando o conteúdo muda.
 - A ampliação de texto permanece habilitada pelas configurações padrão do React Native.
+
+## Testes automatizados
+
+A suíte dedicada de acessibilidade pode ser executada separadamente:
+
+```bash
+npm run test:a11y
+```
+
+Ela verifica nomes, papéis, dicas, estados e anúncios nos componentes reutilizáveis, item de lista e calculadora. Os testes unitários funcionais continuam sendo executados pelo comando `npm test`.
+
+A auditoria web com axe-core está integrada à suíte Playwright:
+
+```bash
+npm run test:e2e:web
+```
+
+A auditoria executa as regras WCAG 2.0 e 2.1 dos níveis A e AA nas telas iniciais, listas, calculadora e comparação de preços. Os cenários E2E também verificam rotas, navegação, foco por teclado e disponibilidade dos controles com zoom de 200% nas telas principais.
+
+A auditoria automatizada é complementar: não comprova sozinha a experiência real com leitor de tela e pode não detectar problemas de ordem de leitura, clareza contextual ou anúncios excessivos.
 
 ## Verificação de contraste
 
@@ -22,7 +39,7 @@ Execute:
 npm run check:a11y:contrast
 ```
 
-O script calcula a razão de contraste pela fórmula de luminância relativa da WCAG. A verificação está dividida por tipo de conteúdo:
+O script calcula a razão de contraste pela fórmula de luminância relativa da WCAG.
 
 | Tipo de conteúdo | Critério mínimo |
 | --- | ---: |
@@ -30,13 +47,11 @@ O script calcula a razão de contraste pela fórmula de luminância relativa da 
 | Texto grande (a partir de 24 px ou 18,66 px em negrito) | 3:1 |
 | Componentes gráficos, ícones informativos e indicador de foco | 3:1 |
 
-As combinações verificadas incluem texto principal e secundário, placeholders, cartões, listas selecionadas, botões de sucesso/neutro/cancelamento, texto de erro, contorno de foco e ícones sobre os fundos escuros usados pela interface.
+O script valida apenas combinações explicitamente cadastradas. Ele não inspeciona automaticamente estilos arbitrários, cores dinâmicas, opacidade, imagens ou todos os estados de todas as telas. A auditoria axe pode complementar a identificação de problemas de contraste no DOM web.
 
-O script valida apenas as combinações explicitamente cadastradas. Ele não inspeciona automaticamente estilos arbitrários, cores dinâmicas, opacidade, imagens ou todos os estados de todas as telas. Novas combinações visuais devem ser adicionadas ao conjunto de verificações quando forem introduzidas.
+## Validação manual obrigatória
 
-## Verificação manual pendente
-
-A validação automatizada não substitui o teste com tecnologia assistiva. Antes de considerar a mini-spec concluída, validar:
+A conclusão da mini-spec depende da execução e do registro desta validação. Os itens abaixo permanecem pendentes até que sejam testados em dispositivos e tecnologias assistivas reais.
 
 ### Android com TalkBack
 
@@ -59,7 +74,5 @@ A validação automatizada não substitui o teste com tecnologia assistiva. Ante
 
 - [ ] Testar ampliação de texto do sistema/navegador e zoom do navegador em 200%.
 - [ ] Confirmar que campos, rótulos, botões e informações essenciais continuam disponíveis, sem cortes ou sobreposição nas telas de listas, calculadora, contas, lembretes e comparação.
-
-Os cenários automatizados de teclado, foco visível e ampliação de 200% são executados pela suíte `npm run test:e2e:web`. Eles complementam, mas não substituem, a verificação manual com leitor de tela.
 
 Data da verificação manual: pendente.

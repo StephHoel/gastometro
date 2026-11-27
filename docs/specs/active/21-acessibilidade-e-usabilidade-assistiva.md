@@ -60,7 +60,9 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - Fluxos essenciais da web podem ser concluídos por teclado.
 - Ampliação de texto não oculta campos, botões ou informações essenciais nas telas cobertas.
 - Contraste é verificado com ferramenta apropriada e atende WCAG AA para os elementos aplicáveis.
-- Testes automatizados verificam propriedades de acessibilidade nos componentes críticos.
+- Testes automatizados específicos verificam nomes, papéis, dicas, estados e anúncios nos componentes críticos, além dos testes unitários funcionais.
+- Auditoria automatizada axe-core cobre WCAG A/AA nas principais telas web.
+- Navegação por teclado, foco visível e ampliação de 200% são cobertos pela suíte E2E.
 - Uma verificação manual documentada é executada com TalkBack no Android e teclado/leitor de tela em navegador.
 
 ## Fora de escopo
@@ -82,4 +84,6 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - A ampliação de texto permanece habilitada pelo comportamento padrão do React Native, sem limitar o fator de escala.
 - A verificação de contraste usa a fórmula de luminância relativa da WCAG e pode ser executada por `npm run check:a11y:contrast`; o workflow Expo Doctor executa essa verificação em pull requests.
 - Nenhuma preferência de acessibilidade é persistida pelo app.
-- A suíte E2E web cobre navegação por teclado, foco visível e ampliação de 200%; a validação manual com TalkBack e leitor de tela permanece pendente e deve ser concluída durante a validação do PR.
+- A suíte dedicada `tests/accessibility/` valida nomes, papéis, dicas, estados e anúncios em componentes e fluxos críticos, separadamente dos testes unitários funcionais.
+- A suíte E2E web usa axe-core para auditar critérios WCAG 2.0/2.1 A e AA nas telas principais, além de cobrir navegação por teclado, foco e ampliação de 200%.
+- A verificação manual com TalkBack e leitor de tela permanece obrigatória e pendente até execução documentada em dispositivos e tecnologias assistivas reais.
