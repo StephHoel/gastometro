@@ -144,7 +144,7 @@ describe('NotificationService', () => {
   it('cancelScheduled captura erro sem lançar', async () => {
     cancelScheduledNotificationAsyncMock.mockRejectedValueOnce(new Error('erro'))
 
-    await expect(NotificationService.cancelScheduled('notif-1')).resolves.toBeUndefined()
+    await expect(NotificationService.cancelScheduled('notif-1')).resolves.toBe(false)
   })
 
   it('clearDeliveredNotifications ignora web e limpa notificações no mobile', async () => {

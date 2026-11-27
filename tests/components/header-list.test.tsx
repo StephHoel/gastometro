@@ -34,9 +34,12 @@ jest.mock('@/components/Icons', () => ({
 jest.mock('@/components/TouchableIcons', () => ({
   Add: () => null,
   Back: () => null,
+  Backup: () => null,
   Delete: () => null,
   Share: () => null,
   Notification: () => null,
+  Market: () => null,
+  Cart: () => null,
 }))
 
 function makeStore(): StateProps {
