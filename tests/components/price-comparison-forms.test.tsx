@@ -22,7 +22,12 @@ describe('Formulários de comparação de preços', () => {
   it('cadastra lugar, normaliza os campos e retorna à comparação', async () => {
     const screen = await render(<FormMarket buttonTitle="Adicionar lugar" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Lugar'), ' Mercado Central ')
+    const marketInput = screen.getByLabelText('Lugar')
+    expect(marketInput.props.accessibilityHint).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Adicionar lugar' }).props.accessibilityHint).toBe(
+      'Valida e salva os dados do lugar',
+    )
+    await fireEvent.changeText(marketInput, ' Mercado Central ')
     await fireEvent.changeText(screen.getByLabelText('Observação'), ' Unidade Centro ')
     await fireEvent.press(screen.getByRole('button', { name: 'Adicionar lugar' }))
 
@@ -65,7 +70,12 @@ describe('Formulários de comparação de preços', () => {
     })
     const screen = await render(<FormCart buttonTitle="Adicionar item" />)
 
-    await fireEvent.changeText(screen.getByLabelText('Nome do item'), 'Arroz')
+    const itemNameInput = screen.getByLabelText('Nome do item')
+    expect(itemNameInput.props.accessibilityHint).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Adicionar item' }).props.accessibilityHint).toBe(
+      'Valida e salva os dados da comparação',
+    )
+    await fireEvent.changeText(itemNameInput, 'Arroz')
     await fireEvent.changeText(screen.getByLabelText('Referência de quantidade'), '1 kg')
     await fireEvent.changeText(screen.getByLabelText('Preço em Mercado A'), '10,50')
     await fireEvent.press(screen.getByRole('button', { name: 'Adicionar item' }))

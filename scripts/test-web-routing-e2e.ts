@@ -300,7 +300,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.notEqual(outlineWidth, "0px", "O controle focado deve exibir indicador visual")
 
     await page.keyboard.press("Enter")
-    await page.getByText("Preço por Unidade: R$ 5,00", { exact: true }).waitFor()
+    await page.getByText(/Preço por Unidade:\s*R\$\s*5,00/).waitFor()
 
     await page.evaluate(() => {
       document.documentElement.style.zoom = "200%"

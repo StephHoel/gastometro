@@ -39,7 +39,7 @@ describe('Calculator accessibility', () => {
     await fireEvent.changeText(quantityInput, '2')
     await fireEvent.press(getByRole('button', { name: 'Calcular preço por unidade' }))
 
-    const result = getByText('Preço por Unidade: R$ 5,00')
+    const result = getByText(/Preço por Unidade:\s*R\$\s*5,00/)
     expect(result.props.accessibilityLiveRegion).toBe('polite')
 
     await fireEvent.press(getByRole('button', { name: 'Limpar campos da calculadora' }))

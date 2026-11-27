@@ -80,7 +80,7 @@ describe('PriceComparison screen', () => {
     await fireEvent.press(itemSort)
     expect(screen.getByRole('button', { name: 'Ordenar itens por menor preço' })).toBeTruthy()
 
-    await fireEvent.press(basketSort)
+    await fireEvent.press(screen.getByRole('button', { name: 'Ordenar cesta por nome' }))
     expect(screen.getByRole('button', { name: 'Ordenar cesta por menor total' })).toBeTruthy()
   })
 
