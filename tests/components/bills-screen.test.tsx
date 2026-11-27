@@ -61,7 +61,7 @@ describe('Bills screen', () => {
     await fireEvent.press(screen.getByText('Salvar alterações'))
     expect(useBillStore.getState().bills[0].title).toBe('Internet fibra')
 
-    await fireEvent.press(screen.getAllByLabelText('Marcar como paga')[0])
+    await fireEvent.press(screen.getAllByLabelText('Marcar conta Internet fibra como paga'))
     expect(useBillStore.getState().bills[0].paid).toBe(true)
     expect(screen.getByText('Total pago')).toBeTruthy()
 
@@ -76,7 +76,7 @@ describe('Bills screen', () => {
     })
     const screen = await render(<Bills />)
 
-    await fireEvent.press(screen.getByLabelText('Remover Água'))
+    await fireEvent.press(screen.getByLabelText('Remover conta Água'))
     expect(mockShowAlert).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Remover conta',
       message: 'Deseja remover "Água"?',
@@ -98,10 +98,10 @@ describe('Bills screen', () => {
     expect(screen.getByText('Assinatura')).toBeTruthy()
     expect(screen.getAllByText(/Vencimento:/)).toHaveLength(1)
 
-    await fireEvent.press(screen.getAllByLabelText('Marcar como paga')[0])
-    expect(screen.getByLabelText('Marcar como pendente')).toBeTruthy()
-    await fireEvent.press(screen.getByLabelText('Marcar como pendente'))
-    expect(screen.getAllByLabelText('Marcar como paga')).toHaveLength(2)
+    await fireEvent.press(screen.getByLabelText('Marcar conta Aluguel como paga'))
+    expect(screen.getByLabelText('Marcar conta Aluguel como pendente')).toBeTruthy()
+    await fireEvent.press(screen.getByLabelText('Marcar conta Aluguel como pendente'))
+    expect(screen.getByLabelText('Marcar conta Aluguel como paga')).toBeTruthy()
   })
 
 })

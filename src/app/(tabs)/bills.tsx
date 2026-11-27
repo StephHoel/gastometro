@@ -98,12 +98,13 @@ export default function Bills() {
         <TextWhite className="text-sm text-slate-300">{label}</TextWhite>
         <Card className="px-3 py-1 border-slate-900">
           <TextInput
-            className="py-2 text-base text-white outline-none"
+            className="py-2 text-base text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
             placeholder={placeholder}
             placeholderTextColor={COLORS.inactive}
             value={value}
             onChangeText={onChangeText}
             accessibilityLabel={accessibilityLabel}
+            accessibilityHint={label === 'Vencimento (opcional)' ? 'Informe a data no formato ano, mês e dia' : `Informe ${label.toLocaleLowerCase()}`}
             keyboardType={keyboardType}
             maxLength={maxLength}
           />
@@ -140,7 +141,7 @@ export default function Bills() {
         <View className="border-b border-slate-700 w-[95%] mx-auto"/>
 
         <View className="px-4 pt-5 gap-3">
-          <TextWhite className="text-2xl font-bold">
+          <TextWhite accessibilityRole="header" className="text-2xl font-bold">
             {editingId ? 'Editar conta' : 'Nova conta'}
           </TextWhite>
 
@@ -175,12 +176,12 @@ export default function Bills() {
 
           <View className="flex-1 flex-row gap-2">
             {editingId && (
-              <Button type="Normal" onPress={resetForm} className="mx-0 flex-1">
+              <Button type="Normal" onPress={resetForm} accessibilityLabel="Cancelar edição da conta" className="mx-0 flex-1">
                 <Button.Text className="text-xl">Cancelar edição</Button.Text>
               </Button>
             )}
 
-            <Button onPress={saveBill} className="mx-0 flex-1">
+            <Button onPress={saveBill} accessibilityLabel={editingId ? `Salvar alterações da conta ${title}` : "Adicionar conta"} accessibilityHint="Valida e salva os dados da conta" className="mx-0 flex-1">
               <Button.Text className="text-xl">
                 {editingId ? 'Salvar alterações' : 'Adicionar conta'}
               </Button.Text>
@@ -190,7 +191,7 @@ export default function Bills() {
 
         <View className="px-4 pt-6">
           <Row className="items-center justify-between mb-3">
-            <TextWhite className="text-lg font-bold">Suas contas</TextWhite>
+            <TextWhite accessibilityRole="header" className="text-lg font-bold">Suas contas</TextWhite>
             <TextWhite className="text-xs text-slate-400">
               {bills.length} {bills.length === 1 ? 'conta' : 'contas'}
             </TextWhite>
@@ -218,8 +219,9 @@ export default function Bills() {
                     <TouchableOpacity
                       onPress={() => confirmRemove(bill)}
                       accessibilityRole="button"
-                      accessibilityLabel={`Remover ${bill.title}`}
-                      hitSlop={8}
+                      accessibilityLabel={`Remover conta ${bill.title}`}
+                      accessibilityHint="Abre a confirmação para remover esta conta"
+                      className="min-w-11 min-h-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                     >
                       <TrashIcon size={SIZE.iconActions} />
                     </TouchableOpacity>
@@ -227,18 +229,20 @@ export default function Bills() {
                     <TouchableOpacity
                       onPress={() => setPaid(bill.id, !bill.paid)}
                       accessibilityRole="checkbox"
-                      accessibilityLabel={bill.paid ? 'Marcar como pendente' : 'Marcar como paga'}
+                      accessibilityLabel={bill.paid ? `Marcar conta ${bill.title} como pendente` : `Marcar conta ${bill.title} como paga`}
+                      accessibilityHint="Alterna o status de pagamento desta conta"
                       accessibilityState={{ checked: bill.paid }}
-                      className="pt-1"
+                      className="min-w-11 min-h-11 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                     >
                       <CheckboxIcon checked={bill.paid} size={SIZE.iconActions} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       onPress={() => editBill(bill)}
-                      className="flex-1 gap-1"
                       accessibilityRole="button"
                       accessibilityLabel={`Editar conta ${bill.title}`}
+                      accessibilityHint="Abre o formulário para alterar esta conta"
+                      className="min-h-11 flex-1 gap-1 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                     >
                       <TextWhite className={`font-bold ${bill.paid ? 'text-slate-500 line-through' : ''}`}>
                         {bill.title}
