@@ -64,7 +64,7 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
           <TextWhite accessibilityRole="header" className="text-xl font-bold mb-3">{title}</TextWhite>
 
           {!!message && (
-            <TextWhite accessibilityLiveRegion="assertive" className="text-base mb-5 text-center">{message}</TextWhite>
+            <TextWhite accessibilityRole="alert" accessibilityLiveRegion="assertive" className="text-base mb-5 text-center">{message}</TextWhite>
           )}
 
           <View className="w-full flex-col px-4">
