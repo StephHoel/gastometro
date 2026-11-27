@@ -40,32 +40,46 @@ const palette = {
 }
 
 const checks = [
-  ['Texto principal na tela', palette.white, palette.background],
-  ['Texto secundário na tela', palette.inactive, palette.background],
-  ['Texto em lista selecionada', palette.white, palette.slate600],
-  ['Placeholder em campo', palette.slate300, palette.slate700],
-  ['Texto secundário em cartão', palette.slate300, palette.slate800],
-  ['Texto muted em cartão', palette.slate400, palette.slate800],
-  ['Ação lime no fundo', palette.active, palette.background],
-  ['Texto preto em botão lime', palette.black, palette.active],
-  ['Texto branco em botão de cancelar', palette.white, palette.red600],
-  ['Texto preto em botão neutro', palette.black, palette.zinc400],
-  ['Texto branco em botão secundário', palette.white, palette.slate500],
-  ['Texto de erro em cartão', palette.red400, palette.slate800],
-  ['Texto secundário em lista selecionada', palette.slate300, palette.slate600],
+  { category: 'Texto normal', label: 'Texto principal na tela', foreground: palette.white, background: palette.background, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto secundário na tela', foreground: palette.inactive, background: palette.background, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto em lista selecionada', foreground: palette.white, background: palette.slate600, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Placeholder em campo', foreground: palette.slate300, background: palette.slate700, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto secundário em cartão', foreground: palette.slate300, background: palette.slate800, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto muted em cartão', foreground: palette.slate400, background: palette.slate800, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto preto em botão lime', foreground: palette.black, background: palette.active, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto branco em botão de cancelar', foreground: palette.white, background: palette.red600, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto preto em botão neutro', foreground: palette.black, background: palette.zinc400, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto branco em botão secundário', foreground: palette.white, background: palette.slate500, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto de erro em cartão', foreground: palette.red400, background: palette.slate800, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto secundário em lista selecionada', foreground: palette.slate300, background: palette.slate600, minimum: 4.5 },
+  { category: 'Texto grande', label: 'Texto grande em botão secundário', foreground: palette.white, background: palette.slate500, minimum: 3 },
+  { category: 'Texto grande', label: 'Texto grande em cartão', foreground: palette.slate300, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Contorno de foco no fundo principal', foreground: palette.active, background: palette.background, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Contorno de foco em cartão', foreground: palette.active, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Ícone claro em cartão', foreground: palette.white, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Ícone secundário em cartão', foreground: palette.slate400, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Indicador de seleção em cartão', foreground: palette.active, background: palette.slate800, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Ícone em lista selecionada', foreground: palette.slate300, background: palette.slate600, minimum: 3 },
 ]
 
 let failed = false
-for (const [label, foreground, background] of checks) {
-  const ratio = contrast(foreground, background)
-  const passed = ratio >= 4.5
-  console.log((passed ? 'PASS' : 'FAIL') + ' ' + label + ': ' + ratio.toFixed(2) + ':1')
+
+for (const check of checks) {
+  const ratio = contrast(check.foreground, check.background)
+  const passed = ratio >= check.minimum
+  const requirement = check.minimum.toFixed(1).replace('.', ',')
+  console.log(
+    (passed ? 'PASS' : 'FAIL') +
+    ' [' + check.category + '] ' +
+    check.label +
+    ': ' + ratio.toFixed(2) + ':1 (mínimo ' + requirement + ':1)',
+  )
   if (!passed) failed = true
 }
 
 if (failed) {
-  console.error('Há combinações abaixo do contraste mínimo WCAG AA de 4,5:1 para texto normal.')
+  console.error('Há combinações abaixo dos critérios WCAG AA configurados.')
   process.exitCode = 1
 } else {
-  console.log('Todas as combinações verificadas atendem ao mínimo WCAG AA de 4,5:1.')
+  console.log('Todas as combinações documentadas atendem aos critérios WCAG AA configurados.')
 }

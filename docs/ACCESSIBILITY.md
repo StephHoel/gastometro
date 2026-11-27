@@ -18,25 +18,17 @@ Execute:
 npm run check:a11y:contrast
 ```
 
-O script calcula a razão de contraste pela fórmula de luminância relativa da WCAG e verifica as combinações de cores usadas nos componentes principais. O critério adotado para texto normal é 4,5:1 (WCAG AA).
+O script calcula a razão de contraste pela fórmula de luminância relativa da WCAG. A verificação está dividida por tipo de conteúdo:
 
-| Combinação verificada | Razão |
+| Tipo de conteúdo | Critério mínimo |
 | --- | ---: |
-| Texto principal na tela | 17,85:1 |
-| Texto secundário na tela | 6,96:1 |
-| Texto em lista selecionada | 7,58:1 |
-| Placeholder em campo | 6,97:1 |
-| Texto secundário em cartão | 9,85:1 |
-| Texto muted em cartão | 5,71:1 |
-| Ação lime no fundo | 11,84:1 |
-| Texto preto em botão lime | 13,93:1 |
-| Texto branco em botão de cancelar | 4,83:1 |
-| Texto preto em botão neutro | 8,19:1 |
-| Texto branco em botão secundário | 4,76:1 |
-| Texto de erro em cartão | 5,29:1 |
-| Texto secundário em lista selecionada | 5,10:1 |
+| Texto normal | 4,5:1 |
+| Texto grande (a partir de 24 px ou 18,66 px em negrito) | 3:1 |
+| Componentes gráficos, ícones informativos e indicador de foco | 3:1 |
 
-Esses resultados cobrem as combinações explicitamente listadas no script, não substituem a auditoria de todos os estados visuais nem a validação em dispositivos reais.
+As combinações verificadas incluem texto principal e secundário, placeholders, cartões, listas selecionadas, botões de sucesso/neutro/cancelamento, texto de erro, contorno de foco e ícones sobre os fundos escuros usados pela interface.
+
+O script valida apenas as combinações explicitamente cadastradas. Ele não inspeciona automaticamente estilos arbitrários, cores dinâmicas, opacidade, imagens ou todos os estados de todas as telas. Novas combinações visuais devem ser adicionadas ao conjunto de verificações quando forem introduzidas.
 
 ## Verificação manual pendente
 
