@@ -48,7 +48,7 @@ describe('FormReminder', () => {
   })
 
   it('renderiza os campos de título, data e hora', async () => {
-    const { getByPlaceholderText } = await render(
+    const { getByPlaceholderText, getByLabelText } = await render(
       <FormReminder
         listId="list-1"
         textButton="Salvar"
@@ -59,10 +59,13 @@ describe('FormReminder', () => {
     expect(getByPlaceholderText(REMINDERS.placeholder.title)).toBeTruthy()
     expect(getByPlaceholderText(REMINDERS.placeholder.date)).toBeTruthy()
     expect(getByPlaceholderText(REMINDERS.placeholder.time)).toBeTruthy()
+    expect(getByLabelText('Título').props.accessibilityHint).toBe(REMINDERS.placeholder.title)
+    expect(getByLabelText('Data').props.accessibilityHint).toBe(REMINDERS.placeholder.date)
+    expect(getByLabelText('Hora').props.accessibilityHint).toBe(REMINDERS.placeholder.time)
   })
 
   it('renderiza botão de submit com o texto correto', async () => {
-    const { getByText } = await render(
+    const { getByRole } = await render(
       <FormReminder
         listId="list-1"
         textButton="Novo Lembrete"
@@ -70,7 +73,8 @@ describe('FormReminder', () => {
       />,
     )
 
-    expect(getByText('Novo Lembrete')).toBeTruthy()
+    const saveButton = getByRole('button', { name: 'Novo Lembrete' })
+    expect(saveButton.props.accessibilityHint).toBe('Salva o lembrete e retorna à lista')
   })
 
   it('não exibe botão de remover quando includeDeleteButton não é passado', async () => {
@@ -86,7 +90,7 @@ describe('FormReminder', () => {
   })
 
   it('exibe botão de remover quando includeDeleteButton é true', async () => {
-    const { getByText } = await render(
+    const { getByRole } = await render(
       <FormReminder
         listId="list-1"
         reminderId="rem-1"
@@ -96,7 +100,7 @@ describe('FormReminder', () => {
       />,
     )
 
-    expect(getByText(REMINDERS.button.remove)).toBeTruthy()
+    expect(getByRole('button', { name: 'Remover lembrete atual' })).toBeTruthy()
   })
 
   it('chama saveReminder ao submeter o formulário', async () => {

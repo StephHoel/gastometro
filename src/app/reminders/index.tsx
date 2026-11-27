@@ -51,7 +51,7 @@ export default function ReminderCenter() {
       <Header />
 
       <View className="px-4 pt-4 pb-3 gap-2">
-        <TextWhite className="text-lg font-bold">{REMINDERS.center_title}</TextWhite>
+        <TextWhite accessibilityRole="header" className="text-lg font-bold">{REMINDERS.center_title}</TextWhite>
         <TextWhite className="text-slate-400 text-xs">{REMINDERS.center_hint}</TextWhite>
       </View>
 
@@ -62,7 +62,10 @@ export default function ReminderCenter() {
           return (
             <TouchableOpacity
               key={candidate}
-              className={`rounded px-2 py-1 ${selected ? 'bg-lime-400' : 'bg-slate-600'}`}
+              className={`min-h-11 rounded px-3 py-2 ${selected ? 'bg-lime-400' : 'bg-slate-600'} focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400`}
+              accessibilityRole="button"
+              accessibilityLabel={`Filtrar lembretes: ${REMINDERS.filter_label[candidate]}`}
+              accessibilityState={{ selected }}
               onPress={() => setFilter(candidate)}
             >
               <TextWhite className={selected ? 'text-black text-xs' : 'text-white text-xs'}>
@@ -78,7 +81,7 @@ export default function ReminderCenter() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}
         ListEmptyComponent={
-          <TextWhite className="text-slate-400 mt-2">{REMINDERS.center_empty}</TextWhite>
+          <TextWhite accessibilityLiveRegion="polite" className="text-slate-400 mt-2">{REMINDERS.center_empty}</TextWhite>
         }
         renderItem={({ item }) => {
           const listName = listNameMap.get(item.listId) ?? REMINDERS.unknown_list
@@ -91,7 +94,9 @@ export default function ReminderCenter() {
 
               <Row className="gap-2 mt-3">
                 <TouchableOpacity
-                  className="bg-lime-400 rounded px-2 py-1"
+                  className="bg-lime-400 rounded px-2 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                  accessibilityRole="button"
+                  accessibilityLabel={`Abrir lista ${listName} para o lembrete ${item.title}`}
                   onPress={() => router.push(ROUTES.Reminder.Id(item.listId))}
                 >
                   <TextWhite className="text-black text-xs">{REMINDERS.open_list_button}</TextWhite>

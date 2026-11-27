@@ -1,7 +1,7 @@
 # Mini-spec: Acessibilidade e usabilidade assistiva
 
 Número: 21
-Status: planejado
+Status: ativa
 
 ## Problema
 
@@ -30,6 +30,8 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 
 - Home/lista de compras e itens da lista.
 - Gerenciamento de múltiplas listas.
+- Contas a pagar.
+- Comparação de preços entre lugares e itens.
 - Calculadora.
 - Formulários de criação e edição de produtos.
 - Central de lembretes e telas de lembretes por lista.
@@ -58,7 +60,9 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - Fluxos essenciais da web podem ser concluídos por teclado.
 - Ampliação de texto não oculta campos, botões ou informações essenciais nas telas cobertas.
 - Contraste é verificado com ferramenta apropriada e atende WCAG AA para os elementos aplicáveis.
-- Testes automatizados verificam propriedades de acessibilidade nos componentes críticos.
+- Testes automatizados específicos verificam nomes, papéis, dicas, estados e anúncios nos componentes críticos, além dos testes unitários funcionais.
+- Auditoria automatizada axe-core cobre WCAG A/AA nas principais telas web.
+- Navegação por teclado, foco visível e ampliação de 200% são cobertos pela suíte E2E.
 - Uma verificação manual documentada é executada com TalkBack no Android e teclado/leitor de tela em navegador.
 
 ## Fora de escopo
@@ -68,8 +72,18 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 - Tradução para novos idiomas.
 - Recursos de acessibilidade que dependam de serviço externo.
 
-## Observações para IA
+## Decisões de implementação
 
-- Auditar primeiro os componentes reutilizáveis para corrigir vários fluxos em conjunto.
-- Usar APIs de acessibilidade do React Native e atributos equivalentes da plataforma web, validando o resultado em runtime.
-- Não considerar a presença de `accessibilityLabel` isoladamente como prova de acessibilidade; validar a experiência real.
+- Os componentes reutilizáveis de texto, botões e botões de ícone expõem papéis, rótulos, dicas e estados de acessibilidade.
+- Campos de formulário usam rótulos em português, com possibilidade de contextualização quando o nome genérico do campo for insuficiente.
+- A calculadora identifica as ações de limpar e calcular e anuncia o resultado atualizado por região viva.
+- Ações icon-only informam o contexto do item ou da lista; checkboxes anunciam o nome do produto e seu estado de coleta.
+- Os alvos de toque principais usam dimensão mínima de 44 × 44 pontos; botões textuais usam altura mínima de 48 pontos.
+- Controles navegáveis por teclado exibem indicador de foco com contorno lime.
+- Mensagens de validação e alertas usam regiões vivas; diálogos declaram contexto modal e botões identificáveis.
+- A ampliação de texto permanece habilitada pelo comportamento padrão do React Native, sem limitar o fator de escala.
+- A verificação de contraste usa a fórmula de luminância relativa da WCAG e pode ser executada por `npm run check:a11y:contrast`; o workflow Expo Doctor executa essa verificação em pull requests.
+- Nenhuma preferência de acessibilidade é persistida pelo app.
+- A suíte dedicada `tests/accessibility/` valida nomes, papéis, dicas, estados e anúncios em componentes reutilizáveis, itens de lista, calculadora, contas, central de lembretes e comparação de preços, separadamente dos testes unitários funcionais.
+- A suíte E2E web usa axe-core para auditar critérios WCAG 2.0/2.1 A e AA nas telas principais, além de cobrir navegação por teclado, foco e ampliação de 200%.
+- A verificação manual com TalkBack e leitor de tela permanece obrigatória e pendente até execução documentada em dispositivos e tecnologias assistivas reais.

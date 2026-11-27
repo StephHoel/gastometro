@@ -41,9 +41,9 @@ Todas as mini-specs devem ser escritas em pt-BR, incluindo acentuação e caract
 ### Ativas/Em andamento
 
 - [Suíte de testes automatizados](./active/05-testes-automatizados.md)
+- [Acessibilidade e usabilidade assistiva](./active/21-acessibilidade-e-usabilidade-assistiva.md)
 
 ### Planejadas (ordem de prioridade)
 
-1. [Acessibilidade e usabilidade assistiva](./planned/21-acessibilidade-e-usabilidade-assistiva.md)
-2. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
-3. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)
+1. [Consistência e validação da documentação técnica](./planned/22-consistencia-documentacao-tecnica.md)
+2. [Feedback com toast e disparo de lembretes na web](./planned/23-feedback-toast-e-lembretes-web.md)

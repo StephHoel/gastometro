@@ -1,4 +1,5 @@
 import React, { type ReactNode } from 'react'
+import type { TextProps } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import ListReminders from '@/app/reminders/[listId]/index'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -63,10 +64,10 @@ jest.mock('@/components/Page', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: ReactNode }) => {
+  TextWhite: ({ children, accessibilityLiveRegion, accessibilityRole }: { children: ReactNode; accessibilityLiveRegion?: TextProps['accessibilityLiveRegion']; accessibilityRole?: TextProps['accessibilityRole'] }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, null, children)
+    return ReactModule.createElement(Text, { accessibilityLiveRegion, accessibilityRole }, children)
   },
 }))
 
@@ -79,15 +80,23 @@ jest.mock('@/components/Row', () => ({
 }))
 
 jest.mock('@/components/TouchableIcons', () => ({
-  Add: ({ action }: { action?: () => void }) => {
+  Add: ({ action, accessibilityLabel }: { action?: () => void; accessibilityLabel?: string }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
-    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, { onPress: action }, 'Add')
+    const { Text, TouchableOpacity } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(
+      TouchableOpacity,
+      { onPress: action, accessibilityRole: 'button', accessibilityLabel },
+      ReactModule.createElement(Text, null, 'Add'),
+    )
   },
-  Delete: ({ action }: { action?: () => void }) => {
+  Delete: ({ action, accessibilityLabel, accessibilityHint }: { action?: () => void; accessibilityLabel?: string; accessibilityHint?: string }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
-    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, { onPress: action }, 'Delete')
+    const { Text, TouchableOpacity } = jest.requireActual('react-native') as typeof import('react-native')
+    return ReactModule.createElement(
+      TouchableOpacity,
+      { onPress: action, accessibilityRole: 'button', accessibilityLabel, accessibilityHint },
+      ReactModule.createElement(Text, null, 'Delete'),
+    )
   },
 }))
 
@@ -117,30 +126,41 @@ describe('ListReminders screen', () => {
   it('renderiza fallback quando lista nao existe e volta para listas', async () => {
     setListIdParam('list-inexistente')
 
-    const { getByText } = await render(<ListReminders />)
+    const { getByText, getByRole } = await render(<ListReminders />)
 
-    expect(getByText(REMINDERS.invalid_list)).toBeTruthy()
-    await fireEvent.press(getByText(REMINDERS.back_to_lists))
+    expect(getByText(REMINDERS.invalid_list).props.accessibilityLiveRegion).toBe('assertive')
+    await fireEvent.press(getByRole('button', { name: 'Voltar para as listas' }))
     expect(mockPush).toHaveBeenCalledWith('/lists')
   })
 
-  it('renderiza lembretes da lista e navega para novo lembrete', async () => {
+  it('anuncia o estado vazio quando a lista não possui lembretes', async () => {
+    mockReminderStore = createReminderStoreMock([])
     const { getByText } = await render(<ListReminders />)
+
+    expect(getByText(REMINDERS.empty_list).props.accessibilityLiveRegion).toBe('polite')
+  })
+
+  it('renderiza lembretes da lista e navega para novo lembrete', async () => {
+    const { getByText, getByRole } = await render(<ListReminders />)
 
     expect(getByText('Pao')).toBeTruthy()
     expect(getByText('Leite')).toBeTruthy()
 
-    await fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByRole('button', { name: 'Adicionar lembrete para Mercado' }))
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1/new')
   })
 
-  it('navega para edicao ao clicar em edit e remove ao confirmar no alert', async () => {
-    const { getAllByText } = await render(<ListReminders />)
+  it('navega para edição e remove o lembrete após confirmação', async () => {
+    const { getByRole } = await render(<ListReminders />)
 
-    await fireEvent.press(getAllByText('Pao')[0])
+    const editButton = getByRole('button', { name: 'Editar lembrete Pao, 2099-01-01T08:00:00.000Z, Ativo' })
+    expect(editButton).toBeTruthy()
+    await fireEvent.press(editButton)
     expect(mockPush).toHaveBeenCalledWith('/reminders/list-1/edit/r2')
 
-    await fireEvent.press(getAllByText('Delete')[0])
+    const removeButton = getByRole('button', { name: 'Remover lembrete Pao' })
+    expect(removeButton.props.accessibilityHint).toBe('Remove este lembrete')
+    await fireEvent.press(removeButton)
 
     expect(capturedAlertCallback).toBeTruthy()
     if (capturedAlertCallback) {

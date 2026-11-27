@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.12.0 - 2026-11-27
+
+Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
+
+### Acessibilidade
+
+- Adicionados papéis, nomes acessíveis, dicas e estados aos controles reutilizáveis e às principais ações de listas, produtos, lembretes e comparação.
+- Checkboxes de coleta anunciam o produto e seu estado marcado/desmarcado.
+- Ampliadas as áreas de toque principais para pelo menos 44 × 44 pontos e adicionados indicadores de foco visível na web.
+- Alertas e mensagens de validação passam a expor semântica e anúncios para tecnologias assistivas.
+- Ajustados textos e placeholders para manter contraste AA nas combinações verificadas.
+- A verificação de contraste agora separa texto normal (4,5:1), texto grande (3:1) e componentes gráficos/indicadores de foco (3:1).
+- Contas e comparação de preços receberam rótulos contextuais, estados de checkbox, alvos de toque e foco visível; a calculadora e formulários identificam ações e campos em português.
+
+### Qualidade e documentação
+
+- Adicionado comando `npm run check:a11y:contrast` e execução da verificação WCAG AA no workflow de pull requests.
+- Adicionados testes de acessibilidade para botões, campos, alertas, itens de lista, filtros de lembretes, contas, comparação de preços e calculadora.
+- Ampliada a suíte E2E web para verificar sequência de foco por teclado, indicador visual de foco e disponibilidade dos controles com ampliação de 200%.
+- Documentado o roteiro de validação manual com TalkBack, teclado, leitor de tela e ampliação. A execução manual permanece pendente.
+
 ## 1.11.0 - 2026-11-27
 
 Implementação da mini-spec 20: backup e restauração local.

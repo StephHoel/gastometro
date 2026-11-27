@@ -1,4 +1,4 @@
-import { TouchableOpacityProps } from 'react-native'
+import type { TouchableOpacityProps } from 'react-native'
 
 export interface IconsProps extends TouchableOpacityProps {
   action?: () => void

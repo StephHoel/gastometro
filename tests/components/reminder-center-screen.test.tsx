@@ -1,4 +1,5 @@
 import React, { type ReactNode } from 'react'
+import type { TextProps } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
 import ReminderCenter from '@/app/reminders'
 import { REMINDERS } from '@/constants/text/reminders'
@@ -29,10 +30,10 @@ jest.mock('@/components/Row', () => ({
 }))
 
 jest.mock('@/components/TextWhite', () => ({
-  TextWhite: ({ children }: { children: ReactNode }) => {
+  TextWhite: ({ children, accessibilityLiveRegion, accessibilityRole }: { children: ReactNode; accessibilityLiveRegion?: TextProps['accessibilityLiveRegion']; accessibilityRole?: TextProps['accessibilityRole'] }) => {
     const ReactModule = jest.requireActual('react') as typeof import('react')
     const { Text } = jest.requireActual('react-native') as typeof import('react-native')
-    return ReactModule.createElement(Text, null, children)
+    return ReactModule.createElement(Text, { accessibilityLiveRegion, accessibilityRole }, children)
   },
 }))
 
@@ -60,21 +61,24 @@ describe('ReminderCenter screen', () => {
 
     const { getByText } = await render(<ReminderCenter />)
 
-    expect(getByText(REMINDERS.center_empty)).toBeTruthy()
+    expect(getByText(REMINDERS.center_empty).props.accessibilityLiveRegion).toBe('polite')
   })
 
   it('aplica filtros enabled, disabled e overdue', async () => {
-    const { getByText, queryByText } = await render(<ReminderCenter />)
+    const { getByText, queryByText, getByRole } = await render(<ReminderCenter />)
 
-    await fireEvent.press(getByText(REMINDERS.filter_label.enabled))
+    const enabledFilter = getByRole('button', { name: `Filtrar lembretes: ${REMINDERS.filter_label.enabled}` })
+    expect(enabledFilter.props.accessibilityState).toEqual({ selected: false })
+    await fireEvent.press(enabledFilter)
+    expect(getByRole('button', { name: `Filtrar lembretes: ${REMINDERS.filter_label.enabled}` }).props.accessibilityState).toEqual({ selected: true })
     expect(getByText('Ativo')).toBeTruthy()
     expect(queryByText('Desativado')).toBeNull()
 
-    await fireEvent.press(getByText(REMINDERS.filter_label.disabled))
+    await fireEvent.press(getByRole('button', { name: `Filtrar lembretes: ${REMINDERS.filter_label.disabled}` }))
     expect(getByText('Desativado')).toBeTruthy()
     expect(queryByText('Ativo')).toBeNull()
 
-    await fireEvent.press(getByText(REMINDERS.filter_label.overdue))
+    await fireEvent.press(getByRole('button', { name: `Filtrar lembretes: ${REMINDERS.filter_label.overdue}` }))
     expect(getByText('Vencido')).toBeTruthy()
     expect(queryByText('Ativo')).toBeNull()
   })
