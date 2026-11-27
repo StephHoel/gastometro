@@ -347,6 +347,13 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.keyboard.press("Enter")
     await page.getByText(/Preço por Unidade:\s*R\$\s*5,00/).waitFor()
 
+    await page.keyboard.press("Shift+Tab")
+    assert.equal(
+      await clearButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Shift+Tab deve retornar o foco para a ação anterior",
+    )
+
     await page.evaluate(() => {
       document.documentElement.style.zoom = "200%"
     })
@@ -392,6 +399,16 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
         if (!(await control.isVisible())) continue
         const bounds = await control.boundingBox()
         assert.ok(bounds && bounds.width > 0 && bounds.height > 0, "Controle sem área visível em " + route.path)
+        const isIconOnlyButton = await control.evaluate((element: Element) =>
+          element.tagName.toLowerCase() === "button" &&
+          Boolean(element.getAttribute("aria-label")) &&
+          !(element.textContent ?? "").trim()
+        )
+        const isCheckbox = (await control.getAttribute("role")) === "checkbox"
+        if (isIconOnlyButton || isCheckbox) {
+          assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44,
+            "Alvos de ícone e checkbox devem medir ao menos 44 × 44 px em " + route.path)
+        }
         await control.scrollIntoViewIfNeeded()
         assert.equal(await control.isVisible(), true, "Controle deve permanecer acessível após rolagem em " + route.path)
       }
