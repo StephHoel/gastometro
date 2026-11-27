@@ -131,6 +131,14 @@ function loadPlaywright(): any {
   return require(packageEntry)
 }
 
+async function waitForDocumentTitle(page: any, expectedTitle: string): Promise<void> {
+  await page.waitForFunction(
+    (title: string) => document.title === title,
+    expectedTitle,
+    { timeout: 10000 },
+  )
+}
+
 async function runScenario(
   browser: any,
   name: string,
@@ -198,7 +206,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(response.status(), 200)
     await page.getByText("Total Geral:", { exact: false }).waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
-    assert.equal(await page.title(), "Gastômetro")
+    await waitForDocumentTitle(page, "Gastômetro")
   })
 
   await run("rota profunda abre diretamente", async page => {
@@ -206,7 +214,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.ok(response.status() === 200 || response.status() === 404)
     await page.getByText("Calculadora", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    assert.equal(await page.title(), "Calculadora")
+    await waitForDocumentTitle(page, "Calculadora")
   })
 
   await run("atualização mantém a rota profunda", async page => {
@@ -216,7 +224,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.reload({ waitUntil: "networkidle" })
     await page.getByText("Calculadora", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    assert.equal(await page.title(), "Calculadora")
+    await waitForDocumentTitle(page, "Calculadora")
   })
 
   await run("rota de listas abre diretamente", async page => {
@@ -224,7 +232,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.ok(response.status() === 200 || response.status() === 404)
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-    assert.equal(await page.title(), "Listas")
+    await waitForDocumentTitle(page, "Listas")
   })
 
   await run("atualização mantém a rota de listas", async page => {
@@ -234,7 +242,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.reload({ waitUntil: "networkidle" })
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-    assert.equal(await page.title(), "Listas")
+    await waitForDocumentTitle(page, "Listas")
   })
 
   await run("navegação entre telas e histórico do navegador funcionam", async page => {
