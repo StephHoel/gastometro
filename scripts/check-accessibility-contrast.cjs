@@ -61,6 +61,12 @@ const checks = [
   { category: 'Componente gráfico e foco', label: 'Ícone secundário em cartão', foreground: palette.slate400, background: palette.slate800, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Indicador de seleção em cartão', foreground: palette.active, background: palette.slate800, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Ícone em lista selecionada', foreground: palette.slate300, background: palette.slate600, minimum: 3 },
+  { category: 'Texto normal', label: 'Texto de formulário em cartão', foreground: palette.white, background: palette.slate800, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Texto claro em campo escuro', foreground: palette.slate300, background: palette.slate700, minimum: 4.5 },
+  { category: 'Texto normal', label: 'Mensagem de erro em cartão', foreground: palette.red400, background: palette.slate800, minimum: 4.5 },
+  { category: 'Componente gráfico e foco', label: 'Indicador de foco em campo escuro', foreground: palette.active, background: palette.slate700, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Checkbox ativo em campo escuro', foreground: palette.active, background: palette.slate700, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Ícone de erro em cartão', foreground: palette.red400, background: palette.slate800, minimum: 3 },
 ]
 
 let failed = false
