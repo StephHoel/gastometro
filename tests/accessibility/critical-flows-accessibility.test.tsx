@@ -62,6 +62,6 @@ describe('Auditoria de acessibilidade dos fluxos críticos', () => {
     await fireEvent.changeText(price, '12,00')
     await fireEvent.changeText(quantity, '3')
     await fireEvent.press(getByRole('button', { name: 'Calcular preço por unidade' }))
-    expect(getByText(/Preço por Unidade:\\s*R\\$\\s*4,00/).props.accessibilityLiveRegion).toBe('polite')
+    expect(getByText(/Preço por Unidade:\s*R\$\s*4,00/).props.accessibilityLiveRegion).toBe('polite')
   })
 })

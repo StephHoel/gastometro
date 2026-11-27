@@ -101,7 +101,7 @@ export function Back({ action, size = 35, accessibilityLabel = 'Voltar', ...prop
   )
 }
 
-export function Market({ action, size = 35, accessibilityLabel = 'Lugar', ...props }: IconsProps) {
+export function Market({ action, size = 35, accessibilityLabel = 'Abrir comparação de preços', ...props }: IconsProps) {
   return (
     <IconButton
       {...props}
@@ -113,7 +113,7 @@ export function Market({ action, size = 35, accessibilityLabel = 'Lugar', ...pro
   )
 }
 
-export function Cart({ action, size = 35, accessibilityLabel = 'Carrinho', ...props }: IconsProps) {
+export function Cart({ action, size = 35, accessibilityLabel = 'Abrir comparação do carrinho', ...props }: IconsProps) {
   return (
     <IconButton
       {...props}

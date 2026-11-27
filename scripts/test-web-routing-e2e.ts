@@ -369,10 +369,9 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     ]
 
     await page.setViewportSize({ width: 640, height: 480 })
-    await page.evaluate(() => { document.documentElement.style.zoom = "200%" })
-
     for (const route of routes) {
       await page.goto(BASE_URL + route.path, { waitUntil: "networkidle" })
+      await page.evaluate(() => { document.documentElement.style.zoom = "200%" })
       await page.locator(route.selector).first().waitFor()
       await page.keyboard.press("Tab")
 
