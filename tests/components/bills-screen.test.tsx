@@ -61,7 +61,7 @@ describe('Bills screen', () => {
     await fireEvent.press(screen.getByText('Salvar alterações'))
     expect(useBillStore.getState().bills[0].title).toBe('Internet fibra')
 
-    await fireEvent.press(screen.getAllByLabelText('Marcar conta Internet fibra como paga'))
+    await fireEvent.press(screen.getByLabelText('Marcar conta Internet fibra como paga'))
     expect(useBillStore.getState().bills[0].paid).toBe(true)
     expect(screen.getByText('Total pago')).toBeTruthy()
 

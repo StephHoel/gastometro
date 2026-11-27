@@ -7,7 +7,7 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
 
   switch (type) {
     case "Success":
-      typeColor = "bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+      typeColor = "bg-lime-400"
       break
     case "Fail":
       typeColor = "bg-red-600"
@@ -24,7 +24,7 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
   return (
     <TouchableOpacity
       accessibilityRole="button"
-      className={`${className} h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
+      className={`${className} h-12 ${typeColor} focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400 items-center justify-center flex-row mx-5 rounded-2xl`}
       activeOpacity={0.7}
       {...rest}
     >

@@ -117,6 +117,7 @@ export default function PriceComparison() {
                       <Delete
                         accessibilityRole="button"
                         accessibilityLabel={'Remover comparação de ' + entry.itemName}
+                        accessibilityHint="Remove este item e seus preços associados"
                         size={24}
                         action={() => onDeleteEntry(entry.id, entry.itemName)}
                       />
