@@ -45,7 +45,7 @@ describe('Calculator accessibility', () => {
     await fireEvent.press(getByRole('button', { name: 'Limpar campos da calculadora' }))
 
     expect(getByText('Preço por Unidade: R$ ??')).toBeTruthy()
-    expect(priceInput.props.value).toBe('')
-    expect(quantityInput.props.value).toBe('')
+    expect(getByLabelText('Preço da embalagem').props.value).toBe('')
+    expect(getByLabelText('Quantidade de unidades').props.value).toBe('')
   })
 })
