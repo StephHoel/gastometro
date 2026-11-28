@@ -56,6 +56,8 @@ export default function Calculator() {
             name="price"
             nameField={NameField.Price}
             placeholder={CALC.placeholder.price}
+            accessibilityLabel="Preço da embalagem"
+            accessibilityHint="Informe o preço total da embalagem"
             keyboardType="number-pad"
             onSubmit={() => setFocus("quantity")}
             returnKeyType={"next"}
@@ -66,25 +68,40 @@ export default function Calculator() {
             name="quantity"
             nameField={NameField.Quantity}
             placeholder={CALC.placeholder.quantity}
+            accessibilityLabel="Quantidade de unidades"
+            accessibilityHint="Informe quantas unidades há na embalagem"
             keyboardType="number-pad"
             onSubmit={() => handleSubmit(onCalculate)()}
             returnKeyType={"done"}
           />
 
           <View className="flex-1 flex-row justify-between">
-            <Button type="Normal" onPress={handleClear} className="flex-1 border text-sm mr-2">
+            <Button
+              type="Normal"
+              onPress={handleClear}
+              accessibilityLabel="Limpar campos da calculadora"
+              accessibilityHint="Apaga os valores informados e o resultado atual"
+              className="flex-1 border text-sm mr-2"
+            >
               <Button.Icon><TrashIcon size={SIZE.iconCalculator} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">{CALC.button.clear}</Button.Text>
             </Button>
 
-            <Button onPress={() => handleSubmit(onCalculate)()} className="flex-1 border text-xl ml-2">
+            <Button
+              onPress={() => handleSubmit(onCalculate)()}
+              accessibilityLabel="Calcular preço por unidade"
+              accessibilityHint="Divide o preço informado pela quantidade"
+              className="flex-1 border text-xl ml-2"
+            >
               <Button.Icon><CalculatorIcon size={SIZE.iconCalculator} color={COLORS.black} /></Button.Icon>
               <Button.Text className="text-2xl">{CALC.button.submit}</Button.Text>
             </Button>
           </View>
 
           <Card className="mx-5 p-4">
-            <TextWhite>{CALC.answer(answer == null ? "R$ ??" : `${SetCurrency(answer)}`)}</TextWhite>
+            <TextWhite accessibilityLiveRegion="polite">
+              {CALC.answer(answer == null ? "R$ ??" : `${SetCurrency(answer)}`)}
+            </TextWhite>
           </Card>
         </View>
       </ScrollView>

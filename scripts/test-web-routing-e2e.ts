@@ -131,6 +131,48 @@ function loadPlaywright(): any {
   return require(packageEntry)
 }
 
+async function waitForDocumentTitle(page: any, expectedTitle: string): Promise<void> {
+  await page.waitForFunction(
+    (title: string) => document.title === title,
+    expectedTitle,
+    { timeout: 10000 },
+  )
+}
+
+async function auditWebAccessibility(page: any): Promise<void> {
+  const axePath = (process.env.PATH ?? "")
+    .split(delimiter)
+    .map((directory: string) => path.resolve(directory, "..", "axe-core", "axe.min.js"))
+    .find((candidate: string) => fs.existsSync(candidate))
+
+  if (!axePath) {
+    throw new Error("axe-core não foi encontrado. Execute a suíte pelo script npm.")
+  }
+
+  await page.addScriptTag({ path: axePath })
+  const results = await page.evaluate(async () => {
+    const axe = (window as any).axe
+    return axe.run(document, {
+      runOnly: {
+        type: "tag",
+        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+      },
+    })
+  })
+
+  const violations = results.violations.map((violation: any) => ({
+    id: violation.id,
+    impact: violation.impact,
+    description: violation.description,
+    nodes: violation.nodes.map((node: any) => ({
+      target: node.target,
+      summary: node.failureSummary,
+    })),
+  }))
+
+  assert.deepEqual(violations, [], "Violações WCAG encontradas: " + JSON.stringify(violations, null, 2))
+}
+
 async function runScenario(
   browser: any,
   name: string,
@@ -198,7 +240,8 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.equal(response.status(), 200)
     await page.getByText("Total Geral:", { exact: false }).waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/")
-    assert.equal(await page.title(), "Gastômetro")
+    await waitForDocumentTitle(page, "Gastômetro")
+    await auditWebAccessibility(page)
   })
 
   await run("rota profunda abre diretamente", async page => {
@@ -206,7 +249,8 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.ok(response.status() === 200 || response.status() === 404)
     await page.getByText("Calculadora", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    assert.equal(await page.title(), "Calculadora")
+    await waitForDocumentTitle(page, "Calculadora")
+    await auditWebAccessibility(page)
   })
 
   await run("atualização mantém a rota profunda", async page => {
@@ -216,7 +260,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.reload({ waitUntil: "networkidle" })
     await page.getByText("Calculadora", { exact: true }).last().waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
-    assert.equal(await page.title(), "Calculadora")
+    await waitForDocumentTitle(page, "Calculadora")
   })
 
   await run("rota de listas abre diretamente", async page => {
@@ -224,7 +268,8 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     assert.ok(response.status() === 200 || response.status() === 404)
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-    assert.equal(await page.title(), "Listas")
+    await waitForDocumentTitle(page, "Listas")
+    await auditWebAccessibility(page)
   })
 
   await run("atualização mantém a rota de listas", async page => {
@@ -234,7 +279,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.reload({ waitUntil: "networkidle" })
     await page.getByPlaceholder("Nome da lista").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/lists")
-    assert.equal(await page.title(), "Listas")
+    await waitForDocumentTitle(page, "Listas")
   })
 
   await run("navegação entre telas e histórico do navegador funcionam", async page => {
@@ -259,6 +304,148 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.waitForURL("**/gastometro/calculator")
     await page.getByPlaceholder("Preço da Embalagem").waitFor()
     assert.equal(new URL(page.url()).pathname, BASE_PATH + "/calculator")
+  })
+
+  await run("calculadora permite navegação por teclado, foco visível e ampliação visual de 200%", async page => {
+    await page.goto(BASE_URL + "/calculator", { waitUntil: "networkidle" })
+
+    const priceInput = page.getByLabel("Preço da embalagem").last()
+    const quantityInput = page.getByLabel("Quantidade de unidades").last()
+    const clearButton = page.getByRole("button", { name: "Limpar campos da calculadora" })
+    const calculateButton = page.getByRole("button", { name: "Calcular preço por unidade" })
+
+    await priceInput.fill("10,00")
+    await quantityInput.fill("2")
+    await priceInput.focus()
+
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await quantityInput.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco do preço para a quantidade",
+    )
+
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await clearButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco da quantidade para a ação de limpar",
+    )
+
+    await page.keyboard.press("Tab")
+    assert.equal(
+      await calculateButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Tab deve mover o foco para a ação de calcular",
+    )
+
+    const outlineWidth = await page.evaluate(() =>
+      window.getComputedStyle(document.activeElement as Element).outlineWidth
+    )
+    assert.notEqual(outlineWidth, "0px", "O controle focado deve exibir indicador visual")
+
+    await page.keyboard.press("Enter")
+    await page.getByText(/Preço por Unidade:\s*R\$\s*5,00/).waitFor()
+
+    await page.keyboard.press("Shift+Tab")
+    assert.equal(
+      await clearButton.evaluate((element: Element) => element === document.activeElement),
+      true,
+      "Shift+Tab deve retornar o foco para a ação anterior",
+    )
+
+    await page.evaluate(() => {
+      document.documentElement.style.zoom = "200%"
+    })
+    await page.setViewportSize({ width: 640, height: 480 })
+
+    for (const control of [priceInput, quantityInput, clearButton, calculateButton]) {
+      await control.scrollIntoViewIfNeeded()
+      assert.equal(await control.isVisible(), true, "O controle deve continuar disponível com ampliação")
+      const bounds = await control.boundingBox()
+      assert.ok(bounds && bounds.width > 0 && bounds.height > 0, "O controle deve manter dimensões visíveis")
+    }
+  })
+
+  await run("telas principais preservam navegação por teclado e controles com zoom de 200%", async page => {
+    const routes = [
+      { path: "/lists", selector: 'input[placeholder="Nome da lista"]' },
+      { path: "/bills", selector: 'body' },
+      { path: "/reminders", selector: 'body' },
+      { path: "/price-comparison", selector: 'body' },
+    ]
+
+    await page.setViewportSize({ width: 640, height: 480 })
+    for (const route of routes) {
+      await page.goto(BASE_URL + route.path, { waitUntil: "networkidle" })
+      await page.evaluate(() => { document.documentElement.style.zoom = "200%" })
+      await page.locator(route.selector).first().waitFor()
+      await page.waitForFunction(() => document.title.trim().length > 0, undefined, { timeout: 10000 })
+      await auditWebAccessibility(page)
+      await page.keyboard.press("Tab")
+
+      const focusState = await page.evaluate(() => ({
+        tagName: document.activeElement?.tagName,
+        role: document.activeElement?.getAttribute("role"),
+        label: document.activeElement?.getAttribute("aria-label"),
+      }))
+      assert.notEqual(focusState.tagName, "BODY", "A navegação por teclado deve alcançar um controle em " + route.path)
+
+      const controls = page.locator('button, input, textarea, select, [role="button"], [role="checkbox"]')
+      const count = await controls.count()
+      assert.ok(count > 0, "A tela deve oferecer controles interativos em " + route.path)
+
+      for (let index = 0; index < count; index += 1) {
+        const control = controls.nth(index)
+        if (!(await control.isVisible())) continue
+        const bounds = await control.boundingBox()
+        assert.ok(bounds && bounds.width > 0 && bounds.height > 0, "Controle sem área visível em " + route.path)
+        const isIconOnlyButton = await control.evaluate((element: Element) =>
+          element.tagName.toLowerCase() === "button" &&
+          Boolean(element.getAttribute("aria-label")) &&
+          !(element.textContent ?? "").trim()
+        )
+        const isCheckbox = (await control.getAttribute("role")) === "checkbox"
+        if (isIconOnlyButton || isCheckbox) {
+          assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44,
+            "Alvos de ícone e checkbox devem medir ao menos 44 × 44 px em " + route.path)
+        }
+        await control.scrollIntoViewIfNeeded()
+        assert.equal(await control.isVisible(), true, "Controle deve permanecer acessível após rolagem em " + route.path)
+      }
+    }
+  })
+
+
+  await run("audita formulários e diálogos abertos com axe-core", async page => {
+    await page.goto(BASE_URL + "/bills", { waitUntil: "networkidle" })
+    await page.getByLabel("Nome da conta").waitFor()
+    await auditWebAccessibility(page)
+
+    await page.getByRole("button", { name: "Adicionar conta" }).click()
+    await page.getByText("Conta inválida", { exact: true }).waitFor()
+    await page.waitForTimeout(600)
+    await auditWebAccessibility(page)
+    await page.getByRole("button", { name: "OK" }).click()
+
+    await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
+    const listName = page.getByLabel("Nome da nova lista")
+    await listName.fill("Lista acessibilidade")
+    await page.getByRole("button", { name: "Criar lista" }).click()
+    await page.getByRole("button", { name: "Selecionar lista Lista acessibilidade" }).waitFor()
+
+    await listName.fill("Lista reserva")
+    await page.getByRole("button", { name: "Criar lista" }).click()
+    const removeButton = page.getByRole("button", { name: "Remover lista Lista reserva" })
+    await removeButton.click()
+    await page.getByText("Remover lista", { exact: true }).last().waitFor()
+    await page.getByText(/Deseja remover a lista "Lista reserva"\?/).waitFor()
+    await page.waitForTimeout(600)
+    await auditWebAccessibility(page)
+
+    await page.getByRole("button", { name: "Cancelar" }).click()
+    await page.getByText(/Deseja remover a lista "Lista reserva"\?/).waitFor({ state: "detached" })
+    await auditWebAccessibility(page)
   })
 
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
@@ -300,23 +487,24 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await page.goto(BASE_URL + "/", { waitUntil: "networkidle" })
     await page.getByText("Preços", { exact: true }).last().click()
     await page.getByText("Nenhum lugar cadastrado ainda.", { exact: true }).waitFor()
+    await auditWebAccessibility(page)
 
     const places = ["Mercado A", "Mercado B", "Mercado C", "Mercado D"]
     for (const place of places) {
       await page.getByRole("button", { name: "Cadastrar lugar" }).last().click()
-      await page.getByLabel("Lugar Input").last().fill(place)
+      await page.getByRole("textbox", { name: "Nome do lugar", exact: true }).fill(place)
       await page.getByText("Adicionar lugar", { exact: true }).last().click()
       await page.getByText(place, { exact: true }).last().waitFor()
       await page.goto(BASE_URL + "/price-comparison", { waitUntil: "networkidle" })
     }
 
     await page.getByRole("button", { name: "Cadastrar item" }).last().click()
-    await page.getByLabel("Nome do item Input").last().fill("Leite")
-    await page.getByLabel("Referência de quantidade Input").last().fill("1 litro")
-    await page.getByLabel("Preço em Mercado A Input").last().fill("5,00")
-    await page.getByLabel("Preço em Mercado B Input").last().fill("5,00")
-    await page.getByLabel("Preço em Mercado C Input").last().fill("10,00")
-    await page.getByLabel("Preço em Mercado D Input").last().fill("10,00")
+    await page.getByLabel("Nome do item").last().fill("Leite")
+    await page.getByLabel("Referência de quantidade").last().fill("1 litro")
+    await page.getByLabel("Preço em Mercado A").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado B").last().fill("5,00")
+    await page.getByLabel("Preço em Mercado C").last().fill("10,00")
+    await page.getByLabel("Preço em Mercado D").last().fill("10,00")
     await page.getByText("Adicionar item", { exact: true }).last().click()
 
     await page.getByText("Mercado A · Melhor preço", { exact: true }).last().waitFor()

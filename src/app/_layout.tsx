@@ -1,7 +1,14 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Stack } from "expo-router"
+import { isWeb } from "@/utils/platform"
 
 export default function RootLayout() {
+  useEffect(() => {
+    if (isWeb && !document.title.trim()) {
+      document.title = "Gastômetro"
+    }
+  }, [])
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />

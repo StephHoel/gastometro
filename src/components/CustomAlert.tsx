@@ -49,29 +49,39 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
 
   return (
     <Modal
+      role="dialog"
+      accessibilityLabel={title}
+      testID="custom-alert-dialog"
       transparent
       animationType="fade"
       visible={isVisible}
       onRequestClose={internalHideAlert}
     >
       <Pressable
+        accessible={false}
         className="flex-1 justify-center items-center bg-black/30"
         onPress={internalHideAlert}
       >
-        <Pressable className="p-5 bg-slate-700 rounded-lg items-center" style={{ width: alertWidth }}>
-          <TextWhite className="text-xl font-bold mb-3">{title}</TextWhite>
+        <View
+          className="p-5 bg-slate-700 rounded-lg items-center"
+          style={{ width: alertWidth }}
+        >
+          <TextWhite accessibilityRole="header" className="text-xl font-bold mb-3" style={{ color: "#FFFFFF", backgroundColor: "#334155" }}>{title}</TextWhite>
 
           {!!message && (
-            <TextWhite className="text-base mb-5 text-center">{message}</TextWhite>
+            <TextWhite accessibilityRole="alert" accessibilityLiveRegion="assertive" className="text-base mb-5 text-center" style={{ color: "#FFFFFF", backgroundColor: "#334155" }}>{message}</TextWhite>
           )}
 
           <View className="w-full flex-col px-4">
             {buttons.map((button, index) => (
               <TouchableOpacity
                 key={index}
-                className={`p-2 mb-2 rounded items-center 
+                style={{ backgroundColor: button.text === INPUTS.buttons.cancel ? "#dc2626" : "#94a3b8" }}
+                accessibilityRole="button"
+                accessibilityLabel={button.text}
+                className={`min-h-11 p-2 mb-2 rounded items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400 
                   ${button.text === INPUTS.buttons.cancel
-                    ? "bg-red-500"
+                    ? "bg-red-600"
                     : "bg-slate-400"}
                   `}
                 onPress={() => {
@@ -82,15 +92,15 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
                 {button.text === alert.share.buttons.whatsapp ? (
                   <Row className="justify-center items-center gap-1">
                     <WhatsappIcon />
-                    <Text className="font-bold text-black/90">{button.text}</Text>
+                    <Text className="font-bold" style={{ color: "#000000", backgroundColor: "#94a3b8" }}>{button.text}</Text>
                   </Row>
                 ) : (
                   <Text
-                    className={`font-bold 
-                    ${button.text === INPUTS.buttons.cancel
-                        ? "text-white"
-                        : "text-black/90"
-                      }`}
+                    className="font-bold"
+                    style={{
+                      color: button.text === INPUTS.buttons.cancel ? "#FFFFFF" : "#000000",
+                      backgroundColor: button.text === INPUTS.buttons.cancel ? "#dc2626" : "#94a3b8",
+                    }}
                   >
                     {button.text}
                   </Text>
@@ -98,7 +108,7 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
               </TouchableOpacity>
             ))}
           </View>
-        </Pressable>
+        </View>
       </Pressable>
     </Modal>
   )

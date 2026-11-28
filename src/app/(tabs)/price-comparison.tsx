@@ -49,13 +49,15 @@ export default function PriceComparison() {
   return (
     <Page>
       <ScrollView
+        accessibilityLabel="Conteúdo da comparação de preços"
+        focusable
         className="flex-1"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 36 }}
       >
         <View className="px-4 pt-4 gap-4">
 
-          <TextWhite className="text-xl font-bold">
+          <TextWhite accessibilityRole="header" className="text-xl font-bold">
             {places.length > 0 ? 'Lugares Cadastrados' : 'Nenhum lugar cadastrado ainda.'}
           </TextWhite>
 
@@ -65,11 +67,13 @@ export default function PriceComparison() {
                 key={place.id}
                 className={`items-center justify-between gap-4 ${index > 0 ? 'pt-2 border-t border-slate-700' : ''}`}
               >
-                <Delete action={() => onDelete(place.id, place.name)} size={24} />
+                <Delete action={() => onDelete(place.id, place.name)} size={24} accessibilityLabel={`Remover lugar ${place.name}`} accessibilityHint="Remove este lugar e os preços associados" />
 
                 <TouchableOpacity
-                  className="flex-1"
-                  accessibilityLabel={'Editar ' + place.name}
+                  className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                  accessibilityRole="button"
+                  accessibilityLabel={'Editar lugar ' + place.name}
+                  accessibilityHint="Abre o formulário de edição do lugar"
                   onPress={() => router.push(ROUTES.PriceComparison.Market.Edit(place.id))}
                 >
                   <TextWhite className="font-semibold text-sm">{place.name}</TextWhite>
@@ -83,12 +87,18 @@ export default function PriceComparison() {
 
           <View className="gap-2">
             <Row className="items-center justify-between gap-2">
-              <TextWhite className="text-xl font-bold">
+              <TextWhite accessibilityRole="header" className="text-xl font-bold">
                 {entries.length > 0 ? 'Itens para Comparar' : 'Nenhum item cadastrado ainda.'}
               </TextWhite>
 
               {entries.length > 0 &&
-                <TouchableOpacity accessibilityRole="button" onPress={() => setEntrySortBy((current) => current === "price" ? "name" : "price")}>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel={entrySortBy === "price" ? "Ordenar itens por nome" : "Ordenar itens por menor preço"}
+                  accessibilityHint={`Ordenação atual: ${entrySortBy === "price" ? "menor preço" : "nome"}. Ative para alternar.`}
+                  className="min-h-11 justify-center px-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                  onPress={() => setEntrySortBy((current) => current === "price" ? "name" : "price")}
+                >
                   <Text className="text-sm text-lime-400">Ordenar por {entrySortBy === "price" ? "nome" : "menor preço"}</Text>
                 </TouchableOpacity>
               }
@@ -109,6 +119,7 @@ export default function PriceComparison() {
                       <Delete
                         accessibilityRole="button"
                         accessibilityLabel={'Remover comparação de ' + entry.itemName}
+                        accessibilityHint="Remove este item e seus preços associados"
                         size={24}
                         action={() => onDeleteEntry(entry.id, entry.itemName)}
                       />
@@ -116,8 +127,9 @@ export default function PriceComparison() {
                       <TouchableOpacity
                         accessibilityRole="button"
                         accessibilityLabel={'Editar comparação de ' + entry.itemName}
+                        accessibilityHint="Abre o formulário para editar os preços deste item"
+                        className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                         onPress={() => router.push(ROUTES.PriceComparison.Cart.Edit(entry.id))}
-                        className="flex-1"
                       >
                         <TextWhite className="font-bold">{entry.itemName}</TextWhite>
 
@@ -154,10 +166,13 @@ export default function PriceComparison() {
 
           <View className="gap-2">
             <Row className="items-center justify-between gap-2">
-              <TextWhite className="text-xl font-bold">Comparação do carrinho completo</TextWhite>
+              <TextWhite accessibilityRole="header" className="text-xl font-bold">Comparação do carrinho completo</TextWhite>
 
               <TouchableOpacity
                 accessibilityRole="button"
+                accessibilityLabel={basketSortBy === "price" ? "Ordenar cesta por nome" : "Ordenar cesta por menor total"}
+                accessibilityHint={`Ordenação atual: ${basketSortBy === "price" ? "menor total" : "nome"}. Ative para alternar.`}
+                className="min-h-11 justify-center px-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
                 onPress={() => setBasketSortBy((current) => current === "price" ? "name" : "price")}
               >
                 <Text className="text-sm text-lime-400">Ordenar por {basketSortBy === "price" ? "nome" : "menor total"}</Text>

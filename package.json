@@ -1,7 +1,7 @@
 {
   "name": "gastometro",
   "main": "expo-router/entry",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "homepage": "https://stephhoel.github.io/gastometro/",
   "scripts": {
     "verify:version-bump": "sh ./scripts/verify-version-bump.sh",
@@ -10,6 +10,7 @@
     "build:local": "sh ./scripts/build-local.sh",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:a11y": "jest tests/accessibility --runInBand",
     "test:coverage": "jest --coverage",
     "test:coverage:csv": "sh ./scripts/test-coverage-csv.sh",
     "clear:coverage": "rm -rf coverage",
@@ -33,7 +34,8 @@
     "check:expo": "npx expo-doctor",
     "deps:audit": "npm audit --omit=dev",
     "check:deps": "npx expo install --check",
-    "test:e2e:web": "npx --yes --package=playwright@1.56.1 --package=tsx -- tsx scripts/test-web-routing-e2e.ts",
+    "test:e2e:web": "npx --yes --package=playwright@1.56.1 --package=tsx --package=axe-core@4.10.3 -- tsx scripts/test-web-routing-e2e.ts",
+    "check:a11y:contrast": "node scripts/check-accessibility-contrast.cjs",
     "delete": "git branch --list \"feat/spec*\" | xargs -r git branch -D",
     "exclusive-committs": "git log --reverse --oneline origin/main..origin/[nome da branch]",
     "push-in-other-branch": "git push origin [branch auxiliar]:[branch de trabalho] --force-with-lease"

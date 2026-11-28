@@ -1,6 +1,6 @@
 import React from 'react'
 import type { ReactNode } from 'react'
-import { render } from '@testing-library/react-native'
+import { fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native-svg', () => {
   const ReactModule = jest.requireActual('react') as typeof import('react')
@@ -48,16 +48,40 @@ describe('Icons and TouchableIcons', () => {
     )).not.toThrow()
   })
 
-  it('deve renderizar os botões de ícone sem quebrar', async () => {
-    const { toJSON } = await render(
+  it('expõe nomes acessíveis e executa ações dos botões de ícone', async () => {
+    const actions = {
+      add: jest.fn(),
+      back: jest.fn(),
+      remove: jest.fn(),
+      share: jest.fn(),
+    }
+    const { getByRole } = await render(
       <>
-        <Add action={jest.fn()} />
-        <Back action={jest.fn()} />
-        <Delete action={jest.fn()} />
-        <Share action={jest.fn()} />
+        <Add action={actions.add} accessibilityLabel="Adicionar produto" />
+        <Back action={actions.back} accessibilityLabel="Voltar para a lista" />
+        <Delete
+          action={actions.remove}
+          accessibilityLabel="Remover produto Arroz"
+          accessibilityHint="Remove Arroz da lista"
+        />
+        <Share action={actions.share} accessibilityLabel="Compartilhar lista atual" />
       </>
     )
 
-    expect(toJSON()).toBeTruthy()
+    const addButton = getByRole('button', { name: 'Adicionar produto' })
+    const backButton = getByRole('button', { name: 'Voltar para a lista' })
+    const removeButton = getByRole('button', { name: 'Remover produto Arroz' })
+    const shareButton = getByRole('button', { name: 'Compartilhar lista atual' })
+
+    expect(removeButton.props.accessibilityHint).toBe('Remove Arroz da lista')
+    await fireEvent.press(addButton)
+    await fireEvent.press(backButton)
+    await fireEvent.press(removeButton)
+    await fireEvent.press(shareButton)
+
+    expect(actions.add).toHaveBeenCalledTimes(1)
+    expect(actions.back).toHaveBeenCalledTimes(1)
+    expect(actions.remove).toHaveBeenCalledTimes(1)
+    expect(actions.share).toHaveBeenCalledTimes(1)
   })
 })

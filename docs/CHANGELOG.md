@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.12.0 - 2026-11-27
+
+Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
+
+### Acessibilidade
+
+- Adicionados papéis, nomes acessíveis, dicas e estados aos controles reutilizáveis e às principais ações de listas, produtos, lembretes e comparação.
+- Checkboxes de coleta anunciam o produto e seu estado marcado/desmarcado.
+- Ampliadas as áreas de toque principais para pelo menos 44 × 44 pontos e adicionados indicadores de foco visível na web.
+- Alertas e mensagens de validação passam a expor semântica e anúncios para tecnologias assistivas.
+- Ajustados textos e placeholders para manter contraste AA nas combinações verificadas.
+- A verificação de contraste agora separa texto normal (4,5:1), texto grande (3:1) e componentes gráficos/indicadores de foco (3:1).
+- Contas e comparação de preços receberam rótulos contextuais, estados de checkbox, alvos de toque e foco visível; a calculadora e formulários identificam ações e campos em português.
+
+### Qualidade e documentação
+
+- Adicionado comando `npm run check:a11y:contrast` e execução da verificação WCAG AA no workflow de pull requests.
+- Adicionada suíte unitária dedicada de acessibilidade para botões, campos, formulários genéricos, gerenciamento de listas, alertas e diálogos, itens de lista, formulários de lembretes, contas, comparação de preços e calculadora, separada dos testes funcionais comuns.
+- Ampliada a auditoria axe-core para as telas de contas e lembretes, além das telas iniciais, listas, calculadora e comparação de preços.
+- Adicionadas verificações E2E de retorno de foco com Shift+Tab e dimensões mínimas de alvos de ícone/checkbox.
+- Ampliada a suíte E2E web para verificar sequência de foco por teclado, indicador visual de foco, disponibilidade dos controles com ampliação de 200% e auditoria axe-core com formulários e diálogos abertos.
+- Adicionado job independente de acessibilidade no GitHub Actions, com execução de `npm run test:a11y` e `npm run check:a11y:contrast`, como dependência obrigatória do build.
+- Documentado o roteiro de validação manual com TalkBack, teclado, leitor de tela e ampliação. A execução manual permanece pendente; a mini-spec não deve ser marcada como concluída até o registro dessa validação.
+
 ## 1.11.0 - 2026-11-27
 
 Implementação da mini-spec 20: backup e restauração local.

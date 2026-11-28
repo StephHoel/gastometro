@@ -75,6 +75,8 @@ export function FormMarket(
         name="market"
         nameField={NameField.Market}
         placeholder={INPUTS.placeholder.market_name}
+        accessibilityLabel="Nome do lugar"
+        accessibilityHint="Informe o nome do mercado ou estabelecimento"
         returnKeyType={"next"}
         onSubmit={() => setFocus("note")}
         maxLength={60}
@@ -90,7 +92,7 @@ export function FormMarket(
         onSubmit={() => handleSubmit(onSubmit)()}
       />
 
-      <CustomButton onPress={() => handleSubmit(onSubmit)()}>
+      <CustomButton onPress={() => handleSubmit(onSubmit)()} accessibilityLabel={buttonTitle} accessibilityHint="Valida e salva os dados do lugar">
         <CustomButton.Icon>{children}</CustomButton.Icon>
         <CustomButton.Text>{buttonTitle}</CustomButton.Text>
       </CustomButton>

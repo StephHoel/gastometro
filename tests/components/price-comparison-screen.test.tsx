@@ -67,12 +67,52 @@ describe('PriceComparison screen', () => {
     expect(screen.getByText('Preço faltando para um ou mais itens')).toBeTruthy()
     expect(screen.getByText('Incompleta')).toBeTruthy()
 
-    const sortButtons = screen.getAllByText(/Ordenar por/)
-    await fireEvent.press(sortButtons[0])
-    expect(screen.getByText('Ordenar por menor preço')).toBeTruthy()
+    const itemSort = screen.getByRole('button', { name: 'Ordenar itens por nome' })
+    const basketSort = screen.getByRole('button', { name: 'Ordenar cesta por nome' })
 
-    await fireEvent.press(screen.getByText('Ordenar por nome'))
-    expect(screen.getByText('Ordenar por menor total')).toBeTruthy()
+    expect(itemSort.props.accessibilityHint).toBe(
+      'Ordenação atual: menor preço. Ative para alternar.',
+    )
+    expect(basketSort.props.accessibilityHint).toBe(
+      'Ordenação atual: menor total. Ative para alternar.',
+    )
+
+    await fireEvent.press(itemSort)
+    expect(screen.getByRole('button', { name: 'Ordenar itens por menor preço' })).toBeTruthy()
+
+    await fireEvent.press(screen.getByRole('button', { name: 'Ordenar cesta por nome' }))
+    expect(screen.getByRole('button', { name: 'Ordenar cesta por menor total' })).toBeTruthy()
+  })
+
+  it('expõe ações contextuais de lugares, itens e ordenação', async () => {
+    usePriceComparisonStore.setState({
+      places: [{ id: 'a', name: 'Mercado A' }],
+      entries: [{
+        id: 'entry-1',
+        itemName: 'Arroz',
+        pricesByPlace: [{ placeId: 'a', price: '10,00' }],
+        createdAt: '',
+        updatedAt: '',
+      }],
+    })
+
+    const screen = await render(<PriceComparison />)
+
+    expect(screen.getByRole('header', { name: 'Lugares Cadastrados' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Itens para Comparar' })).toBeTruthy()
+
+    const removePlace = screen.getByRole('button', { name: 'Remover lugar Mercado A' })
+    const editPlace = screen.getByRole('button', { name: 'Editar lugar Mercado A' })
+    const removeEntry = screen.getByRole('button', { name: 'Remover comparação de Arroz' })
+    const editEntry = screen.getByRole('button', { name: 'Editar comparação de Arroz' })
+
+    expect(removePlace.props.accessibilityHint).toBe('Remove este lugar e os preços associados')
+    expect(editPlace.props.accessibilityHint).toBe('Abre o formulário de edição do lugar')
+    expect(removeEntry.props.accessibilityHint).toBe('Remove este item e seus preços associados')
+    expect(editEntry.props.accessibilityHint).toBe('Abre o formulário para editar os preços deste item')
+
+    expect(screen.getByRole('button', { name: 'Ordenar itens por nome' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Ordenar cesta por nome' })).toBeTruthy()
   })
 
   it('não apresenta diferença quando há somente uma oferta válida', async () => {

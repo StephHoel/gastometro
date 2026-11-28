@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Mantém o texto de orientação dos campos legível em fundos escuros. */
+input::placeholder,
+textarea::placeholder {
+  color: #cbd5e1 !important;
+  opacity: 1;
+}

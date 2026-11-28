@@ -2,8 +2,8 @@
 
 > Status: rascunho vivo. Este arquivo deve ser atualizado sempre que uma decisão de produto, arquitetura, design ou processo mudar.
 >
-> **Versão do App:** 1.11.0
-> **Data:** 2026-11-26
+> **Versão do App:** 1.12.0
+> **Data:** 2026-11-27
 > **Última validação de código e testes (commit `1f5d909`):** TypeScript aprovado; 439 testes em 65 suítes; 91,12% statements, 85,13% branches, 89,53% funções e 92,69% linhas. Expo Doctor aprovado.
 
 Este spec orienta futuras interações com ferramentas de IA como Codex, GitHub Copilot, ChatGPT ou agentes similares. Use-o como fonte primária antes de propor código, refatorações, testes, automações ou mudanças de produto.
@@ -61,7 +61,6 @@ Público esperado:
 
 Todas as funcionalidades abaixo devem ser implementadas futuramente, mas ainda precisam de mini-spec antes da execução:
 
-- acessibilidade e usabilidade assistiva;
 - consistência e validação da documentação técnica;
 - feedback com toast e disparo de lembretes na web.
 
@@ -471,3 +470,7 @@ Fora de escopo:
 - Foco continua Android, com suporte web estático disponível via GitHub Pages e limitações documentadas.
 - Baseline de Android suportado definida em API 29+, com foco em artefatos menores para Android moderno.
 - Todos os comportamentos devem ser preservados, exceto quando a feature aprovada os alterar com confirmação do usuário.
+
+## 13. Acessibilidade e usabilidade assistiva
+
+A mini-spec 21 permanece ativa enquanto a validação manual com TalkBack no Android e leitor de tela no navegador não for registrada. A implementação automatizada inclui uma suíte Jest dedicada em `tests/accessibility/`, separada dos testes unitários funcionais; auditoria axe-core WCAG 2.0/2.1 A e AA nas rotas web principais; cenários E2E de Tab/Shift+Tab, foco visível, alvos de ícone e checkbox de 44 × 44 px e zoom de 200%; e verificação de contraste com combinações explícitas no script `scripts/check-accessibility-contrast.cjs`. Consulte `docs/ACCESSIBILITY.md` para comandos, cobertura e checklist manual. Os testes automatizados não substituem a validação com tecnologias assistivas reais.

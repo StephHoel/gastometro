@@ -1,6 +1,6 @@
-import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps"
-import React, { type PropsWithChildren } from "react"
+import React from "react"
 import { Text, TextProps, TouchableOpacity } from "react-native"
+import { ButtonTouchableProps } from "@/interfaces/ButtonTouchableProps"
 
 function Button({ children, type = "Success", className, ...rest }: ButtonTouchableProps) {
   let typeColor: string
@@ -24,7 +24,7 @@ function Button({ children, type = "Success", className, ...rest }: ButtonToucha
   return (
     <TouchableOpacity
       accessibilityRole="button"
-      className={`${className} h-12 ${typeColor} items-center justify-center flex-row mx-5 rounded-2xl`}
+      className={`${className} h-12 ${typeColor} focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400 items-center justify-center flex-row mx-5 rounded-2xl`}
       activeOpacity={0.7}
       {...rest}
     >
@@ -41,7 +41,7 @@ function ButtonText({ children, className = "text-3xl" }: TextProps) {
   )
 }
 
-function ButtonIcon({ children }: PropsWithChildren) {
+function ButtonIcon({ children }: TextProps) {
   return children
 }
 

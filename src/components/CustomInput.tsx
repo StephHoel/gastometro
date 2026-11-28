@@ -14,6 +14,8 @@ export function CustomInput<TFieldValues extends FieldValues>({
   name,
   nameField,
   placeholder,
+  accessibilityLabel,
+  accessibilityHint,
   maxLength,
   returnKeyType,
   onSubmit,
@@ -46,12 +48,14 @@ export function CustomInput<TFieldValues extends FieldValues>({
             <TextWhite className="p-2">{nameField}:</TextWhite>
 
             <TextInput
-              className={"text-white flex-1 py-2 mr-3 outline-none"}
-              placeholderTextColor={colors.slate[400]}
+              className={"text-white flex-1 py-2 mr-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"}
+              placeholderTextColor={colors.slate[300]}
               placeholder={placeholder}
+              accessibilityLabel={accessibilityLabel ?? String(nameField)}
+              accessibilityHint={accessibilityHint ?? placeholder}
+              importantForAccessibility="yes"
               onChangeText={(text) => onChange(normalizeText(text))}
               value={inputValue}
-              accessibilityLabel={nameField + " Input"}
               maxLength={maxLength}
               ref={ref}
               keyboardType={keyboardType}

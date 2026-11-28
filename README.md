@@ -1,6 +1,6 @@
 # Gastômetro
 
-[![Release](https://img.shields.io/badge/Release-v1.11.0-blue)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/badge/Release-v1.12.0-blue)](docs/CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/Tests-automated-green)](docs/specs/active/05-testes-automatizados.md)
 [![Coverage](https://img.shields.io/badge/Coverage-93.38%25-brightgreen)](docs/coverages/)
 
@@ -33,6 +33,7 @@ Aplicativo mobile para organizar listas de compras de supermercado de forma simp
 - Sincroniza lembretes de forma idempotente, sem reagendar notificações válidas após alterações nos produtos.
 - Valida e migra dados locais do carrinho e dos lembretes, preservando cópias de recuperação antes de reparos e informando o usuário sobre ocorrências.
 - Exporta e restaura backup JSON versionado com listas, produtos, lembretes, contas e comparações de preços, por substituição ou mesclagem com resolução explícita de conflitos.
+- Inclui rótulos e estados acessíveis nos principais controles, suíte unitária dedicada para formulários, listas, alertas e fluxos críticos, auditoria axe-core WCAG A/AA inclusive com diálogos abertos, navegação E2E por teclado e verificação automatizada de contraste WCAG AA. A validação manual com TalkBack e leitor de tela permanece pendente.
 
 ## Stack
 
@@ -54,11 +55,14 @@ Compatibilidade atual de plataforma:
 - Build Android local e preview priorizam arquitetura `arm64-v8a` para reduzir tamanho de artefato.
 - Build de produção Android usa AAB (`app-bundle`) para distribuição mais eficiente.
 
+## Em implementação (aguardando validação dos PRs)
+
+- [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-usabilidade-assistiva.md)
+
 ## Funcionalidades planejadas
 
 As funcionalidades planejadas são documentadas em mini-specs dentro de [`docs/specs/planned/`](docs/specs/planned/):
 
-- [Acessibilidade e usabilidade assistiva](docs/specs/planned/21-acessibilidade-e-usabilidade-assistiva.md)
 - [Consistência e validação da documentação técnica](docs/specs/planned/22-consistencia-documentacao-tecnica.md)
 - [Feedback com toast e disparo de lembretes na web](docs/specs/planned/23-feedback-toast-e-lembretes-web.md)
 
@@ -79,6 +83,8 @@ Funcionalidades concluídas recentemente:
 - Notificações e lembretes locais (mini-spec 10 em `docs/specs/done/`).
 - Service Worker para funcionamento offline em web (mini-spec 13 em `docs/specs/done/`).
 - Refatoração de formulários para `react-hook-form` (mini-spec 16 em `docs/specs/done/`).
+
+Consulte também o [guia de acessibilidade](docs/ACCESSIBILITY.md) para os critérios e a validação manual.
 
 Antes de implementar uma feature maior, consulte o [`docs/SPEC.md`](docs/SPEC.md) e a mini-spec correspondente.
 
