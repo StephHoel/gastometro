@@ -54,6 +54,7 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
       visible={isVisible}
       onRequestClose={internalHideAlert}
       accessibilityViewIsModal
+      testID="custom-alert-modal"
     >
       <Pressable
         accessible={false}

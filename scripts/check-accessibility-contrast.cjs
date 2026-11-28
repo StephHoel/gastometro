@@ -72,9 +72,9 @@ const checks = [
   { category: 'Texto normal', label: 'Mensagem de confirmação em diálogo', foreground: palette.white, background: palette.slate700, minimum: 4.5 },
   { category: 'Texto normal', label: 'Texto de ação em filtro selecionado', foreground: palette.black, background: palette.active, minimum: 4.5 },
   { category: 'Texto normal', label: 'Texto de ação em filtro não selecionado', foreground: palette.white, background: palette.slate600, minimum: 4.5 },
-  { category: 'Componente gráfico e foco', label: 'Foco em controle sobre lista selecionada', foreground: palette.active, background: palette.slate600, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Foco em controle sobre lista selecionada', foreground: palette.white, background: palette.slate600, minimum: 3 },
   { category: 'Componente gráfico e foco', label: 'Checkbox sobre campo de formulário', foreground: palette.active, background: palette.slate700, minimum: 3 },
-  { category: 'Componente gráfico e foco', label: 'Indicador de seleção em filtro escuro', foreground: palette.active, background: palette.slate600, minimum: 3 },
+  { category: 'Componente gráfico e foco', label: 'Indicador de seleção em filtro escuro', foreground: palette.white, background: palette.slate600, minimum: 3 },
 ]
 
 let failed = false

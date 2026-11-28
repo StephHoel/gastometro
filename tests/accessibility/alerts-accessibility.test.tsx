@@ -1,6 +1,5 @@
 import React, { createRef } from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import { Modal } from 'react-native'
 import { CustomAlert } from '@/components/CustomAlert'
 import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 
@@ -20,7 +19,7 @@ describe('Acessibilidade de alertas e diálogos', () => {
     expect(screen.getByText('Remover conta').props.accessibilityRole).toBe('header')
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityRole).toBe('alert')
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityLiveRegion).toBe('assertive')
-    expect(screen.UNSAFE_getByType(Modal).props.accessibilityViewIsModal).toBe(true)
+    expect(screen.getByTestId('custom-alert-modal').props.accessibilityViewIsModal).toBe(true)
   })
 
   it('oferece ações com nomes claros e executa confirmação uma única vez', async () => {

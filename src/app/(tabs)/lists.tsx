@@ -177,7 +177,7 @@ export default function Lists() {
                     accessibilityRole="button"
                     accessibilityLabel={`Selecionar lista ${item.name}`}
                     accessibilityState={{ selected: isActive }}
-                    className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-400"
+                    className="flex-1 min-h-11 justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
                   >
                     <TextWhite className="text-base font-semibold">
                       {item.name}
