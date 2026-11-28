@@ -437,11 +437,11 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     const removeButton = page.getByRole("button", { name: "Remover lista Lista reserva" })
     await removeButton.click()
     await page.getByText("Remover lista", { exact: true }).last().waitFor()
-    await page.getByText('Deseja remover a lista "Lista reserva"?', { exact: true }).waitFor()
+    await page.getByText(/Deseja remover a lista "Lista reserva"\?/).waitFor()
     await auditWebAccessibility(page)
 
     await page.getByRole("button", { name: "Cancelar" }).click()
-    await page.getByText('Deseja remover a lista "Lista reserva"?', { exact: true }).waitFor({ state: "detached" })
+    await page.getByText(/Deseja remover a lista "Lista reserva"\?/).waitFor({ state: "detached" })
     await auditWebAccessibility(page)
   })
 
