@@ -17,10 +17,10 @@ Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
 ### Qualidade e documentação
 
 - Adicionado comando `npm run check:a11y:contrast` e execução da verificação WCAG AA no workflow de pull requests.
-- Adicionada suíte unitária dedicada de acessibilidade para botões, campos, alertas, itens de lista, formulários de lembretes, contas, comparação de preços e calculadora, separada dos testes funcionais comuns.
+- Adicionada suíte unitária dedicada de acessibilidade para botões, campos, formulários genéricos, gerenciamento de listas, alertas e diálogos, itens de lista, formulários de lembretes, contas, comparação de preços e calculadora, separada dos testes funcionais comuns.
 - Ampliada a auditoria axe-core para as telas de contas e lembretes, além das telas iniciais, listas, calculadora e comparação de preços.
 - Adicionadas verificações E2E de retorno de foco com Shift+Tab e dimensões mínimas de alvos de ícone/checkbox.
-- Ampliada a suíte E2E web para verificar sequência de foco por teclado, indicador visual de foco e disponibilidade dos controles com ampliação de 200%.
+- Ampliada a suíte E2E web para verificar sequência de foco por teclado, indicador visual de foco, disponibilidade dos controles com ampliação de 200% e auditoria axe-core com formulários e diálogos abertos.
 - Adicionado job independente de acessibilidade no GitHub Actions, com execução de `npm run test:a11y` e `npm run check:a11y:contrast`, como dependência obrigatória do build.
 - Documentado o roteiro de validação manual com TalkBack, teclado, leitor de tela e ampliação. A execução manual permanece pendente; a mini-spec não deve ser marcada como concluída até o registro dessa validação.
 

@@ -90,19 +90,19 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 
 ## Matriz de rastreabilidade da cobertura assistiva
 
-A tabela diferencia os testes dedicados de acessibilidade dos testes funcionais comuns. Os caminhos listados correspondem aos arquivos presentes na suíte dedicada; itens identificados como pendentes serão adicionados nas próximas etapas desta implementação.
+A tabela diferencia os testes dedicados de acessibilidade dos testes funcionais comuns. Os caminhos listados correspondem aos arquivos presentes na suíte dedicada.
 
 | Fluxo/tela | Testes específicos de acessibilidade | Auditoria web axe-core | Teclado/zoom | Validação manual |
 |---|---|---|---|---|
 | Tela inicial e lista ativa | `critical-flows-accessibility.test.tsx` | Rota inicial e telas principais | Fluxos E2E web | TalkBack e leitor de tela |
-| Gerenciamento de listas | A criar: `lists-accessibility.test.tsx` | Rota de listas | Fluxos E2E web | TalkBack e teclado |
+| Gerenciamento de listas | `lists-accessibility.test.tsx` | Rota de listas | Fluxos E2E web | TalkBack e teclado |
 | Calculadora | `critical-flows-accessibility.test.tsx` | Rota da calculadora | Fluxos E2E web | TalkBack e teclado |
 | Contas | `bills-accessibility.test.tsx` | Rota de contas | Fluxos E2E web | TalkBack e teclado |
 | Central de lembretes | `reminders-accessibility.test.tsx` | Rota de lembretes | Fluxos E2E web | TalkBack e teclado |
 | Itens de lembrete | `reminder-items-accessibility.test.tsx` | Fluxos de lembretes | Fluxos E2E web | TalkBack e teclado |
-| Formulários | A criar: `forms-accessibility.test.tsx` | Formulários abertos, etapa E2E | Fluxos E2E web | TalkBack e teclado |
+| Formulários | `forms-accessibility.test.tsx` | Formulários e estados de validação abertos | Fluxos E2E web | TalkBack e teclado |
 | Comparação de preços | `price-comparison-accessibility.test.tsx` | Rota de comparação | Fluxos E2E web | TalkBack e teclado |
-| Alertas e diálogos | A criar: `alerts-accessibility.test.tsx` | Diálogos abertos, etapa E2E | Foco e retorno, etapa E2E | TalkBack e leitor de tela |
+| Alertas e diálogos | `alerts-accessibility.test.tsx` | Diálogos abertos | Foco e retorno após fechar diálogo | TalkBack e leitor de tela |
 | Componentes reutilizáveis | `critical-flows-accessibility.test.tsx` | Em cada tela consumidora | Em cada tela consumidora | TalkBack e leitor de tela |
 
 A cobertura unitária específica deve verificar nome, papel, dica, estado e comportamento assistivo aplicável. A mera renderização do componente não caracteriza cobertura de acessibilidade.
