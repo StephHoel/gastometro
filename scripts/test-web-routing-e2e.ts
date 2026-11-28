@@ -424,6 +424,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
 
     await page.getByRole("button", { name: "Adicionar conta" }).click()
     await page.getByText("Conta inválida", { exact: true }).waitFor()
+    await page.waitForTimeout(600)
     await auditWebAccessibility(page)
     await page.getByRole("button", { name: "OK" }).click()
 
@@ -439,6 +440,7 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     await removeButton.click()
     await page.getByText("Remover lista", { exact: true }).last().waitFor()
     await page.getByText(/Deseja remover a lista "Lista reserva"\?/).waitFor()
+    await page.waitForTimeout(600)
     await auditWebAccessibility(page)
 
     await page.getByRole("button", { name: "Cancelar" }).click()

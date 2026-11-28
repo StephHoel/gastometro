@@ -49,6 +49,9 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
 
   return (
     <Modal
+      role="dialog"
+      accessibilityLabel={title}
+      testID="custom-alert-dialog"
       transparent
       animationType="fade"
       visible={isVisible}
@@ -60,10 +63,6 @@ export function CustomAlert({ ref }: { ref: ForwardedRef<CustomAlertRef> }) {
         onPress={internalHideAlert}
       >
         <View
-          role="dialog"
-          aria-modal={true}
-          accessibilityLabel={title}
-          testID="custom-alert-dialog"
           className="p-5 bg-slate-700 rounded-lg items-center"
           style={{ width: alertWidth }}
         >
