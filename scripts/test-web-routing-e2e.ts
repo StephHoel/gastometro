@@ -415,6 +415,36 @@ async function runSuite(browser: any, cycle: number): Promise<void> {
     }
   })
 
+
+  await run("audita formulários e diálogos abertos com axe-core", async page => {
+    await page.goto(BASE_URL + "/bills", { waitUntil: "networkidle" })
+    await page.getByLabel("Nome da conta").waitFor()
+    await auditWebAccessibility(page)
+
+    await page.getByRole("button", { name: "Adicionar conta" }).click()
+    await page.getByText("Conta inválida", { exact: true }).waitFor()
+    await auditWebAccessibility(page)
+    await page.getByRole("button", { name: "OK" }).click()
+
+    await page.goto(BASE_URL + "/lists", { waitUntil: "networkidle" })
+    const listName = page.getByLabel("Nome da nova lista")
+    await listName.fill("Lista acessibilidade")
+    await page.getByRole("button", { name: "Criar lista" }).click()
+    await page.getByRole("button", { name: "Selecionar lista Lista acessibilidade" }).waitFor()
+
+    await listName.fill("Lista reserva")
+    await page.getByRole("button", { name: "Criar lista" }).click()
+    const removeButton = page.getByRole("button", { name: "Remover lista Lista reserva" })
+    await removeButton.click()
+    await page.getByText("Remover lista", { exact: true }).last().waitFor()
+    await page.getByText('Deseja remover a lista "Lista reserva"?', { exact: true }).waitFor()
+    await auditWebAccessibility(page)
+
+    await page.getByRole("button", { name: "Cancelar" }).click()
+    await page.getByText('Deseja remover a lista "Lista reserva"?', { exact: true }).waitFor({ state: "detached" })
+    await auditWebAccessibility(page)
+  })
+
   await run("rota inexistente executa o fallback SPA e preserva o caminho", async page => {
     const invalidPath = BASE_PATH + "/rota-inexistente-e2e"
     let fallbackStatus: number | undefined
