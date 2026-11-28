@@ -77,7 +77,6 @@ export default function ReminderCenter() {
       </Row>
 
       <FlatList
-        accessibilityRole="list"
         accessibilityLabel="Lista de lembretes"
         focusable
         data={filteredReminders}

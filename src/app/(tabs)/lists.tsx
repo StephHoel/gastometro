@@ -149,7 +149,6 @@ export default function Lists() {
       )}
 
       <FlatList
-        accessibilityRole="list"
         accessibilityLabel="Listas de compras"
         focusable
         data={cartStore.lists}
