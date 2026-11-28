@@ -1,0 +1,123 @@
+# Mini-spec: APK menor com foco em Android moderno e web
+
+Número: 04
+Status: concluída
+
+## Problema
+
+O APK atual pode ficar maior do que o necessário para o escopo do projeto. O objetivo agora é reduzir o tamanho do artefato de distribuição, aceitando compatibilidade apenas com versões mais novas do Android e mantendo suporte web.
+
+## Objetivo
+
+Diminuir o tamanho final de instalação/distribuição no Android por meio de ajustes de build e compatibilidade, sem quebrar os fluxos principais do app nem a versão web.
+
+## Comportamento esperado
+
+- O app deve continuar funcional no Android dentro da nova faixa mínima de versão suportada.
+- O processo de build deve gerar artefatos menores que o baseline atual.
+- A versão web deve continuar funcionando com os fluxos principais já existentes.
+- A UX principal (lista, total, edição, calculadora e compartilhamento quando suportado) deve ser preservada.
+
+## Telas afetadas
+
+- Nenhuma tela específica por regra de negócio.
+- Configurações de build Android (Gradle/Expo) e pipeline de release.
+- Fluxo web para validação de compatibilidade após ajustes de build.
+
+## Dados e persistência
+
+- Não alterar formato dos dados persistidos no AsyncStorage.
+- Não alterar chave de persistência (`gastometro`).
+- Não exigir migração de dados para esta entrega.
+
+## Regras de validação
+
+- Definir e documentar a nova baseline de Android suportado (API mínima).
+- Validar que o app instala e abre em ao menos um dispositivo/emulador dentro da nova baseline.
+- Validar que a build web continua gerando e executando sem regressão evidente.
+- Comparar tamanho do artefato final com o baseline anterior e registrar o ganho.
+
+## Critérios de aceite
+
+- Baseline de compatibilidade Android atualizada e documentada.
+- Build Android com redução mensurável de tamanho em relação ao baseline.
+- Fluxos principais validados manualmente no Android suportado.
+- Fluxos principais validados manualmente na web.
+- README/docs atualizados com os novos requisitos de compatibilidade e processo de build.
+
+## Fora de escopo
+
+- Suporte a Android legado fora da nova baseline definida.
+- Mudanças de arquitetura de produto.
+- Refatoração ampla de UI.
+- Introdução de backend/login.
+
+## Riscos e trade-offs
+
+- Aumentar a versão mínima do Android reduz alcance de dispositivos antigos.
+- Algumas otimizações podem mudar formato de distribuição (ex.: preferência por AAB e splits por ABI) e exigir ajuste no processo de teste local.
+- Dependências nativas podem impor limites técnicos para redução adicional de tamanho.
+
+## Observações para IA
+
+- Confirmar com o usuário qual será a baseline mínima de Android (ex.: API 29+ ou API 30+) antes de implementar.
+- Medir baseline de tamanho antes de alterar configurações para evitar comparação imprecisa.
+- Priorizar ganhos de build/configuração antes de considerar troca de bibliotecas.
+- Preservar foco em Android e compatibilidade web do projeto.
+
+## Implementação realizada
+
+- Baseline mínima de Android definida com o usuário em API 29+ (Android 10).
+- Configuração de app atualizada para `minSdkVersion: 29`.
+- Perfis Android do EAS ajustados para priorizar `arm64-v8a` em builds locais/preview.
+- Build Android de produção ajustado para `app-bundle` (AAB).
+- Script local (`scripts/build-local.sh`) ajustado para exportar `ORG_GRADLE_PROJECT_reactNativeArchitectures=arm64-v8a` antes do Gradle.
+- Documentação principal (README e SPEC) atualizada com nova baseline e estratégia de build.
+- Workflows de CI/release revisados e atualizados para reduzir risco operacional durante geração/publicação de artefatos.
+
+## Resultado funcional observado
+
+- Estratégia de distribuição Android ficou alinhada ao objetivo de reduzir tamanho (foco em arquitetura arm64 e uso de AAB em produção).
+- Processo de build ficou mais consistente entre execução local e automação.
+- Compatibilidade web permaneceu documentada como requisito do projeto, sem mudança de contrato funcional.
+
+## Baseline de tamanho medido antes da mudança
+
+- Artefatos em `_apks/` medidos em 2026-06-05: aproximadamente 102 MB por APK.
+- Arquivos usados como baseline:
+  - `gastometro-20260528215752.apk`
+  - `gastometro-20260528215955.apk`
+  - `gastometro-20260529130635.apk`
+  - `gastometro-20260529131239.apk`
+
+## Medição pós-mudança
+
+- Novo APK de referência medido em 2026-06-07: aproximadamente 22 MB.
+- Redução aproximada em relação ao baseline de ~102 MB: 78%.
+
+## Validação manual executada
+
+Data: 2026-06-07
+
+Android (API 29+):
+
+- Instalação do APK: OK.
+- Abertura do app: OK.
+- Fluxo de lista (criar, editar, remover e marcar coletado): OK.
+- Calculadora: OK.
+- Compartilhamento via WhatsApp: OK.
+
+Web:
+
+- Build web: OK.
+- Abertura inicial: OK.
+- Fluxos principais (lista, total, edição e calculadora): OK.
+- Sem regressões visuais críticas observadas: OK.
+
+## Checklist de conclusão
+
+- [x] Baseline mínima Android definida e documentada.
+- [x] Configurações de build Android ajustadas para estratégia de artefato menor.
+- [x] Processo de build/release atualizado em scripts e workflows.
+- [x] Ganho de tamanho comprovado com medição pós-ajuste registrada.
+- [x] Validação manual final em Android 29+ e web registrada.

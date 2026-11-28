@@ -1,0 +1,557 @@
+# Changelog
+
+## 1.12.0 - 2026-11-27
+
+Implementação da mini-spec 21: acessibilidade e usabilidade assistiva.
+
+### Acessibilidade
+
+- Adicionados papéis, nomes acessíveis, dicas e estados aos controles reutilizáveis e às principais ações de listas, produtos, lembretes e comparação.
+- Checkboxes de coleta anunciam o produto e seu estado marcado/desmarcado.
+- Ampliadas as áreas de toque principais para pelo menos 44 × 44 pontos e adicionados indicadores de foco visível na web.
+- Alertas e mensagens de validação passam a expor semântica e anúncios para tecnologias assistivas.
+- Ajustados textos e placeholders para manter contraste AA nas combinações verificadas.
+- A verificação de contraste agora separa texto normal (4,5:1), texto grande (3:1) e componentes gráficos/indicadores de foco (3:1).
+- Contas e comparação de preços receberam rótulos contextuais, estados de checkbox, alvos de toque e foco visível; a calculadora e formulários identificam ações e campos em português.
+
+### Qualidade e documentação
+
+- Adicionado comando `npm run check:a11y:contrast` e execução da verificação WCAG AA no workflow de pull requests.
+- Adicionada suíte unitária dedicada de acessibilidade para botões, campos, alertas, itens de lista, formulários de lembretes, contas, comparação de preços e calculadora, separada dos testes funcionais comuns.
+- Ampliada a auditoria axe-core para as telas de contas e lembretes, além das telas iniciais, listas, calculadora e comparação de preços.
+- Adicionadas verificações E2E de retorno de foco com Shift+Tab e dimensões mínimas de alvos de ícone/checkbox.
+- Ampliada a suíte E2E web para verificar sequência de foco por teclado, indicador visual de foco e disponibilidade dos controles com ampliação de 200%.
+- Adicionado job independente de acessibilidade no GitHub Actions, com execução de `npm run test:a11y` e `npm run check:a11y:contrast`, como dependência obrigatória do build.
+- Documentado o roteiro de validação manual com TalkBack, teclado, leitor de tela e ampliação. A execução manual permanece pendente; a mini-spec não deve ser marcada como concluída até o registro dessa validação.
+
+## 1.11.0 - 2026-11-27
+
+Implementação da mini-spec 20: backup e restauração local.
+
+### Funcionalidade
+
+- Adicionada exportação de listas, produtos, lembretes, contas e comparação de preços em arquivo JSON versionado (schema v2), com download na web e compartilhamento no Android.
+- Backups v1 continuam importáveis: listas e lembretes são preservados e as coleções de contas e comparação são inicializadas vazias.
+- A validação das contas reutiliza as regras do cadastro, aceitando vencimento vazio e rejeitando datas inexistentes e valores inválidos.
+- Adicionada importação por seletor de arquivos, validação e pré-visualização do conteúdo antes da restauração.
+- Disponibilizadas as estratégias de substituição integral e mesclagem com dados locais.
+- Conflitos de listas, produtos, lembretes, contas, locais e comparações exibem os valores locais e do backup; cada conflito exige escolha explícita.
+- Locais com nomes equivalentes são reconhecidos durante a mesclagem e as referências de preços são remapeadas para o identificador local, evitando duplicidade e referências órfãs.
+- IDs de notificações nativas são excluídos do backup e os agendamentos são reconciliados após a restauração.
+- Dados locais anteriores dos quatro stores (carrinho, lembretes, contas e comparação de preços) são preservados antes da restauração; falhas disparam rollback dos valores persistidos e dos estados em memória.
+- A pré-visualização e os resumos exibem contagens de listas, produtos, lembretes, contas, locais e registros de comparação.
+
+### Qualidade e documentação
+
+- Ampliada a cobertura da tela de backup para exportação por download e importação via arquivo no navegador.
+- Adicionados testes de interação para os seis tipos de conflito, escolhas locais/do backup, cancelamento da confirmação Web e bloqueio de operações concorrentes.
+- Adicionado cenário E2E Web para exportar, importar, pré-visualizar as seis coleções, cancelar a substituição e mesclar o backup.
+- No workflow `46021328819` (27/11/2026), TypeScript, 456 testes em 65 suítes, Expo Doctor, verificação de versão, CodeQL e as três execuções do E2E Web foram aprovados. O job de build Android iniciou após o E2E, mas foi cancelado durante `assembleRelease`, sem confirmação de APK gerado.
+- Adicionados testes para envelope v2, migração v1→v2, validação de contas e comparações, referências, mesclagem, conflitos, persistência dos quatro stores e rollback.
+- A validação de lembretes confirma que `itemId`, quando informado, pertence à mesma lista; a resolução de conflitos revalida as referências antes de permitir a persistência.
+- A pré-visualização informa a versão original do arquivo e identifica a migração de backups v1 para o schema v2.
+- Os testes de restauração simulam falhas em cada uma das quatro chaves persistidas e verificam o rollback dos dados e estados locais.
+- Reforçada a validação do tamanho em bytes UTF-8 e a remoção de IDs de notificações recebidos de arquivos externos.
+- Implementada persistência coordenada dos stores com preservação dos valores brutos e tentativa de rollback.
+- A tela invalida pré-visualizações após edição do JSON e bloqueia operações simultâneas.
+- Documentadas as decisões de formato, limite de tamanho e política de conflitos na mini-spec 20.
+- A exportação também rejeita arquivos acima de 10 MB em bytes UTF-8, mantendo o limite simétrico com a importação.
+- A restauração rejeita operações simultâneas e os testes de interface cobrem erros de leitura, persistência e reconciliação de notificações.
+- Registrados os limites de segurança: o arquivo não é criptografado, o compartilhamento não confirma armazenamento permanente e as cópias locais de recuperação não substituem backup externo.
+- Validação manual Android/Web concluída; mini-spec 20 movida para `docs/specs/done/`.
+
+## 1.10.0 - 2026-11-25
+
+Implementação da mini-spec 19: integridade e migração de dados locais.
+
+### Persistência
+
+- Versionados os schemas persistidos de carrinho e lembretes para a versão 3.
+- Adicionada validação de estruturas, campos obrigatórios, datas, IDs duplicados e consistência entre lista ativa, listas e espelho de produtos.
+- Dados legados do carrinho são migrados para uma lista compatível; lembretes válidos mantêm seus identificadores e referências.
+- Registros inválidos isolados são reparados ou descartados de forma controlada, preservando os registros válidos.
+- Antes de aplicar reparos, o conteúdo anterior é copiado para `gastometro-recovery-cart` ou `gastometro-recovery-reminders`.
+- Estruturas irrecuperáveis e versões futuras geram erro explícito, preservam o conteúdo original e não são tratadas como estado válido.
+- Escritas e remoções ficam bloqueadas durante a recuperação; alterações concorrentes são enfileiradas até a cópia ser concluída.
+- Campos desconhecidos são descartados com sinalização de reparo, e campos opcionais inválidos são normalizados sem descartar registros recuperáveis.
+- A limpeza de lembretes órfãos preserva todos os registros antes de cancelar notificações e mantém os que não puderem ser cancelados.
+
+### Recuperação para o usuário
+
+- Adicionado aviso persistente na interface para informar quando dados locais foram reparados ou não puderam ser validados.
+- O usuário pode dispensar o aviso sem apagar a cópia de recuperação.
+- Mantidas as chaves originais `gastometro` e `gastometro-reminders`.
+
+### Testes
+
+- Adicionados testes de migração legada, recuperação parcial, IDs duplicados, listas ativas inconsistentes, lembretes malformados e versões desconhecidas.
+- Na validação da PR 69, 398 testes em 62 suítes e o type-check foram aprovados.
+
+### Documentação
+
+- Mini-spec 19 movida para `docs/specs/done/` e marcada como implementada; README, guia técnico e índice de mini-specs sincronizados.
+
+## 1.9.2 - 2026-11-24
+
+Implementação da mini-spec 18: sincronização eficiente e idempotente de lembretes.
+
+### Sincronização
+
+- O bootstrap aguarda a hidratação do store de lembretes e observa somente os campos relevantes dos lembretes e os IDs das listas.
+- Alterações em produtos ou nomes de listas deixam de disparar a reconciliação de notificações.
+- A reconciliação consulta os agendamentos nativos, preserva notificações válidas, recupera IDs persistidos perdidos, remove duplicidades e recria apenas agendamentos ausentes ou divergentes.
+- Sincronizações sobrepostas são serializadas; retomada do app solicita uma nova reconciliação.
+- Listeners de resposta a notificações passam a ser registrados uma vez por montagem e removidos no cleanup.
+- Remoções e limpeza de órfãos cancelam todos os agendamentos encontrados para o lembrete.
+
+### Qualidade e compatibilidade
+
+- Adicionados testes para consulta de agendamentos, preservação de notificações válidas, recuperação de agendamentos e deduplicação.
+- Mantida a chave `gastometro-reminders` e o contrato persistido de `ReminderProps`.
+- A web continua sem agendamento nativo.
+- Mini-spec 18 movida para `docs/specs/done/` após conclusão da implementação e das validações.
+
+## 1.9.1 - 2026-11-24
+
+Reforço dos testes automatizados da comparação de preços e atualização da documentação.
+
+### Testes e interface
+
+- A tela agora apresenta, no resumo de maior preço, todos os lugares empatados no valor máximo; os destaques de menor e maior preço permanecem visíveis em cada oferta.
+- Adicionado teste de componente que valida múltiplos empates simultâneos no menor e no maior preço, incluindo diferença absoluta e percentual.
+- Adicionado cenário E2E Playwright para cadastrar quatro lugares e um item, validar a comparação com empates e confirmar a persistência após recarregar a aplicação.
+- Os botões de cadastro de lugar e item receberam rótulos acessíveis estáveis para automação e tecnologias assistivas.
+- A ordenação alfabética dos itens passou a operar sobre uma cópia do array, evitando mutação do estado do Zustand durante a renderização.
+
+### Documentação
+
+- Atualizados a mini-spec 17, o guia E2E web, o índice de documentação, o README e a SPEC para descrever o novo cenário funcional.
+- A validação manual foi concluída em Android e Web; a mini-spec 17 foi movida para `docs/specs/done/`.
+
+## 1.9.0 - 2026-11-22
+
+Implementação da mini-spec 17: comparação offline-first de preços entre lugares.
+
+### Funcionalidade
+
+- Adicionada tela de comparação de preços com cadastro, edição e remoção de lugares e itens.
+- Incluída comparação individual com destaque da menor oferta, maior preço e diferença absoluta/percentual.
+- Incluída comparação da cesta completa, com indicação de cesta incompleta quando faltar preço em qualquer item do lugar.
+- Resultados podem ser ordenados por preço ou nome do lugar.
+
+### Persistência e qualidade
+
+- Criado store independente com a chave `gastometro-price-comparisons`, sem alterar os dados existentes.
+- Adicionados testes de serviço, store e tela para validação, cálculo, ordenação independente e integridade de preços ausentes.
+- Reforçadas as validações no store para rejeitar preços inválidos, lugares inexistentes, duplicidade de referência e atualizações para IDs inexistentes.
+- Parser monetário ampliado para aceitar valores pt-BR com símbolo de moeda e agrupamento de milhares.
+
+### Qualidade e testes
+
+- A execução final de CI em 2026-11-22 aprovou os 303 testes (50 suítes), com 96,57% em statements, 91,90% em branches, 96,21% em funções e 97,87% em linhas.
+- Corrigidos os três testes que falhavam na execução anterior: mocks de UUID agora geram identificadores distintos nos testes de carrinho e contas, e a expectativa da ordenação da cesta considera seu controle independente. O `CartStore` também protege a remoção caso o filtro resulte em uma lista vazia.
+- O build Android e os testes E2E web também concluíram com sucesso.
+- A interface identifica explicitamente tanto o lugar com menor preço quanto os lugares com maior preço, inclusive quando há empate.
+- Cesta sem itens agora retorna total indisponível (`null`), em vez de zero, evitando confundir ausência de compras com uma cesta de custo zero. Testes também garantem que preços zero informados continuam válidos.
+- O gate mínimo global de cobertura permanece em 80%.
+
+### Documentação
+
+- Documentação do produto e mini-spec atualizadas para refletir a comparação individual e da cesta completa.
+- README, SPEC e índice de documentação atualizados com os percentuais da execução aprovada.
+- Registro da medição e das falhas adicionado em `docs/coverages/README.md`.
+
+## 1.8.2 - 2026-11-21
+
+Implementação da mini-spec 14: suíte E2E para validar o roteamento web SPA e o fallback utilizado no GitHub Pages.
+
+### Qualidade e testes
+
+- Adicionada suíte Playwright com sete cenários: carregamento da raiz, acesso direto e atualização das rotas de calculadora e listas, navegação entre telas com histórico do navegador e fallback para rota inexistente.
+- Cada cenário é executado em contexto isolado e a suíte completa roda em três ciclos consecutivos.
+- Incluída validação de exceções JavaScript, erros no console, requisições malsucedidas e respostas HTTP de erro em recursos.
+- Adicionada captura de screenshots e traces para facilitar o diagnóstico de falhas.
+- Criado o workflow `.github/workflows/test-web-e2e.yml`, com execução em pull requests para `main` e em atualizações da própria branch.
+- O workflow também verifica os tipos TypeScript e publica evidências quando a suíte falha.
+
+### Web e roteamento
+
+- Corrigida a restauração de rotas profundas do GitHub Pages para ocorrer após a hidratação inicial do Expo Router, evitando divergência entre o HTML inicial e a rota restaurada.
+- Adicionada página própria em pt-BR para rotas inexistentes.
+- Removido o script de injeção de redirecionamento executado antes da hidratação, substituído pela restauração controlada no layout.
+
+### Documentação
+
+- Criado `docs/WEB_E2E.md` com requisitos, preparação do Chromium, execução local, cenários cobertos, CI e limitações.
+- Mini-spec 14 movida para `docs/specs/done/` e marcada como concluída.
+- Atualizados README, SPEC e índice de mini-specs para refletir a cobertura E2E implementada.
+
+## 1.8.1 - 2026-11-15
+
+## 1.8.0 - 2026-11-15
+
+Implementação da mini-spec 11: nova seção integrada de contas a pagar, com persistência local independente.
+
+### Funcionalidade
+
+- Adicionada aba Contas ao app, com cadastro, edição, exclusão e marcação de contas como pagas.
+- Exibidos totais de contas pendentes e pagas, além de destaque visual para contas vencidas.
+- Adicionada validação de título, valor e data de vencimento, com formatação monetária pt-BR.
+
+### Persistência e qualidade
+
+- Criado `BillProps` e `useBillStore` com armazenamento isolado na chave `gastometro-bills`, sem alterar os dados das listas de compras.
+- Adicionados testes para validações, formatação, vencimentos e operações do store.
+
+### Documentação
+
+- Mini-spec 11 movida para `docs/specs/done/` e documentação do produto atualizada.
+
+## 1.7.3 - 2026-06-24
+
+Implementação da mini-spec 13 (Service Worker offline web), com cache versionado, fluxo de validação offline atualizado e ajustes de scripts para versionamento e testes locais.
+
+### Funcionalidade (Web)
+
+- Service Worker adicionado em `public/sw.js`, com estratégia híbrida de cache (`network-first` para navegação e `cache-first` para assets).
+- Registro do Service Worker integrado ao app em `src/services/ServiceWorkerService.ts` e inicialização web no layout.
+- Ativação imediata da nova versão de cache (`skipWaiting` + `clients.claim`) e limpeza de versões antigas.
+- Versão de cache derivada de arquivo gerado (`public/sw-version.js`) a partir da versão do app.
+
+### Scripts e versionamento
+
+- Novo script `npm run sw:version` para gerar/atualizar `public/sw-version.js`.
+- Build web passa a executar geração de versão do SW antes do export estático.
+- Fluxo `npm run new-version` passa a atualizar `sw-version` automaticamente e incluir `public/sw-version.js` no commit de release.
+- Adicionado `npm run web:test:offline` com launcher Node cross-platform para teste exploratório de SW em ambiente dev (`EXPO_PUBLIC_SW_DEV_ENABLED=1`).
+- Fluxo não-interativo de versionamento atualizado para aceitar terceiro argumento opcional (`n`, `no` ou `no-commit`) para executar atualização de versão/changelog sem commit e sem push automático.
+
+### Qualidade
+
+- Testes unitários adicionados para `ServiceWorkerService`.
+- Teste adicionado para o script `scripts/generate-sw-version.js`.
+- Ajuste de robustez no install do Service Worker para evitar falha global de cache quando algum asset não estiver disponível em ambiente dev.
+- `scripts/test-coverage-csv.sh` evoluído para preservar o código de saída do Jest, melhorar tratamento de erro e desacoplar a atualização de documentação de cobertura.
+- Novo script `scripts/update-coverage-docs.js` para atualizar automaticamente os indicadores de cobertura em `README.md`, `docs/README.md` e `docs/SPEC.md` com base no CSV gerado.
+- Novos snapshots de cobertura adicionados em `docs/coverages/` para o ciclo atual de validação da branch.
+
+### Documentação
+
+- `README.md`, `docs/WEB_DEPLOY.md`, `docs/SPEC.md` e `docs/specs/README.md` sincronizados com o novo comportamento offline web.
+- `README.md`, `docs/README.md` e `docs/SPEC.md` atualizados com a sintaxe completa do modo não-interativo de `npm run new-version`, incluindo opção sem commit.
+- Mini-spec 13 movida para `docs/specs/done/` com `Status: implementado` e registro de decisões finais.
+- Nova mini-spec planejada adicionada: `docs/specs/planned/17-comparacao-de-precos-entre-lugares.md`.
+
+## 1.7.2 - 2026-06-23
+
+Refatoração interna dos formulários para `react-hook-form` e adaptação do `CustomInput` para encapsular o `Controller`, reduzindo boilerplate nos fluxos de criação e edição.
+
+### Refatoração
+
+- Formulários de item, lembrete, listas e calculadora migrados de `useState` manual para `useForm` com tipagem estrita por fluxo.
+- `CustomInput` passou a receber `control` e `name` diretamente, integrando o `Controller` internamente e eliminando a necessidade de envolver cada campo externamente.
+- Interfaces TypeScript criadas para cada conjunto de dados de formulário (`ProductFormData`, `ReminderFormData`, `CalculatorFormData`, `CreateListForm`, `EditListForm`).
+
+### Qualidade
+
+- Testes de componentes e formulários atualizados para lidar com o comportamento assíncrono do `react-hook-form` via `waitFor`.
+- 195 testes passando; cobertura global mantida acima de 80%.
+
+### Compatibilidade
+
+- Sem alteração no formato de dados persistidos ou no formato de compartilhamento/importação via WhatsApp.
+- Sem mudança funcional visível ao usuário.
+
+## 1.7.1 - 2026-06-23
+
+Ajustes visuais nos botões do formulário de lembretes para melhorar legibilidade e simplificação dos rótulos de ação.
+
+### Funcionalidade
+
+- Reduzindo o tamanho do texto nos botões de ação do formulário de lembretes (`Salvar/Editar` e `Remover`) para melhorar a leitura.
+- Simplificados os rótulos dos botões de edição e remoção de lembretes de `Editar Lembrete`/`Remover Lembrete` para `Editar`/`Remover`.
+
+### Impacto
+
+- Mudança focada em UX/visual; sem alteração de formato de dados persistidos e sem impacto no compartilhamento via WhatsApp.
+
+## 1.7.0 - 2026-06-21
+
+Implementação completa da mini-spec 10 com sistema de lembretes locais e notificações, incluindo CRUD por lista, central consolidada, fallback sem permissão e sincronização no bootstrap do app.
+
+### Funcionalidade
+
+- Store dedicado `ReminderStore` com persistência isolada em `gastometro-reminders` (sem impacto na chave `gastometro` do carrinho).
+- Serviços de domínio: `ReminderService` (validações/regras), `NotificationService` (permissões/agendamento), `ReminderOrchestrator` (sincronização).
+- CRUD de lembretes por lista em `src/app/reminders/[listId]/` (novo, edit, listagem).
+- Central de lembretes consolidada em `src/app/reminders/index.tsx` com filtros (ativos, desativados, vencidos).
+- Hook `useReminderPendingAlerts` para fallback de lembretes pendentes quando permissão de notificação não está concedida.
+- Integração com notificações nativas: agendamento, cancelamento, sincronização no bootstrap.
+- Navegação por payload: ao tocar na notificação, o app seleciona a lista relacionada e volta para a tela principal quando disponível.
+- Remoção de lista agora informa quantidade de lembretes impactados e executa remoção em cascata.
+- Limpeza de lembretes órfãos na inicialização.
+- Atalho de lembretes na tela home.
+
+### Arquitetura e qualidade
+
+- Separação de camadas: store + serviços dedicados reduz risco de regressão no domínio principal de compras.
+- Componentes novos: `Form/Reminder.tsx`, `Reminder/Item.tsx`, `HeaderActions.tsx` para suporte a ações de lembrete.
+- Refatoração: `Header` refatorizado com `HeaderActions` para melhor gestão de botões/ações.
+- Constantes: separação de mensagens por domínio em `src/constants/text/` (error, inputs, lists, reminders).
+- Enums novos: `NameField`, `PermissionState`, `ReminderState`, `ReminderStatus`.
+- Testes: 20+ novos testes cobrindo store, serviços, hooks, telas e componentes de lembrete (cobertura mantida ≥80%).
+
+### Interfaces TypeScript
+
+- `ReminderProps`, `ReminderStateProps`, `ReminderFilter`, `FormReminderProps`, `ReminderItemProps` adicionadas.
+- Refatoração de interfaces existentes para melhor consistência e type-safety.
+
+### Compatibilidade
+
+- Nenhuma alteração no formato de persistência do carrinho ou compartilhamento WhatsApp.
+- Persistência de lembretes usa chave dedicada, sem impacto em migração de dados legada.
+- App continua funcional quando permissão de notificação for negada (fallback local).
+
+### Documentação
+
+- Mini-spec 10 movida de `docs/specs/planned/` para `docs/specs/done/` e marcada como `Status: implementado`.
+- `README.md` atualizado para listar lembretes/notificações como funcionalidade existente.
+- `docs/specs/README.md` atualizado para refletir a mudança de status da spec 10.
+- `docs/SPEC.md` sincronizado com capacidades atuais de lembretes e notificações locais.
+
+## 1.6.0 - 2026-06-16
+
+Implementação da mini-spec 09 com suporte completo a múltiplas listas de compras, incluindo migração de dados, nova tela de gerenciamento e cobertura de testes.
+
+### Funcionalidade
+
+- Adicionada gestão de múltiplas listas com criação, renomeação, remoção e seleção de lista ativa.
+- Nova tela de listas em `src/app/lists.tsx`, com fluxo de gerenciamento dedicado e integração ao Header.
+- Operações de item (adicionar, editar, remover, limpar) passam a atuar na lista ativa.
+- Importação/colar via WhatsApp com opção de criar nova lista usando nome padrão de lista importada.
+
+### Persistência e migração
+
+- Evoluído o modelo de estado para suportar `lists` e `activeListId`, preservando compatibilidade com a chave `gastometro`.
+- Implementada migração automática do formato legado (lista única) para o novo formato sem perda de dados, criando lista padrão inicial.
+
+### Qualidade
+
+- Suite de testes ampliada para cobrir cenários de múltiplas listas no store e impactos em serviços/componentes.
+- Atualizados mocks de `StateProps` nos testes para o novo contrato do estado.
+- Execuções de validação da release: `npm run test` e `npm run check:ts` sem falhas.
+
+### Documentação
+
+- Mini-spec 09 movida para `docs/specs/done/` com status implementado.
+- `docs/specs/README.md`, `docs/SPEC.md` e `README.md` atualizados para refletir a funcionalidade entregue.
+
+## 1.5.1 - 2026-06-14
+
+Correções no fluxo de versionamento/changelog e simplificação da gestão de título de página na web.
+
+### Correções
+
+- Ajustado o script de atualização de versão para melhorar a robustez de validações e tratamento de erro envolvendo `package-lock.json`.
+- Aprimorada a atualização de versão no `app.config.js` com regex mais resiliente.
+- Melhorado o script de criação de nova versão com texto de ajuda mais claro para os tipos de incremento e fluxo de commit mais previsível.
+
+### Changelog e normalização
+
+- Tratamento de argumento de changelog reforçado com trim de espaços para evitar entradas vazias acidentais.
+- Normalização de linhas em branco e quebra final do changelog refinada para evitar ruído entre execuções.
+
+### Web e navegação
+
+- Removido o uso do hook `usePageTitle` em favor de gestão centralizada de título no layout, reduzindo complexidade e divergência entre telas.
+- Ajustado `app.config.js` para manter consistência com o modelo atual de configuração.
+
+## 1.5.0 - 2026-06-13
+
+Implementação da base de compatibilidade web com GitHub Pages, incluindo build estática, deploy automatizado e ajustes de fallback para recursos nativos no navegador.
+
+### Funcionalidade
+
+- Build web estática habilitada com `expo export --platform web` e script dedicado `npm run web:build`.
+- Fluxo de compartilhamento via WhatsApp preservado, com uso de URL `wa.me` na web e fallback para deep link/web link no Android.
+- Leitura e escrita de clipboard adaptadas para web com `navigator.clipboard`, mantendo fallback seguro em caso de bloqueio/permissão negada.
+
+### Qualidade e Infraestrutura
+
+- Workflow de deploy web criado em `.github/workflows/deploy-web.yml`, com build, type-check e publicação em GitHub Pages.
+- Gatilhos do workflow de deploy web para rodar a cada alteração na `main`.
+- Arquivo `.nojekyll` adicionado para garantir compatibilidade de artefatos estáticos no GitHub Pages.
+
+### Documentação
+
+- `README.md` atualizado com status da spec 08 em andamento e diretrizes de execução/build web.
+- `docs/WEB_DEPLOY.md` criado/atualizado com instruções de build, teste local, deploy e troubleshooting.
+- `docs/specs/active/08-web-github-pages.md` atualizado com regras de validação e decisões técnicas adotadas.
+- `docs/specs/README.md` atualizado para refletir a spec 08 em andamento.
+- `docs/SPEC.md` atualizado para refletir a plataforma web como frente em andamento, não mais futura.
+
+## 1.4.12 - 2026-06-13
+
+Implementação da união automática de itens duplicados na colagem/importação para a lista existente, com cobertura de testes e alinhamento da documentação.
+
+### Funcionalidade
+
+- Ao colar uma lista na lista existente, o app agora identifica duplicados por nome + preço normalizados antes de concluir a união.
+- Itens duplicados compatíveis passam a ser unidos automaticamente, somando a quantidade no item mantido.
+- O estado `collected` do item mantido é preservado apenas quando a quantidade final não muda; quando a soma altera a quantidade, o item resultante volta para `false`.
+- Itens com mesmo nome, mas preço diferente, continuam separados e não são mesclados.
+
+### Qualidade
+
+- Nova regra centralizada em `DuplicateProducts` para agrupar e mesclar duplicados com tipos dedicados para grupo e resultado de mesclagem.
+- Quantidades mescladas agora são arredondadas para até 3 casas decimais, evitando imprecisões de ponto flutuante no total consolidado.
+- Testes adicionados e ampliados para `AlertService`, mesclagem de duplicados e fluxo de colagem/importação com cenários de nome e preço normalizados.
+- Relatório de cobertura adicionado em `docs/coverages/2026-06-13_13-13.csv`.
+
+### Documentação
+
+- Mini-spec 06 consolidada em `docs/specs/done/06-uniao-itens-duplicados.md` com comportamento final de união automática de duplicados na colagem em lista existente.
+- `docs/SPEC.md` alinhado para refletir que a união de duplicados importados ocorre automaticamente no app.
+- `README.md` revisado para mover a união de duplicados de funcionalidade planejada para comportamento já implementado.
+- `docs/specs/README.md` atualizado para listar a mini-spec 06 como implementada.
+
+## 1.4.11 - 2026-06-13
+
+Refatoração da spec 12: redução de código duplicado, remoção de código não utilizado e ampliação de cobertura de testes
+
+### Refatoração
+
+- Extração do item de lista para componente dedicado (`src/components/List/ListItem.tsx`), removendo duplicação em `List.tsx`.
+- Remoção de função não utilizada em `src/stores/helpers/CartInMemory.ts`.
+- Remoção de campo não utilizado em `src/interfaces/ListProps.ts`.
+- Remoção do arquivo sem uso `src/utils/products.ts` e ajuste correspondente em `jest.config.js`.
+- Movida a interface `CustomAlertRef` para `src/interfaces/CustomAlertRef.ts` e atualização dos consumidores.
+
+### Qualidade
+
+- Novos testes de componentes/lista para cobrir callbacks e interações do `ListItem`.
+- Ajustes em testes existentes para elevar e manter o gate mínimo de cobertura no escopo monitorado pelo Jest.
+- Relatório de cobertura adicionado em `docs/coverages/2026-06-13_10-04.csv`.
+
+### Documentação
+
+- Mini-spec 12 movida para `docs/specs/done/` com status `implementado`.
+- `docs/specs/README.md` atualizado com o novo status da spec 12.
+- Regras de versionamento atualizadas para criar branch de release apenas quando o fluxo iniciar na `main`.
+
+## 1.4.10 - 2026-06-12
+
+Exibe itens coletados no final da lista, separados dos não coletados por cabeçalhos de seção com contador.
+
+### Funcionalidade
+
+- Itens não coletados aparecem primeiro; itens coletados aparecem no final.
+- Cabeçalhos de seção "Não coletados" e "Coletados" com contador de itens separam visualmente os dois blocos.
+- Marcar ou desmarcar item move-o imediatamente para o bloco correto, sem recarregar a tela.
+
+### Qualidade
+
+- Função pura `SortProductsByCollected` em `src/utils/functions/SortList.ts` para agrupamento testável.
+- Novo componente `ListSectionHeader` com interface `ListSectionHeaderProps`.
+- Testes adicionados para cobertura de ordem visual e presença dos cabeçalhos.
+- Script `npm run new-version` atualizado para aceitar argumentos opcionais (`tipo` e texto do changelog), com suporte a execução não-interativa.
+
+### Documentação
+
+- Mini-spec 07 movida para `docs/specs/done/` com status `implementado`.
+- `docs/SPEC.md` e `docs/specs/README.md` atualizados.
+- Regra adicionada nas instruções do Copilot: nunca executar `git commit` sem pedido explícito do usuário.
+
+## 1.4.9 - 2026-06-07
+
+Implementação da visualização de total de itens coletados na tela principal, com atualização de documentação e cobertura de testes.
+
+### Funcionalidade
+
+- Exibe `Total Geral | Total Coletado` na tela principal.
+- Atualiza o total coletado imediatamente ao marcar ou desmarcar itens.
+- Mantém formato monetário `pt-BR` com `BRL` e regras atuais de cálculo.
+
+### Qualidade
+
+- Adiciona função pura para cálculo de total coletado.
+- Expande testes unitários de matemática para cobrir total de coletados.
+- Adiciona teste de componente para validar exibição dos dois totais na Home.
+
+### Documentação
+
+- Atualiza mini-spec `docs/specs/done/03-total-itens-coletados.md` para `Status: implementado`.
+- Atualiza README e SPEC para refletir que o total coletado não é mais item planejado.
+
+## 1.4.8 - 2026-06-07
+
+Melhorias de infraestrutura, UX e qualidade com foco em Android moderno e estabilidade do app.
+
+### Build e distribuição Android
+
+- Ajuste da baseline para Android moderno (API 29+), com estratégia de build orientada a artefatos menores.
+- Otimizações de configuração Android para reduzir peso de distribuição e melhorar performance de empacotamento.
+- Refinamentos em scripts e propriedades de build para tornar o processo mais previsível em ambiente local e CI.
+- Redução mensurável do APK de aproximadamente 102 MB para 22 MB (queda aproximada de 78%).
+
+### Compartilhamento e regras de negócio
+
+- Fluxo de compartilhamento via WhatsApp reforçado com deep link e fallback web.
+- Tratamento de erro mais robusto nos fluxos relacionados ao compartilhamento.
+
+### Interface e consistência visual
+
+- Padronização de uso de constantes de cor em componentes.
+- Ajustes visuais em ícones e alertas para melhorar consistência da interface.
+
+### Qualidade, testes e manutenção
+
+- Ajustes em testes para maior estabilidade de execução entre plataformas.
+- Limpeza de dependência não utilizada e atualização de itens de suporte ao build.
+- Atualizações em workflows para melhorar gatilhos e confiabilidade da automação.
+- Validação manual concluída em Android API 29+ e Web, sem regressão funcional crítica nos fluxos principais.
+
+## 1.4.7 - 2026-06-04
+
+Ajustes internos e melhorias na documentação e suíte de testes automatizados.
+
+## 1.4.6 - 2026-06-03
+
+Correção
+
+- Bloqueia a criação manual de itens duplicados na lista atual.
+- Bloqueia a edição para um nome que já exista em outro item.
+- Preserva a importação/colagem com duplicados permitidos.
+- Adiciona registro da mini-spec de bloqueio de duplicados na criação manual.
+
+## 1.4.5 - 2026-06-02
+
+Correção
+
+- Bloqueia valores negativos em quantidade e preço no formulário de adicionar/editar item.
+- Bloqueia cálculo com valores negativos na calculadora.
+- Adiciona mensagem de erro dedicada para valor negativo (`valor_negativo`).
+- Refatora normalização numérica para utilitários compartilhados (entrada decimal e normalização de string numérica).
+- Atualiza README, SPEC e mini-spec de validação de valores negativos para refletir a implementação.
+
+## 1.4.4 - 2026-06-02
+
+Refatoração
+
+- Remove ordenação duplicada em render da lista e centraliza ordenação no helper do store.
+- Atualiza assinatura de `SortProductsAlphabetically` para API explícita por parâmetro.
+- Adiciona tratamento de erro no hook `useInitAlert`.
+- Fortalece fluxo de colagem/importação com `try/catch` no `AlertService`.
+- Torna parser de importação mais defensivo para linhas malformadas.
+
+## 1.4.3 - 2026-05-17
+
+Correção
+
+## 1.4.2 - 2026-05-17
+
+Correção da v1.4.1
+
+## 1.4.0 - 2025-05-01
+
+Criação de calculadora de preços

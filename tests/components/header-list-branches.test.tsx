@@ -1,0 +1,301 @@
+import React from 'react'
+import { fireEvent, render } from '@testing-library/react-native'
+import { Header } from '@/components/Header'
+import { List } from '@/components/List'
+import { useRouter } from 'expo-router'
+import { useRoute } from 'expo-router/react-navigation'
+import type { StateProps } from '@/interfaces/StateProps'
+import { ROUTES } from '@/constants/routes'
+
+const mockPush = jest.fn()
+const mockRemove = jest.fn()
+const mockShare = jest.fn()
+const mockPaste = jest.fn(async (..._args: unknown[]) => Promise.resolve())
+const mockClear = jest.fn()
+const mockEdit = jest.fn()
+const mockRemoveItem = jest.fn()
+
+let mockProductsState = [
+  { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
+  { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: true },
+]
+
+jest.mock('@/stores/CartStore', () => ({
+  useCartStore: () => ({
+    products: mockProductsState,
+    clear: mockClear,
+  }),
+}))
+
+jest.mock('@/hooks/useInitAlert', () => ({
+  useInitAlert: jest.fn(),
+}))
+
+jest.mock('@/hooks/useReminderPendingAlerts', () => ({
+  useReminderPendingAlerts: jest.fn(),
+}))
+
+jest.mock('@/components/CustomAlert', () => ({
+  CustomAlert: () => null,
+}))
+
+jest.mock('@/services/AlertService', () => ({
+  AlertService: {
+    remove: (...args: unknown[]) => mockRemove(...args),
+    share: (...args: unknown[]) => mockShare(...args),
+    paste: (...args: unknown[]) => mockPaste(...args),
+  },
+}))
+
+jest.mock('@/components/TouchableIcons', () => ({
+  Add: ({ action, accessibilityLabel }: { action?: () => void; accessibilityLabel?: string }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action, accessibilityRole: 'button', accessibilityLabel }, 'Add')
+  },
+  Backup: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Backup')
+  },
+  Back: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Back')
+  },
+  Delete: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Delete')
+  },
+  Share: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Share')
+  },
+  Notification: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Notification')
+  },
+  Market: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Market')
+  },
+  Cart: ({ action }: { action?: () => void }) => {
+    const React = jest.requireActual('react') as typeof import('react')
+    const { Text } = jest.requireActual('react-native') as typeof import('react-native')
+    return React.createElement(Text, { onPress: action }, 'Cart')
+  },
+}))
+
+describe('Header and List branch coverage', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockProductsState = [
+      { id: '1', item: 'Arroz', quantity: '2', price: '10', collected: false },
+      { id: '2', item: 'Feijão', quantity: '1', price: '8', collected: true },
+    ]
+      ; (useRouter as jest.Mock).mockReturnValue({ push: mockPush })
+      ; (useRoute as jest.Mock).mockReturnValue({ name: 'index' })
+  })
+
+  it('Header anuncia o título e a ação para adicionar produto', async () => {
+    const { getByRole } = await render(<Header />)
+
+    expect(getByRole('header')).toBeTruthy()
+    expect(getByRole('button', { name: 'Adicionar item à lista' })).toBeTruthy()
+  })
+
+  it('Header index: executa remove e share quando há produtos', async () => {
+    const { getByText } = await render(<Header />)
+
+    await fireEvent.press(getByText('Delete'))
+    await fireEvent.press(getByText('Share'))
+    await fireEvent.press(getByText('Add'))
+    await fireEvent.press(getByText('Backup'))
+
+    expect(mockPush).toHaveBeenCalledWith(ROUTES.Backup)
+    expect(mockRemove).toHaveBeenCalled()
+    expect(mockShare).toHaveBeenCalled()
+    expect(mockPaste).not.toHaveBeenCalled()
+    expect(mockPush).toHaveBeenCalledWith('/list/add')
+  })
+
+  it('Header index: usa paste quando lista está vazia', async () => {
+    mockProductsState = []
+
+    const { getByText, queryByText } = await render(<Header />)
+
+    await fireEvent.press(getByText('Share'))
+
+    expect(queryByText('Delete')).toBeNull()
+    expect(mockPaste).toHaveBeenCalled()
+    expect(mockShare).not.toHaveBeenCalled()
+  })
+
+  it('Header default: renderiza back e navega para /', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'list/edit/[id]' })
+
+    const { getByText, queryByText } = await render(<Header />)
+
+    await fireEvent.press(getByText('Back'))
+
+    expect(mockPush).toHaveBeenCalledWith(ROUTES.Index)
+    expect(queryByText('Add')).toBeNull()
+  })
+
+  it('Header calculator: não renderiza ações', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'calculator' })
+
+    const { queryByText } = await render(<Header />)
+
+    expect(queryByText('Back')).toBeNull()
+    expect(queryByText('Share')).toBeNull()
+    expect(queryByText('Add')).toBeNull()
+  })
+
+  it('Header de comparação: abre os formulários de lugar e item', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'price-comparison' })
+
+    const { getByText } = await render(<Header />)
+
+    await fireEvent.press(getByText('Market'))
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison/market/add')
+
+    await fireEvent.press(getByText('Cart'))
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison/cart/add')
+  })
+
+  it('Header dos formulários de comparação: retorna à tela de preços', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'price-comparison/cart/add' })
+
+    const { getByText } = await render(<Header />)
+    await fireEvent.press(getByText('Back'))
+
+    expect(mockPush).toHaveBeenCalledWith('/price-comparison')
+  })
+
+  it('Header index: Notification com activeListId navega para reminders/[listId]', async () => {
+    const { getByText } = await render(<Header activeListId="list-1" />)
+
+    await fireEvent.press(getByText('Notification'))
+
+    expect(mockPush).toHaveBeenCalledWith('/reminders/list-1')
+  })
+
+  it('Header reminders/[listId]/edit/[reminderId]: renderiza Back com rota de lista', async () => {
+    ; (useRoute as jest.Mock).mockReturnValue({ name: 'reminders/[listId]/edit/[reminderId]' })
+
+    const { getByText, queryByText } = await render(<Header />)
+
+    expect(getByText('Back')).toBeTruthy()
+    expect(queryByText('Share')).toBeNull()
+
+    await fireEvent.press(getByText('Back'))
+    expect(mockPush).toHaveBeenCalledWith('/reminders/')
+  })
+
+  it('List: alterna collected, navega para edição e aciona remoção', async () => {
+    const cartStore: StateProps = {
+      lists: [{ id: 'list-1', name: 'Test', products: mockProductsState }],
+      activeListId: 'list-1',
+      products: mockProductsState,
+      add: jest.fn(),
+      edit: mockEdit,
+      replace: jest.fn(),
+      remove: mockRemoveItem,
+      get: jest.fn(),
+      clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
+    }
+
+    const { getAllByText, getAllByRole, getByText } = await render(<List cartStore={cartStore} />)
+
+    const touchables = getAllByRole('checkbox')
+    await fireEvent.press(touchables[0])
+    await fireEvent.press(touchables[1])
+    await fireEvent.press(getByText(/2x Arroz/))
+    await fireEvent.press(getAllByText('Delete')[0])
+
+    expect(mockEdit).toHaveBeenCalled()
+    expect(mockPush).toHaveBeenCalledWith('/list/edit/1')
+    expect(mockRemove).toHaveBeenCalled()
+  })
+
+  it('List: mostra não coletados antes e exibe cabeçalhos de seção', async () => {
+    const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+          { id: '2', item: 'Arroz', quantity: '2', price: '10', collected: false },
+        ]
+      }],
+      activeListId: 'list-1',
+      products: [
+        { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+        { id: '2', item: 'Arroz', quantity: '2', price: '10', collected: false },
+      ],
+      add: jest.fn(),
+      edit: mockEdit,
+      replace: jest.fn(),
+      remove: mockRemoveItem,
+      get: jest.fn(),
+      clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
+    }
+
+    const { toJSON, getByText, getByRole } = await render(<List cartStore={cartStore} />)
+    const serializedTree = JSON.stringify(toJSON())
+    const arrozIndex = serializedTree.indexOf('2x Arroz')
+    const feijaoIndex = serializedTree.indexOf('1x Feijão')
+
+    expect(arrozIndex).toBeGreaterThan(-1)
+    expect(feijaoIndex).toBeGreaterThan(-1)
+    expect(arrozIndex).toBeLessThan(feijaoIndex)
+    expect(getByRole('header', { name: 'Não coletados' })).toBeTruthy()
+    expect(getByRole('header', { name: 'Coletados' })).toBeTruthy()
+  })
+
+  it('List: quando todos estão coletados mostra apenas a seção coletados', async () => {
+    const cartStore: StateProps = {
+      lists: [{
+        id: 'list-1',
+        name: 'Test',
+        products: [
+          { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+        ]
+      }],
+      activeListId: 'list-1',
+      products: [
+        { id: '1', item: 'Feijão', quantity: '1', price: '8', collected: true },
+      ],
+      add: jest.fn(),
+      edit: mockEdit,
+      replace: jest.fn(),
+      remove: mockRemoveItem,
+      get: jest.fn(),
+      clear: jest.fn(),
+      addList: jest.fn(),
+      removeList: jest.fn(),
+      renameList: jest.fn(),
+      setActiveList: jest.fn(),
+    }
+
+    const { queryByText, toJSON } = await render(<List cartStore={cartStore} />)
+    const serializedTree = JSON.stringify(toJSON())
+
+    expect(serializedTree.indexOf('1x Feijão')).toBeGreaterThan(-1)
+    expect(queryByText('Não coletados')).toBeNull()
+    expect(queryByText('Coletados')).toBeTruthy()
+  })
+})
