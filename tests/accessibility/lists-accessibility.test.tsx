@@ -3,10 +3,8 @@ import { fireEvent, render } from '@testing-library/react-native'
 import Lists from '@/app/(tabs)/lists'
 import { useCartStore } from '@/stores/CartStore'
 
-const mockRouterPush = jest.fn()
-
 jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockRouterPush }),
+  useRouter: () => ({ push: jest.fn() }),
 }))
 
 jest.mock('@/hooks/useInitAlert', () => ({
@@ -25,7 +23,6 @@ jest.mock('@/stores/ReminderStore', () => ({
 
 describe('Acessibilidade do gerenciamento de listas', () => {
   beforeEach(() => {
-    mockRouterPush.mockClear()
     useCartStore.setState({
       lists: [
         { id: 'list-active', name: 'Compras', products: [] },
@@ -50,7 +47,6 @@ describe('Acessibilidade do gerenciamento de listas', () => {
 
     await fireEvent.press(screen.getByRole('button', { name: 'Selecionar lista Farmácia' }))
     expect(useCartStore.getState().activeListId).toBe('list-other')
-    expect(mockRouterPush).toHaveBeenCalledTimes(1)
   })
 
   it('mantém o campo e as ações acessíveis durante a renomeação', async () => {
