@@ -149,6 +149,9 @@ export default function Lists() {
       )}
 
       <FlatList
+        accessibilityRole="list"
+        accessibilityLabel="Listas de compras"
+        focusable
         data={cartStore.lists}
         keyExtractor={(item) => item.id}
         className="mt-4"

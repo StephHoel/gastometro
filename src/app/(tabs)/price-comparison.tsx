@@ -49,6 +49,8 @@ export default function PriceComparison() {
   return (
     <Page>
       <ScrollView
+        accessibilityLabel="Conteúdo da comparação de preços"
+        focusable
         className="flex-1"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 36 }}

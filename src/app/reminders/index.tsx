@@ -5,7 +5,7 @@ import { TextWhite } from '@/components/TextWhite'
 import { ReminderService } from '@/services/ReminderService'
 import { useRouter } from 'expo-router'
 import React, { useMemo, useState } from 'react'
-import { FlatList, TouchableOpacity, View } from 'react-native'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { useCartStore } from '@/stores/CartStore'
 import { useReminderStore } from '@/stores/ReminderStore'
 import { toDisplayDate } from '@/utils/functions/DateFunctions'
@@ -68,15 +68,18 @@ export default function ReminderCenter() {
               accessibilityState={{ selected }}
               onPress={() => setFilter(candidate)}
             >
-              <TextWhite className={selected ? 'text-black text-xs' : 'text-white text-xs'}>
+              <Text className={selected ? 'text-black text-xs' : 'text-white text-xs'}>
                 {REMINDERS.filter_label[candidate]}
-              </TextWhite>
+              </Text>
             </TouchableOpacity>
           )
         })}
       </Row>
 
       <FlatList
+        accessibilityRole="list"
+        accessibilityLabel="Lista de lembretes"
+        focusable
         data={filteredReminders}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 32 }}

@@ -116,6 +116,8 @@ export default function Bills() {
   return (
     <Page alertRef={alertRef}>
       <ScrollView
+        accessibilityLabel="Conteúdo de contas a pagar"
+        focusable
         className="flex-1"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 32 }}
