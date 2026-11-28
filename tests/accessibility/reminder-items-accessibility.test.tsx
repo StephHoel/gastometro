@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { createRef } from 'react'
+import type { CustomAlertRef } from '@/interfaces/CustomAlertRef'
 import { render } from '@testing-library/react-native'
 import { ReminderItem } from '@/components/Reminder/ReminderItem'
 import { makeReminder } from '../setup/helpers/reminder-test-factories'
@@ -12,7 +13,8 @@ describe('Acessibilidade das ações individuais de lembretes', () => {
       enabled: true,
       datetimeISO: '2099-01-01T10:00:00.000Z',
     })
-    const screen = await render(<ReminderItem item={item} />)
+    const alertRef = createRef<CustomAlertRef>()
+    const screen = await render(<ReminderItem item={item} alertRef={alertRef} />)
 
     expect(screen.getByRole('button', { name: /Editar lembrete Comprar café/ })).toBeTruthy()
     const remove = screen.getByRole('button', { name: 'Remover lembrete Comprar café' })
