@@ -19,7 +19,7 @@ describe('Acessibilidade de alertas e diálogos', () => {
     expect(screen.getByText('Remover conta').props.accessibilityRole).toBe('header')
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityRole).toBe('alert')
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityLiveRegion).toBe('assertive')
-    expect(screen.getByTestId('custom-alert-modal').props.accessibilityViewIsModal).toBe(true)
+    expect(screen.getByTestId('custom-alert-dialog').props.role).toBe('dialog')
   })
 
   it('oferece ações com nomes claros e executa confirmação uma única vez', async () => {
