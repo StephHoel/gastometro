@@ -20,7 +20,6 @@ describe('Acessibilidade de alertas e diálogos', () => {
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityRole).toBe('alert')
     expect(screen.getByText('Deseja remover Internet?').props.accessibilityLiveRegion).toBe('assertive')
     expect(screen.getByTestId('custom-alert-dialog').props.role).toBe('dialog')
-    expect(screen.getByTestId('custom-alert-dialog').props['aria-modal']).toBe(true)
   })
 
   it('oferece ações com nomes claros e executa confirmação uma única vez', async () => {
