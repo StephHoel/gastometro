@@ -90,18 +90,21 @@ Estabelecer uma experiência consistente e verificável para leitores de tela e 
 
 ## Matriz de rastreabilidade da cobertura assistiva
 
-| Fluxo/tela | Cobertura unitária específica | Auditoria web axe-core | Teclado/zoom | Validação manual |
+A tabela diferencia os testes dedicados de acessibilidade dos testes funcionais comuns. Os caminhos listados correspondem aos arquivos presentes na suíte dedicada; itens identificados como pendentes serão adicionados nas próximas etapas desta implementação.
+
+| Fluxo/tela | Testes específicos de acessibilidade | Auditoria web axe-core | Teclado/zoom | Validação manual |
 |---|---|---|---|---|
-| Tela inicial e lista ativa | critical-flows-accessibility + lists-accessibility | Sim | Sim | TalkBack e leitor de tela |
-| Gerenciamento de listas | lists-accessibility | Sim | Sim | TalkBack e teclado |
-| Calculadora | critical-flows-accessibility | Sim | Sim | TalkBack e teclado |
-| Contas | bills-accessibility | Sim | Sim | TalkBack e teclado |
-| Central de lembretes | reminders-accessibility | Sim | Sim | TalkBack e teclado |
-| Formulário e itens de lembrete | reminder-forms-accessibility + reminder-items-accessibility | Sim, incluindo formulário | Sim | TalkBack e teclado |
-| Comparação de preços | price-comparison-accessibility + forms-accessibility | Sim, incluindo formulários | Sim | TalkBack e teclado |
-| Alertas e diálogos | alerts-accessibility | Sim, com diálogos abertos | Sim, foco e retorno | TalkBack e leitor de tela |
-| Componentes reutilizáveis | critical-flows-accessibility | Em cada tela consumidora | Em cada tela consumidora | TalkBack e leitor de tela |
+| Tela inicial e lista ativa | `critical-flows-accessibility.test.tsx` | Rota inicial e telas principais | Fluxos E2E web | TalkBack e leitor de tela |
+| Gerenciamento de listas | A criar: `lists-accessibility.test.tsx` | Rota de listas | Fluxos E2E web | TalkBack e teclado |
+| Calculadora | `critical-flows-accessibility.test.tsx` | Rota da calculadora | Fluxos E2E web | TalkBack e teclado |
+| Contas | `bills-accessibility.test.tsx` | Rota de contas | Fluxos E2E web | TalkBack e teclado |
+| Central de lembretes | `reminders-accessibility.test.tsx` | Rota de lembretes | Fluxos E2E web | TalkBack e teclado |
+| Itens de lembrete | `reminder-items-accessibility.test.tsx` | Fluxos de lembretes | Fluxos E2E web | TalkBack e teclado |
+| Formulários | A criar: `forms-accessibility.test.tsx` | Formulários abertos, etapa E2E | Fluxos E2E web | TalkBack e teclado |
+| Comparação de preços | `price-comparison-accessibility.test.tsx` | Rota de comparação | Fluxos E2E web | TalkBack e teclado |
+| Alertas e diálogos | A criar: `alerts-accessibility.test.tsx` | Diálogos abertos, etapa E2E | Foco e retorno, etapa E2E | TalkBack e leitor de tela |
+| Componentes reutilizáveis | `critical-flows-accessibility.test.tsx` | Em cada tela consumidora | Em cada tela consumidora | TalkBack e leitor de tela |
 
-A matriz distingue a existência de testes unitários de acessibilidade da cobertura funcional comum. Um fluxo só é considerado coberto quando as asserções verificam nome, papel, dica, estado e comportamento assistivo aplicável, e não apenas a renderização do componente.
+A cobertura unitária específica deve verificar nome, papel, dica, estado e comportamento assistivo aplicável. A mera renderização do componente não caracteriza cobertura de acessibilidade.
 
-A auditoria automatizada não substitui a validação manual. Os itens manuais permanecem pendentes até que a execução seja registrada em docs/ACCESSIBILITY.md com dispositivo, sistema operacional, versão do TalkBack/leitor de tela, navegador e data.
+A auditoria automatizada não substitui a validação manual. Os itens manuais permanecem pendentes até que a execução seja registrada em `docs/ACCESSIBILITY.md` com dispositivo, sistema operacional, versão do TalkBack/leitor de tela, navegador e data.

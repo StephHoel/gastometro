@@ -57,7 +57,7 @@ Compatibilidade atual de plataforma:
 
 ## Em implementação (aguardando validação dos PRs)
 
-- [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-e-usabilidade-assistiva.md)
+- [Acessibilidade e usabilidade assistiva](docs/specs/active/21-acessibilidade-usabilidade-assistiva.md)
 
 ## Funcionalidades planejadas
 
